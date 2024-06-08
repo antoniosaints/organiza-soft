@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Clientes` ADD COLUMN `status` VARCHAR(191) NOT NULL DEFAULT 'A';

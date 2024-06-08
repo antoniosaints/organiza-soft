@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.introjs-dontShowAgain input {
+    padding: 0px 9px !important;
+    border-radius: 12px;
+}

@@ -1,0 +1,113 @@
+{
+  "usuarios": [
+    {
+      "id": "f1b5",
+      "name": "Eduardo Oliveira",
+      "color": "Cinza",
+      "category": "NOC",
+      "price": "7997",
+      "locais_trabalho": [
+        "c364",
+        "b48c"
+      ]
+    },
+    {
+      "id": "b02d",
+      "name": "Haildson SIlva",
+      "color": "Branco",
+      "category": "NOC",
+      "price": "78552"
+    },
+    {
+      "id": "d587",
+      "name": "Antonio Santos",
+      "color": "Branco",
+      "category": "T.I",
+      "price": "77752"
+    },
+    {
+      "id": "a9b8",
+      "name": "Admin",
+      "color": "Azul",
+      "category": "Admin",
+      "price": "5252"
+    }
+  ],
+  "locais_trabalho": [
+    {
+      "id": "c364",
+      "description": "Espaço cultural",
+      "color": "green",
+      "latlon": "-4.032061998820194, -44.46534694233698",
+      "radius": "20"
+    },
+    {
+      "id": "864a",
+      "description": "Central",
+      "color": "red",
+      "latlon": "-4.039300095455312, -44.46853528493972",
+      "radius": "30"
+    },
+    {
+      "id": "7d97",
+      "description": "Chácara tarumã",
+      "color": "blue",
+      "latlon": "-4.0322185615346084, -44.46204954344523",
+      "radius": "20"
+    },
+    {
+      "id": "b48c",
+      "description": "Magazine Luiza",
+      "color": "cyan",
+      "latlon": "-4.034811282796596, -44.46657394184906",
+      "radius": "56"
+    }
+  ],
+  "horarios": [
+    {
+      "id": "25634",
+      "horario": "Horário principal",
+      "entrada1": "08:00",
+      "saida1": "12:00",
+      "entrada2": "14:00",
+      "saida2": "18:00",
+      "tolerancia": 10
+    }
+  ],
+  "empresas": [
+    {
+      "id": "d5b8",
+      "name": "CAS",
+      "usuarios": [
+        "f1b5",
+        "b02d",
+        "d587",
+        "1a46"
+      ]
+    }
+  ],
+  "batidas": [
+    {
+      "id": "06cc",
+      "data": "2024-03-05",
+      "usuario": "41",
+      "batidas": [
+        "16:07"
+      ],
+      "local": "Central"
+    },
+    {
+      "id": "1698",
+      "data": "2024-03-06",
+      "usuario": "41",
+      "batidas": [
+        "07:56",
+        "08:22",
+        "08:37",
+        "10:22",
+        "15:11"
+      ],
+      "local": "Central"
+    }
+  ]
+}
