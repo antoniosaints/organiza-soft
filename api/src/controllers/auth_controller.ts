@@ -10,7 +10,7 @@ class AuthController {
             return ResponseService.badRequest(res, "email and password are required");
         }
 
-        const user = await prisma_service.user.findFirst({
+        const user = await prisma_service.usuario.findFirst({
             where: {
                 email
             }
@@ -20,11 +20,11 @@ class AuthController {
             return ResponseService.notFound(res, "user not found");
         }
 
-        if (user.password !== password) {
+        if (user.senha !== password) {
             return ResponseService.unauthorized(res, "invalid credentials");
         }
 
-        const token = JwtService.encode({userId: user.id, name: user.name}, "4h");
+        const token = JwtService.encode({ userId: user.id, name: user.nome }, "4h");
         return ResponseService.success(res, { token });
     }
 }

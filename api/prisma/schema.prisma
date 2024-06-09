@@ -7,31 +7,73 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        Int     @id @default(autoincrement())
-  email     String  @unique
-  name      String?
-  password  String
+model Usuario {
+  id          Int      @id @default(autoincrement())
+  nome        String   @db.VarChar(100)
+  email       String   @unique @db.VarChar(100)
+  senha       String   @db.VarChar(255)
+  dataCriacao DateTime @default(now())
 }
 
-model Clientes {
-  id      Int     @id @default(autoincrement())
-  email   String  @unique
-  name    String
-  plano   Int?
-  tickets Int?
-  status  String @default("A")
+model Cliente {
+  id          Int       @id @default(autoincrement())
+  nome        String    @db.VarChar(100)
+  email       String    @unique @db.VarChar(100)
+  telefone    String?   @db.VarChar(20)
+  endereco    String?   @db.Text
+  dataCriacao DateTime  @default(now())
+  dataBloqueio DateTime?
+  Assinatura  Assinatura[]
+  Transacao   Transacao[]
+  Bloqueio    Bloqueio[]
 }
 
-model Avisos {
-  id Int @id @default(autoincrement())
-  title String 
-  description String
-  status Int @default(1)
+model Plano {
+  id          Int       @id @default(autoincrement())
+  nome        String    @db.VarChar(100)
+  descricao   String?   @db.Text
+  preco       Float
+  dataCriacao DateTime  @default(now())
+  Assinatura  Assinatura[]
 }
 
-model Planos {
-  id Int @id @default(autoincrement())
-  plano String
-  description String
+model Assinatura {
+  id         Int       @id @default(autoincrement())
+  clienteId  Int
+  planoId    Int
+  dataInicio DateTime
+  dataFim    DateTime
+  status     Status     @default(ativa)
+  Cliente    Cliente    @relation(fields: [clienteId], references: [id])
+  Plano      Plano      @relation(fields: [planoId], references: [id])
+}
+
+model Transacao {
+  id         Int       @id @default(autoincrement())
+  clienteId  Int
+  data       DateTime
+  valor      Float
+  tipo       Tipo
+  descricao  String?   @db.Text
+  Cliente    Cliente   @relation(fields: [clienteId], references: [id])
+}
+
+model Bloqueio {
+  id             Int       @id @default(autoincrement())
+  clienteId      Int
+  motivo         String    @db.Text
+  dataBloqueio   DateTime
+  dataDesbloqueio DateTime?
+  Cliente        Cliente   @relation(fields: [clienteId], references: [id])
+}
+
+enum Status {
+  ativa
+  vencida
+  cancelada
+}
+
+enum Tipo {
+  recebido
+  a_receber
 }
