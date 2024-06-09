@@ -24,6 +24,7 @@ export const getClientes = async (req: any, res: any) => {
 export const getCliente = async (req: any, res: any) => {
     const { id } = req.params;
     try {
+        if (!id) throw new Error("ID obrigatorio");
         const cliente = await prisma_service.cliente.findUnique({ where: { id: Number(id) } });
         res.status(200).json(cliente);
     } catch (error: any) {
@@ -48,8 +49,8 @@ export const updateCliente = async (req: any, res: any) => {
 export const deleteCliente = async (req: any, res: any) => {
     const { id } = req.params;
     try {
-        await prisma_service.cliente.delete({ where: { id: Number(id) } });
-        res.status(204).send();
+        const cliente = await prisma_service.cliente.delete({ where: { id: Number(id) } });
+        res.status(204).json({ data: cliente });
     } catch (error: any) {
         res.status(400).json({ error: error.message });
     }
