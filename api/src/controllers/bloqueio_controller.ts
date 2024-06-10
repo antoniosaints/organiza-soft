@@ -1,33 +1,35 @@
-import prisma_service from "../services/prisma_service";
+import HttpErrorService from "../services/http_error_service";
+import prismaService from "../services/prisma_service";
+import ResponseService from "../services/response_service";
 
 export const createBloqueio = async (req: any, res: any) => {
     const { clienteId, motivo, dataBloqueio, dataDesbloqueio } = req.body;
     try {
-        const bloqueio = await prisma_service.bloqueio.create({
+        const bloqueio = await prismaService.bloqueio.create({
             data: { clienteId, motivo, dataBloqueio, dataDesbloqueio }
         });
-        res.status(201).json(bloqueio);
+        ResponseService.created(res, {message: "Bloqueio criado com sucesso", data: bloqueio});
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        HttpErrorService.hadle(error, res);
     }
 };
 
 export const getBloqueios = async (req: any, res: any) => {
     try {
-        const bloqueios = await prisma_service.bloqueio.findMany();
-        res.status(200).json(bloqueios);
+        const bloqueios = await prismaService.bloqueio.findMany();
+        ResponseService.success(res, {data: bloqueios});
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        HttpErrorService.hadle(error, res);
     }
 };
 
 export const getBloqueio = async (req: any, res: any) => {
     const { id } = req.params;
     try {
-        const bloqueio = await prisma_service.bloqueio.findUnique({ where: { id: Number(id) } });
-        res.status(200).json(bloqueio);
+        const bloqueio = await prismaService.bloqueio.findUnique({ where: { id: Number(id) } });
+        ResponseService.success(res, {data: bloqueio});
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        HttpErrorService.hadle(error, res);
     }
 };
 
@@ -35,22 +37,22 @@ export const updateBloqueio = async (req: any, res: any) => {
     const { id } = req.params;
     const { clienteId, motivo, dataBloqueio, dataDesbloqueio } = req.body;
     try {
-        const bloqueio = await prisma_service.bloqueio.update({
+        const bloqueio = await prismaService.bloqueio.update({
             where: { id: Number(id) },
             data: { clienteId, motivo, dataBloqueio, dataDesbloqueio }
         });
-        res.status(200).json(bloqueio);
+        ResponseService.success(res, {message: "Bloqueio atualizado com sucesso", data: bloqueio});
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        HttpErrorService.hadle(error, res);
     }
 };
 
 export const deleteBloqueio = async (req: any, res: any) => {
     const { id } = req.params;
     try {
-        await prisma_service.bloqueio.delete({ where: { id: Number(id) } });
-        res.status(204).send();
+        await prismaService.bloqueio.delete({ where: { id: Number(id) } });
+        ResponseService.success(res, {message: "Bloqueio excluido com sucesso"});
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        HttpErrorService.hadle(error, res);
     }
 };

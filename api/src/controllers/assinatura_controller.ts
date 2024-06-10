@@ -1,33 +1,35 @@
-import prisma_service from "../services/prisma_service";
+import HttpErrorService from "../services/http_error_service";
+import prismaService from "../services/prisma_service";
+import ResponseService from "../services/response_service";
 
 export const createAssinatura = async (req: any, res: any) => {
     const { clienteId, planoId, dataInicio, dataFim, status } = req.body;
     try {
-        const assinatura = await prisma_service.assinatura.create({
+        const assinatura = await prismaService.assinatura.create({
             data: { clienteId, planoId, dataInicio, dataFim, status }
         });
-        res.status(201).json(assinatura);
+        ResponseService.created(res, {data: assinatura})
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        HttpErrorService.hadle(error, res);
     }
 };
 
 export const getAssinaturas = async (req: any, res: any) => {
     try {
-        const assinaturas = await prisma_service.assinatura.findMany();
-        res.status(200).json(assinaturas);
+        const assinaturas = await prismaService.assinatura.findMany();
+        ResponseService.success(res, {data: assinaturas})
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        HttpErrorService.hadle(error, res);
     }
 };
 
 export const getAssinatura = async (req: any, res: any) => {
     const { id } = req.params;
     try {
-        const assinatura = await prisma_service.assinatura.findUnique({ where: { id: Number(id) } });
-        res.status(200).json(assinatura);
+        const assinatura = await prismaService.assinatura.findUnique({ where: { id: Number(id) } });
+        ResponseService.success(res, {data: assinatura})
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        HttpErrorService.hadle(error, res);
     }
 };
 
@@ -35,22 +37,22 @@ export const updateAssinatura = async (req: any, res: any) => {
     const { id } = req.params;
     const { clienteId, planoId, dataInicio, dataFim, status } = req.body;
     try {
-        const assinatura = await prisma_service.assinatura.update({
+        const assinatura = await prismaService.assinatura.update({
             where: { id: Number(id) },
             data: { clienteId, planoId, dataInicio, dataFim, status }
         });
-        res.status(200).json(assinatura);
+        ResponseService.success(res, {data: assinatura})
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        HttpErrorService.hadle(error, res);
     }
 };
 
 export const deleteAssinatura = async (req: any, res: any) => {
     const { id } = req.params;
     try {
-        await prisma_service.assinatura.delete({ where: { id: Number(id) } });
-        res.status(204).send();
+        await prismaService.assinatura.delete({ where: { id: Number(id) } });
+        ResponseService.success(res, { message: "Assinatura excluida com sucesso" });
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        HttpErrorService.hadle(error, res);
     }
 };

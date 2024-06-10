@@ -1,23 +1,25 @@
-import prisma_service from "../services/prisma_service";
+import HttpErrorService from "../services/http_error_service";
+import prismaService from "../services/prisma_service";
+import ResponseService from "../services/response_service";
 
 export const createCliente = async (req: any, res: any) => {
     const { nome, email, telefone, endereco } = req.body;
     try {
-        const cliente = await prisma_service.cliente.create({
+        const cliente = await prismaService.cliente.create({
             data: { nome, email, telefone, endereco }
         });
-        res.status(201).json(cliente);
+        ResponseService.created(res, {message: "Cliente criado com sucesso", data: cliente});
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        HttpErrorService.hadle(error, res);
     }
 };
 
 export const getClientes = async (req: any, res: any) => {
     try {
-        const clientes = await prisma_service.cliente.findMany();
-        res.status(200).json(clientes);
+        const clientes = await prismaService.cliente.findMany();
+        ResponseService.success(res, { data: clientes });
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        HttpErrorService.hadle(error, res);
     }
 };
 
@@ -25,10 +27,10 @@ export const getCliente = async (req: any, res: any) => {
     const { id } = req.params;
     try {
         if (!id) throw new Error("ID obrigatorio");
-        const cliente = await prisma_service.cliente.findUnique({ where: { id: Number(id) } });
-        res.status(200).json(cliente);
+        const cliente = await prismaService.cliente.findUnique({ where: { id: Number(id) } });
+        ResponseService.success(res, { data: cliente });
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        HttpErrorService.hadle(error, res);
     }
 };
 
@@ -36,22 +38,22 @@ export const updateCliente = async (req: any, res: any) => {
     const { id } = req.params;
     const { nome, email, telefone, endereco } = req.body;
     try {
-        const cliente = await prisma_service.cliente.update({
+        const cliente = await prismaService.cliente.update({
             where: { id: Number(id) },
             data: { nome, email, telefone, endereco }
         });
-        res.status(200).json(cliente);
+        ResponseService.success(res, { message: "Cliente atualizado com sucesso", data: cliente });
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        HttpErrorService.hadle(error, res);
     }
 };
 
 export const deleteCliente = async (req: any, res: any) => {
     const { id } = req.params;
     try {
-        const cliente = await prisma_service.cliente.delete({ where: { id: Number(id) } });
-        res.status(204).json({ data: cliente });
+        const cliente = await prismaService.cliente.delete({ where: { id: Number(id) } });
+        ResponseService.success(res, { message: "Cliente deletado com sucesso", data: cliente });
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        HttpErrorService.hadle(error, res);
     }
 };

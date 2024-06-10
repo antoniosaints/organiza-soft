@@ -9,7 +9,11 @@
     "start": "node app.ts",
     "dev": "nodemon app.ts",
     "database": "npx prisma studio",
-    "migrate": "npx prisma migrate dev",
+    "migrate:dev": "npx prisma migrate dev",
+    "migrate:deploy": "npx prisma migrate deploy",
+    "migrate:reset": "npx prisma migrate reset",
+    "migrate:resolve": "npx prisma migrate resolve",
+    "migrate:status": "npx prisma migrate status",
     "premigrate": "npx prisma db push"
   },
   "dependencies": {
@@ -18,7 +22,8 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",

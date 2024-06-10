@@ -1,56 +1,62 @@
-import prisma_service from "../services/prisma_service";
+import { createUser, updateUser } from "../schemas/usuarios_schema";
+import HttpErrorService from "../services/http_error_service";
+import prismaService from "../services/prisma_service";
+import ResponseService from "../services/response_service";
+import validateSchema from "../services/validade_schema";
+import { ValidationError } from "../utils/http/lancar_erro";
 
 export const createUsuario = async (req: any, res: any) => {
-    const { nome, email, senha } = req.body;
     try {
-        const usuario = await prisma_service.usuario.create({
-            data: { nome, email, senha }
+        const validated = validateSchema(createUser, req.body);
+        const usuario = await prismaService.usuario.create({
+            data: validated
         });
-        res.status(201).json(usuario);
+        ResponseService.success(res, { message: "Usuario criado com sucesso", data: usuario });
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        HttpErrorService.hadle(error, res);
     }
 };
 
 export const getUsuarios = async (req: any, res: any) => {
     try {
-        const usuarios = await prisma_service.usuario.findMany();
-        res.status(200).json(usuarios);
+        const usuarios = await prismaService.usuario.findMany();
+        ResponseService.success(res, { data: usuarios });
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        HttpErrorService.hadle(error, res);
     }
 };
 
 export const getUsuario = async (req: any, res: any) => {
     const { id } = req.params;
     try {
-        const usuario = await prisma_service.usuario.findUnique({ where: { id: Number(id) } });
-        res.status(200).json(usuario);
+        const usuario = await prismaService.usuario.findUnique({ where: { id: Number(id) } });
+        ResponseService.success(res, { data: usuario });
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        HttpErrorService.hadle(error, res);
     }
 };
 
 export const updateUsuario = async (req: any, res: any) => {
     const { id } = req.params;
-    const { nome, email, senha } = req.body;
     try {
-        const usuario = await prisma_service.usuario.update({
+        if (!id) throw new ValidationError("ID obrigatorio");
+        const validated = validateSchema(updateUser, req.body);
+        const usuario = await prismaService.usuario.update({
             where: { id: Number(id) },
-            data: { nome, email, senha }
+            data: validated
         });
-        res.status(200).json(usuario);
+        ResponseService.success(res, { message: "Usuario atualizado com sucesso", data: usuario });
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        HttpErrorService.hadle(error, res);
     }
 };
 
 export const deleteUsuario = async (req: any, res: any) => {
     const { id } = req.params;
     try {
-        await prisma_service.usuario.delete({ where: { id: Number(id) } });
-        res.status(204).send();
+        await prismaService.usuario.delete({ where: { id: Number(id) } });
+        ResponseService.success(res, { message: "Usuario excluido com sucesso" });
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        HttpErrorService.hadle(error, res);
     }
 };

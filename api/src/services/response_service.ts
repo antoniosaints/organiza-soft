@@ -3,7 +3,7 @@ class ResponseService {
     return res.status(200).json({
       status: "success",
       message,
-      data,
+      ...data,
     });
   }
 
@@ -11,7 +11,7 @@ class ResponseService {
     return res.status(201).json({
       status: "success",
       message,
-      data,
+      ...data,
     });
   }
 

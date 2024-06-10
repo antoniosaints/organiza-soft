@@ -1,33 +1,35 @@
-import prisma_service from "../services/prisma_service";
+import HttpErrorService from "../services/http_error_service";
+import prismaService from "../services/prisma_service";
+import ResponseService from "../services/response_service";
 
 export const createPlano = async (req: any, res: any) => {
     const { nome, descricao, preco } = req.body;
     try {
-        const plano = await prisma_service.plano.create({
+        const plano = await prismaService.plano.create({
             data: { nome, descricao, preco }
         });
-        res.status(201).json(plano);
+        ResponseService.created(res, { message: "Plano criado com sucesso", data: plano });
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        HttpErrorService.hadle(error, res);
     }
 };
 
 export const getPlanos = async (req: any, res: any) => {
     try {
-        const planos = await prisma_service.plano.findMany();
-        res.status(200).json(planos);
+        const planos = await prismaService.plano.findMany();
+        ResponseService.success(res, {data: planos});
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        HttpErrorService.hadle(error, res);
     }
 };
 
 export const getPlano = async (req: any, res: any) => {
     const { id } = req.params;
     try {
-        const plano = await prisma_service.plano.findUnique({ where: { id: Number(id) } });
-        res.status(200).json(plano);
+        const plano = await prismaService.plano.findUnique({ where: { id: Number(id) } });
+        ResponseService.success(res, {data: plano});
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        HttpErrorService.hadle(error, res);
     }
 };
 
@@ -35,22 +37,22 @@ export const updatePlano = async (req: any, res: any) => {
     const { id } = req.params;
     const { nome, descricao, preco } = req.body;
     try {
-        const plano = await prisma_service.plano.update({
+        const plano = await prismaService.plano.update({
             where: { id: Number(id) },
             data: { nome, descricao, preco }
         });
-        res.status(200).json(plano);
+        ResponseService.success(res, { message: "Plano atualizado com sucesso", data: plano });
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        HttpErrorService.hadle(error, res);
     }
 };
 
 export const deletePlano = async (req: any, res: any) => {
     const { id } = req.params;
     try {
-        await prisma_service.plano.delete({ where: { id: Number(id) } });
-        res.status(204).send();
+        await prismaService.plano.delete({ where: { id: Number(id) } });
+        ResponseService.success(res, {message: "Plano excluido com sucesso"});
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        HttpErrorService.hadle(error, res);
     }
 };
