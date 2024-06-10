@@ -15,13 +15,13 @@
 
       <div class="mb-5">
         <label for="text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Usuário</label>
-        <input type="text" id="text" v-model="user.usuario"
+        <input type="text" id="text" v-model="user.email"
           class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
           placeholder="Seu usuário" required />
       </div>
       <div class="mb-5">
         <label for="senha" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Senha</label>
-        <input type="senha" id="senha" placeholder="•••••••••" v-model="user.senha"
+        <input type="senha" id="senha" placeholder="•••••••••" v-model="user.password"
           class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
           required />
       </div>
@@ -51,8 +51,8 @@ import { reactive, ref } from 'vue';
 
 const rememberMe = ref(JSON.parse(localStorage.getItem("rememberMe")) || false);
 const user = reactive({
-  usuario: localStorage.getItem("@ponto_ideal:usuario") || '',
-  senha: localStorage.getItem("@ponto_ideal:senha") || '',
+  email: localStorage.getItem("@gestao_inteligente:email") || '',
+  password: localStorage.getItem("@gestao_inteligente:password") || '',
 })
 
 const toggleRememberMe = () => {
@@ -63,12 +63,12 @@ const auth = async () => {
   if (logged.success == true) {
     if (rememberMe.value == true) {
       localStorage.setItem("rememberMe", true);
-      localStorage.setItem("@ponto_ideal:usuario", user.email)
-      localStorage.setItem("@ponto_ideal:senha", user.senha)
+      localStorage.setItem("@gestao_inteligente:email", user.email)
+      localStorage.setItem("@gestao_inteligente:password", user.password)
     }else {
       localStorage.removeItem("rememberMe");
-      localStorage.removeItem("@ponto_ideal:usuario");
-      localStorage.removeItem("@ponto_ideal:senha");
+      localStorage.removeItem("@gestao_inteligente:email");
+      localStorage.removeItem("@gestao_inteligente:password");
     }
     router.push('/');
     toast.success(logged.message, 'Logado!');

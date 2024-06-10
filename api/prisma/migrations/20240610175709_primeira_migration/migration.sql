@@ -28,6 +28,7 @@ CREATE TABLE `UsuariosOnGrupos` (
 CREATE TABLE `Grupos` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `grupo` VARCHAR(100) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -45,7 +46,9 @@ CREATE TABLE `PermissoesOnGrupos` (
 -- CreateTable
 CREATE TABLE `Permissoes` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `cor` VARCHAR(191) NOT NULL,
     `permissao` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `status` ENUM('ativo', 'inativo') NOT NULL,
 
     PRIMARY KEY (`id`)
@@ -72,7 +75,9 @@ CREATE TABLE `Plano` (
     `nome` VARCHAR(100) NOT NULL,
     `descricao` TEXT NULL,
     `preco` DOUBLE NOT NULL,
+    `cor` VARCHAR(191) NOT NULL,
     `dataCriacao` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `dataAtualizacao` DATETIME(3) NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -85,6 +90,7 @@ CREATE TABLE `Assinatura` (
     `dataInicio` DATETIME(3) NOT NULL,
     `dataFim` DATETIME(3) NOT NULL,
     `status` ENUM('ativa', 'vencida', 'cancelada') NOT NULL DEFAULT 'ativa',
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

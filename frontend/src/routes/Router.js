@@ -81,7 +81,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const mainStore = useMainStore();
   if (to.path !== "/login") {
-    if (!mainStore.isAuth || !CookieUtil.getCookie("@pontoideal:token")) {
+    if (!mainStore.isAuth || !CookieUtil.getCookie("@gestao_inteligente:token")) {
       next("/login");
     }else {
       next();

@@ -73,12 +73,6 @@ import TableComponent from '@/components/Flowbite/Table/TableComponent.vue';
 import TheadComponent from '@/components/Flowbite/Table/TheadComponent.vue';
 import ThComponent from '@/components/Flowbite/Table/ThComponent.vue';
 import { onMounted, reactive, ref } from 'vue';
-import { radiusStore } from '@/stores/Radius/radiusStore';
-const storeRadius = radiusStore();
 const connections = ref([]);
 
-onMounted(async () => {
-  connections.value = await storeRadius.getConnections();
-  console.log(connections.value);
-})
 </script>

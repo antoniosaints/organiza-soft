@@ -3,10 +3,10 @@ import prismaService from "../services/prisma_service";
 import ResponseService from "../services/response_service";
 
 export const createPlano = async (req: any, res: any) => {
-    const { nome, descricao, preco } = req.body;
+    const { nome, descricao, preco, cor } = req.body;
     try {
         const plano = await prismaService.plano.create({
-            data: { nome, descricao, preco }
+            data: { nome, descricao, preco, cor }
         });
         ResponseService.created(res, { message: "Plano criado com sucesso", data: plano });
     } catch (error: any) {

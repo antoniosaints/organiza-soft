@@ -2,14 +2,14 @@ import CookieUtil from "@/utils/cookie";
 
 
 // const BASE_URL = "http://localhost:8443/";
-const BASE_URL = "http://localhost:8090/";
+const BASE_URL = "http://localhost:5000/";
 
 async function httpService(path, method = "GET", body = null) {
   const url = `${BASE_URL}${path}`;
 
   const headers = {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${CookieUtil.getCookie("@autentik:token")}`,
+    Authorization: `Bearer ${CookieUtil.getCookie("@gestao_inteligente:token")}`,
   };
 
   const options = {

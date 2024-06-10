@@ -32,14 +32,14 @@ export const userStore = defineStore("userStore", () => {
   };
 
   const getUsers = async () => {
-    const data = await httpService("usuarios");
+    const data = await httpService("usuario");
     users.value = data;
     return data;
   };
 
   const getUser = async (id) => {
     try {
-      const data = await httpService(`usuarios?id=${id}`);
+      const data = await httpService(`usuario/${id}`);
       return data;
     } catch (error) {
       toast.error(error.message, "Ops..");
@@ -48,7 +48,7 @@ export const userStore = defineStore("userStore", () => {
 
   const storeUser = async () => {
     try {
-      await httpService("usuarios", "POST", dataUserStore.value);
+      await httpService("usuario", "POST", dataUserStore.value);
       await getUsers();
       dataUserStore.value = defaultUser;
       toast.success("Usuário adicionado com sucesso!", "Sucesso");
@@ -59,7 +59,7 @@ export const userStore = defineStore("userStore", () => {
 
   const updateUser = async () => {
     try {
-      await httpService(`usuarios?id=${userEdit.value}`, "PUT", dataUserStore.value);
+      await httpService(`usuario/${userEdit.value}`, "PUT", dataUserStore.value);
       await getUsers();
       dataUserStore.value = defaultUser;
       toast.success("Usuário atualizado com sucesso!", "Sucesso");
@@ -70,7 +70,7 @@ export const userStore = defineStore("userStore", () => {
 
   const deleteUser = async (id) => {
     try {
-      await httpService(`usuarios?id=${id}`, "DELETE");
+      await httpService(`usuario/${id}`, "DELETE");
       await getUsers();
       toast.success("Usuário removido com sucesso!", "Sucesso");
     }catch (error) {

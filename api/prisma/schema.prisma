@@ -12,12 +12,13 @@ model Usuario {
   nome        String             @db.VarChar(100)
   email       String             @unique @db.VarChar(100)
   senha       String             @db.VarChar(255)
-  regra       Permissao
-  grupos      UsuariosOnGrupos[]
   anotacoes   String?            @db.Text
   telefone    String?            @db.VarChar(20)
   status      StatusUsuario      @default(ativo)
   dataCriacao DateTime           @default(now())
+  regra       Permissao
+  Contas      Contas[]
+  grupos      UsuariosOnGrupos[]
 }
 
 model UsuariosOnGrupos {
@@ -52,6 +53,7 @@ model PermissoesOnGrupos {
 
 model Permissoes {
   id        Int                  @id @default(autoincrement())
+  cor       String
   permissao String
   createdAt DateTime             @default(now())
   status    StatusUsuario
@@ -73,13 +75,14 @@ model Cliente {
 }
 
 model Plano {
-  id          Int          @id @default(autoincrement())
-  nome        String       @db.VarChar(100)
-  descricao   String?      @db.Text
-  preco       Float
-  dataCriacao DateTime     @default(now())
+  id              Int          @id @default(autoincrement())
+  nome            String       @db.VarChar(100)
+  descricao       String?      @db.Text
+  preco           Float
+  cor             String
+  dataCriacao     DateTime     @default(now())
   dataAtualizacao DateTime?
-  Assinatura  Assinatura[]
+  Assinatura      Assinatura[]
 }
 
 model Assinatura {
@@ -95,13 +98,82 @@ model Assinatura {
 }
 
 model Transacao {
-  id        Int      @id @default(autoincrement())
-  clienteId Int
-  data      DateTime
-  valor     Float
-  tipo      Tipo
-  descricao String?  @db.Text
-  Cliente   Cliente  @relation(fields: [clienteId], references: [id])
+  id               Int               @id @default(autoincrement())
+  clienteId        Int
+  operacao         TipoOperacao
+  natureza         NaturezaTransacao
+  contaId          Int
+  formaPagamentoId Int
+  planoId          Int?
+  servicoId        Int?
+  categoriasId     Int
+  parcelado        Parcelado         @default(nao)
+  parcelamentoId   Int?              @default(0)
+  data             DateTime
+  valor            Float             @default(0)
+  desconto         Float?            @default(0)
+  valorFinal       Float             @default(0)
+  dataEfetivado    DateTime?
+  dataLancamento   DateTime          @default(now())
+  status           StatusTransacao   @default(pendente)
+  descricao        String?           @db.Text
+  Cliente          Cliente           @relation(fields: [clienteId], references: [id])
+  Conta            Contas            @relation(fields: [contaId], references: [id])
+  FormaPagamento   FormasPagamento   @relation(fields: [formaPagamentoId], references: [id])
+  Categoria        Categorias        @relation(fields: [categoriasId], references: [id])
+  Parcelamento     Parcelamento[]
+}
+
+model Parcelas {
+  id         Int             @id @default(autoincrement())
+  nome       String
+  quantidade Int             @default(1)
+  periodo    PeriodoParcelas
+}
+
+model Configuracoes {
+  id          Int      @id @default(autoincrement())
+  chave       String
+  valor       String
+  dataCriacao DateTime @default(now())
+}
+
+model Parcelamento {
+  id              Int             @id @default(autoincrement())
+  transacaoId     Int
+  parcela         Int
+  status          StatusTransacao @default(pendente)
+  valor           Float
+  valorRecebido   Float?
+  dataRecebimento DateTime?
+  dataCadastro    DateTime        @default(now())
+  Transacao       Transacao       @relation(fields: [transacaoId], references: [id], onDelete: Cascade)
+}
+
+model FormasPagamento {
+  id        Int         @id @default(autoincrement())
+  forma     String
+  cor       String?
+  Transacao Transacao[]
+}
+
+model Categorias {
+  id        Int         @id @default(autoincrement())
+  categoria String
+  cor       String
+  Transacao Transacao[]
+}
+
+model Contas {
+  id        Int         @id @default(autoincrement())
+  conta     String      @db.VarChar(200)
+  saldo     Float       @default(0)
+  regra     Regra       @default(privada)
+  userId    Int
+  cor       String?
+  descricao String      @db.Text
+  transacao Transacao[]
+  Usuario   Usuario     @relation(fields: [userId], references: [id])
 }
 
 model Bloqueio {
@@ -113,15 +185,44 @@ model Bloqueio {
   Cliente         Cliente   @relation(fields: [clienteId], references: [id])
 }
 
+enum PeriodoParcelas {
+  mensal
+  semanal
+  diario
+  anual
+}
+
+enum Parcelado {
+  sim
+  nao
+}
+
 enum Status {
   ativa
   vencida
   cancelada
 }
 
-enum Tipo {
+enum NaturezaTransacao {
+  receita
+  despesa
+}
+
+enum StatusTransacao {
   recebido
   pendente
+}
+
+enum Regra {
+  publica
+  privada
+}
+
+enum TipoOperacao {
+  entrada
+  saida
+  transferencia
+  ajuste
 }
 
 enum StatusUsuario {

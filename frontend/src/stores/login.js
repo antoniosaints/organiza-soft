@@ -12,9 +12,10 @@ export const useLoginStore = defineStore("login", () => {
     async function login($user) {
         try {
             const user = await httpService("auth", "POST", $user)
+            console.log(user)
             if (user.token) {
-                CookieUtil.setCookie("@autentik:token", user.token, 1)
-                CookieUtil.setCookie("@autentik:refreshtoken", user.refreshtoken, 7)
+                CookieUtil.setCookie("@gestao_inteligente:token", user.token, 1)
+                CookieUtil.setCookie("@gestao_inteligente:refreshtoken", user.refreshToken, 7)
                 useMainStore().isAuth = true
                 return { success: true, message: user.message }
             } else {
@@ -26,8 +27,8 @@ export const useLoginStore = defineStore("login", () => {
     }
 
     async function logout() {
-        CookieUtil.deleteCookie("@autentik:token")
-        CookieUtil.deleteCookie("@autentik:refreshtoken")
+        CookieUtil.deleteCookie("@gestao_inteligente:token")
+        CookieUtil.deleteCookie("@gestao_inteligente:refreshtoken")
         useMainStore().isAuth = false
         router.push({ path: "/login" })
     }
@@ -35,10 +36,10 @@ export const useLoginStore = defineStore("login", () => {
     const checkToken = async () => {
         try {
             useMainStore().darkMode = JSON.parse(localStorage.getItem("darkMode"));
-            const token = CookieUtil.getCookie("@autentik:token");
+            const token = CookieUtil.getCookie("@gestao_inteligente:token");
             if (token) {
                 const response = await httpService("auth/verify");
-                response.status === 200 ? useMainStore().isAuth = true : useMainStore().isAuth = false;
+                response.status === "success" ? useMainStore().isAuth = true : useMainStore().isAuth = false;
                 if (router.currentRoute.value.path === "/login") {
                     router.push({ path: "/" });
                 }
