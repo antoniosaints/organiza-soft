@@ -12,7 +12,6 @@ export const useLoginStore = defineStore("login", () => {
     async function login($user) {
         try {
             const user = await httpService("auth", "POST", $user)
-            console.log(user)
             if (user.token) {
                 CookieUtil.setCookie("@gestao_inteligente:token", user.token, 1)
                 CookieUtil.setCookie("@gestao_inteligente:refreshtoken", user.refreshToken, 7)

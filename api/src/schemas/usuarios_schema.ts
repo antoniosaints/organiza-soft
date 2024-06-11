@@ -20,11 +20,7 @@ const createUser = zodUtil.object({
     regra: zodUtil.string({
         required_error: "A regra é obrigatória",
         invalid_type_error: "A regra deve ser uma string",
-    }),
-    anotacoes: zodUtil.string({
-        required_error: "As anotacoes são obrigatórias",
-        invalid_type_error: "A anotacoes deve ser uma string",
-    }),
+    })
 })
 
 
@@ -48,10 +44,6 @@ const updateUser = zodUtil.object({
     regra: zodUtil.string({
         required_error: "A regra é obrigatória",
         invalid_type_error: "A regra deve ser uma string",
-    }).optional(),
-    anotacoes: zodUtil.string({
-        required_error: "As anotacoes são obrigatórias",
-        invalid_type_error: "A anotacoes deve ser uma string",
     }).optional(),
 })
 

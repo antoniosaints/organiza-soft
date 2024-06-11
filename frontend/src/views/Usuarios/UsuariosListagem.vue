@@ -30,7 +30,11 @@
         </li>
       </ol>
     </nav>
-
+    <div class="flex justify-end pb-3">
+      <IconComponent @click="buscarUsuarios()"
+        class="w-3 h-3 py-2 px-3 rounded mr-1 cursor-pointer dark:bg-cyan-900 dark:text-cyan-200 bg-cyan-300 text-cyan-900"
+        icon="redo" />
+    </div>
 
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
       <TableComponent>
@@ -39,24 +43,36 @@
             <ThComponent> # </ThComponent>
             <ThComponent> Nome </ThComponent>
             <ThComponent> E-mail </ThComponent>
-            <ThComponent> Contato </ThComponent>
-            <ThComponent> Horário </ThComponent>
+            <ThComponent> Regra </ThComponent>
+            <ThComponent> Status </ThComponent>
             <ThComponent alinhar="justify-end"> Opções </ThComponent>
           </tr>
         </TheadComponent>
         <tbody>
-          <tr v-for="usuario in storeUsers.users.data" :key="usuario.id"
+          <tr v-for="usuario in storeUsers.users" :key="usuario.id"
             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-              <p class="dark:bg-emerald-900 dark:text-emerald-400 text-emerald-600 font-bold p-1 rounded bg-emerald-200 text-center ">{{ usuario.id }}</p>
+            <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+              <p
+                class="dark:bg-emerald-900 dark:text-emerald-400 text-emerald-600 font-bold p-1 rounded bg-emerald-200 text-center ">
+                {{ usuario.id }}</p>
             </th>
-            <th class="px-6 py-4 ">
+            <th class="px-6 py-2 ">
               {{ usuario.nome }}
             </th>
-            <td class="px-6 py-4"><p class="dark:text-emerald-300 text-emerald-600 font-bold">{{ usuario.email || 'Não informado' }}</p></td>
-            <td class="px-6 py-4 font-bold">{{ usuario.contato || 'Não informado' }}</td>
-            <td class="px-6 py-4 font-bold">{{ usuario.horario || 'Não informado' }}</td>
-            <td class="px-6 py-4 text-right">
+            <td class="px-6 py-2">
+              <p class="dark:text-emerald-300 text-emerald-600 font-bold">{{ usuario.email || 'Não informado' }}</p>
+            </td>
+            <td class="px-6 py-2 font-bold">{{ usuario.regra || 'Não informado' }}</td>
+            <td class="px-6 py-2 font-bold">
+              <p v-if="usuario.status === 'Ativo'"
+                class="dark:bg-emerald-900 dark:text-emerald-400 text-emerald-600 font-bold p-1 rounded bg-emerald-200 text-center ">
+                {{ usuario.status || 'Não informado' }}</p>
+              <p v-else
+                class="dark:bg-red-900 dark:text-red-400 text-red-600 font-bold p-1 rounded bg-red-200 text-center ">
+                {{ usuario.status || 'Não informado' }}
+              </p>
+            </td>
+            <td class="px-6 py-2 text-right">
               <IconComponent @click="storeUsers.deleteUser(usuario.id)"
                 class="w-3 h-3 py-2 px-3 rounded mr-1 cursor-pointer dark:bg-red-900 dark:text-red-200 bg-red-300 text-red-900"
                 icon="trash" />
@@ -97,10 +113,13 @@ import IconComponent from '@/components/Fontawesome/IconComponent.vue';
 const storeUsers = userStore();
 
 const modalNovoUsuario = ref(null); //  do caralho
-
 onMounted(async () => {
-  await storeUsers.getUsers();
+  await buscarUsuarios();
 })
+
+const buscarUsuarios = async () => {
+  await storeUsers.getUsers();
+}
 
 const editarUsuario = async (id) => {
   await storeUsers.setUserEdit(id)

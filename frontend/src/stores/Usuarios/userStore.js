@@ -12,8 +12,7 @@ export const userStore = defineStore("userStore", () => {
     nome: "",
     email: "",
     senha: "",
-    contato: "",
-    horario: "",
+    regra: "",
   }
 
   const dataUserStore = ref({
@@ -32,8 +31,11 @@ export const userStore = defineStore("userStore", () => {
   };
 
   const getUsers = async () => {
-    const data = await httpService("usuario");
-    users.value = data;
+    const {data} = await httpService("usuario");
+    users.value = data.map((item) => ({
+      ...item,
+      status: item.status == "ativo" ? "Ativo" : "Inativo",
+    }));
     return data;
   };
 
@@ -52,7 +54,7 @@ export const userStore = defineStore("userStore", () => {
       await getUsers();
       dataUserStore.value = defaultUser;
       toast.success("Usuário adicionado com sucesso!", "Sucesso");
-    }catch (error) {
+    } catch (error) {
       toast.error(error.message, "Ops..");
     }
   };
@@ -63,7 +65,7 @@ export const userStore = defineStore("userStore", () => {
       await getUsers();
       dataUserStore.value = defaultUser;
       toast.success("Usuário atualizado com sucesso!", "Sucesso");
-    }catch (error) {
+    } catch (error) {
       toast.error(error.message, "Ops..");
     }
   };
@@ -73,7 +75,7 @@ export const userStore = defineStore("userStore", () => {
       await httpService(`usuario/${id}`, "DELETE");
       await getUsers();
       toast.success("Usuário removido com sucesso!", "Sucesso");
-    }catch (error) {
+    } catch (error) {
       toast.error(error.message, "Ops..");
     }
   };
@@ -90,10 +92,3 @@ export const userStore = defineStore("userStore", () => {
     deleteUser,
   };
 });
-
-export const userMockStore = defineStore("userMockStore", () => {
-  const users = ref([]);
-  return {
-    users,
-  }
-})

@@ -9,12 +9,6 @@ const routes = [
     component: () => import("@/templates/Default.vue"),
     children: [
       {
-        // Rotas de ponto
-        path: "/",
-        name: "Home",
-        component: () => import("@/views/Home/PontoView.vue"),
-      },
-      {
         path: "/usuarios",
         name: "Usuarios",
         children: [
@@ -48,12 +42,6 @@ const routes = [
         ],
       },
       {
-        // Rotas de espelho
-        path: "/espelho",
-        name: "Espelho do ponto",
-        component: () => import("@/views/Espelho/EspelhoPontoVIew.vue")
-      },
-      {
         path: "/relatorios",
         name: "Relatórios",
         children: [
@@ -83,10 +71,10 @@ router.beforeEach((to, from, next) => {
   if (to.path !== "/login") {
     if (!mainStore.isAuth || !CookieUtil.getCookie("@gestao_inteligente:token")) {
       next("/login");
-    }else {
+    } else {
       next();
     }
-  }else {
+  } else {
     next()
   }
 })

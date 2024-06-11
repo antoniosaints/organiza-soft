@@ -109,7 +109,6 @@ model Transacao {
   categoriasId     Int
   parcelado        Parcelado         @default(nao)
   parcelamentoId   Int?              @default(0)
-  data             DateTime
   valor            Float             @default(0)
   desconto         Float?            @default(0)
   valorFinal       Float             @default(0)
