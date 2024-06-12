@@ -7,6 +7,9 @@ import transacaoRouter from "./transacao_router";
 import planoRouter from "./plano_router";
 import usuariosRouter from "./usuario_router";
 import bloqueioRouter from "./bloqueio_router";
+import categoriaRouter from "./categorias_router";
+import parcelamentoRouter from "./parcelamento_router";
+import contasRouter from "./contas_router";
 
 const router = Router();
 
@@ -14,8 +17,11 @@ router.use("/auth", authRouter);
 router.use("/cliente", auth_middleware, clienteRouter);
 router.use("/assinatura", auth_middleware, assinaturaRouter);
 router.use("/transacao", auth_middleware, transacaoRouter);
+router.use("/parcelamento", auth_middleware, parcelamentoRouter);
+router.use("/contas", auth_middleware, contasRouter);
 router.use("/plano", auth_middleware, planoRouter);
 router.use("/usuario", auth_middleware, usuariosRouter);
 router.use("/bloqueio", auth_middleware, bloqueioRouter);
+router.use("/categoria", auth_middleware, categoriaRouter);
 
 export default router;
