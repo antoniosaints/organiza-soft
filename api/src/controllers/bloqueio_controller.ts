@@ -3,10 +3,10 @@ import prismaService from "../services/prisma_service";
 import ResponseService from "../services/response_service";
 
 export const createBloqueio = async (req: any, res: any) => {
-    const { clienteId, motivo, dataBloqueio, dataDesbloqueio } = req.body;
+    const { assinaturaId, motivo, dataBloqueio, dataDesbloqueio } = req.body;
     try {
         const bloqueio = await prismaService.bloqueio.create({
-            data: { clienteId, motivo, dataBloqueio, dataDesbloqueio }
+            data: { assinaturaId, motivo, dataBloqueio, dataDesbloqueio }
         });
         ResponseService.created(res, {message: "Bloqueio criado com sucesso", data: bloqueio});
     } catch (error: any) {
@@ -35,11 +35,11 @@ export const getBloqueio = async (req: any, res: any) => {
 
 export const updateBloqueio = async (req: any, res: any) => {
     const { id } = req.params;
-    const { clienteId, motivo, dataBloqueio, dataDesbloqueio } = req.body;
+    const { assinaturaId, motivo, dataBloqueio, dataDesbloqueio } = req.body;
     try {
         const bloqueio = await prismaService.bloqueio.update({
             where: { id: Number(id) },
-            data: { clienteId, motivo, dataBloqueio, dataDesbloqueio }
+            data: { assinaturaId, motivo, dataBloqueio, dataDesbloqueio }
         });
         ResponseService.success(res, {message: "Bloqueio atualizado com sucesso", data: bloqueio});
     } catch (error: any) {

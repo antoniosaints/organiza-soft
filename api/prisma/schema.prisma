@@ -71,7 +71,6 @@ model Cliente {
   dataBloqueio DateTime?
   Assinatura   Assinatura[]
   Transacao    Transacao[]
-  Bloqueio     Bloqueio[]
 }
 
 model Plano {
@@ -86,26 +85,33 @@ model Plano {
 }
 
 model Assinatura {
-  id         Int      @id @default(autoincrement())
-  clienteId  Int
-  planoId    Int
-  dataInicio DateTime
-  dataFim    DateTime
-  status     Status   @default(ativa)
-  createdAt  DateTime @default(now())
-  Cliente    Cliente  @relation(fields: [clienteId], references: [id])
-  Plano      Plano    @relation(fields: [planoId], references: [id])
+  id              Int        @id @default(autoincrement())
+  Cliente         Cliente    @relation(fields: [clienteId], references: [id])
+  clienteId       Int
+  Plano           Plano      @relation(fields: [planoId], references: [id])
+  planoId         Int
+  dataInicio      DateTime
+  dataFim         DateTime
+  status          Status     @default(ativa)
+  dataCriacao     DateTime   @default(now())
+  dataDesbloqueio DateTime
+  dataBloqueio    DateTime?
+  Bloqueio        Bloqueio[]
 }
 
 model Transacao {
   id               Int               @id @default(autoincrement())
+  Cliente          Cliente           @relation(fields: [clienteId], references: [id])
   clienteId        Int
   operacao         TipoOperacao
   natureza         NaturezaTransacao
+  Conta            Contas            @relation(fields: [contaId], references: [id])
   contaId          Int
+  FormaPagamento   FormasPagamento   @relation(fields: [formaPagamentoId], references: [id])
   formaPagamentoId Int
   planoId          Int?
   servicoId        Int?
+  Categoria        Categorias        @relation(fields: [categoriasId], references: [id])
   categoriasId     Int
   parcelado        Parcelado         @default(nao)
   parcelamentoId   Int?              @default(0)
@@ -116,10 +122,6 @@ model Transacao {
   dataLancamento   DateTime          @default(now())
   status           StatusTransacao   @default(pendente)
   descricao        String?           @db.Text
-  Cliente          Cliente           @relation(fields: [clienteId], references: [id])
-  Conta            Contas            @relation(fields: [contaId], references: [id])
-  FormaPagamento   FormasPagamento   @relation(fields: [formaPagamentoId], references: [id])
-  Categoria        Categorias        @relation(fields: [categoriasId], references: [id])
   Parcelamento     Parcelamento[]
 }
 
@@ -139,6 +141,7 @@ model Configuracoes {
 
 model Parcelamento {
   id              Int             @id @default(autoincrement())
+  Transacao       Transacao       @relation(fields: [transacaoId], references: [id], onDelete: Cascade)
   transacaoId     Int
   parcela         Int
   status          StatusTransacao @default(pendente)
@@ -146,7 +149,6 @@ model Parcelamento {
   valorRecebido   Float?
   dataRecebimento DateTime?
   dataCadastro    DateTime        @default(now())
-  Transacao       Transacao       @relation(fields: [transacaoId], references: [id], onDelete: Cascade)
 }
 
 model FormasPagamento {
@@ -168,20 +170,20 @@ model Contas {
   conta     String      @db.VarChar(200)
   saldo     Float       @default(0)
   regra     Regra       @default(privada)
+  Usuario   Usuario     @relation(fields: [userId], references: [id])
   userId    Int
   cor       String?
   descricao String      @db.Text
   transacao Transacao[]
-  Usuario   Usuario     @relation(fields: [userId], references: [id])
 }
 
 model Bloqueio {
-  id              Int       @id @default(autoincrement())
-  clienteId       Int
-  motivo          String    @db.Text
+  id              Int        @id @default(autoincrement())
+  Assinatura      Assinatura @relation(fields: [assinaturaId], references: [id])
+  assinaturaId    Int
+  motivo          String     @db.Text
   dataBloqueio    DateTime
   dataDesbloqueio DateTime?
-  Cliente         Cliente   @relation(fields: [clienteId], references: [id])
 }
 
 enum PeriodoParcelas {

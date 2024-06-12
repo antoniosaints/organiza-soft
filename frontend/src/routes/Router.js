@@ -9,6 +9,11 @@ const routes = [
     component: () => import("@/templates/Default.vue"),
     children: [
       {
+        path: "/",
+        name: "Dashboard",
+        component: () => import("@/views/Dashboard/DashboardView.vue"),
+      },
+      {
         path: "/usuarios",
         name: "Usuarios",
         children: [
