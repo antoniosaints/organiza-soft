@@ -1,7 +1,8 @@
 import { PrismaClient } from "@prisma/client";
+import { assemblyPermissoes } from "../src/permissoes";
 const prisma = new PrismaClient();
 async function main() {
-  const defaultUser = await prisma.usuario.upsert({
+  await prisma.usuario.upsert({
     where: { id: 1 },
     update: {},
     create: {
@@ -12,6 +13,19 @@ async function main() {
       anotacoes: "admin",
     },
   });
+
+  const permissoes = assemblyPermissoes();
+
+  for (const permissao of permissoes) {
+    await prisma.permissoes.upsert({
+      where: { slug: permissao.slug },
+      update: {},
+      create: {
+        permissao: permissao.permissao,
+        slug: permissao.slug,
+      },
+    });
+  }
 }
 
 main()

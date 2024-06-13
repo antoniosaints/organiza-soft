@@ -18,13 +18,13 @@ model Usuario {
   dataCriacao DateTime           @default(now())
   regra       Permissao
   Contas      Contas[]
-  grupos      UsuariosOnGrupos[]
+  Grupos      UsuariosOnGrupos[]
 }
 
 model UsuariosOnGrupos {
-  usuario   Usuario  @relation(fields: [usuarioId], references: [id])
+  Usuario   Usuario  @relation(fields: [usuarioId], references: [id])
   usuarioId Int
-  grupo     Grupos   @relation(fields: [grupoId], references: [id])
+  Grupo     Grupos   @relation(fields: [grupoId], references: [id])
   grupoId   Int
   createdAt DateTime @default(now())
   createBy  Int
@@ -35,17 +35,17 @@ model UsuariosOnGrupos {
 model Grupos {
   id         Int                  @id @default(autoincrement())
   grupo      String               @db.VarChar(100)
+  cor        String?              @default("white")
   createdAt  DateTime             @default(now())
-  usuarios   UsuariosOnGrupos[]
-  permissoes PermissoesOnGrupos[]
+  Usuarios   UsuariosOnGrupos[]
+  Permissoes PermissoesOnGrupos[]
 }
 
 model PermissoesOnGrupos {
   grupoId     Int
-  grupo       Grupos     @relation(fields: [grupoId], references: [id])
+  Grupo       Grupos     @relation(fields: [grupoId], references: [id])
   permissaoId Int
-  permissao   Permissoes @relation(fields: [permissaoId], references: [id])
-  createdBy   Int
+  Permissao   Permissoes @relation(fields: [permissaoId], references: [id])
   createdAt   DateTime   @default(now())
 
   @@id([permissaoId, grupoId])
@@ -53,10 +53,11 @@ model PermissoesOnGrupos {
 
 model Permissoes {
   id        Int                  @id @default(autoincrement())
-  cor       String
   permissao String
+  status    StatusUsuario        @default(ativo)
+  slug      String               @unique
+  cor       String?              @default("white")
   createdAt DateTime             @default(now())
-  status    StatusUsuario
   Grupos    PermissoesOnGrupos[]
 }
 
@@ -174,7 +175,7 @@ model Contas {
   userId    Int
   cor       String?
   descricao String      @db.Text
-  transacao Transacao[]
+  Transacao Transacao[]
 }
 
 model Bloqueio {

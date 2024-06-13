@@ -10,11 +10,15 @@ import bloqueioRouter from "./bloqueio_router";
 import categoriaRouter from "./categorias_router";
 import parcelamentoRouter from "./parcelamento_router";
 import contasRouter from "./contas_router";
+import gruposRouter from "./grupos_router";
+import permissoesRouter from "./permissoes_router";
 
 const router = Router();
 
 router.use("/auth", authRouter);
 router.use("/cliente", auth_middleware, clienteRouter);
+router.use("/grupo", auth_middleware, gruposRouter);
+router.use("/permissoes", auth_middleware, permissoesRouter);
 router.use("/assinatura", auth_middleware, assinaturaRouter);
 router.use("/transacao", auth_middleware, transacaoRouter);
 router.use("/parcelamento", auth_middleware, parcelamentoRouter);

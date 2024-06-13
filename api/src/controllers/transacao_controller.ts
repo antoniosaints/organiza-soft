@@ -47,7 +47,7 @@ export const createTransacao = async (req: any, res: any) => {
     ResponseService.created(res, {
       message: "Transação criada com sucesso",
       data: transacao,
-    });
+    }, "Transação criada com sucesso");
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
   }
@@ -121,7 +121,7 @@ export const updateTransacao = async (req: any, res: any) => {
     ResponseService.success(res, {
       message: "Transação atualizada com sucesso",
       data: transacao,
-    });
+    }, "Transação atualizada com sucesso");
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
   }

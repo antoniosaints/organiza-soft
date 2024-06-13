@@ -29,7 +29,16 @@ export const getUsuarios = async (req: any, res: any) => {
 export const getUsuario = async (req: any, res: any) => {
     const { id } = req.params;
     try {
-        const usuario = await prismaService.usuario.findUnique({ where: { id: Number(id) } });
+        const usuario = await prismaService.usuario.findUnique({ 
+            where: { id: Number(id) },
+            include: {
+                Grupos: {
+                    select: {
+                        Grupo: true
+                    }
+                }
+            }
+        });
         ResponseService.success(res, { data: usuario });
     } catch (error: any) {
         HttpErrorService.hadle(error, res);
