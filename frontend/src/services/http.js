@@ -1,5 +1,5 @@
+import axios from "axios";
 import CookieUtil from "@/utils/cookie";
-
 
 // const BASE_URL = "http://localhost:8443/";
 const BASE_URL = "http://localhost:5000/";
@@ -9,28 +9,34 @@ async function httpService(path, method = "GET", body = null) {
 
   const headers = {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${CookieUtil.getCookie("@gestao_inteligente:token")}`,
+    Authorization: `Bearer ${CookieUtil.getCookie(
+      "@gestao_inteligente:token"
+    )}`,
   };
 
-  const options = {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : null,
-  };
+  try {
+    const response = await axios({
+      url,
+      method,
+      headers,
+      data: body ? JSON.stringify(body) : null,
+    });
 
-  const response = await fetch(url, options);
-  if (!response.ok) {
-    const errorMessage = await response.json();
-    throw new Error(errorMessage.message);
+    // Verificar se a resposta é um JSON válido
+    if (response.headers["content-type"].includes("application/json")) {
+      return response.data;
+    } else {
+      console.log(response);
+      throw new Error("Resposta do servidor não é um JSON válido");
+    }
+  } catch (error) {
+    // Lida com erros de resposta HTTP e outros erros de rede
+    if (error.response && error.response.data && error.response.data.message) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error("Erro ao conectar com o servidor");
+    }
   }
-  const contentType = response.headers.get("content-type");
-  if (contentType && contentType.includes("application/json")) {
-    return await response.json();
-  } else {
-    console.log(response)
-    throw new Error("Resposta do servidor não é um JSON válido");
-  }
-
 }
 
 export default httpService;

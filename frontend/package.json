@@ -17,7 +17,7 @@
     "@fortawesome/vue-fontawesome": "^3.0.6",
     "@sweetalert2/theme-dark": "^5.0.16",
     "apexcharts": "^3.49.1",
-    "axios": "^1.6.8",
+    "axios": "^1.7.2",
     "flowbite": "^2.3.0",
     "flowbite-datepicker": "^1.2.6",
     "intro.js": "^7.2.0",

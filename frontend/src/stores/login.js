@@ -19,8 +19,8 @@ export const useLoginStore = defineStore("login", () => {
           user.refreshToken,
           7
         );
-        await useAutorizacaoStore().getPermissoesUsuario();
         useMainStore().isAuth = true;
+        await useAutorizacaoStore().getPermissoesUsuario();
         return { success: true, message: user.message };
       } else {
         return { success: false, message: user.message };
@@ -43,9 +43,12 @@ export const useLoginStore = defineStore("login", () => {
       const token = CookieUtil.getCookie("@gestao_inteligente:token");
       if (token) {
         const response = await httpService("auth/verify");
-        response.status === "success"
-          ? (useMainStore().isAuth = true)
-          : (useMainStore().isAuth = false);
+        if (response.status === "success") {
+          useMainStore().isAuth = true
+          await useAutorizacaoStore().getPermissoesUsuario();
+        }else {
+          useMainStore().isAuth = false
+        }
         if (router.currentRoute.value.path === "/login") {
           router.push({ path: "/" });
         }

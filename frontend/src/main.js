@@ -6,7 +6,6 @@ import "./pluguins/Fontawesome/IconsPluguin.js";
 import "./index.css";
 import { useLoginStore } from "./stores/login";
 import VueApexCharts from "vue3-apexcharts";
-import { useAutorizacaoStore } from "./stores/Permissoes/autorizacaoStore";
 
 const app = createApp(App);
 app.use(createPinia());
@@ -15,7 +14,6 @@ app.component("apexchart", VueApexCharts);
 
 (async () => {
   await useLoginStore().checkToken();
-  await useAutorizacaoStore().getPermissoesUsuario();
 })();
 
 app.use(Router);
