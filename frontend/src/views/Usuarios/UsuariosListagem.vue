@@ -30,7 +30,8 @@
         </li>
       </ol>
     </nav>
-    <div class="flex justify-end pb-3">
+    <div class="flex justify-between pb-3">
+      <p class="text-2xl font-bold text-gray-900 dark:text-white">Usuários</p>
       <IconComponent @click="buscarUsuarios()"
         class="w-3 h-3 py-2 px-3 rounded mr-1 cursor-pointer dark:bg-cyan-900 dark:text-cyan-200 bg-cyan-300 text-cyan-900"
         icon="redo" />
@@ -48,7 +49,7 @@
             <ThComponent alinhar="justify-end"> Opções </ThComponent>
           </tr>
         </TheadComponent>
-        <tbody>
+        <tbody v-if="autorizacao.canList('usuarios') || autorizacao.isAdmin">
           <tr v-for="usuario in storeUsers.users" :key="usuario.id"
             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
             <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -64,7 +65,7 @@
             </td>
             <td class="px-6 py-2 font-bold">{{ usuario.regra || 'Não informado' }}</td>
             <td class="px-6 py-2 font-bold">
-              <p v-if="usuario.status === 'Ativo'"
+              <p v-if="usuario.status === 'Ativo'" @click="updatestatusUsuario(usuario.id)"
                 class="dark:bg-emerald-900 dark:text-emerald-400 text-emerald-600 font-bold p-1 rounded bg-emerald-200 text-center ">
                 {{ usuario.status || 'Não informado' }}</p>
               <p v-else
@@ -74,12 +75,19 @@
             </td>
             <td class="px-6 py-2 text-right">
               <IconComponent @click="storeUsers.deleteUser(usuario.id)"
+                v-if="autorizacao.canDelete('usuarios')"
                 class="w-3 h-3 py-2 px-3 rounded mr-1 cursor-pointer dark:bg-red-900 dark:text-red-200 bg-red-300 text-red-900"
                 icon="trash" />
-              <IconComponent @click="editarUsuario(usuario.id)"
+                <IconComponent @click="editarUsuario(usuario.id)"
+                v-if="autorizacao.canUpdate('usuarios')"
                 class="w-3 h-3 py-2 px-3 rounded mr-1 cursor-pointer dark:bg-green-900 dark:text-green-200 bg-green-300 text-green-900"
                 icon="edit" />
             </td>
+          </tr>
+        </tbody>
+        <tbody v-else>
+          <tr>
+            <td class="px-6 py-4 font-bold text-md bg-gray-800 text-center" colspan="6">Você não tem permissão para visualizar usuários</td>
           </tr>
         </tbody>
       </TableComponent>
@@ -109,8 +117,10 @@ import ThComponent from '@/components/Flowbite/Table/ThComponent.vue';
 import Modal from '@/components/Flowbite/Modal.vue';
 import NovoUsuario from '@/views/Usuarios/NovoUsuarioView.vue';
 import { userStore } from '@/stores/Usuarios/userStore';
+import { useAutorizacaoStore } from '@/stores/Permissoes/autorizacaoStore'
 import IconComponent from '@/components/Fontawesome/IconComponent.vue';
 const storeUsers = userStore();
+const autorizacao = useAutorizacaoStore();
 
 const modalNovoUsuario = ref(null); //  do caralho
 onMounted(async () => {
@@ -119,6 +129,10 @@ onMounted(async () => {
 
 const buscarUsuarios = async () => {
   await storeUsers.getUsers();
+}
+
+const updatestatusUsuario = async (id) => {
+  alert("Em desenvolvimento")
 }
 
 const editarUsuario = async (id) => {

@@ -2,6 +2,7 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import httpService from "@/services/http";
 import toast from "@/utils/toast";
+import swalert from "@/utils/swal";
 
 export const userStore = defineStore("userStore", () => {
   const users = ref([]);
@@ -13,6 +14,7 @@ export const userStore = defineStore("userStore", () => {
     email: "",
     senha: "",
     regra: "",
+    grupoId: "",
   }
 
   const dataUserStore = ref({
@@ -37,7 +39,7 @@ export const userStore = defineStore("userStore", () => {
       status: item.status == "ativo" ? "Ativo" : "Inativo",
     }));
     return data;
-  };
+  }
 
   const getUser = async (id) => {
     try {
@@ -72,9 +74,26 @@ export const userStore = defineStore("userStore", () => {
 
   const deleteUser = async (id) => {
     try {
-      await httpService(`usuario/${id}`, "DELETE");
-      await getUsers();
-      toast.success("Usuário removido com sucesso!", "Sucesso");
+      if (id == 1) {
+        toast.warning("O usuário padrão não pode ser removido!", "Atenção");
+        return;
+      }
+      swalert.fire({
+        title: "Tem certeza?",
+        text: "Tem certeza que deseja remover o usuário selecionado?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sim, pode remover!",
+        cancelButtonText: "Cancelar",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await httpService(`usuario/${id}`, "DELETE");
+          await getUsers();
+          toast.success("Usuário removido com sucesso!", "Sucesso");
+        }
+      })
     } catch (error) {
       toast.error(error.message, "Ops..");
     }

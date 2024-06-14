@@ -10,7 +10,12 @@
             placeholder="..........." required />
         </FormCol>
       </FormRow>
-      <SelectForm label="Regra de acesso" v-model="storeUsers.dataUserStore.regra" :dataList="dataList"></SelectForm>
+      <FormRow>
+        <FormCol>
+          <SelectForm label="Regra de acesso" v-model="storeUsers.dataUserStore.regra" :dataList="dataList"></SelectForm>
+          <SelectForm label="Grupo de usuário" v-model="storeUsers.dataUserStore.grupoId" :dataList="gruposUsuario"></SelectForm>
+        </FormCol>
+      </FormRow>
     </FormContainer>
   </div>
 </template>
@@ -24,7 +29,22 @@ import SelectForm from "@/components/Flowbite/Form/SelectForm.vue";
 
 // stores
 import { userStore } from "@/stores/Usuarios/userStore.js";
+import { useGruposStore } from "@/stores/Grupos/grupoStore.js";
+import { onMounted, ref } from "vue";
 const storeUsers = userStore();
+const storeGrupos = useGruposStore();
+const gruposUsuario = ref([]);
+
+onMounted(async () => {
+  const resultado = await storeGrupos.getGrupos();
+  gruposUsuario.value = resultado.map((item) => {
+    return {
+      name: item.grupo,
+      value: item.id,
+    };
+  });
+});
+
 const dataList = [
   {
     name: "Administrador",

@@ -10,7 +10,7 @@ class JwtService {
             return JWT.sign(payload, SECRET, { expiresIn: time });
     }
 
-    static decode(token: string) {
+    static decode(token: string): any {
         if (!SECRET) {
             throw new Error("Secret not found");
         }

@@ -2,6 +2,15 @@ import { PrismaClient } from "@prisma/client";
 import { assemblyPermissoes } from "../src/permissoes";
 const prisma = new PrismaClient();
 async function main() {
+  await prisma.grupos.upsert({
+    where: { id: 1 },
+    update: {},
+    create: {
+      grupo: "Administrador",
+      cor: "#00ff00",
+    },
+  });
+
   await prisma.usuario.upsert({
     where: { id: 1 },
     update: {},
@@ -11,6 +20,17 @@ async function main() {
       senha: "admin",
       regra: "admin",
       anotacoes: "admin",
+      grupoId: 1,
+    },
+  }); 
+
+  await prisma.parcelas.upsert({
+    where: { id: 1 },
+    update: {},
+    create: {
+      periodo: "mensal",
+      nome: "1 vez",
+      quantidade: 1,
     },
   });
 

@@ -8,28 +8,18 @@ datasource db {
 }
 
 model Usuario {
-  id          Int                @id @default(autoincrement())
-  nome        String             @db.VarChar(100)
-  email       String             @unique @db.VarChar(100)
-  senha       String             @db.VarChar(255)
-  anotacoes   String?            @db.Text
-  telefone    String?            @db.VarChar(20)
-  status      StatusUsuario      @default(ativo)
-  dataCriacao DateTime           @default(now())
+  id          Int           @id @default(autoincrement())
+  nome        String        @db.VarChar(100)
+  email       String        @unique @db.VarChar(100)
+  senha       String        @db.VarChar(255)
+  anotacoes   String?       @db.Text
+  telefone    String?       @db.VarChar(20)
+  status      StatusUsuario @default(ativo)
+  dataCriacao DateTime      @default(now())
   regra       Permissao
   Contas      Contas[]
-  Grupos      UsuariosOnGrupos[]
-}
-
-model UsuariosOnGrupos {
-  Usuario   Usuario  @relation(fields: [usuarioId], references: [id])
-  usuarioId Int
-  Grupo     Grupos   @relation(fields: [grupoId], references: [id])
-  grupoId   Int
-  createdAt DateTime @default(now())
-  createBy  Int
-
-  @@id([usuarioId, grupoId])
+  grupoId     Int
+  Grupos      Grupos        @relation(fields: [grupoId], references: [id])
 }
 
 model Grupos {
@@ -37,18 +27,18 @@ model Grupos {
   grupo      String               @db.VarChar(100)
   cor        String?              @default("white")
   createdAt  DateTime             @default(now())
-  Usuarios   UsuariosOnGrupos[]
   Permissoes PermissoesOnGrupos[]
+  Usuario    Usuario[]
 }
 
 model PermissoesOnGrupos {
-  grupoId     Int
-  Grupo       Grupos     @relation(fields: [grupoId], references: [id])
-  permissaoId Int
-  Permissao   Permissoes @relation(fields: [permissaoId], references: [id])
-  createdAt   DateTime   @default(now())
+  grupoId       Int
+  Grupo         Grupos     @relation(fields: [grupoId], references: [id])
+  permissaoSlug String
+  Permissao     Permissoes @relation(fields: [permissaoSlug], references: [slug])
+  createdAt     DateTime   @default(now())
 
-  @@id([permissaoId, grupoId])
+  @@id([permissaoSlug, grupoId])
 }
 
 model Permissoes {
