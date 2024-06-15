@@ -16,7 +16,7 @@ export const useAutorizacaoStore = defineStore("autorizacao", () => {
     if (regra === "admin") {
       isAdmin.value = true;
     } else isAdmin.value = false;
-
+    
     if (regra === "gerente") {
       isGerente.value = true;
     } else isGerente.value = false;
@@ -28,10 +28,11 @@ export const useAutorizacaoStore = defineStore("autorizacao", () => {
     if (regra === "submoderador") {
       isSubmoderador.value = true;
     } else isSubmoderador.value = false;
-
+    
     if (regra === "visualizador") {
       isVisualizador.value = true;
     } else isVisualizador.value = false;
+    new Promise((resolve) => setTimeout(resolve, 10));
   };
 
   const getPayloadUsuario = async () => {
@@ -75,7 +76,7 @@ export const useAutorizacaoStore = defineStore("autorizacao", () => {
     try {
       const payload = await getPayloadUsuario();
       const { data } = await httpService(`usuario/${payload?.userId}`);
-      defineRegraUsuario(data?.regra);
+      await defineRegraUsuario(data?.regra);
       const grupo_decode = await httpService(`grupo/${data?.grupoId}`);
       permissoes.value = grupo_decode.data?.Permissoes.map(
         (item) => item?.Permissao?.slug

@@ -7,7 +7,7 @@
       <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
         <li class="inline-flex items-center">
           <a href="#"
-            class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-emerald-600 dark:text-gray-400 dark:hover:text-white">
+            class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
             <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
               viewBox="0 0 20 20">
               <path
@@ -24,7 +24,7 @@
                 d="m1 9 4-4-4-4" />
             </svg>
             <a href="#"
-              class="ms-1 text-sm font-medium text-gray-900 hover:text-emerald-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">Listagem
+              class="ms-1 text-sm font-medium text-gray-900 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">Listagem
               de usuários</a>
           </div>
         </li>
@@ -33,7 +33,7 @@
     <div class="flex justify-between pb-3">
       <p class="text-2xl font-bold text-gray-900 dark:text-white">Usuários</p>
       <IconComponent @click="buscarUsuarios()"
-        class="w-3 h-3 py-2 px-3 rounded mr-1 cursor-pointer dark:bg-cyan-900 dark:text-cyan-200 bg-cyan-300 text-cyan-900"
+        class="w-3 h-3 py-2 px-3 rounded mr-1 cursor-pointer dark:bg-blue-900 dark:text-blue-200 bg-blue-300 text-blue-900"
         icon="redo" />
     </div>
 
@@ -54,19 +54,19 @@
             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
             <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
               <p
-                class="dark:bg-emerald-900 dark:text-emerald-400 text-emerald-600 font-bold p-1 rounded bg-emerald-200 text-center ">
+                class="dark:bg-blue-900 dark:text-blue-400 text-blue-600 font-bold p-1 rounded bg-blue-200 text-center ">
                 {{ usuario.id }}</p>
             </th>
             <th class="px-6 py-2 ">
               {{ usuario.nome }}
             </th>
             <td class="px-6 py-2">
-              <p class="dark:text-emerald-300 text-emerald-600 font-bold">{{ usuario.email || 'Não informado' }}</p>
+              <p class="dark:text-blue-300 text-blue-600 font-bold">{{ usuario.email || 'Não informado' }}</p>
             </td>
             <td class="px-6 py-2 font-bold">{{ usuario.regra || 'Não informado' }}</td>
             <td class="px-6 py-2 font-bold">
               <p v-if="usuario.status === 'Ativo'" @click="updatestatusUsuario(usuario.id)"
-                class="dark:bg-emerald-900 dark:text-emerald-400 text-emerald-600 font-bold p-1 rounded bg-emerald-200 text-center ">
+                class="dark:bg-blue-900 dark:text-blue-400 text-blue-600 font-bold p-1 rounded bg-blue-200 text-center ">
                 {{ usuario.status || 'Não informado' }}</p>
               <p v-else
                 class="dark:bg-red-900 dark:text-red-400 text-red-600 font-bold p-1 rounded bg-red-200 text-center ">
@@ -75,11 +75,11 @@
             </td>
             <td class="px-6 py-2 text-right">
               <IconComponent @click="storeUsers.deleteUser(usuario.id)"
-                v-if="autorizacao.canDelete('usuarios')"
+                v-if="autorizacao.canDelete('usuarios') || autorizacao.isAdmin"
                 class="w-3 h-3 py-2 px-3 rounded mr-1 cursor-pointer dark:bg-red-900 dark:text-red-200 bg-red-300 text-red-900"
                 icon="trash" />
                 <IconComponent @click="editarUsuario(usuario.id)"
-                v-if="autorizacao.canUpdate('usuarios')"
+                v-if="autorizacao.canUpdate('usuarios') || autorizacao.isAdmin"
                 class="w-3 h-3 py-2 px-3 rounded mr-1 cursor-pointer dark:bg-green-900 dark:text-green-200 bg-green-300 text-green-900"
                 icon="edit" />
             </td>
@@ -92,12 +92,12 @@
         </tbody>
       </TableComponent>
     </div>
-    <Modal ref="modalNovoUsuario" modalName="Novo usuário" buttonName="Novo usuário" colorButton="bg-emerald-700">
+    <Modal ref="modalNovoUsuario" modalName="Novo usuário" buttonName="Novo usuário" colorButton="bg-blue-700">
       <NovoUsuario @userCreated="modalNovoUsuario.toggleModal()" />
     </Modal>
-    <div data-dial-init class="fixed end-4 bottom-20 group">
+    <div data-dial-init class="fixed end-4 bottom-20 group" v-if="autorizacao.canCreate('usuarios') || autorizacao.isAdmin">
       <button type="button" aria-expanded="false" @click="novoUsuario"
-        class="flex items-center justify-center text-white bg-emerald-700 rounded-full w-14 h-14 hover:bg-emerald-800 dark:bg-emerald-600 dark:hover:bg-emerald-700 focus:ring-4 focus:ring-emerald-300 focus:outline-none dark:focus:ring-emerald-800">
+        class="flex items-center justify-center text-white bg-blue-700 rounded-full w-14 h-14 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:focus:ring-blue-800">
         <svg class="w-5 h-5 transition-transform" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
           viewBox="0 0 18 18">
           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

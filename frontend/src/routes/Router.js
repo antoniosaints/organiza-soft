@@ -30,11 +30,6 @@ const routes = [
         ]
       },
       {
-        path: "/locais",
-        name: "Locais de Trabalho",
-        component: () => import("@/views/Locais/LocaisListagem.vue"),
-      },
-      {
         // Rotas de perfil
         path: "/perfil",
         name: "Perfil",

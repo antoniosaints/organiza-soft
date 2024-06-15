@@ -15,6 +15,7 @@ import {
   faMartiniGlassCitrus,
   faCircleNotch,
   faRedo,
+  faScaleBalanced,
 } from "@fortawesome/free-solid-svg-icons";
 library.add(
   faUser,
@@ -31,5 +32,6 @@ library.add(
   faEdit,
   faMartiniGlassCitrus,
   faCircleNotch,
-  faRedo
+  faRedo,
+  faScaleBalanced
 );

@@ -1,5 +1,5 @@
 <template>
-        <font-awesome-icon :class="[size, color]" class="group-hover:text-emerald-600 dark:group-hover:text-emerald-500" :icon="['fas', icon]" />
+        <font-awesome-icon :class="[size, color]" class="group-hover:text-blue-600 dark:group-hover:text-blue-500" :icon="['fas', icon]" />
 </template>
 
 <script setup>

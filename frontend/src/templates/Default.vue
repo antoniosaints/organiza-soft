@@ -6,7 +6,10 @@ import { useLoginStore } from "@/stores/login";
 import ButtonDrawerMobile from "@/components/Flowbite/ButtonDrawerMobile.vue";
 import DrawerMobile from "@/components/Flowbite/DrawerMobile.vue";
 import MenuLink from "@/components/Flowbite/Menu/MenuLink.vue";
+import DropdownMenu from "@/components/Flowbite/Menu/DropdownMenu.vue";
 import iconComponent from "@/components/Fontawesome/IconComponent.vue";
+import { useAutorizacaoStore } from "@/stores/Permissoes/autorizacaoStore";
+import { initFlowbite } from "flowbite";
 
 defineOptions({ name: "template padrão" });
 
@@ -35,11 +38,21 @@ const toggleDarkMode = () => {
 // Lifecycle hooks
 onMounted(() => {
   window.addEventListener('resize', checkMobile);
+
+  initFlowbite();
 });
 
 onUnmounted(() => {
   window.removeEventListener('resize', checkMobile);
 });
+
+const menuItens = ref([
+  {
+    name: "Usuários",
+    href: "/usuarios/lista",
+    show: useAutorizacaoStore().isAdmin
+  }
+])
 
 </script>
 <template>
@@ -51,13 +64,7 @@ onUnmounted(() => {
       <ButtonDrawerMobile to="/" nome="Dashboard">
         <iconComponent icon="clock" />
       </ButtonDrawerMobile>
-      <ButtonDrawerMobile v-if="useLoginStore().isAdmin" to="/relatorios/usuarios" nome="Relatório">
-        <iconComponent icon="file-lines" />
-      </ButtonDrawerMobile>
-      <ButtonDrawerMobile to="/locais" nome="Acessos">
-        <iconComponent icon="list-check" />
-      </ButtonDrawerMobile>
-      <ButtonDrawerMobile v-if="useLoginStore().isAdmin" to="/perfil" nome="Configs">
+      <ButtonDrawerMobile v-if="useAutorizacaoStore().isAdmin" to="/perfil" nome="Configs">
         <iconComponent icon="gears" />
       </ButtonDrawerMobile>
     </DrawerMobile>
@@ -70,10 +77,8 @@ onUnmounted(() => {
       <div class="py-4 overflow-y-auto">
         <ul class="space-y-2 font-medium">
           <MenuLink icon="clock" label="Dashboard" para="/" />
-          <MenuLink icon="list-check" label="Acessos" para="/locais" />
-          <MenuLink v-if="useLoginStore().isAdmin" icon="file-lines" label="Relatórios" para="/relatorios/usuarios" />
-          <MenuLink v-if="useLoginStore().isAdmin" icon="location-dot" label="Hotspot" para="/locais" />
-          <MenuLink v-if="useLoginStore().isAdmin" icon="user" label="Usuários" para="/usuarios/lista" />
+          <DropdownMenu icon="user" :links="menuItens" name="Administração" />
+          <MenuLink icon="scale-balanced" label="Financeiro" para="/" />
         </ul>
       </div>
 
@@ -82,9 +87,9 @@ onUnmounted(() => {
           <label class="inline-flex items-center mb-5 cursor-pointer" @change="toggleDarkMode">
             <input type="checkbox" v-model="darkMode" value="" class="sr-only peer" />
             <div
-              class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-300 dark:peer-focus:ring-emerald-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-emerald-600">
+              class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
             </div>
-            <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">DarkMode</span>
+            <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Modo escuro</span>
           </label>
         </div>
         <div class="py-4 overflow-y-auto">
