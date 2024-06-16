@@ -1,6 +1,8 @@
+import { deleteFileService, renameFileService } from "../services/file_service";
 import HttpErrorService from "../services/http_error_service";
 import prismaService from "../services/prisma_service";
 import ResponseService from "../services/response_service";
+import uploadService from "../services/upload_service";
 
 export const createTransacao = async (req: any, res: any) => {
   try {
@@ -122,6 +124,58 @@ export const updateTransacao = async (req: any, res: any) => {
       message: "Transação atualizada com sucesso",
       data: transacao,
     }, "Transação atualizada com sucesso");
+  } catch (error: any) {
+    HttpErrorService.hadle(error, res);
+  }
+};
+
+export const uploadComprovante = async (req: any, res: any) => {
+  const upload = uploadService("teste", "tsc01");
+
+  upload(req, res, (err: any) => {
+    if (err) {
+      return ResponseService.notFound(res, err, "Comprovante não enviado");
+    }
+
+    ResponseService.success(res, {
+      message: "Comprovante enviado com sucesso",
+      data: req.files.map((file: any) => file.filename),
+    }, "Comprovante enviado com sucesso");
+  })
+
+};
+
+export const deleteComprovante = async (req: any, res: any) => {
+  try {
+    const fileName = req.params.filename;
+    deleteFileService(fileName, (err: any) => {
+      if (err) {
+        return ResponseService.notFound(res, err, "Erro ao excluir o comprovante");
+      }
+
+      ResponseService.success(res, {
+        message: "Comprovante excluído com sucesso",
+      }, "Comprovante excluído com sucesso");
+    })
+  } catch (error: any) {
+    HttpErrorService.hadle(error, res);
+  }
+
+};
+
+export const renameComprovante = async (req: any, res: any) => {
+  try {
+    const oldName = req.params.filename;
+    const { newName } = req.body;
+    renameFileService(oldName, newName, (err: any) => {
+      if (err) {
+        return ResponseService.notFound(res, err, "Erro ao renomear o comprovante");
+      }
+
+      ResponseService.success(res, {
+        message: "Comprovante renomeado com sucesso",
+      }, "Comprovante renomeado com sucesso");
+    })
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
   }
