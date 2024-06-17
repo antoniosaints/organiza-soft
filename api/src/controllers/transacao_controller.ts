@@ -130,7 +130,7 @@ export const updateTransacao = async (req: any, res: any) => {
 };
 
 export const uploadComprovante = async (req: any, res: any) => {
-  const upload = uploadService("teste", "tsc01");
+  const upload = uploadService("comprovante", "tsc01");
 
   upload(req, res, (err: any) => {
     if (err) {

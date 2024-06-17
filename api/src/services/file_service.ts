@@ -1,7 +1,7 @@
 import fs from "fs"
 import path from "path"
 
-const renameFileService = (oldFileName: any, newFileName: any, callback: any) => {
+const renameFileService = (oldFileName: string, newFileName: string, callback: Function) => {
     const basePath = 'uploads/';
     const oldFilePath = path.join(basePath, oldFileName);
     const newFilePath = path.join(basePath, newFileName); // Aqui estava `newFilePath` duas vezes
@@ -20,7 +20,7 @@ const renameFileService = (oldFileName: any, newFileName: any, callback: any) =>
                 return;
             }
 
-            console.log(`Arquivo renomeado de ${oldFilePath} para ${newFilePath}`);
+            console.log(`Arquivo renomeado de ${oldFileName} para ${newFileName}`);
             callback(null);
         });
     });
