@@ -9,50 +9,46 @@ import MenuLink from "@/components/Flowbite/Menu/MenuLink.vue";
 import DropdownMenu from "@/components/Flowbite/Menu/DropdownMenu.vue";
 import iconComponent from "@/components/Fontawesome/IconComponent.vue";
 import { useAutorizacaoStore } from "@/stores/Permissoes/autorizacaoStore";
-import { initFlowbite } from "flowbite";
+import { initAccordions, initCollapses, initDropdowns, initPopovers, initTooltips } from "flowbite";
 
 defineOptions({ name: "template padrão" });
-
-// Reactive variables
 const isMobile = ref(window.innerWidth <= 768 && window.innerHeight <= 1024);
 const darkMode = ref(localStorage.getItem("darkMode"));
-
-// Store
 const store = useMainStore();
-
-// Function to check mobile status
 function checkMobile() {
   isMobile.value = window.innerWidth <= 768 && window.innerHeight <= 1024;
 }
+const menuItens = ref([])
 
-// Emit setup
 const emit = defineEmits(["toggleDarkMode", "darkMode"]);
-
-// Toggle dark mode function
 const toggleDarkMode = () => {
   store.darkMode = !store.darkMode;
   emit("darkMode", darkMode.value);
-  localStorage.setItem("darkMode", darkMode.value);
+  localStorage.setItem("darkMode", JSON.stringify(darkMode.value));
 };
-
-// Lifecycle hooks
-onMounted(() => {
+onMounted(async () => {
+  initTooltips();
+  initPopovers();
+  initCollapses();
   window.addEventListener('resize', checkMobile);
-
-  initFlowbite();
+  await useLoginStore().checkToken();
+  menuItens.value = [
+    { 
+      name: "Usuários", 
+      href: "/usuarios/lista", 
+      show: useAutorizacaoStore().isAdmin 
+    },
+    {
+      name: "Grupos",
+      href: "/grupos/lista",
+      show: useAutorizacaoStore().isAdmin
+    }
+  ];
 });
-
 onUnmounted(() => {
   window.removeEventListener('resize', checkMobile);
 });
 
-const menuItens = ref([
-  {
-    name: "Usuários",
-    href: "/usuarios/lista",
-    show: useAutorizacaoStore().isAdmin
-  }
-])
 
 </script>
 <template>

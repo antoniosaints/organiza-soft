@@ -1,14 +1,24 @@
 {
-    "compilerOptions": {
-      "target": "es5",
-      "module": "esnext",
-      "baseUrl": "./",
-      "moduleResolution": "node",
-      "paths": {
-        "@/*": [
-          "src/*"
-        ]
-      }
-    }
-  }
-  
+  "compilerOptions": {
+    "target": "es6", // Define a versão alvo do JavaScript (ECMAScript 2015)
+    "module": "esnext", // Define o módulo alvo como ESNext
+    "lib": ["dom", "es2015"], // Inclui as bibliotecas padrão para o DOM e ES2015
+    "allowJs": true, // Permite a importação de arquivos JavaScript
+    "strict": true, // Ativa todas as verificações estritas
+    "moduleResolution": "node", // Define a resolução de módulos como Node.js
+    "baseUrl": "./", // Define o diretório base para resolução de módulos
+    "paths": {
+      "@/*": ["src/*"] // Define alias para o diretório src
+    },
+    "esModuleInterop": true, // Habilita interoperabilidade com módulos ES
+    "skipLibCheck": true, // Ignora checagem de tipos em arquivos de declaração
+    "forceConsistentCasingInFileNames": true // Garante consistência em nomes de arquivos
+  },
+  "include": [
+    "src/**/*" // Inclui todos os arquivos no diretório src
+  ],
+  "exclude": [
+    "node_modules", // Exclui o diretório node_modules
+    "dist" // Exclui o diretório dist
+  ]
+}
