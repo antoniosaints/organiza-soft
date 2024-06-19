@@ -87,7 +87,8 @@ import BarChartComponent from '@/components/ApexCharts/BarChartComponent.vue';
       <div class="flex flex-col gap-4">
         <ValorVisual label="Recebido" valor="12,423" percent="23%" color="green" />
         <ValorVisual label="A receber" valor="2,423" percent="5%" color="red" />
-        <div class="w-full max-w-md bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <div class="w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+          <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white p-4">Transações</h5>
           <BarChartComponent />
         </div>
       </div>
@@ -95,7 +96,7 @@ import BarChartComponent from '@/components/ApexCharts/BarChartComponent.vue';
 
 
         <div
-          class="w-full max-w-md p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+          class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
           <div class="flex items-center justify-between mb-4">
             <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">Transações</h5>
             <a href="#" class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">
