@@ -1,0 +1,31 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3001:5000" # Porta do backend
+      - "3002:5173" # Porta do frontend
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=cas20182018
+      - MYSQL_DB=api
+    depends_on:
+      - mysql
+    command:
+      [
+        "sh",
+        "-c",
+        "cd /app/api && npm run migrate:deploy && npm run dev && cd /app/frontend && npm run dev",
+      ]
+
+  mysql:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: cas20182018
+      MYSQL_DATABASE: api
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
