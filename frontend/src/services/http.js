@@ -2,7 +2,11 @@ import axios from "axios";
 import CookieUtil from "@/utils/cookie";
 
 // const BASE_URL = "http://localhost:8443/";
-const BASE_URL = "http://localhost:5000/";
+const BASE_URL = import.meta.env.VITE_BASE_URL_BACKEND;
+
+if (!BASE_URL) {
+  throw new Error("BASE_URL não foi definida no arquivo de configuração");
+}
 
 async function httpService(path, method = "GET", body = null) {
   const url = `${BASE_URL}${path}`;

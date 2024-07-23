@@ -1,5 +1,7 @@
+import { Response } from "express";
+
 class ResponseService {
-  static success(res: any, data: any, message = "success") {
+  static success(res: Response, data: any, message = "success") {
     return res.status(200).json({
       status: "success",
       message,
@@ -7,7 +9,7 @@ class ResponseService {
     });
   }
 
-  static created(res: any, data: any, message = "Registro criado com sucesso") {
+  static created(res: Response, data: any, message = "Registro criado com sucesso") {
     return res.status(201).json({
       status: "success",
       message,
@@ -15,32 +17,32 @@ class ResponseService {
     });
   }
 
-  static badRequest(res: any, error: any, message = "Bad request") {
-    return res.status(400).json({
+  static badRequest(res: Response, message = "Bad request", error: number = 400) {
+    return res.status(error).json({
       status: "error",
       message,
       error,
     });
   }
 
-  static unauthorized(res: any, error: any, message = "Unauthorized") {
-    return res.status(401).json({
+  static unauthorized(res: Response, message = "Unauthorized", error: number = 401) {
+    return res.status(error).json({
       status: "error",
       message,
       error,
     });
   }
 
-  static forbidden(res: any, error: any, message = "Forbidden") {
-    return res.status(403).json({
+  static forbidden(res: any, message = "Forbidden", error: number = 403) {
+    return res.status(error).json({
       status: "error",
       message,
       error,
     });
   }
 
-  static notFound(res: any, error: any, message = "Not found") {
-    return res.status(404).json({
+  static notFound(res: any, message = "Not found", error: number = 404,) {
+    return res.status(error).json({
       status: "error",
       message,
       error,

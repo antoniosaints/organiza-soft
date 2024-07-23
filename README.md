@@ -1,26 +1,26 @@
-## Ponto ideal
+## Organiza soft
 
 ## Instalação
 
+### Clonando o repositório
+- clone o repositório com `git clone https://github.com/antoniosaints/gestor-clientes.git`
+- acesse a pasta do repositório clonado
+
 ### Frontend
-- clone o repositório e entre no frontend
+- entre na pasta `/frontend`
+- no arquivo `.env`, preencha as variáveis com os dados corretos
 - instale as dependências com `npm i`
 - rode o build com `npm run build`
 - use os arquivos do build na hospedagem
 
 ### Backend
-* DOCKER
-    * rode o comando `docker-compose up -d` dentro da pasta do backend
-    * acesse o terminal do container aplication e rode `composer db:init`
-    * no arquivo `phinx.json` defina as configs do banco de dados
-    * rode as migrations com `composer migrate:up`
-    * rode as seeds com `composer seed:up`
+- entre na pasta `/api`
+- no arquivo `.env` informe as informações corretamente
+- instale as dependencias com `npm i`
+- com as informações de banco de dados informadas no `.env` corretamente, vamos rodar as migrations e seeds com:
+    * rode as migrations com `npm run migrate:deploy`
+    * rode as seeds com `npm run seed`
+- agora faça o build da aplicação com `npm run build` 
+- por fim, rode o backend com `npm start`
 
-* Server Apache
-    * instale as dependências com `composer install`
-    * rode o comando `composer db:init`
-    * defina as configs no arquivo `phinx.json`
-    * rode as migrations `composer migrate:up`
-    * rode as seeds com `composer seed:up`
-
-### O servidor já deve rodar, o backend roda nas portas 8443 e 8090 no docker
+### O servidor já deve rodar, o backend roda nas portas definidas por você nos arquivos .env

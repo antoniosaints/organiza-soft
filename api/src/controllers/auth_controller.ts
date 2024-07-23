@@ -8,7 +8,7 @@ class AuthController {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return ResponseService.badRequest(res, "email and password are required");
+      return ResponseService.badRequest(res, "Email e senha obrigatórios");
     }
 
     const user = await prisma_service.usuario.findFirst({
@@ -18,11 +18,11 @@ class AuthController {
     });
 
     if (!user) {
-      return ResponseService.notFound(res, "user not found");
+      return ResponseService.notFound(res, "Usuário não encontrado");
     }
 
     if (user.senha !== password) {
-      return ResponseService.unauthorized(res, "invalid credentials");
+      return ResponseService.unauthorized(res, "Credenciais inválidas");
     }
 
     const refreshToken = JwtService.encode(
@@ -44,7 +44,6 @@ class AuthController {
       if (!authHeader) {
         return ResponseService.unauthorized(
           res,
-          "unauthorized",
           "Token não informado"
         );
       }
@@ -54,7 +53,6 @@ class AuthController {
       if (parts.length !== 2) {
         return ResponseService.unauthorized(
           res,
-          "unauthorized",
           "Token mal formatado"
         );
       }
@@ -64,7 +62,6 @@ class AuthController {
       if (!/^Bearer$/i.test(scheme)) {
         return ResponseService.unauthorized(
           res,
-          "unauthorized",
           "Token mal formatado"
         );
       }
@@ -83,7 +80,6 @@ class AuthController {
       if (!authHeader) {
         return ResponseService.unauthorized(
           res,
-          "unauthorized",
           "Token não informado"
         );
       }
@@ -93,7 +89,6 @@ class AuthController {
       if (parts.length !== 2) {
         return ResponseService.unauthorized(
           res,
-          "unauthorized",
           "Token mal formatado"
         );
       }
@@ -103,7 +98,6 @@ class AuthController {
       if (!/^Bearer$/i.test(scheme)) {
         return ResponseService.unauthorized(
           res,
-          "unauthorized",
           "Token mal formatado"
         );
       }
