@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-default: #105da5;
+  --color-black: #1b1818;
+  --color-contrast: #ffffff;
+  --color-background: #f5f5f5;
+}
+* {
+  @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Teko:wght@300..700&display=swap");
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+}
+
+/* Estilizando a barra de rolagem completa */
+::-webkit-scrollbar {
+  width: 12px; /* Largura da barra de rolagem */
+}
+
+/* Estilizando o "polegar" da barra de rolagem */
+::-webkit-scrollbar-thumb {
+  background-color: #555; /* Cor do polegar */
+  border-radius: 10px; /* Bordas arredondadas */
+  border: 3px solid #313030; /* Borda em torno do polegar */
+}
+
+/* Estilizando o "trilho" da barra de rolagem */
+::-webkit-scrollbar-track {
+  background: #313030; /* Cor do trilho */
+}
+
+/* Estilizando a barra de rolagem quando em estado "hover" */
+::-webkit-scrollbar-thumb:hover {
+  background: #888; /* Cor do polegar quando em hover */
+}

@@ -1,11 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { useMainStore } from "@/stores/main";
-import CookieUtil from "@/utils/cookie";
 
 const routes = [
   {
     path: "/",
     name: "Home",
+    meta: { requiresAuth: true },
     component: () => import("@/templates/Default.vue"),
     children: [
       {
@@ -65,18 +64,5 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 });
-
-router.beforeEach((to, from, next) => {
-  const mainStore = useMainStore();
-  if (to.path !== "/login") {
-    if (!mainStore.isAuth || !CookieUtil.getCookie("@gestao_inteligente:token")) {
-      next("/login");
-    } else {
-      next();
-    }
-  } else {
-    next()
-  }
-})
 
 export default router;

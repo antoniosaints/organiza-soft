@@ -126,8 +126,7 @@ import BarChartComponent from '@/components/ApexCharts/BarChartComponent.vue';
               <li class="py-3 sm:py-4">
                 <div class="flex items-center ">
                   <div class="flex-shrink-0">
-                    <img class="w-8 h-8 rounded-full" src="/OS.png"
-                      alt="Bonnie image">
+                    <img class="w-8 h-8 rounded-full" src="/OS.png" alt="Bonnie image">
                   </div>
                   <div class="flex-1 min-w-0 ms-4">
                     <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
@@ -138,15 +137,14 @@ import BarChartComponent from '@/components/ApexCharts/BarChartComponent.vue';
                     </p>
                   </div>
                   <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                    $3467
+                    R$ 3467
                   </div>
                 </div>
               </li>
               <li class="py-3 sm:py-4">
                 <div class="flex items-center">
                   <div class="flex-shrink-0">
-                    <img class="w-8 h-8 rounded-full" src="/OS.png"
-                      alt="Michael image">
+                    <img class="w-8 h-8 rounded-full" src="/OS.png" alt="Michael image">
                   </div>
                   <div class="flex-1 min-w-0 ms-4">
                     <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
@@ -182,8 +180,7 @@ import BarChartComponent from '@/components/ApexCharts/BarChartComponent.vue';
               <li class="pt-3 pb-0 sm:pt-4">
                 <div class="flex items-center ">
                   <div class="flex-shrink-0">
-                    <img class="w-8 h-8 rounded-full" src="/OS.png"
-                      alt="Thomas image">
+                    <img class="w-8 h-8 rounded-full" src="/OS.png" alt="Thomas image">
                   </div>
                   <div class="flex-1 min-w-0 ms-4">
                     <p class="text-sm font-medium text-gray-900 truncate dark:text-white">

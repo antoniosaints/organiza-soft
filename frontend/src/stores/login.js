@@ -6,6 +6,7 @@ import router from "@/routes/Router";
 import toast from "@/utils/toast";
 import CookieUtil from "@/utils/cookie";
 import { ref } from "vue";
+import HttpAxios from "@/services/axios";
 
 export const useLoginStore = defineStore("login", () => {
   const isAdmin = ref(true);
@@ -42,21 +43,22 @@ export const useLoginStore = defineStore("login", () => {
       useMainStore().darkMode = JSON.parse(localStorage.getItem("darkMode"));
       const token = CookieUtil.getCookie("@gestao_inteligente:token");
       if (token) {
-        const response = await httpService("auth/verify");
-        if (response.status === "success") {
+        const { data, status } = await HttpAxios.get("auth/verify");
+        if (status === 200) {
           useMainStore().isAuth = true
-          await useAutorizacaoStore().getPermissoesUsuario();
-        }else {
+          if (router.currentRoute.value.path === "/login") {
+            router.push({ path: "/" });
+          }
+          // await useAutorizacaoStore().getPermissoesUsuario();
+        } else {
           useMainStore().isAuth = false
-        }
-        if (router.currentRoute.value.path === "/login") {
-          router.push({ path: "/" });
         }
       } else {
         useMainStore().isAuth = false;
         router.push({ path: "/login" });
       }
     } catch (error) {
+      console.log(error);
       useMainStore().isAuth = false;
       router.push({ path: "/login" });
       toast.error(error.message, "Ops..");

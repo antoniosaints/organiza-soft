@@ -9,19 +9,9 @@ const HttpAxios = axios.create({
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${
-      CookieUtil.getCookie("@gestao_inteligente:token") || ""
-    }`,
-  },
-  transformResponse: [
-    function (data) {
-      try {
-        return JSON.parse(data).data;
-      } catch (e) {
-        return data;
-      }
-    },
-  ],
+    Authorization: `Bearer ${CookieUtil.getCookie("@gestao_inteligente:token") || ""
+      }`,
+  }
 });
 
 export default HttpAxios;

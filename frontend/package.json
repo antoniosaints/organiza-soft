@@ -16,7 +16,6 @@
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/vue-fontawesome": "^3.0.6",
     "@sweetalert2/theme-dark": "^5.0.16",
-    "apexcharts": "^3.49.1",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
     "flowbite": "^2.4.1",

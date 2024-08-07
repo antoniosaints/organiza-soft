@@ -77,37 +77,19 @@ class AuthController {
     try {
       const authHeader = req.headers.authorization;
 
-      if (!authHeader) {
-        return ResponseService.unauthorized(
-          res,
-          "Token não informado"
-        );
-      }
+      if (!authHeader) return ResponseService.unauthorized(res, "Token não informado");
 
       const parts = authHeader.split(" ");
 
-      if (parts.length !== 2) {
-        return ResponseService.unauthorized(
-          res,
-          "Token mal formatado"
-        );
-      }
+      if (parts.length !== 2) return ResponseService.unauthorized(res, "Token mal formatado");
 
       const [scheme, token] = parts;
 
-      if (!/^Bearer$/i.test(scheme)) {
-        return ResponseService.unauthorized(
-          res,
-          "Token mal formatado"
-        );
-      }
+      if (!/^Bearer$/i.test(scheme)) return ResponseService.unauthorized(res, "Token mal formatado");
+
       const { refreshToken } = JwtService.decode(token);
       const data = JwtService.decode(refreshToken);
-      ResponseService.success(
-        res,
-        { data },
-        "Token decodificado com sucesso"
-      );
+      ResponseService.success(res, { data }, "Token decodificado com sucesso");
     } catch (err) {
       HttpErrorService.hadle(err, res);
     }
