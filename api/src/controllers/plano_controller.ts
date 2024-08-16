@@ -2,7 +2,7 @@ import HttpErrorService from "../services/http_error_service";
 import prismaService from "../services/prisma_service";
 import ResponseService from "../services/response_service";
 
-export const createPlano = async (req: any, res: any) => {
+export const createPlano = async (req: any, res: any): Promise<void> => {
     const { nome, descricao, preco, cor } = req.body;
     try {
         const plano = await prismaService.plano.create({

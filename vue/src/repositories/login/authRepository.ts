@@ -10,7 +10,6 @@ export default class AuthRepository {
         const { data } = await axiosService.get(`auth/verify`);
         return data;
     }
-
     static async decode(): Promise<any> {
         const { data } = await axiosService.get(`auth/decode`);
         return data;

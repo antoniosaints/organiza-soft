@@ -1,12 +1,10 @@
-export default interface IUsuario {
+export default interface ICliente {
   id?: number;
   nome: string;
   email: string;
-  senha: string;
   status: string;
-  regra: string;
-  grupoId: number;
-  anotacoes?: string;
   telefone?: string;
+  endereco?: string;
   dataCriacao?: Date;
+  dataBloqueio?: Date;
 }
