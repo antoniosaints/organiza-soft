@@ -134,7 +134,7 @@ export const uploadComprovante = async (req: any, res: any) => {
 
   upload(req, res, (err: any) => {
     if (err) {
-      return ResponseService.notFound(res, err, "Comprovante não enviado");
+      return ResponseService.notFound(res, "Comprovante não enviado");
     }
 
     ResponseService.success(res, {
@@ -150,7 +150,7 @@ export const deleteComprovante = async (req: any, res: any) => {
     const fileName = req.params.filename;
     deleteFileService(fileName, (err: any) => {
       if (err) {
-        return ResponseService.notFound(res, err, "Erro ao excluir o comprovante");
+        return ResponseService.notFound(res, "Erro ao excluir o comprovante");
       }
 
       ResponseService.success(res, {
@@ -169,7 +169,7 @@ export const renameComprovante = async (req: any, res: any) => {
     const { newName } = req.body;
     renameFileService(oldName, newName, (err: any) => {
       if (err) {
-        return ResponseService.notFound(res, err, "Erro ao renomear o comprovante");
+        return ResponseService.notFound(res, "Erro ao renomear o comprovante");
       }
 
       ResponseService.success(res, {

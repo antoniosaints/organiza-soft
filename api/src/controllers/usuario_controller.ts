@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 import { createUser, updateUser } from "../schemas/usuarios_schema";
 import HttpErrorService from "../services/http_error_service";
 import prismaService from "../services/prisma_service";
@@ -20,9 +21,17 @@ export const createUsuario = async (req: any, res: any) => {
   }
 };
 
-export const getUsuarios = async (req: any, res: any) => {
+export const getUsuarios = async (req: Request, res: Response) => {
   try {
-    const usuarios = await prismaService.usuario.findMany();
+    const {limit, perPage, page} = req.query;
+    const offset = (Number(page) - 1) * Number(perPage);
+
+    const usuarios = await prismaService.usuario.findMany({
+      skip: offset || 0,
+      take: Number(limit) || 10,
+      orderBy: { nome: "asc" },
+    });
+
     ResponseService.success(res, { data: usuarios });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
