@@ -1,8 +1,9 @@
+import { Request, Response } from "express";
 import HttpErrorService from "../services/http_error_service";
 import prismaService from "../services/prisma_service";
 import ResponseService from "../services/response_service";
 
-export const createBloqueio = async (req: any, res: any) => {
+export const createBloqueio = async (req: Request, res: Response) => {
     const { assinaturaId, motivo, dataBloqueio, dataDesbloqueio } = req.body;
     try {
         const bloqueio = await prismaService.bloqueio.create({
@@ -14,7 +15,7 @@ export const createBloqueio = async (req: any, res: any) => {
     }
 };
 
-export const getBloqueios = async (req: any, res: any) => {
+export const getBloqueios = async (req: Request, res: Response) => {
     try {
         const bloqueios = await prismaService.bloqueio.findMany();
         ResponseService.success(res, { data: bloqueios });
@@ -23,7 +24,7 @@ export const getBloqueios = async (req: any, res: any) => {
     }
 };
 
-export const getBloqueio = async (req: any, res: any) => {
+export const getBloqueio = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
         const bloqueio = await prismaService.bloqueio.findUnique({ where: { id: Number(id) } });
@@ -33,7 +34,7 @@ export const getBloqueio = async (req: any, res: any) => {
     }
 };
 
-export const updateBloqueio = async (req: any, res: any) => {
+export const updateBloqueio = async (req: Request, res: Response) => {
     const { id } = req.params;
     const { assinaturaId, motivo, dataBloqueio, dataDesbloqueio } = req.body;
     try {
@@ -47,7 +48,7 @@ export const updateBloqueio = async (req: any, res: any) => {
     }
 };
 
-export const deleteBloqueio = async (req: any, res: any) => {
+export const deleteBloqueio = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
         await prismaService.bloqueio.delete({ where: { id: Number(id) } });

@@ -1,8 +1,9 @@
+import { Request, Response } from "express";
 import HttpErrorService from "../services/http_error_service";
 import prismaService from "../services/prisma_service";
 import ResponseService from "../services/response_service";
 
-export const createPlano = async (req: any, res: any): Promise<void> => {
+export const createPlano = async (req: Request, res: Response): Promise<void> => {
     const { nome, descricao, preco, cor } = req.body;
     try {
         const plano = await prismaService.plano.create({
@@ -14,7 +15,7 @@ export const createPlano = async (req: any, res: any): Promise<void> => {
     }
 };
 
-export const getPlanos = async (req: any, res: any) => {
+export const getPlanos = async (req: Request, res: Response) => {
     try {
         const planos = await prismaService.plano.findMany();
         ResponseService.success(res, {data: planos});
@@ -23,7 +24,7 @@ export const getPlanos = async (req: any, res: any) => {
     }
 };
 
-export const getPlano = async (req: any, res: any) => {
+export const getPlano = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
         const plano = await prismaService.plano.findUnique({ where: { id: Number(id) } });
@@ -33,8 +34,8 @@ export const getPlano = async (req: any, res: any) => {
     }
 };
 
-export const updatePlano = async (req: any, res: any) => {
-    const { id } = req.params;
+export const updatePlano = async (req: Request, res: Response) => {
+    const { id } = req.params; 
     const { nome, descricao, preco } = req.body;
     try {
         const plano = await prismaService.plano.update({
@@ -47,7 +48,7 @@ export const updatePlano = async (req: any, res: any) => {
     }
 };
 
-export const deletePlano = async (req: any, res: any) => {
+export const deletePlano = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
         await prismaService.plano.delete({ where: { id: Number(id) } });

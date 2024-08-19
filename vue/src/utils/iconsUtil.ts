@@ -1,5 +1,5 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faChartPie, faCircleCheck, faCirclePlus, faCircleXmark, faCogs, faLayerGroup, faRightFromBracket, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faChartPie, faCircleCheck, faCirclePlus, faCircleXmark, faCogs, faLayerGroup, faPencil, faRightFromBracket, faTrash, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as IconsUtil } from "@fortawesome/vue-fontawesome";
 
 library.add(
@@ -10,7 +10,9 @@ library.add(
     faRightFromBracket,
     faLayerGroup,
     faCircleCheck,
-    faCircleXmark
+    faCircleXmark,
+    faTrash,
+    faPencil
 )
 
 export default IconsUtil
