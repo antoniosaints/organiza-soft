@@ -2,7 +2,7 @@ export default interface IParcelamento {
     id?: number;
     transacaoId: number;
     parcela: number;
-    status: string;
+    status: 'recebido' | 'pendente' | 'cancelada';
     valor: number;
     valorRecebido?: number;
     dataRecebimento?: Date;

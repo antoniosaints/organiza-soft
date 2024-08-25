@@ -10,7 +10,7 @@ export default interface ITransacao {
     categoriasId: number;
     parcelado: string;
     valor: number;
-    status: string;
+    status: 'recebido' | 'pendente' | 'cancelada';
     planoId?: number;
     servicoId?: number;
     parcelamentoId?: number;

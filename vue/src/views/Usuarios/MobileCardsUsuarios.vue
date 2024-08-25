@@ -9,7 +9,7 @@
         id="react-option"
         value=""
         class="hidden peer"
-        required=""
+        required
       />
       <label
         for="react-option"

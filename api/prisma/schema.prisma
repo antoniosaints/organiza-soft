@@ -203,6 +203,7 @@ enum NaturezaTransacao {
 enum StatusTransacao {
   recebido
   pendente
+  cancelada
 }
 
 enum Regra {
