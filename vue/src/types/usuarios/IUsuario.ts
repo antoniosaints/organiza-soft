@@ -3,8 +3,8 @@ export default interface IUsuario {
   nome: string;
   email: string;
   senha: string;
-  status: string;
-  regra: string;
+  status: 'ativo' | 'inativo';
+  regra:  'admin' | 'gerente' | 'moderador' | 'submoderador' | 'visualizador';
   grupoId: number;
   anotacoes?: string;
   telefone?: string;
