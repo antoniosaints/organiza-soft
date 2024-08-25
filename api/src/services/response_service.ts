@@ -33,7 +33,7 @@ class ResponseService {
     });
   }
 
-  static forbidden(res: any, message = "Forbidden", error: number = 403) {
+  static forbidden(res: Response, message = "Forbidden", error: number = 403) {
     return res.status(error).json({
       status: "error",
       message,
@@ -41,7 +41,7 @@ class ResponseService {
     });
   }
 
-  static notFound(res: any, message = "Not found", error: number = 404,) {
+  static notFound(res: Response, message = "Not found", error: number = 404,) {
     return res.status(error).json({
       status: "error",
       message,
@@ -50,7 +50,7 @@ class ResponseService {
   }
 
   static internalError(
-    res: any,
+    res: Response,
     error: any,
     message = "Internal server error"
   ) {

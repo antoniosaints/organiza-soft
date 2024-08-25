@@ -31,7 +31,7 @@ const uploadService = (
     },
   });
 
-  const fileFilter = (req: any, file: any, cb: any) => {
+  const fileFilter = (req: Request, file: any, cb: any) => {
     const allowTypes = [
       "image/jpeg",
       "image/jpg",
