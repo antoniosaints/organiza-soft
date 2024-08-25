@@ -4,9 +4,9 @@
             <div class="flex h-16 items-center justify-between px-4">
                 <router-link to="/" class="flex items-center gap-2 font-bold dark:bg-gray-950 bg-white">
                     <iconFA class="h-6 w-6" icon="fa-scale-unbalanced-flip" />
-                    <span class="text-lg">Acme</span>
+                    <span class="text-lg">Organiza Soft</span>
                 </router-link>
-                <button type="button" class="sm:hidden" @click="toggleSidebar">
+                <button type="button" class="lg:hidden" @click="toggleSidebar">
                     <iconFA class="h-5 w-5" icon="fa-bars" />
                 </button>
             </div>
@@ -20,13 +20,13 @@
                     <collapsible class="grid gap-2">
                         <collapsible-trigger
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
-                            <iconFA class="h-5 w-5" icon="fa-folder" />
-                            <span>Opções</span>
+                            <iconFA class="h-5 w-5" icon="fa-cogs" />
+                            <span>Administração</span>
                             <iconFA class="ml-auto h-4 w-4 transition-transform" icon="fa-chevron-right" />
                         </collapsible-trigger>
                         <collapsible-content>
                             <div class="grid gap-2 pl-6">
-                                <router-link to="/about"
+                                <router-link to="/administracao/usuarios"
                                     class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
                                     <iconFA class="h-5 w-5" icon="fa-user" />
                                     <span>Usuários</span>
@@ -61,12 +61,18 @@
                     </router-link>
                 </nav>
             </div>
+            <nav class="mb-4 mx-3">
+                <router-link to="/login" class="flex text-red-600 items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
+                    <iconFA class="h-5 w-5" icon="fa-right-from-bracket" />
+                    <span>Logout</span>
+                </router-link>
+            </nav>
         </aside>
         <div class="flex-1 lg:pl-64">
             <header
                 class="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-border bg-background px-4 shadow-sm lg:px-6">
                 <div class="flex items-center gap-4">
-                    <button type="button" class="sm:hidden" @click="toggleSidebar">
+                    <button type="button" class="lg:hidden" @click="toggleSidebar">
                         <iconFA class="h-5 w-5" icon="fa-bars" />
                     </button>
                     <breadcrumb>
@@ -112,10 +118,10 @@
                             </avatar>
                         </dropdown-menu-trigger>
                         <dropdown-menu-content>
-                            <dropdown-menu-item>My Account</dropdown-menu-item>
-                            <dropdown-menu-item>Settings</dropdown-menu-item>
+                            <dropdown-menu-item><iconFA class="h-3 w-3 mr-2" icon="fa-user" /> Perfil</dropdown-menu-item>
+                            <dropdown-menu-item><iconFA class="h-3 w-3 mr-2" icon="fa-cogs" /> Configs</dropdown-menu-item>
                             <dropdown-menu-separator />
-                            <dropdown-menu-item>Logout</dropdown-menu-item>
+                            <dropdown-menu-item><iconFA class="h-3 w-3 mr-2" icon="fa-right-from-bracket" /> Sair</dropdown-menu-item>
                         </dropdown-menu-content>
                     </dropdown-menu>
                 </div>
@@ -151,6 +157,6 @@ const toggleSidebar = () => {
 
 const sidebarClasses = computed(() => {
     return `fixed inset-y-0 left-0 z-20 flex w-64 flex-col border-r border-border bg-background
-      transition-all duration-300 ${isSidebarOpen.value ? 'translate-x-0' : '-translate-x-full'} sm:translate-x-0`;
+      transition-all duration-300 ${isSidebarOpen.value ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`;
 });
 </script>

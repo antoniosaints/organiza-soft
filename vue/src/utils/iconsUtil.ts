@@ -20,7 +20,8 @@ library.add(
     faUser,
     faBook,
     faBars,
-    faScaleUnbalancedFlip
+    faScaleUnbalancedFlip,
+    faRightFromBracket
 )
 
 export default IconsUtil
