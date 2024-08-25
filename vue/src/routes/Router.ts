@@ -7,7 +7,7 @@ const routes = [
         name: "DefaultLayout",
         redirect: "/login",
         meta: { requiresAuth: true },
-        component: () => import("@/layouts/default.vue"),
+        component: () => import("@/layouts/shadcn/index.vue"),
         children: [
             {
                 path: "/dashboard",
