@@ -1,5 +1,5 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faChartPie, faCircleCheck, faCirclePlus, faCircleXmark, faCogs, faLayerGroup, faPencil, faRightFromBracket, faTrash, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faBook, faBoxesStacked, faChartPie, faChevronRight, faCircleCheck, faCirclePlus, faCircleXmark, faCogs, faFolder, faHomeUser, faLayerGroup, faPencil, faRightFromBracket, faScaleUnbalancedFlip, faTrash, faUser, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as IconsUtil } from "@fortawesome/vue-fontawesome";
 
 library.add(
@@ -12,7 +12,15 @@ library.add(
     faCircleCheck,
     faCircleXmark,
     faTrash,
-    faPencil
+    faPencil,
+    faHomeUser,
+    faFolder,
+    faBoxesStacked,
+    faChevronRight,
+    faUser,
+    faBook,
+    faBars,
+    faScaleUnbalancedFlip
 )
 
 export default IconsUtil
