@@ -1,8 +1,8 @@
+import {Request, Response} from 'express';
 import HttpErrorService from "../services/http_error_service";
 import prismaService from "../services/prisma_service";
 import ResponseService from "../services/response_service";
 import { ValidationError } from "../utils/http/lancar_erro";
-import { Request, Response } from "express";
 
 export const createPermissoes = async (req: Request, res: Response) => {
   const { permissao, status, slug } = req.body;

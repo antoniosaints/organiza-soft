@@ -1,10 +1,11 @@
+import { Request, Response } from 'express';
 import HttpErrorService from "../services/http_error_service";
 import JwtService from "../services/jwt_service";
 import prisma_service from "../services/prisma_service";
 import ResponseService from "../services/response_service";
 
 class AuthController {
-  static async login(req: any, res: any) {
+  static async login(req: Request, res: Response) {
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -37,7 +38,7 @@ class AuthController {
     );
   }
 
-  static async verify(req: any, res: any) {
+  static async verify(req: Request, res: Response) {
     try {
       const authHeader = req.headers.authorization;
 
@@ -73,7 +74,7 @@ class AuthController {
     }
   }
 
-  static async decode(req: any, res: any) {
+  static async decode(req: Request, res: Response) {
     try {
       const authHeader = req.headers.authorization;
 

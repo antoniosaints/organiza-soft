@@ -1,8 +1,9 @@
+import { Request, Response } from 'express';
 import HttpErrorService from "../services/http_error_service";
 import prismaService from "../services/prisma_service";
 import ResponseService from "../services/response_service";
 
-export const createConta = async (req: any, res: any) => {
+export const createConta = async (req: Request, res: Response) => {
   const { conta, saldo, regra, userId, cor, descricao } = req.body;
   try {
     const data = await prismaService.contas.create({
@@ -17,7 +18,7 @@ export const createConta = async (req: any, res: any) => {
   }
 };
 
-export const getContas = async (req: any, res: any) => {
+export const getContas = async (req: Request, res: Response) => {
   try {
     const contas = await prismaService.contas.findMany();
     ResponseService.success(res, { data: contas });
@@ -26,7 +27,7 @@ export const getContas = async (req: any, res: any) => {
   }
 };
 
-export const getConta = async (req: any, res: any) => {
+export const getConta = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     if (!id) throw new Error("ID obrigatorio");
@@ -39,7 +40,7 @@ export const getConta = async (req: any, res: any) => {
   }
 };
 
-export const updateConta = async (req: any, res: any) => {
+export const updateConta = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const { conta, saldo, regra, userId, cor, descricao } = req.body;
@@ -56,7 +57,7 @@ export const updateConta = async (req: any, res: any) => {
   }
 };
 
-export const deleteConta = async (req: any, res: any) => {
+export const deleteConta = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const conta = await prismaService.contas.delete({

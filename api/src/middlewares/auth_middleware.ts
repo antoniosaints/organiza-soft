@@ -1,7 +1,7 @@
 import JwtService from "../services/jwt_service";
 import ResponseService from "../services/response_service";
 
-const auth_middleware = (req: any, res: any, next: any) => {
+const auth_middleware = (req: Request, res: Response, next: any) => {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
         return ResponseService.unauthorized(res, "Token não informado");

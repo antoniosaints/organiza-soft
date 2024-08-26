@@ -1,8 +1,9 @@
+import {Request, Response} from 'express';
 import HttpErrorService from "../services/http_error_service";
 import prismaService from "../services/prisma_service";
 import ResponseService from "../services/response_service";
 
-export const createGrupos = async (req: any, res: any) => {
+export const createGrupos = async (req: Request, res: Response) => {
   const { grupo, cor } = req.body;
   try {
     const grupos = await prismaService.grupos.create({
@@ -17,7 +18,7 @@ export const createGrupos = async (req: any, res: any) => {
   }
 };
 
-export const getGrupos = async (req: any, res: any) => {
+export const getGrupos = async (req: Request, res: Response) => {
   try {
     const grupos = await prismaService.grupos.findMany();
     ResponseService.success(res, { data: grupos });
@@ -26,7 +27,7 @@ export const getGrupos = async (req: any, res: any) => {
   }
 };
 
-export const getGrupo = async (req: any, res: any) => {
+export const getGrupo = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const grupos = await prismaService.grupos.findUnique({
@@ -49,7 +50,7 @@ export const getGrupo = async (req: any, res: any) => {
   }
 };
 
-export const updateGrupo = async (req: any, res: any) => {
+export const updateGrupo = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { grupo, cor } = req.body;
   try {
@@ -66,7 +67,7 @@ export const updateGrupo = async (req: any, res: any) => {
   }
 };
 
-export const deletegrupos = async (req: any, res: any) => {
+export const deletegrupos = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     await prismaService.grupos.delete({ where: { id: Number(id) } });

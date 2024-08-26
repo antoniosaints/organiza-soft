@@ -1,10 +1,12 @@
 import { deleteFileService, renameFileService } from "../services/file_service";
+import { Request, Response } from 'express';
 import HttpErrorService from "../services/http_error_service";
 import prismaService from "../services/prisma_service";
 import ResponseService from "../services/response_service";
 import uploadService from "../services/upload_service";
 
-export const createTransacao = async (req: any, res: any) => {
+// Criação de transação
+export const createTransacao = async (req: Request, res: Response) => {
   try {
     const {
       clienteId,
@@ -25,6 +27,7 @@ export const createTransacao = async (req: any, res: any) => {
       status,
       descricao,
     } = req.body;
+
     const transacao = await prismaService.transacao.create({
       data: {
         clienteId,
@@ -46,16 +49,18 @@ export const createTransacao = async (req: any, res: any) => {
         descricao,
       },
     });
+
     ResponseService.created(res, {
-      message: "Transação criada com sucesso",
+      message: "Transação criada com sucesso",
       data: transacao,
-    }, "Transação criada com sucesso");
+    }, "Transação criada com sucesso");
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
   }
 };
 
-export const getTransacoes = async (req: any, res: any) => {
+// Obter todas as transações
+export const getTransacoes = async (req: Request, res: Response) => {
   try {
     const transacoes = await prismaService.transacao.findMany();
     ResponseService.success(res, { data: transacoes });
@@ -64,7 +69,8 @@ export const getTransacoes = async (req: any, res: any) => {
   }
 };
 
-export const getTransacao = async (req: any, res: any) => {
+// Obter transação por ID
+export const getTransacao = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const transacao = await prismaService.transacao.findUnique({
@@ -76,7 +82,8 @@ export const getTransacao = async (req: any, res: any) => {
   }
 };
 
-export const updateTransacao = async (req: any, res: any) => {
+// Atualizar transação
+export const updateTransacao = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const {
@@ -120,32 +127,40 @@ export const updateTransacao = async (req: any, res: any) => {
         descricao,
       },
     });
+
     ResponseService.success(res, {
-      message: "Transação atualizada com sucesso",
+      message: "Transação atualizada com sucesso",
       data: transacao,
-    }, "Transação atualizada com sucesso");
+    }, "Transação atualizada com sucesso");
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
   }
 };
 
-export const uploadComprovante = async (req: any, res: any) => {
+// Upload de comprovante
+export const uploadComprovante = async (req: Request, res: Response) => {
   const upload = uploadService("comprovante", "tsc01");
 
   upload(req, res, (err: any) => {
     if (err) {
-      return ResponseService.notFound(res, "Comprovante não enviado");
+      return ResponseService.notFound(res, "Comprovante não enviado");
     }
+
+    if (!req.files || !Array.isArray(req.files)) {
+      return ResponseService.notFound(res, "Nenhum arquivo foi enviado");
+    }
+
+    const files = req.files as Express.Multer.File[]; // Tipagem correta para req.files
 
     ResponseService.success(res, {
       message: "Comprovante enviado com sucesso",
-      data: req.files.map((file: any) => file.filename),
+      data: files.map((file) => file.filename), // Usando map com a tipagem correta
     }, "Comprovante enviado com sucesso");
-  })
-
+  });
 };
 
-export const deleteComprovante = async (req: any, res: any) => {
+// Excluir comprovante
+export const deleteComprovante = async (req: Request, res: Response) => {
   try {
     const fileName = req.params.filename;
     deleteFileService(fileName, (err: any) => {
@@ -156,14 +171,14 @@ export const deleteComprovante = async (req: any, res: any) => {
       ResponseService.success(res, {
         message: "Comprovante excluído com sucesso",
       }, "Comprovante excluído com sucesso");
-    })
+    });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
   }
-
 };
 
-export const renameComprovante = async (req: any, res: any) => {
+// Renomear comprovante
+export const renameComprovante = async (req: Request, res: Response) => {
   try {
     const oldName = req.params.filename;
     const { newName } = req.body;
@@ -175,17 +190,18 @@ export const renameComprovante = async (req: any, res: any) => {
       ResponseService.success(res, {
         message: "Comprovante renomeado com sucesso",
       }, "Comprovante renomeado com sucesso");
-    })
+    });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
   }
 };
 
-export const deleteTransacao = async (req: any, res: any) => {
+// Excluir transação
+export const deleteTransacao = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     await prismaService.transacao.delete({ where: { id: Number(id) } });
-    ResponseService.success(res, { message: "Transação excluida com sucesso" });
+    ResponseService.success(res, { message: "Transação excluída com sucesso" });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
   }

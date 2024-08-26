@@ -6,7 +6,7 @@ import ResponseService from "../services/response_service";
 import validateSchema from "../services/validade_schema";
 import { ValidationError } from "../utils/http/lancar_erro";
 
-export const createUsuario = async (req: any, res: any) => {
+export const createUsuario = async (req: Request, res: Response) => {
   try {
     const validated = validateSchema(createUser, req.body);
     const usuario = await prismaService.usuario.create({
@@ -38,7 +38,7 @@ export const getUsuarios = async (req: Request, res: Response) => {
   }
 };
 
-export const getUsuario = async (req: any, res: any) => {
+export const getUsuario = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const usuario = await prismaService.usuario.findUnique({
@@ -50,7 +50,7 @@ export const getUsuario = async (req: any, res: any) => {
   }
 };
 
-export const updateUsuario = async (req: any, res: any) => {
+export const updateUsuario = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     if (!id) throw new ValidationError("ID obrigatorio");
@@ -69,7 +69,7 @@ export const updateUsuario = async (req: any, res: any) => {
   }
 };
 
-export const deleteUsuario = async (req: any, res: any) => {
+export const deleteUsuario = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     await prismaService.usuario.delete({ where: { id: Number(id) } });
