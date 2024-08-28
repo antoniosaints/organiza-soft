@@ -34,6 +34,11 @@ const routes = [
                         component: () => import("@/views/Administracao/Regras/RegrasView.vue")
                     }
                 ]
+            },
+            {
+                path: "/perfil",
+                name: "Perfil",
+                component: () => import("@/views/Perfil/InformacoesView.vue")
             }
         ]
     },
@@ -45,7 +50,7 @@ const routes = [
 ];
 
 export const Router = createRouter({
-    linkActiveClass: 'dark:bg-gray-700 bg-gray-200',
+    // linkActiveClass: 'dark:bg-gray-700 bg-gray-200',
     linkExactActiveClass: 'border-indigo-700',
     history: createWebHistory(),
     routes

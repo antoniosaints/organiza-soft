@@ -118,7 +118,7 @@
                             </avatar>
                         </dropdown-menu-trigger>
                         <dropdown-menu-content>
-                            <dropdown-menu-item><iconFA class="h-3 w-3 mr-2" icon="fa-user" /> Perfil</dropdown-menu-item>
+                            <dropdown-menu-item><router-link to="/perfil"><iconFA class="h-3 w-3 mr-2" icon="fa-user" /> Perfil</router-link></dropdown-menu-item>
                             <dropdown-menu-item><iconFA class="h-3 w-3 mr-2" icon="fa-cogs" /> Configs</dropdown-menu-item>
                             <dropdown-menu-separator />
                             <dropdown-menu-item><iconFA class="h-3 w-3 mr-2" icon="fa-right-from-bracket" /> Sair</dropdown-menu-item>
