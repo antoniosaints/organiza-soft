@@ -1,8 +1,9 @@
+import { Request } from "express";
 import { promises as fs } from "fs";
-import multer from "multer";
+import multer, { StorageEngine, FileFilterCallback } from "multer";
 import path from "path";
 
-const ensureDirectoryExists = async (directory: any) => {
+const ensureDirectoryExists = async (directory: string): Promise<void> => {
   try {
     await fs.access(directory);
   } catch (error) {
@@ -16,8 +17,12 @@ const uploadService = (
   tagUpload: string,
   pathName = "uploads/"
 ) => {
-  const storage = multer.diskStorage({
-    destination: async (req, file, cb) => {
+  const storage: StorageEngine = multer.diskStorage({
+    destination: async (
+      req: Request,
+      file: Express.Multer.File,
+      cb: (error: Error | null, destination: string) => void
+    ) => {
       try {
         await ensureDirectoryExists(pathName);
         cb(null, pathName);
@@ -25,13 +30,21 @@ const uploadService = (
         cb(new Error("Falha na criação do diretorio"), "");
       }
     },
-    filename: (req, file, cb) => {
+    filename: (
+      req: Request,
+      file: Express.Multer.File,
+      cb: (error: Error | null, filename: string) => void
+    ) => {
       const extension = path.extname(file.originalname);
       cb(null, `${Date.now()}_${tagUpload}${extension}`);
     },
   });
 
-  const fileFilter = (req: Request, file: any, cb: any) => {
+  const fileFilter = (
+    req: Request,
+    file: Express.Multer.File,
+    cb: any
+  ) => {
     const allowTypes = [
       "image/jpeg",
       "image/jpg",
@@ -48,21 +61,12 @@ const uploadService = (
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       "application/vnd.ms-powerpoint",
       "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-      // 'audio/mpeg',
-      // 'audio/wav',
-      // 'video/mp4',
-      // 'application/zip',
-      // 'application/x-rar-compressed',
-      // 'application/gzip',
-      // 'application/x-7z-compressed',
-      // 'application/octet-stream',
-      // 'application/x-msdownload'
     ];
 
     if (allowTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(new Error("Invalid file type!"), false);
+      cb(new Error("Tipo de arquivo inválido!"), false);
     }
   };
 
