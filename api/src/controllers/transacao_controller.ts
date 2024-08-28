@@ -143,7 +143,7 @@ export const uploadComprovante = async (req: Request, res: Response) => {
 
   upload(req, res, (err: any) => {
     if (err) {
-      return ResponseService.notFound(res, "Comprovante não enviado");
+      return ResponseService.notFound(res, err.message);
     }
 
     if (!req.files || !Array.isArray(req.files)) {
