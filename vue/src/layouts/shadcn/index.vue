@@ -3,37 +3,37 @@
         <aside :class="sidebarClasses">
             <div class="flex h-16 items-center justify-between px-4">
                 <router-link to="/" class="flex items-center gap-2 font-bold dark:bg-gray-950 bg-white">
-                    <iconFA class="h-6 w-6" icon="fa-scale-unbalanced-flip" />
+                    <Wallet />
                     <span class="text-lg">Organiza Soft</span>
                 </router-link>
                 <button type="button" class="lg:hidden" @click="toggleSidebar">
-                    <iconFA class="h-5 w-5" icon="fa-bars" />
+                    <Menu />
                 </button>
             </div>
             <div class="flex-1 overflow-y-auto px-2 py-4">
                 <nav class="grid gap-2">
                     <router-link to="/dashboard"
                         class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
-                        <iconFA class="h-5 w-5" icon="fa-home-user" />
+                        <House />
                         <span>Dashboard</span>
                     </router-link>
                     <collapsible class="grid gap-2">
                         <collapsible-trigger
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
-                            <iconFA class="h-5 w-5" icon="fa-cogs" />
+                            <LockKeyhole />
                             <span>Administração</span>
-                            <iconFA class="ml-auto h-4 w-4 transition-transform" icon="fa-chevron-right" />
+                            <ChevronRight class="ml-auto h-4 w-4 transition-transform" />
                         </collapsible-trigger>
                         <collapsible-content>
                             <div class="grid gap-2 pl-6">
                                 <router-link to="/administracao/usuarios"
                                     class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
-                                    <iconFA class="h-5 w-5" icon="fa-user" />
+                                    <Users />
                                     <span>Usuários</span>
                                 </router-link>
                                 <router-link to="/contact"
                                     class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
-                                    <iconFA class="h-5 w-5" icon="fa-book" />
+                                    <List />
                                     <span>Contatos</span>
                                 </router-link>
                             </div>
@@ -41,29 +41,15 @@
                     </collapsible>
                     <router-link to="/products"
                         class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
-                        <iconFA class="h-5 w-5" icon="fa-boxes-stacked" />
-                        <span>Products</span>
-                    </router-link>
-                    <router-link to="/orders"
-                        class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
-                        <ShoppingCartIcon class="h-5 w-5" />
-                        <span>Orders</span>
-                    </router-link>
-                    <router-link to="/customers"
-                        class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
-                        <UsersIcon class="h-5 w-5" />
-                        <span>Customers</span>
-                    </router-link>
-                    <router-link to="/settings"
-                        class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
-                        <SettingsIcon class="h-5 w-5" />
-                        <span>Settings</span>
+                        <PackageOpen />
+                        <span>Patrimônio</span>
                     </router-link>
                 </nav>
             </div>
             <nav class="mb-4 mx-3">
-                <router-link to="/login" class="flex text-red-600 items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
-                    <iconFA class="h-5 w-5" icon="fa-right-from-bracket" />
+                <router-link to="/login"
+                    class="flex text-red-600 items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
+                    <LogOut />
                     <span>Logout</span>
                 </router-link>
             </nav>
@@ -73,7 +59,7 @@
                 class="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-border bg-background px-4 shadow-sm lg:px-6">
                 <div class="flex items-center gap-4">
                     <button type="button" class="lg:hidden" @click="toggleSidebar">
-                        <iconFA class="h-5 w-5" icon="fa-bars" />
+                        <Menu />
                     </button>
                     <breadcrumb>
                         <breadcrumb-list>
@@ -113,15 +99,21 @@
                     <dropdown-menu>
                         <dropdown-menu-trigger>
                             <avatar class="h-9 w-9">
-                                <img src="/logo-login.png" alt="@shadcn" />
-                                <span>JP</span>
+                                <AvatarImage src="/logo-login.png" />
+                                <AvatarFallback>JP</AvatarFallback>
                             </avatar>
                         </dropdown-menu-trigger>
                         <dropdown-menu-content>
-                            <dropdown-menu-item><router-link to="/perfil"><iconFA class="h-3 w-3 mr-2" icon="fa-user" /> Perfil</router-link></dropdown-menu-item>
-                            <dropdown-menu-item><iconFA class="h-3 w-3 mr-2" icon="fa-cogs" /> Configs</dropdown-menu-item>
+                            <dropdown-menu-item><router-link to="/perfil">
+                                    <iconFA class="h-3 w-3 mr-2" icon="fa-user" /> Perfil
+                                </router-link></dropdown-menu-item>
+                            <dropdown-menu-item>
+                                <iconFA class="h-3 w-3 mr-2" icon="fa-cogs" /> Configs
+                            </dropdown-menu-item>
                             <dropdown-menu-separator />
-                            <dropdown-menu-item><iconFA class="h-3 w-3 mr-2" icon="fa-right-from-bracket" /> Sair</dropdown-menu-item>
+                            <dropdown-menu-item>
+                                <iconFA class="h-3 w-3 mr-2" icon="fa-right-from-bracket" /> Sair
+                            </dropdown-menu-item>
                         </dropdown-menu-content>
                     </dropdown-menu>
                 </div>
@@ -135,7 +127,8 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import {Icon} from "@iconify/vue";
+import { House, LockKeyhole, Users, List, PackageOpen, Wallet, Menu, ChevronRight, LogOut, User } from 'lucide-vue-next'
+import { Icon } from "@iconify/vue";
 import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible"
 import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "@/components/ui/breadcrumb"
