@@ -23,6 +23,7 @@
     "flowbite": "^2.4.1",
     "flowbite-vue": "^0.1.5",
     "izitoast": "^1.4.0",
+    "lucide-vue-next": "^0.436.0",
     "pinia": "^2.2.0",
     "radix-vue": "^1.9.4",
     "tailwind-merge": "^2.5.2",
