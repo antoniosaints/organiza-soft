@@ -1,11 +1,16 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
-import { Box, Lock, MessageCircle, Users } from "lucide-vue-next"
+import { Box, Lock, MessageCircle, PenTool, Users } from "lucide-vue-next"
+
+
+const { t } = useI18n();
+
 </script>
 <template>
     <div class="mx-auto max-w-7xl">
@@ -93,7 +98,7 @@ import { Box, Lock, MessageCircle, Users } from "lucide-vue-next"
                 <CardHeader>
                     <div class="flex items-center">
                         <Box class="h-4 w-4 mr-2" />
-                        <CardTitle>Patrimônio</CardTitle>
+                        <CardTitle>{{ t('menu.stock') }}</CardTitle>
                     </div>
                     <CardDescription>Defina as configurações de patrimônio.</CardDescription>
                 </CardHeader>
@@ -106,17 +111,26 @@ import { Box, Lock, MessageCircle, Users } from "lucide-vue-next"
                         </div>
                         <Switch id="dark-mode" />
                     </div>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader>
+                    <div class="flex items-center">
+                        <PenTool class="h-4 w-4 mr-2" />
+                        <CardTitle>{{ t('menu.all') }}</CardTitle>
+                    </div>
+                    <CardDescription>Defina as configurações gerais do sistema.</CardDescription>
+                </CardHeader>
+                <CardContent class="space-y-4">
                     <div class="space-y-2">
                         <Label htmlFor="language">Idioma</Label>
-                        <Select defaultValue="pt-br">
+                        <Select defaultValue="pt">
                             <SelectTrigger id="language">
                                 <SelectValue placeholder="Selecione seu idioma" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="pt-br">Português</SelectItem>
-                                <!-- <SelectItem value="es">Español</SelectItem>
-                                <SelectItem value="fr">Français</SelectItem>
-                                <SelectItem value="de">Deutsch</SelectItem> -->
+                                <SelectItem value="pt">Português</SelectItem>
+                                <!-- <SelectItem value="en">Inglês</SelectItem> -->
                             </SelectContent>
                         </Select>
                     </div>

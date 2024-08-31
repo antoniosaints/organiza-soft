@@ -22,16 +22,6 @@ const routes = [
                         path: "/administracao/usuarios",
                         name: "Usuarios",
                         component: () => import("@/views/Usuarios/UsuariosView.vue")
-                    },
-                    {
-                        path: "/administracao/usuarios/cards",
-                        name: "CardsUsuarios",
-                        component: () => import("@/views/Usuarios/MobileCardsUsuarios.vue")
-                    },
-                    {
-                        path: "/administracao/regras",
-                        name: "Regras",
-                        component: () => import("@/views/Administracao/Regras/RegrasView.vue")
                     }
                 ]
             },
