@@ -1,6 +1,6 @@
 <template>
     <TableRow class="hover:bg-foreground/5 transition-colors">
-        <TableCell >{{ client.id }}</TableCell>
+        <TableCell >#{{ client.id }}</TableCell>
         <TableCell>
             <HoverCard>
                 <HoverCardTrigger asChild>
@@ -13,12 +13,12 @@
                 </HoverCardContent>
             </HoverCard>
         </TableCell>
-        <TableCell class="hidden sm:table-cell">{{ client.email }}</TableCell>
+        <TableCell class="hidden md:table-cell">{{ client.email }}</TableCell>
         <TableCell>
             <UsuarioBadge :status="client.status" />
         </TableCell>
         <TableCell class="text-right">
-            <UsuarioActions />
+            <UsuarioActions :id="client.id" />
         </TableCell>
     </TableRow>
 </template>

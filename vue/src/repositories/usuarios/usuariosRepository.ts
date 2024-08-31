@@ -18,4 +18,8 @@ export class UsuariosRepository {
         const { data } = await axiosService.put(`usuario/${id}`, user);
         return data.data;
     }
+    static async delete(id: number): Promise<any> {
+        const { data } = await axiosService.delete(`usuario/${id}`);
+        return data.data;
+    }
 }
