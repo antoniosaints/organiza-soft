@@ -1,9 +1,9 @@
 <template>
     <Dialog v-model:open="UsuarioFormularioState.modalState">
         <DialogTrigger as-child>
-            <Button size="sm" class="bg-primary hover:bg-primary/90"><UserPlus class="mr-1 h-3 w-3" /> Cadastrar Usuário</Button>
+            <Button @click="defineSaveForm" size="sm" class="bg-primary hover:bg-primary/90"><UserPlus class="mr-1 h-3 w-3" /> Cadastrar Usuário</Button>
         </DialogTrigger>
-        <DialogContent class="sm:max-w-xl">
+        <DialogContent aria-describedby="description" class="sm:max-w-xl">
             <DialogHeader>
                 <DialogTitle> Cadastro de Usuário</DialogTitle>
             </DialogHeader>
@@ -19,4 +19,10 @@ import UserForm from "@/pages/Usuarios/Formulario/UsuarioFormulario.vue";
 import { UserPlus } from "lucide-vue-next";
 import { useUsuarioFormularioStore } from "@/stores/usuarios/usuarioFormularioStore";
 const UsuarioFormularioState = useUsuarioFormularioStore();
+
+const defineSaveForm = () => {
+    UsuarioFormularioState.ref_id = null
+    UsuarioFormularioState.data = UsuarioFormularioState.data_default
+}
+
 </script>
