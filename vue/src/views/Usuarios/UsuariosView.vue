@@ -1,18 +1,16 @@
 <template>
   <div>
-    <UsuariosTable :usersListagem="usersListagem" />
+    <UsuariosTable :usersListagem="usuarioStore.usuarios" />
   </div>
 </template>
 
 <script setup lang="ts">
 import UsuariosTable from '@/pages/Usuarios/UsuariosTable.vue';
 import { useUsuarioStore } from '@/stores/usuarios/usuarioStore';
-import IUsuario from '@/types/usuarios/IUsuario';
-import { onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
 const usuarioStore = useUsuarioStore();
-const usersListagem = ref<IUsuario[] | null> ();
 
 onMounted(async () => {
-  usersListagem.value = await usuarioStore.getUsuarios();
+  await usuarioStore.getUsuarios();
 });
 </script>

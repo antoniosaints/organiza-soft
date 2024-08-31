@@ -5,15 +5,19 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
+import { Box, Lock, MessageCircle, Users } from "lucide-vue-next"
 </script>
 <template>
-    <div class="container mx-auto p-4 max-w-7xl">
+    <div class="mx-auto max-w-7xl">
         <h1 class="text-3xl font-bold mb-6">Configurações de Perfil</h1>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <Card class="md:col-span-2">
                 <CardHeader>
-                    <CardTitle>Informações Pessoais</CardTitle>
+                    <div class="flex items-center">
+                        <Users class="h-4 w-4 mr-2" />
+                        <CardTitle> Informações Pessoais</CardTitle>
+                    </div>
                     <CardDescription>Atualize suas informações pessoais aqui.</CardDescription>
                 </CardHeader>
                 <CardContent class="space-y-4">
@@ -34,7 +38,10 @@ import { Switch } from "@/components/ui/switch"
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Privacidade</CardTitle>
+                    <div class="flex items-center">
+                        <Lock class="h-4 w-4 mr-2" />
+                        <CardTitle>Privacidade</CardTitle>
+                    </div>
                     <CardDescription>Configure suas opções de privacidade.</CardDescription>
                 </CardHeader>
                 <CardContent class="space-y-4">
@@ -48,7 +55,8 @@ import { Switch } from "@/components/ui/switch"
                     <div class="flex items-center justify-between">
                         <div class="space-y-0.5">
                             <Label htmlFor="show-email">Lançamentos retroativos</Label>
-                            <p class="text-sm text-muted-foreground">Permite que lançamentos possam ser lançados retroativamente</p>
+                            <p class="text-sm text-muted-foreground">Permite que lançamentos possam ser lançados
+                                retroativamente</p>
                         </div>
                         <Switch id="show-email" />
                     </div>
@@ -57,7 +65,10 @@ import { Switch } from "@/components/ui/switch"
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Notificações</CardTitle>
+                    <div class="flex items-center">
+                        <MessageCircle class="h-4 w-4 mr-2" />
+                        <CardTitle>Notificações</CardTitle>
+                    </div>
                     <CardDescription>Defina as configurações de notificação.</CardDescription>
                 </CardHeader>
                 <CardContent class="space-y-4">
@@ -80,16 +91,20 @@ import { Switch } from "@/components/ui/switch"
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Patrimônio</CardTitle>
+                    <div class="flex items-center">
+                        <Box class="h-4 w-4 mr-2" />
+                        <CardTitle>Patrimônio</CardTitle>
+                    </div>
                     <CardDescription>Defina as configurações de patrimônio.</CardDescription>
                 </CardHeader>
                 <CardContent class="space-y-4">
                     <div class="flex items-center justify-between">
                         <div class="space-y-0.5">
                             <Label htmlFor="dark-mode">Monitorar estoque</Label>
-                            <p class="text-sm text-muted-foreground">Receba notificações por email em caso de estoque baixo</p>
+                            <p class="text-sm text-muted-foreground">Receba notificações por email em caso de estoque
+                                baixo</p>
                         </div>
-                        <Switch id="dark-mode"/>
+                        <Switch id="dark-mode" />
                     </div>
                     <div class="space-y-2">
                         <Label htmlFor="language">Idioma</Label>

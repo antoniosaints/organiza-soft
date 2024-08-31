@@ -2,9 +2,14 @@ import { UsuariosRepository } from "@/repositories/usuarios/usuariosRepository";
 import IUsuario from "@/types/usuarios/IUsuario";
 import toastUtil from "@/utils/toastUtil";
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { Ref, ref } from "vue";
 
-export const useUsuarioStore = defineStore("usuarioStore", () => {
+interface IUsuarioStore {
+    getUsuarios(): Promise<IUsuario[] | undefined>;
+    usuarios: Ref<IUsuario[]>;
+}
+
+export const useUsuarioStore = defineStore("usuarioStore", () : IUsuarioStore => {
     const usuarios = ref<IUsuario[]>([]);
     const getUsuarios = async (): Promise<IUsuario[] | undefined> => {
         try {

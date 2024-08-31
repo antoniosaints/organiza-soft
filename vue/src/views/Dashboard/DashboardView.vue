@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto max-w-7xl">
+  <div class="mx-auto max-w-7xl">
     <div class="gap-4 grid">
       <div class="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
         <Card>
@@ -7,10 +7,10 @@
             <CardTitle class="text-sm font-medium">
               Total recebido
             </CardTitle>
-            <DollarSign class="h-4 w-4 text-muted-foreground" />
+            <DollarSign class="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
-            <div class="text-2xl font-bold">
+            <div class="text-2xl font-bold text-green-500">
               R$45,231.89
             </div>
             <p class="text-xs text-muted-foreground">
@@ -23,10 +23,10 @@
             <CardTitle class="text-sm font-medium">
               Assinaturas
             </CardTitle>
-            <Users class="h-4 w-4 text-muted-foreground" />
+            <Users class="h-4 w-4 text-cyan-500" />
           </CardHeader>
           <CardContent>
-            <div class="text-2xl font-bold">
+            <div class="text-2xl font-bold text-cyan-500">
               +2350
             </div>
             <p class="text-xs text-muted-foreground">
@@ -39,10 +39,10 @@
             <CardTitle class="text-sm font-medium">
               Vendas
             </CardTitle>
-            <CreditCard class="h-4 w-4 text-muted-foreground" />
+            <CreditCard class="h-4 w-4 text-blue-500" />
           </CardHeader>
           <CardContent>
-            <div class="text-2xl font-bold">
+            <div class="text-2xl font-bold text-blue-500">
               +12,234
             </div>
             <p class="text-xs text-muted-foreground">
@@ -55,10 +55,10 @@
             <CardTitle class="text-sm font-medium">
               Clientes
             </CardTitle>
-            <Activity class="h-4 w-4 text-muted-foreground" />
+            <Activity class="h-4 w-4 text-blue-500" />
           </CardHeader>
           <CardContent>
-            <div class="text-2xl font-bold">
+            <div class="text-2xl font-bold text-blue-500">
               +573
             </div>
             <p class="text-xs text-muted-foreground">
