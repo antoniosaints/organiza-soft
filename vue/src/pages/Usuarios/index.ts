@@ -1,0 +1,5 @@
+export { default as UsuarioActions } from './UsuarioActions.vue'
+export { default as UsuarioTable } from './UsuarioTable.vue'
+export { default as UsuarioBadge } from './UsuarioBadge.vue'
+export { default as UsuarioDetails } from './UsuarioDetails.vue'
+export { default as UsuariosRow } from './UsuariosRow.vue'

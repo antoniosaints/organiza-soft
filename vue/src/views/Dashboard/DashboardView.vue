@@ -256,7 +256,7 @@
   </div>
 </template>
 
-<script setup></script><script setup lang="ts">
+<script setup lang="ts">
 import { reactive } from "vue";
 import { Activity, ArrowUpRight, CreditCard, DollarSign, Users } from "lucide-vue-next"
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
