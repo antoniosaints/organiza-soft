@@ -64,6 +64,10 @@ defineProps<{
 }>()
 
 const onDeletarUsuario = async (id: number) => {
+    if (id === 1) {
+        toastUtil.warning("O usuário master não pode ser excluído.", "Ops..");
+        return;
+    }
     try {
         await UsuariosRepository.delete(id);
         UsuarioState.getUsuarios();
@@ -75,8 +79,9 @@ const onDeletarUsuario = async (id: number) => {
     }
 }
 
-const onEditarUsuario = (id: number) => {
-    console.log(id);
+const onEditarUsuario = async (id: number) => {
+    UsuarioFormularioState.ref_id = id;
+    UsuarioFormularioState.data = await UsuariosRepository.get(id);
     UsuarioFormularioState.modalState = true;
 }
 </script>
