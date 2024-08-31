@@ -25,6 +25,8 @@ const i18n = createI18n({
     }
 });
 
+i18n.global.locale.value = <any>localStorage.getItem('gestaocliente:locale') || 'pt';
+
 app.use(i18n);
 
 (async () => {
