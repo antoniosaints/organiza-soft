@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 import JwtService from "../services/jwt_service";
 import ResponseService from "../services/response_service";
 
