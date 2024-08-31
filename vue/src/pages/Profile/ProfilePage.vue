@@ -7,9 +7,14 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { Box, Lock, MessageCircle, PenTool, Users } from "lucide-vue-next"
+import { watch } from 'vue';
 
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
+
+watch(locale, () => {
+    localStorage.setItem('gestaocliente:locale', locale.value);
+});
 
 </script>
 <template>
@@ -45,9 +50,9 @@ const { t } = useI18n();
                 <CardHeader>
                     <div class="flex items-center">
                         <Lock class="h-4 w-4 mr-2" />
-                        <CardTitle>Privacidade</CardTitle>
+                        <CardTitle>{{ t('profile.privacy.title') }}</CardTitle>
                     </div>
-                    <CardDescription>Configure suas opções de privacidade.</CardDescription>
+                    <CardDescription>{{ t('profile.privacy.description') }}</CardDescription>
                 </CardHeader>
                 <CardContent class="space-y-4">
                     <div class="flex items-center justify-between">
@@ -72,9 +77,9 @@ const { t } = useI18n();
                 <CardHeader>
                     <div class="flex items-center">
                         <MessageCircle class="h-4 w-4 mr-2" />
-                        <CardTitle>Notificações</CardTitle>
+                        <CardTitle>{{ t('profile.notify.title') }}</CardTitle>
                     </div>
-                    <CardDescription>Defina as configurações de notificação.</CardDescription>
+                    <CardDescription>{{ t('profile.notify.description') }}</CardDescription>
                 </CardHeader>
                 <CardContent class="space-y-4">
                     <div class="flex items-center justify-between">
@@ -98,9 +103,9 @@ const { t } = useI18n();
                 <CardHeader>
                     <div class="flex items-center">
                         <Box class="h-4 w-4 mr-2" />
-                        <CardTitle>{{ t('menu.stock') }}</CardTitle>
+                        <CardTitle>{{ t('profile.stock.title') }}</CardTitle>
                     </div>
-                    <CardDescription>Defina as configurações de patrimônio.</CardDescription>
+                    <CardDescription>{{ t('profile.stock.description') }}</CardDescription>
                 </CardHeader>
                 <CardContent class="space-y-4">
                     <div class="flex items-center justify-between">
@@ -117,20 +122,20 @@ const { t } = useI18n();
                 <CardHeader>
                     <div class="flex items-center">
                         <PenTool class="h-4 w-4 mr-2" />
-                        <CardTitle>{{ t('menu.all') }}</CardTitle>
+                        <CardTitle>{{ t('profile.general.title') }}</CardTitle>
                     </div>
-                    <CardDescription>Defina as configurações gerais do sistema.</CardDescription>
+                    <CardDescription>{{ t('profile.general.description') }}</CardDescription>
                 </CardHeader>
                 <CardContent class="space-y-4">
                     <div class="space-y-2">
                         <Label htmlFor="language">Idioma</Label>
-                        <Select defaultValue="pt">
+                        <Select v-model="locale">
                             <SelectTrigger id="language">
                                 <SelectValue placeholder="Selecione seu idioma" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="pt">Português</SelectItem>
-                                <!-- <SelectItem value="en">Inglês</SelectItem> -->
+                                <SelectItem value="en">Inglês</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
