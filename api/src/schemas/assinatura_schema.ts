@@ -1,13 +1,13 @@
 import zodUtil from "../utils/validations/zod_util";
 
 const createAssinatura = zodUtil.object({
-  clienteId: zodUtil.string({
+  clienteId: zodUtil.number({
     required_error: "O ID do cliente é obrigatorio.",
-    invalid_type_error: "O ID do cliente deve ser uma String."
+    invalid_type_error: "O ID do cliente deve ser um number."
   }),
-  planoId: zodUtil.string({
+  planoId: zodUtil.number({
     required_error: "O ID do plano é obrigatorio.",
-    invalid_type_error: "O ID do plano deve ser uma String."
+    invalid_type_error: "O ID do plano deve ser um number."
   }),
   dataInicio: zodUtil.string({
     required_error: "A data de inicio é obrigatorio.",
@@ -39,11 +39,11 @@ const createAssinatura = zodUtil.object({
 });
 
 const updateAssinatura = zodUtil.object({
-  clienteId: zodUtil.string({
-    invalid_type_error: "O ID do cliente deve ser uma string",
+  clienteId: zodUtil.number({
+    invalid_type_error: "O ID do cliente deve ser um number",
   }).optional(),
-  planoId: zodUtil.string({
-    invalid_type_error: "O ID do plano deve ser uma string",
+  planoId: zodUtil.number({
+    invalid_type_error: "O ID do plano deve ser um number",
   }).optional(),
   dataInicio: zodUtil.string({
     invalid_type_error: "A data de início deve ser uma string",

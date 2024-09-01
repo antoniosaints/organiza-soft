@@ -23,9 +23,7 @@ class AuthController {
     }
 
     const user = await prisma_service.usuario.findFirst({
-      where: {
-        email: email,
-      },
+      where: { email },
     });
 
     if (!user) {
