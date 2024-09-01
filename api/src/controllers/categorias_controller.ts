@@ -3,12 +3,13 @@ import HttpErrorService from "../services/http_error_service";
 import prismaService from "../services/prisma_service";
 import ResponseService from "../services/response_service";
 import { ValidationError } from "../utils/http/lancar_erro";
-
+import validateSchema from '../services/validade_schema';
+import { createCategoria as createCategoriaSchema, updateCategoria as updateCategoriaSchema } from '../schemas/categoria_schema';
 export const createcategoria = async (req: Request, res: Response) => {
   try {
-    const { categoria, cor } = req.body;
+    const validated = validateSchema(createCategoriaSchema, req.body);
     const received = await prismaService.categorias.create({
-      data: { categoria, cor },
+      data: validated,
     });
     ResponseService.success(res, {
       message: "Categoria criada com sucesso",
@@ -44,10 +45,10 @@ export const updatecategoria = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     if (!id) throw new ValidationError("ID obrigatorio");
-    const { categoria, cor } = req.body;
+    const validated = validateSchema(updateCategoriaSchema, req.body);
     const received = await prismaService.categorias.update({
       where: { id: Number(id) },
-      data: { categoria, cor },
+      data: validated,
     });
     ResponseService.success(res, {
       message: "Categoria atualizada com sucesso",

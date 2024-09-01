@@ -4,50 +4,16 @@ import HttpErrorService from "../services/http_error_service";
 import prismaService from "../services/prisma_service";
 import ResponseService from "../services/response_service";
 import uploadService from "../services/upload_service";
+import { createTransacao as createTransacaoSchema, updateTransacao as updateTransacaoSchema } from "../schemas/transacao_schema";
+import validateSchema from "../services/validade_schema";
 
 // Criação de transação
 export const createTransacao = async (req: Request, res: Response) => {
   try {
-    const {
-      clienteId,
-      operacao,
-      natureza,
-      contaId,
-      formaPagamentoId,
-      planoId,
-      servicoId,
-      categoriasId,
-      parcelado,
-      parcelamentoId,
-      valor,
-      desconto,
-      valorFinal,
-      dataEfetivado,
-      dataLancamento,
-      status,
-      descricao,
-    } = req.body;
+    const validated = validateSchema(createTransacaoSchema, req.body)
 
     const transacao = await prismaService.transacao.create({
-      data: {
-        clienteId,
-        operacao,
-        natureza,
-        contaId,
-        formaPagamentoId,
-        planoId,
-        servicoId,
-        categoriasId,
-        parcelado,
-        parcelamentoId,
-        valor,
-        desconto,
-        valorFinal,
-        dataEfetivado,
-        dataLancamento,
-        status,
-        descricao,
-      },
+      data: validated,
     });
 
     ResponseService.created(res, {
@@ -86,46 +52,11 @@ export const getTransacao = async (req: Request, res: Response) => {
 export const updateTransacao = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const {
-      clienteId,
-      operacao,
-      natureza,
-      contaId,
-      formaPagamentoId,
-      planoId,
-      servicoId,
-      categoriasId,
-      parcelado,
-      parcelamentoId,
-      valor,
-      desconto,
-      valorFinal,
-      dataEfetivado,
-      status,
-      descricao,
-    } = req.body;
-
-    const dataISO = new Date(dataEfetivado).toISOString();
+    const validated = validateSchema(updateTransacaoSchema, req.body)
+    const dataISO = new Date(validated.dataEfetivado).toISOString();
     const transacao = await prismaService.transacao.update({
       where: { id: Number(id) },
-      data: {
-        clienteId,
-        operacao,
-        natureza,
-        contaId,
-        formaPagamentoId,
-        planoId,
-        servicoId,
-        categoriasId,
-        parcelado,
-        parcelamentoId,
-        valor,
-        desconto,
-        valorFinal,
-        dataEfetivado: dataISO,
-        status,
-        descricao,
-      },
+      data: validated
     });
 
     ResponseService.success(res, {

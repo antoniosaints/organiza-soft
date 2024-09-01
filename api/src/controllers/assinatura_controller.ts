@@ -2,31 +2,37 @@ import { Request, Response } from "express";
 import HttpErrorService from "../services/http_error_service";
 import prismaService from "../services/prisma_service";
 import ResponseService from "../services/response_service";
+import { createAssinatura as createAssinaturaSchema, updateAssinatura as updateAssinaturaSchema } from "../schemas/assinatura_schema"; 
+import validateSchema from "../services/validade_schema";
 
 export const createAssinatura = async (req: Request, res: Response) => {
-  const {
-    clienteId,
-    planoId,
-    dataInicio,
-    dataFim,
-    status,
-    dataDesbloqueio,
-    dataBloqueio,
-  } = req.body;
+  try {
+    const validated = validateSchema(createAssinaturaSchema, req.body);
+    const assinatura = await prismaService.assinatura.create({
+      data: validated,
+    });
+    ResponseService.success(res, {
+      message: "Assinatura criada com sucesso",
+      data: assinatura,
+    });
+  } catch (error: any) {
+    HttpErrorService.hadle(error, res);
+  }
+};
+
+export const updateAssinatura = async (req: Request, res: Response) => {
+  const { id } = req.params;
 
   try {
-    const assinatura = await prismaService.assinatura.create({
-      data: {
-        clienteId,
-        planoId,
-        dataInicio: new Date(dataInicio).toISOString(),
-        dataFim: new Date(dataFim).toISOString(),
-        status,
-        ...(dataDesbloqueio && { dataDesbloqueio: new Date(dataDesbloqueio).toISOString() }),
-        ...(dataBloqueio && { dataBloqueio: new Date(dataBloqueio).toISOString() }),
-      },
+    const validated = validateSchema(updateAssinaturaSchema, req.body);
+    const assinatura = await prismaService.assinatura.update({
+      where: { id: Number(id) },
+      data: validated,
     });
-    ResponseService.created(res, { data: assinatura });
+    ResponseService.success(res, {
+      message: "Assinatura atualizada com sucesso",
+      data: assinatura,
+    });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
   }
@@ -52,37 +58,6 @@ export const getAssinatura = async (req: Request, res: Response) => {
     } else {
       ResponseService.notFound(res, "Assinatura não encontrada.");
     }
-  } catch (error: any) {
-    HttpErrorService.hadle(error, res);
-  }
-};
-
-export const updateAssinatura = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const {
-    clienteId,
-    planoId,
-    dataInicio,
-    dataFim,
-    status,
-    dataDesbloqueio,
-    dataBloqueio,
-  } = req.body;
-
-  try {
-    const assinatura = await prismaService.assinatura.update({
-      where: { id: Number(id) },
-      data: {
-        clienteId,
-        planoId,
-        dataInicio: new Date(dataInicio).toISOString(),
-        dataFim: new Date(dataFim).toISOString(),
-        status,
-        ...(dataDesbloqueio && { dataDesbloqueio: new Date(dataDesbloqueio).toISOString() }),
-        ...(dataBloqueio && { dataBloqueio: new Date(dataBloqueio).toISOString() }),
-      },
-    });
-    ResponseService.success(res, { data: assinatura });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
   }

@@ -3,26 +3,13 @@ import HttpErrorService from "../services/http_error_service";
 import prismaService from "../services/prisma_service";
 import ResponseService from "../services/response_service";
 import { ValidationError } from "../utils/http/lancar_erro";
-
+import validateSchema from '../services/validade_schema';
+import { createParcelamento as createParcelamentoSchema, updateParcelamento as updateParcelamentoSchema } from '../schemas/parcelamento_schema';
 export const createParcelamento = async (req: Request, res: Response) => {
   try {
-    const {
-      transacaoId,
-      parcela,
-      status,
-      valor,
-      valorRecebido,
-      dataRecebimento,
-    } = req.body;
+    const validated = validateSchema(createParcelamentoSchema, req.body);
     const received = await prismaService.parcelamento.create({
-      data: {
-        transacaoId,
-        parcela,
-        status,
-        valor,
-        valorRecebido,
-        dataRecebimento,
-      },
+      data: validated,
     });
     ResponseService.success(res, {
       message: "Parcelamento criada com sucesso",
@@ -58,24 +45,10 @@ export const updateParcelamento = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     if (!id) throw new ValidationError("ID obrigatorio");
-    const {
-      transacaoId,
-      parcela,
-      status,
-      valor,
-      valorRecebido,
-      dataRecebimento,
-    } = req.body;
+    const validated = validateSchema(updateParcelamentoSchema, req.body);
     const received = await prismaService.parcelamento.update({
       where: { id: Number(id) },
-      data: {
-        transacaoId,
-        parcela,
-        status,
-        valor,
-        valorRecebido,
-        dataRecebimento,
-      },
+      data: validated,
     });
     ResponseService.success(res, {
       message: "Parcelamento atualizada com sucesso",
