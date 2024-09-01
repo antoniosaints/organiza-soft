@@ -2,12 +2,13 @@ import { Request, Response } from "express";
 import HttpErrorService from "../services/http_error_service";
 import prismaService from "../services/prisma_service";
 import ResponseService from "../services/response_service";
-
+import { createPlano as createPlanoSchema, updatePlano as updatePlanoSchema } from "../schemas/plano_schema";
+import validateSchema from "../services/validade_schema";
 export const createPlano = async (req: Request, res: Response): Promise<void> => {
-    const { nome, descricao, preco, cor } = req.body;
     try {
+        const validated = validateSchema(createPlanoSchema, req.body);
         const plano = await prismaService.plano.create({
-            data: { nome, descricao, preco, cor }
+            data: validated
         });
         ResponseService.created(res, { message: "Plano criado com sucesso", data: plano });
     } catch (error: any) {
@@ -36,11 +37,12 @@ export const getPlano = async (req: Request, res: Response) => {
 
 export const updatePlano = async (req: Request, res: Response) => {
     const { id } = req.params; 
-    const { nome, descricao, preco } = req.body;
+    
     try {
+        const validated = validateSchema(updatePlanoSchema, req.body);
         const plano = await prismaService.plano.update({
             where: { id: Number(id) },
-            data: { nome, descricao, preco }
+            data: validated
         });
         ResponseService.success(res, { message: "Plano atualizado com sucesso", data: plano });
     } catch (error: any) {

@@ -2,12 +2,15 @@ import { Request, Response } from "express";
 import HttpErrorService from "../services/http_error_service";
 import prismaService from "../services/prisma_service";
 import ResponseService from "../services/response_service";
+import { createBloqueio as createBloqueioSchema, updateBloqueio as updateBloqueioSchemae } from "../schemas/bloqueio_schema";
+import validateSchema from "../services/validade_schema";
 
 export const createBloqueio = async (req: Request, res: Response) => {
-    const { assinaturaId, motivo, dataBloqueio, dataDesbloqueio } = req.body;
+    
     try {
+        const validated = validateSchema(createBloqueioSchema, req.body);
         const bloqueio = await prismaService.bloqueio.create({
-            data: { assinaturaId, motivo, dataBloqueio, dataDesbloqueio }
+            data: validated
         });
         ResponseService.created(res, { message: "Bloqueio criado com sucesso", data: bloqueio });
     } catch (error: any) {
@@ -36,11 +39,11 @@ export const getBloqueio = async (req: Request, res: Response) => {
 
 export const updateBloqueio = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { assinaturaId, motivo, dataBloqueio, dataDesbloqueio } = req.body;
     try {
+        const validated = validateSchema(updateBloqueio, req.body)
         const bloqueio = await prismaService.bloqueio.update({
-            where: { id: Number(id) },
-            data: { assinaturaId, motivo, dataBloqueio, dataDesbloqueio }
+            where: { id: Number(id)},
+            data: validated
         });
         ResponseService.success(res, { message: "Bloqueio atualizado com sucesso", data: bloqueio });
     } catch (error: any) {

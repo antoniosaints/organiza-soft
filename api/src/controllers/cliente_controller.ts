@@ -2,12 +2,14 @@ import { Request, Response } from 'express';
 import HttpErrorService from "../services/http_error_service";
 import prismaService from "../services/prisma_service";
 import ResponseService from "../services/response_service";
-
+import validateSchema from '../services/validade_schema';
+import { createCliente as createClienteSchema, updateCliente as updateClienteSchema } from '../schemas/cliente_schema';
 export const createCliente = async (req: Request, res: Response) => {
-  const { nome, email, telefone, endereco } = req.body;
+  
   try {
+    const validated = validateSchema(createClienteSchema, req.body);
     const cliente = await prismaService.cliente.create({
-      data: { nome, email, telefone, endereco },
+      data: validated,
     });
     ResponseService.created(res, {
       message: "Cliente criado com sucesso",
@@ -42,11 +44,12 @@ export const getCliente = async (req: Request, res: Response) => {
 
 export const updateCliente = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { nome, email, telefone, endereco } = req.body;
+  
   try {
+    const validated = validateSchema(updateClienteSchema, req.body);
     const cliente = await prismaService.cliente.update({
       where: { id: Number(id) },
-      data: { nome, email, telefone, endereco },
+      data: validated,
     });
     ResponseService.success(res, {
       message: "Cliente atualizado com sucesso",

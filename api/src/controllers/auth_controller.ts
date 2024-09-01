@@ -3,19 +3,27 @@ import HttpErrorService from "../services/http_error_service";
 import JwtService from "../services/jwt_service";
 import prisma_service from "../services/prisma_service";
 import ResponseService from "../services/response_service";
+import { createAuth as createAuthSchema } from '../schemas/auth_schema';
+import validateSchema from '../services/validade_schema';
 
 class AuthController {
   static async login(req: Request, res: Response) {
-    const { email, password } = req.body;
+    const validationResult = validateSchema(createAuthSchema, req.body);
+
+    if (validationResult.error) {
+      return ResponseService.badRequest(res, validationResult.error.message);
+    }
+
+    const validated = validationResult.value;
+    const email = validated.email;
+    const password = validated.password;
 
     if (!email || !password) {
       return ResponseService.badRequest(res, "Email e senha obrigatórios");
     }
 
     const user = await prisma_service.usuario.findFirst({
-      where: {
-        email,
-      },
+      where: { email },
     });
 
     if (!user) {
@@ -31,6 +39,7 @@ class AuthController {
       "7d"
     );
     const token = JwtService.encode({ refreshToken }, "4h");
+
     return ResponseService.success(
       res,
       { token, refreshToken },
@@ -43,28 +52,19 @@ class AuthController {
       const authHeader = req.headers.authorization;
 
       if (!authHeader) {
-        return ResponseService.unauthorized(
-          res,
-          "Token não informado"
-        );
+        return ResponseService.unauthorized(res, "Token não informado");
       }
 
       const parts = authHeader.split(" ");
 
       if (parts.length !== 2) {
-        return ResponseService.unauthorized(
-          res,
-          "Token mal formatado"
-        );
+        return ResponseService.unauthorized(res, "Token mal formatado");
       }
 
       const [scheme, token] = parts;
 
       if (!/^Bearer$/i.test(scheme)) {
-        return ResponseService.unauthorized(
-          res,
-          "Token mal formatado"
-        );
+        return ResponseService.unauthorized(res, "Token mal formatado");
       }
 
       JwtService.verify(token);
@@ -90,6 +90,7 @@ class AuthController {
 
       const { refreshToken } = JwtService.decode(token);
       const data = JwtService.decode(refreshToken);
+
       ResponseService.success(res, { data }, "Token decodificado com sucesso");
     } catch (err) {
       HttpErrorService.hadle(err, res);

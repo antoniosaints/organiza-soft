@@ -2,12 +2,14 @@ import {Request, Response} from 'express';
 import HttpErrorService from "../services/http_error_service";
 import prismaService from "../services/prisma_service";
 import ResponseService from "../services/response_service";
-
+import { createGrupos as createGruposSchema, updateGrupos as updateGruposSchema } from '../schemas/grupos_schema';
+import validateSchema from '../services/validade_schema';
 export const createGrupos = async (req: Request, res: Response) => {
-  const { grupo, cor } = req.body;
+  
   try {
+    const validated = validateSchema(createGruposSchema, req.body);
     const grupos = await prismaService.grupos.create({
-      data: { grupo, cor },
+      data: validated,
     });
     ResponseService.created(res, {
       message: "Grupo criado com sucesso",
@@ -52,11 +54,12 @@ export const getGrupo = async (req: Request, res: Response) => {
 
 export const updateGrupo = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { grupo, cor } = req.body;
+  
   try {
+    const validated = validateSchema(updateGruposSchema, req.body);
     const grupos = await prismaService.grupos.update({
       where: { id: Number(id) },
-      data: { grupo, cor },
+      data: validated,
     });
     ResponseService.success(res, {
       message: "Grupo atualizado com sucesso",

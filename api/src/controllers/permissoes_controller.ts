@@ -3,12 +3,14 @@ import HttpErrorService from "../services/http_error_service";
 import prismaService from "../services/prisma_service";
 import ResponseService from "../services/response_service";
 import { ValidationError } from "../utils/http/lancar_erro";
-
+import { createPermissoes as createPermissoesSchema, updatePermissoes as updatePermissoesSchema } from '../schemas/permissoes_schema';
+import validateSchema from '../services/validade_schema';
 export const createPermissoes = async (req: Request, res: Response) => {
-  const { permissao, status, slug } = req.body;
+  
   try {
+    const validated = validateSchema(createPermissoesSchema, req.body);
     const permissoes = await prismaService.permissoes.create({
-      data: { permissao, status, slug },
+      data: validated,
     });
     ResponseService.created(res, {
       message: "Permissão criada com sucesso",
@@ -44,10 +46,10 @@ export const updatePermissao = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     if (!id) throw new ValidationError("ID obrigatorio");
-    const { status, permissao } = req.body;
+    const validated = validateSchema(updatePermissoesSchema, req.body);
     const permissoes = await prismaService.permissoes.update({
       where: { id: Number(id) },
-      data: { status, permissao },
+      data: validated,
     });
     ResponseService.success(res, {
       message: "Permissão atualizada com sucesso",
