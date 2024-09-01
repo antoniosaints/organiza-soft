@@ -7,7 +7,7 @@ const createBloqueio = zodUtil.object({
   }).refine((val) => !isNaN(Date.parse(val)), {
     message: "Data de bloqueio inválida."
   }).optional(),
-  dataDesBloqueio: zodUtil.string({
+  dataDesbloqueio: zodUtil.string({
     invalid_type_error: "A data de desbloqueio deve ser uma string"
   }).refine((val) => !isNaN(Date.parse(val)), {
     message: "Data de desbloqueio inválida."
@@ -25,7 +25,7 @@ const updateBloqueio = zodUtil.object({
   }).refine((val) => !val || !isNaN(Date.parse(val)), {
     message: "Data de bloqueio inválida",
   }).optional(),
-  dataDesBloqueio: zodUtil.string({
+  dataDesbloqueio: zodUtil.string({
     invalid_type_error: "A data de desbloqueio deve ser uma string"
   }).refine((val) => !isNaN(Date.parse(val)), {
     message: "Data de desbloqueio inválida."

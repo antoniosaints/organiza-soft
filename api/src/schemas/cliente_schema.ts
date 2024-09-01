@@ -19,7 +19,7 @@ const createCliente = zodUtil.object({
     required_error: "O endereço e obrigatorio",
     invalid_type_error: "O endereço deve ser uma string",
   }).optional(),
-  dataDesBloqueio: zodUtil.string({
+  dataDesbloqueio: zodUtil.string({
     required_error: "A data de desbloqueio é obrigatorio.",
     invalid_type_error: "A data de desbloqueio deve ser uma string"
   }).refine((val) => !isNaN(Date.parse(val)), {
@@ -45,7 +45,7 @@ const updateCliente = zodUtil.object({
   endereco: zodUtil.string({
     invalid_type_error: "O endereço deve ser uma string",
   }).optional(),
-  dataDesBloqueio: zodUtil.string({
+  dataDesbloqueio: zodUtil.string({
     required_error: "A data de desbloqueio é obrigatorio.",
     invalid_type_error: "A data de desbloqueio deve ser uma string"
   }).refine((val) => !isNaN(Date.parse(val)), {
