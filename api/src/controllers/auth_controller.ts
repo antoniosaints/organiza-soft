@@ -14,13 +14,8 @@ class AuthController {
       return ResponseService.badRequest(res, validationResult.error.message);
     }
 
-    const validated = validationResult.value;
-    const email = validated.email;
-    const password = validated.password;
-
-    if (!email || !password) {
-      return ResponseService.badRequest(res, "Email e senha obrigatórios");
-    }
+    const email = validationResult.email;
+    const senha = validationResult.senha;
 
     const user = await prisma_service.usuario.findFirst({
       where: { email },
@@ -30,7 +25,7 @@ class AuthController {
       return ResponseService.notFound(res, "Usuário não encontrado");
     }
 
-    if (user.senha !== password) {
+    if (user.senha !== senha) {
       return ResponseService.unauthorized(res, "Credenciais inválidas");
     }
 
