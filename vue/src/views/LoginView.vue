@@ -24,7 +24,7 @@
         </div>
         <div class="mb-5">
           <Label for="password">Senha</Label>
-          <Input class="border-2 border-gray-600" v-model="usuario.password" required type="password" label="Senha"
+          <Input class="border-2 border-gray-600" v-model="usuario.senha" required type="password" label="Senha"
             placeholder="•••••••••" />
         </div>
         <div class="flex items-start mb-5">
@@ -85,7 +85,7 @@ const lembrarUsuario = ref<boolean>(
 
 const usuario = reactive(<IUserLogin>{
   email: StorageUtil.get("@gestao_inteligente:email") || "",
-  password: StorageUtil.get("@gestao_inteligente:password") || "",
+  senha: StorageUtil.get("@gestao_inteligente:password") || "",
 });
 
 const loginUsuario = async () => {
@@ -94,7 +94,7 @@ const loginUsuario = async () => {
     if (lembrarUsuario.value) {
       StorageUtil.set("@gestao_inteligente:lembrarSenha", true);
       StorageUtil.set("@gestao_inteligente:email", usuario.email);
-      StorageUtil.set("@gestao_inteligente:password", usuario.password);
+      StorageUtil.set("@gestao_inteligente:password", usuario.senha);
     } else {
       StorageUtil.remove("@gestao_inteligente:lembrarSenha");
       StorageUtil.remove("@gestao_inteligente:email");
