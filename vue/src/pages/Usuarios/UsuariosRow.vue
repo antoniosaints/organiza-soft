@@ -1,6 +1,6 @@
 <template>
     <TableRow class="hover:bg-foreground/5 transition-colors">
-        <TableCell >#{{ client.id }}</TableCell>
+        <TableCell ><span class="px-2 py-1 bg-secondary rounded-md">#{{ client.id }}</span></TableCell>
         <TableCell>
             <HoverCard>
                 <HoverCardTrigger asChild>

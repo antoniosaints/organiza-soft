@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto max-w-7xl">
     <div class="gap-4 grid">
-      <div class="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+      <div class="grid gap-4 md:grid-cols-2 md:gap-4 lg:grid-cols-4">
         <Card>
           <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle class="text-sm font-medium">
@@ -67,7 +67,7 @@
           </CardContent>
         </Card>
       </div>
-      <div class="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
+      <div class="grid gap-4 md:gap-4 lg:grid-cols-2 xl:grid-cols-3">
         <Card class="xl:col-span-2">
           <CardHeader class="flex flex-row items-center">
             <div class="grid gap-2">
