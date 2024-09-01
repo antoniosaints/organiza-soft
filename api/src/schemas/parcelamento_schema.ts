@@ -1,10 +1,6 @@
 import zodUtil from "../utils/validations/zod_util";
 
 const createParcelamento = zodUtil.object({
-  id: zodUtil.number({
-    required_error: "O id é obrigatório",
-    invalid_type_error: "O id deve ser um number",
-  }).optional(), // Geralmente o id é opcional na criação se é autogerado
   transacaoId: zodUtil.number({
     required_error: "O transacaoId é obrigatório",
     invalid_type_error: "O transacaoId deve ser um number",
@@ -34,9 +30,6 @@ const createParcelamento = zodUtil.object({
 });
 
 const updateParcelamento = zodUtil.object({
-  id: zodUtil.number({
-    invalid_type_error: "O id deve ser um number",
-  }).optional(),
   transacaoId: zodUtil.number({
     invalid_type_error: "O transacaoId deve ser um number",
   }).optional(),

@@ -1,10 +1,6 @@
 import zodUtil from "../utils/validations/zod_util";
 import { createTransacao as transacao } from "./transacao_schema";
 const createConta = zodUtil.object({
-  contaId: zodUtil.number({
-    required_error: "O id da conta e obrigatorio",
-    invalid_type_error: "O id da conta deve ser um number"
-  }),
   conta: zodUtil.string({
     required_error: "O nome e obrigatorio",
     invalid_type_error: "O nome deve ser uma string",
@@ -29,13 +25,6 @@ const createConta = zodUtil.object({
     required_error: "O userId e obrigatorio",
     invalid_type_error: "O userId deve ser um number",
   }),
-  nomeUsuario: zodUtil.string({
-    required_error:"O usuario e obrigatorio",
-    invalid_type_error:"O usuario deve ser uma string"
-  }),
-  transacao: zodUtil.array(transacao, {
-    required_error: "Transacao é obrigatorio",
-  })
 })
 
 const updateConta = zodUtil.object({

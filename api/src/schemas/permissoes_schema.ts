@@ -13,6 +13,9 @@ const createPermissoes = zodUtil.object({
     required_error: "O slug e obrigatorio",
     invalid_type_error: "O slug deve ser uma string",
   }),
+  cor: zodUtil.string({
+    invalid_type_error:"O campo cor deve ser uma string"
+  }).optional(),
 })
 
 const updatePermissoes = zodUtil.object({
@@ -24,6 +27,9 @@ const updatePermissoes = zodUtil.object({
   }).optional(),
   slug: zodUtil.string({
     invalid_type_error: "O slug deve ser uma string",
+  }).optional(),
+  cor: zodUtil.string({
+    invalid_type_error:"O campo cor deve ser uma string"
   }).optional(),
 })
 

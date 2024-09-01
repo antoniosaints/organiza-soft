@@ -25,6 +25,9 @@ const createCliente = zodUtil.object({
   }).refine((val) => !isNaN(Date.parse(val)), {
     message: "Data de desbloqueio inválida."
   }).optional(),
+  status: zodUtil.string({
+    invalid_type_error: "O status do cliente deve ser uma string"
+  }).optional(),
 })
 
 const updateCliente = zodUtil.object({
