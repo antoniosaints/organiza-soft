@@ -14,11 +14,17 @@ const createCliente = zodUtil.object({
   telefone: zodUtil.string({
     required_error: "O telefone e obrigatorio",
     invalid_type_error: "O telefone deve ser uma string",
-  }),
+  }).optional(),
   endereco: zodUtil.string({
     required_error: "O endereço e obrigatorio",
     invalid_type_error: "O endereço deve ser uma string",
-  }),
+  }).optional(),
+  dataDesBloqueio: zodUtil.string({
+    required_error: "A data de desbloqueio é obrigatorio.",
+    invalid_type_error: "A data de desbloqueio deve ser uma string"
+  }).refine((val) => !isNaN(Date.parse(val)), {
+    message: "Data de desbloqueio inválida."
+  }).optional(),
 })
 
 const updateCliente = zodUtil.object({
@@ -35,6 +41,12 @@ const updateCliente = zodUtil.object({
   }).optional(),
   endereco: zodUtil.string({
     invalid_type_error: "O endereço deve ser uma string",
+  }).optional(),
+  dataDesBloqueio: zodUtil.string({
+    required_error: "A data de desbloqueio é obrigatorio.",
+    invalid_type_error: "A data de desbloqueio deve ser uma string"
+  }).refine((val) => !isNaN(Date.parse(val)), {
+    message: "Data de desbloqueio inválida."
   }).optional(),
 })
 

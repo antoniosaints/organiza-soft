@@ -1,10 +1,6 @@
 import zodUtil from "../utils/validations/zod_util";
 
 const createTransacao = zodUtil.object({
-  id: zodUtil.number({
-    required_error:"O id e obrigatorio",
-    invalid_type_error: "O id deve ser um number",
-  }),
   clienteId: zodUtil.number({
     required_error: "O clienteId é obrigatório",
     invalid_type_error: "O clienteId deve ser um number",
@@ -62,7 +58,7 @@ const createTransacao = zodUtil.object({
   status: zodUtil.string({
     required_error: "O status é obrigatório",
     invalid_type_error: "O status deve ser uma string",
-  }),
+  }).optional(),
   valorFinal: zodUtil.number({
     required_error: "O valorFinal é obrigatório",
     invalid_type_error: "O valorFinal deve ser um number",
@@ -70,9 +66,6 @@ const createTransacao = zodUtil.object({
 });
 
 const updateTransacao = zodUtil.object({
-  id: zodUtil.number({
-    invalid_type_error: "O id deve ser um number",
-  }).optional(),
   clienteId: zodUtil.number({
     invalid_type_error: "O clienteId deve ser um number",
   }).optional(),

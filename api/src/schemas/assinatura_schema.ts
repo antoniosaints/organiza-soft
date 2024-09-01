@@ -25,12 +25,7 @@ const createAssinatura = zodUtil.object({
     required_error: "O status da assinatura é obrigatoria.",
     invalid_type_error: "O status da assinatura deve ser uma String"
   }),
-  dataBlqueio: zodUtil.string({
-    required_error: "A data de bloqueio é obrigatoria.",
-    invalid_type_error: "A data de bloqueio deve ser uma String"
-  }).refine((val) => !isNaN(Date.parse(val)), {
-    message: "Data de bloqueio inválida."
-  }),
+ 
   dataBloqueio: zodUtil.string({
     invalid_type_error: "A data de bloqueio deve ser uma string",
   }).refine((val) => !val || !isNaN(Date.parse(val)), {
