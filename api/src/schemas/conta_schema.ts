@@ -1,5 +1,4 @@
 import zodUtil from "../utils/validations/zod_util";
-import { createTransacao as transacao } from "./transacao_schema";
 const createConta = zodUtil.object({
   conta: zodUtil.string({
     required_error: "O nome e obrigatorio",
