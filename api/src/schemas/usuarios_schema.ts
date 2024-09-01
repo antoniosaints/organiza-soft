@@ -17,6 +17,9 @@ const createUser = zodUtil.object({
     }).min(8, {
         message: "A senha deve ter pelo menos 8 caracteres",
     }).trim(),
+    telefone: zodUtil.string({
+        invalid_type_error: "O telefone deve ser uma string",
+    }).optional(),
     regra: zodUtil.string({
         required_error: "A regra é obrigatória",
         invalid_type_error: "A regra deve ser uma string",
@@ -42,6 +45,9 @@ const updateUser = zodUtil.object({
     }).min(8, {
         message: "A senha deve ter pelo menos 8 caracteres",
     }).trim().optional(),
+    telefone: zodUtil.string({
+        invalid_type_error: "O telefone deve ser uma string",
+    }).optional(),
     regra: zodUtil.string({
         invalid_type_error: "A regra deve ser uma string",
     }).optional(),
