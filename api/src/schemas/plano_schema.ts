@@ -1,5 +1,4 @@
 import zodUtil from "../utils/validations/zod_util";
-import { createAssinatura as assinatura } from "./assinatura_schema";
 const createPlano = zodUtil.object({
   nome: zodUtil.string({
     required_error: "O nome é obrigatório",
