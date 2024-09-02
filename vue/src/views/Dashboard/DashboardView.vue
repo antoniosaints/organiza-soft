@@ -68,6 +68,45 @@
         </Card>
       </div>
       <div class="grid gap-4 md:gap-4 lg:grid-cols-2 xl:grid-cols-3">
+        <Card class="col-span-1">
+          <CardHeader>
+            <CardTitle>Resumo de vendas</CardTitle>
+            <CardDescription>Resumo de vendas por mês</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <BarChart class="h-48 py-4" :data="data" index="name" :categories="['total', 'meta']" :y-formatter="(tick, i) => {
+              return typeof tick === 'number'
+                ? `$ ${new Intl.NumberFormat('us').format(tick).toString()}`
+                : ''
+            }" />
+          </CardContent>
+        </Card>
+        <Card class="col-span-1">
+          <CardHeader>
+            <CardTitle>Resumo de assinaturas</CardTitle>
+            <CardDescription>Resumo de assinaturas por mês</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <BarChart class="h-48 py-4" :data="data" index="name" :categories="['total', 'meta']" :y-formatter="(tick, i) => {
+              return typeof tick === 'number'
+                ? `$ ${new Intl.NumberFormat('us').format(tick).toString()}`
+                : ''
+            }" />
+          </CardContent>
+        </Card>
+        <Card class="col-span-1">
+          <CardHeader>
+            <CardTitle>Resumo de lançamentos</CardTitle>
+            <CardDescription>Resumo de lançamentos por mês</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <BarChart class="h-48 py-4" :data="data" index="name" :categories="['total', 'meta']" :y-formatter="(tick, i) => {
+              return typeof tick === 'number'
+                ? `$ ${new Intl.NumberFormat('us').format(tick).toString()}`
+                : ''
+            }" />
+          </CardContent>
+        </Card>
         <Card class="xl:col-span-2">
           <CardHeader class="flex flex-row items-center">
             <div class="grid gap-2">
@@ -88,13 +127,13 @@
               <TableHeader>
                 <TableRow>
                   <TableHead>Customer</TableHead>
-                  <TableHead class="hidden xl:table-column">
+                  <TableHead class="hidden xl:table-cell">
                     Type
                   </TableHead>
-                  <TableHead class="hidden xl:table-column">
+                  <TableHead class="hidden xl:table-cell">
                     Status
                   </TableHead>
-                  <TableHead class="hidden xl:table-column">
+                  <TableHead class="hidden xl:table-cell">
                     Date
                   </TableHead>
                   <TableHead class="text-right">
@@ -112,15 +151,15 @@
                       liam@example.com
                     </div>
                   </TableCell>
-                  <TableCell class="hidden xl:table-column">
+                  <TableCell class="hidden xl:table-cell">
                     Sale
                   </TableCell>
-                  <TableCell class="hidden xl:table-column">
+                  <TableCell class="hidden xl:table-cell">
                     <Badge class="text-xs" variant="outline">
                       Approved
                     </Badge>
                   </TableCell>
-                  <TableCell class="hidden md:table-cell lg:hidden xl:table-column">
+                  <TableCell class="hidden md:table-cell lg:hidden xl:table-cell">
                     2023-06-23
                   </TableCell>
                   <TableCell class="text-right">
@@ -136,15 +175,15 @@
                       olivia@example.com
                     </div>
                   </TableCell>
-                  <TableCell class="hidden xl:table-column">
+                  <TableCell class="hidden xl:table-cell">
                     Refund
                   </TableCell>
-                  <TableCell class="hidden xl:table-column">
+                  <TableCell class="hidden xl:table-cell">
                     <Badge class="text-xs" variant="outline">
                       Declined
                     </Badge>
                   </TableCell>
-                  <TableCell class="hidden md:table-cell lg:hidden xl:table-column">
+                  <TableCell class="hidden md:table-cell lg:hidden xl:table-cell">
                     2023-06-24
                   </TableCell>
                   <TableCell class="text-right">
@@ -160,15 +199,15 @@
                       noah@example.com
                     </div>
                   </TableCell>
-                  <TableCell class="hidden xl:table-column">
+                  <TableCell class="hidden xl:table-cell">
                     Subscription
                   </TableCell>
-                  <TableCell class="hidden xl:table-column">
+                  <TableCell class="hidden xl:table-cell">
                     <Badge class="text-xs" variant="outline">
                       Approved
                     </Badge>
                   </TableCell>
-                  <TableCell class="hidden md:table-cell lg:hidden xl:table-column">
+                  <TableCell class="hidden md:table-cell lg:hidden xl:table-cell">
                     2023-06-25
                   </TableCell>
                   <TableCell class="text-right">
@@ -184,15 +223,15 @@
                       emma@example.com
                     </div>
                   </TableCell>
-                  <TableCell class="hidden xl:table-column">
+                  <TableCell class="hidden xl:table-cell">
                     Sale
                   </TableCell>
-                  <TableCell class="hidden xl:table-column">
+                  <TableCell class="hidden xl:table-cell">
                     <Badge class="text-xs" variant="outline">
                       Approved
                     </Badge>
                   </TableCell>
-                  <TableCell class="hidden md:table-cell lg:hidden xl:table-column">
+                  <TableCell class="hidden md:table-cell lg:hidden xl:table-cell">
                     2023-06-26
                   </TableCell>
                   <TableCell class="text-right">
@@ -208,15 +247,15 @@
                       liam@example.com
                     </div>
                   </TableCell>
-                  <TableCell class="hidden xl:table-column">
+                  <TableCell class="hidden xl:table-cell">
                     Sale
                   </TableCell>
-                  <TableCell class="hidden xl:table-column">
+                  <TableCell class="hidden xl:table-cell">
                     <Badge class="text-xs" variant="outline">
                       Approved
                     </Badge>
                   </TableCell>
-                  <TableCell class="hidden md:table-cell lg:hidden xl:table-column">
+                  <TableCell class="hidden md:table-cell lg:hidden xl:table-cell">
                     2023-06-27
                   </TableCell>
                   <TableCell class="text-right">
@@ -264,6 +303,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { BarChart } from '@/components/ui/chart-bar'
 
 interface RecentSales {
   image: string
@@ -271,6 +311,16 @@ interface RecentSales {
   email: string
   amount: number
 }
+
+const data = [
+  { name: 'Jan', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
+  { name: 'Feb', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
+  { name: 'Mar', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
+  { name: 'Apr', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
+  { name: 'May', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
+  { name: 'Jun', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
+  { name: 'Jul', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
+]
 
 const recentSales = reactive<RecentSales[]>([
   {
