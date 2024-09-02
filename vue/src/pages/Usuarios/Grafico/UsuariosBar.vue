@@ -13,7 +13,7 @@ const data = [
 </script>
 
 <template>
-    <BarChart :colors="['#2196F3', '#FF9800']" :data="data" index="name" :categories="['total', 'predicted']" :y-formatter="(tick, i) => {
+    <BarChart :colors="['#2196F3', '#FF9800']" :data="data" index="name" :categories="['total', 'predicted']" :y-formatter="(tick) => {
         return typeof tick === 'number'
             ? `$ ${new Intl.NumberFormat('us').format(tick).toString()}`
             : ''

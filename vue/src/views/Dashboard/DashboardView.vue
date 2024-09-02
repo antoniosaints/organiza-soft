@@ -74,7 +74,7 @@
             <CardDescription>Resumo de vendas por mês</CardDescription>
           </CardHeader>
           <CardContent>
-            <BarChart class="h-48 py-4" :data="data" index="name" :categories="['total', 'meta']" :y-formatter="(tick, i) => {
+            <BarChart class="h-48 py-4" :data="data" index="name" :categories="['total', 'meta']" :y-formatter="(tick) => {
               return typeof tick === 'number'
                 ? `$ ${new Intl.NumberFormat('us').format(tick).toString()}`
                 : ''
@@ -87,7 +87,7 @@
             <CardDescription>Resumo de assinaturas por mês</CardDescription>
           </CardHeader>
           <CardContent>
-            <BarChart class="h-48 py-4" :data="data" index="name" :categories="['total', 'meta']" :y-formatter="(tick, i) => {
+            <BarChart class="h-48 py-4" :data="data" index="name" :categories="['total', 'meta']" :y-formatter="(tick) => {
               return typeof tick === 'number'
                 ? `$ ${new Intl.NumberFormat('us').format(tick).toString()}`
                 : ''
@@ -100,7 +100,7 @@
             <CardDescription>Resumo de lançamentos por mês</CardDescription>
           </CardHeader>
           <CardContent>
-            <BarChart class="h-48 py-4" :data="data" index="name" :categories="['total', 'meta']" :y-formatter="(tick, i) => {
+            <BarChart class="h-48 py-4" :data="data" index="name" :categories="['total', 'meta']" :y-formatter="(tick) => {
               return typeof tick === 'number'
                 ? `$ ${new Intl.NumberFormat('us').format(tick).toString()}`
                 : ''
