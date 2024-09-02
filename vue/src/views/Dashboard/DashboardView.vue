@@ -74,11 +74,8 @@
             <CardDescription>Resumo de vendas por mês</CardDescription>
           </CardHeader>
           <CardContent>
-            <BarChart class="h-48 py-4" :data="data" index="name" :categories="['total', 'meta']" :y-formatter="(tick) => {
-              return typeof tick === 'number'
-                ? `$ ${new Intl.NumberFormat('us').format(tick).toString()}`
-                : ''
-            }" />
+            <BarChart class="h-48 py-4" :data="data" index="name" :categories="['total', 'meta']"
+              :y-formatter="formateTicketValue" />
           </CardContent>
         </Card>
         <Card class="col-span-1">
@@ -87,11 +84,8 @@
             <CardDescription>Resumo de assinaturas por mês</CardDescription>
           </CardHeader>
           <CardContent>
-            <BarChart class="h-48 py-4" :data="data" index="name" :categories="['total', 'meta']" :y-formatter="(tick) => {
-              return typeof tick === 'number'
-                ? `$ ${new Intl.NumberFormat('us').format(tick).toString()}`
-                : ''
-            }" />
+            <BarChart class="h-48 py-4" :data="data" index="name" :categories="['total', 'meta']"
+              :y-formatter="formateTicketValue" />
           </CardContent>
         </Card>
         <Card class="col-span-1">
@@ -100,11 +94,8 @@
             <CardDescription>Resumo de lançamentos por mês</CardDescription>
           </CardHeader>
           <CardContent>
-            <BarChart class="h-48 py-4" :data="data" index="name" :categories="['total', 'meta']" :y-formatter="(tick) => {
-              return typeof tick === 'number'
-                ? `$ ${new Intl.NumberFormat('us').format(tick).toString()}`
-                : ''
-            }" />
+            <BarChart class="h-48 py-4" :data="data" index="name" :categories="['total', 'meta']"
+              :y-formatter="formateTicketValue" />
           </CardContent>
         </Card>
         <Card class="xl:col-span-2">
@@ -310,6 +301,12 @@ interface RecentSales {
   name: string
   email: string
   amount: number
+}
+
+const formateTicketValue = (value: any) => {
+  return typeof value === 'number'
+    ? `R$ ${new Intl.NumberFormat('us').format(value).toString()}`
+    : ''
 }
 
 const data = [
