@@ -63,12 +63,14 @@
                     </button>
                     <breadcrumb>
                         <breadcrumb-list>
-                            <breadcrumb-item>
-                                <router-link to="/">Home</router-link>
-                            </breadcrumb-item>
-                            <breadcrumb-separator />
-                            <breadcrumb-item>
-                                <span>Dashboard</span>
+                            <breadcrumb-item v-for="(route, index) in breadcrumbRoutes" :key="index">
+                                <template v-if="index !== breadcrumbRoutes.length - 1">
+                                    <router-link :to="route.path">{{ route.meta.breadcrumb }}</router-link>
+                                    <breadcrumb-separator />
+                                </template>
+                                <template v-else>
+                                    <span>{{ route.meta.breadcrumb }}</span>
+                                </template>
                             </breadcrumb-item>
                         </breadcrumb-list>
                     </breadcrumb>
@@ -139,8 +141,14 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { useColorMode } from '@vueuse/core';
+import { useRoute } from 'vue-router';
 
 const mode = useColorMode();
+
+const route = useRoute();
+const breadcrumbRoutes = computed(() => {
+    return route.matched.filter(route => route.meta && route.meta.breadcrumb)
+})
 
 const isSidebarOpen = ref(false);
 
@@ -153,3 +161,16 @@ const sidebarClasses = computed(() => {
       transition-all duration-300 ${isSidebarOpen.value ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`;
 });
 </script>
+
+<style scoped>
+.breadcrumb {
+    display: flex;
+    list-style: none;
+    padding: 0;
+}
+
+.breadcrumb-item+.breadcrumb-item::before {
+    content: ">";
+    padding: 0 5px;
+}
+</style>
