@@ -91,6 +91,26 @@ class AuthController {
       HttpErrorService.hadle(err, res);
     }
   }
+
+  static async refreshToken(req: Request, res: Response) {
+
+    try {
+      const { refreshToken } = req.body;
+  
+      if (!refreshToken) {
+        return ResponseService.unauthorized(res, "Token inválido");
+      }
+  
+      JwtService.verify(refreshToken)
+  
+      const token = JwtService.encode({ refreshToken }, "4h");
+      return ResponseService.success(res, { token }, "Token atualizado com sucesso");
+
+    }catch (error) {
+      HttpErrorService.hadle(error, res);
+    }
+
+  }
 }
 
 export default AuthController;
