@@ -3,24 +3,27 @@ import { useLoginStore } from "@/stores/login/loginStore";
 
 const routes = [
     {
-        path: "/",
+        path: "/dashboard",
         name: "DefaultLayout",
-        redirect: "/login",
-        meta: { requiresAuth: true },
+        redirect: "/dashboard",
+        meta: { requiresAuth: true, breadcrumb: 'Home' },
         component: () => import("@/layouts/shadcn/index.vue"),
         children: [
             {
                 path: "/dashboard",
                 name: "Dashboard",
+                meta: { breadcrumb: 'Dashboard' },
                 component: () => import("@/views/Dashboard/DashboardView.vue")
             },
             {
                 path: "/administracao",
                 name: "Administracao",
+                // meta: { breadcrumb: 'Administracao' },
                 children: [
                     {
                         path: "/administracao/usuarios",
                         name: "Usuarios",
+                        meta: { breadcrumb: 'Usuarios' },
                         component: () => import("@/views/Usuarios/UsuariosView.vue")
                     }
                 ]
@@ -28,6 +31,7 @@ const routes = [
             {
                 path: "/perfil",
                 name: "Perfil",
+                meta: { breadcrumb: 'Perfil' },
                 component: () => import("@/views/Perfil/InformacoesView.vue")
             }
         ]
