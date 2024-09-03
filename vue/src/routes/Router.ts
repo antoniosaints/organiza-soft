@@ -1,9 +1,9 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import { useLoginStore } from "@/stores/login/loginStore";
 
-const routes = [
+const routes: Array<RouteRecordRaw> = [
     {
-        path: "/dashboard",
+        path: "/",
         name: "DefaultLayout",
         redirect: "/dashboard",
         meta: { requiresAuth: true, breadcrumb: 'Home' },
