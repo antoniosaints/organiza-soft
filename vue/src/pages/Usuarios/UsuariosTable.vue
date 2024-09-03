@@ -1,13 +1,16 @@
 <template>
     <div class="mx-auto max-w-7xl">
         <div class="flex justify-between items-center mb-4">
-            <h2 class="text-2xl font-bold text-foreground">Usuários</h2>
+            <div>
+                <h2 class="text-2xl font-bold text-foreground">Usuários</h2>
+                <p class="text-sm font-normal text-foreground hidden md:flex">Listagem de todos os usuários do sistema</p>
+            </div>
             <UserDialog/>
         </div>
         <div class="rounded-lg border shadow-sm overflow-hidden">
             <Table>
                 <TableHeader>
-                    <TableRow>
+                    <TableRow class="bg-secondary">
                         <TableHead>ID</TableHead>
                         <TableHead>Nome</TableHead>
                         <TableHead class="hidden md:table-cell">Email</TableHead>

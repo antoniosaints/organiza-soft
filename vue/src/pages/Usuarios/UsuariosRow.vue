@@ -4,8 +4,9 @@
         <TableCell>
             <HoverCard>
                 <HoverCardTrigger asChild>
-                    <Button variant="ghost" class="p-0 h-auto font-normal">
+                    <Button variant="ghost" class="p-0 h-auto font-normal hover:bg-transparent hover:text-primary-foreground/50">
                         {{ client.nome }}
+                        <span v-if="client.id == 1" class="px-1 py-0 text-[10px] ml-1 bg-primary text-primary-foreground rounded-md flex items-center"><User class="w-3 h-3" /> Super Admin</span>
                     </Button>
                 </HoverCardTrigger>
                 <HoverCardContent class="w-80">
@@ -31,6 +32,7 @@ import UsuarioDetails from "@/pages/Usuarios/UsuarioDetails.vue";
 import UsuarioBadge from "@/pages/Usuarios/UsuarioBadge.vue";
 import UsuarioActions from "@/pages/Usuarios/UsuarioActions.vue";
 import IUsuario from "@/types/usuarios/IUsuario";
+import { User } from "lucide-vue-next";
 
 defineProps<{
     client: IUsuario

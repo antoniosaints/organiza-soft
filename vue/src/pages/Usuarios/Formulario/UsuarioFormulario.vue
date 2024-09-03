@@ -47,7 +47,7 @@ import { useUsuarioStore } from "@/stores/usuarios/usuarioStore";
 const UsuarioFormularioStore = useUsuarioFormularioStore();
 const UsuarioStore = useUsuarioStore();
 
-const handleSubmit = async () => {
+const handleSubmit = async (): Promise<void> => {
     try {
         if (UsuarioFormularioStore.ref_id == null) {
             await UsuariosRepository.create(UsuarioFormularioStore.data);

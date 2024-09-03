@@ -8,6 +8,7 @@
 import UsuariosTable from '@/pages/Usuarios/UsuariosTable.vue';
 import { useUsuarioStore } from '@/stores/usuarios/usuarioStore';
 import { onMounted } from 'vue';
+
 const usuarioStore = useUsuarioStore();
 
 onMounted(async () => {
