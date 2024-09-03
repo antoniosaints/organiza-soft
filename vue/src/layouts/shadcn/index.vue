@@ -7,7 +7,7 @@
                     <span class="text-lg">Organiza Soft</span>
                 </router-link>
                 <button type="button" class="lg:hidden" @click="toggleSidebar">
-                    <Menu />
+                    <PanelLeftClose />
                 </button>
             </div>
             <div class="flex-1 overflow-y-auto px-2 py-4">
@@ -59,7 +59,8 @@
                 class="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-border bg-background px-4 shadow-sm lg:px-6">
                 <div class="flex items-center gap-4">
                     <button type="button" class="" @click="toggleSidebar">
-                        <Menu />
+                        <PanelLeftOpen v-if="!isSidebarOpen" />
+                        <PanelLeftClose v-else />
                     </button>
                     <breadcrumb>
                         <breadcrumb-list>
@@ -131,7 +132,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
-import { House, LockKeyhole, Users, List, PackageOpen, Wallet, Menu, ChevronRight, LogOut } from 'lucide-vue-next'
+import { House, LockKeyhole, Users, List, PackageOpen, Wallet, Menu, ChevronRight, LogOut, PanelLeftOpen, PanelLeftClose } from 'lucide-vue-next'
 import { Icon } from "@iconify/vue";
 import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible"
