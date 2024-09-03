@@ -54,11 +54,11 @@
                 </router-link>
             </nav>
         </aside>
-        <div class="flex-1 lg:pl-64">
+        <div class="flex-1" :class="mainContentClass">
             <header
                 class="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-border bg-background px-4 shadow-sm lg:px-6">
                 <div class="flex items-center gap-4">
-                    <button type="button" class="lg:hidden" @click="toggleSidebar">
+                    <button type="button" class="" @click="toggleSidebar">
                         <Menu />
                     </button>
                     <breadcrumb>
@@ -78,22 +78,22 @@
                 <div class="flex items-center gap-4">
                     <DropdownMenu>
                         <DropdownMenuTrigger as-child>
-                            <Button variant="outline" class="dark:bg-gray-700">
+                            <Button variant="outline" class="h-10 w-10 p-0 dark:bg-gray-950 dark:hover:bg-gray-800 rounded-full">
                                 <Icon icon="radix-icons:moon"
-                                    class="h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:-rotate-0 dark:scale-100" />
+                                    class="h-[1rem] w-[1rem] rotate-90 scale-0 transition-all dark:-rotate-0 dark:scale-100" />
                                 <Icon icon="radix-icons:sun"
-                                    class="absolute h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:rotate-90 dark:scale-0" />
+                                    class="absolute h-[1rem] w-[1rem] rotate-0 scale-100 transition-all dark:rotate-90 dark:scale-0" />
                                 <span class="sr-only">Toggle theme</span>
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuItem @click="mode = 'light'">
+                            <DropdownMenuItem @click="toggleMode('light')">
                                 Claro
                             </DropdownMenuItem>
-                            <DropdownMenuItem @click="mode = 'dark'">
+                            <DropdownMenuItem @click="toggleMode('dark')">
                                 Escuro
                             </DropdownMenuItem>
-                            <DropdownMenuItem @click="mode = 'auto'">
+                            <DropdownMenuItem @click="toggleMode('auto')">
                                 Automático
                             </DropdownMenuItem>
                         </DropdownMenuContent>
@@ -106,9 +106,11 @@
                             </avatar>
                         </dropdown-menu-trigger>
                         <dropdown-menu-content>
-                            <dropdown-menu-item><router-link to="/perfil">
+                            <dropdown-menu-item as-child>
+                                <router-link to="/perfil">
                                     <iconFA class="h-3 w-3 mr-2" icon="fa-user" /> Perfil
-                                </router-link></dropdown-menu-item>
+                                </router-link>
+                            </dropdown-menu-item>
                             <dropdown-menu-item>
                                 <iconFA class="h-3 w-3 mr-2" icon="fa-cogs" /> Configs
                             </dropdown-menu-item>
@@ -127,38 +129,42 @@
     </div>
 </template>
 
-<script setup>
-import { ref, computed } from 'vue';
-import { House, LockKeyhole, Users, List, PackageOpen, Wallet, Menu, ChevronRight, LogOut, User } from 'lucide-vue-next'
+<script setup lang="ts">
+import { ref, computed, watch } from 'vue';
+import { House, LockKeyhole, Users, List, PackageOpen, Wallet, Menu, ChevronRight, LogOut } from 'lucide-vue-next'
 import { Icon } from "@iconify/vue";
 import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible"
-import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "@/components/ui/breadcrumb"
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
 import { useColorMode } from '@vueuse/core';
 import { useRoute } from 'vue-router';
+import { ITheme } from '@/types/interface/ITheme';
 
 const mode = useColorMode();
+
+const toggleMode = (theme: ITheme) => {
+    mode.value = theme;
+};
 
 const route = useRoute();
 const breadcrumbRoutes = computed(() => {
     return route.matched.filter(route => route.meta && route.meta.breadcrumb)
 })
 
-const isSidebarOpen = ref(false);
+const isSidebarOpen = ref(true);
 
 const toggleSidebar = () => {
     isSidebarOpen.value = !isSidebarOpen.value;
 };
 
+const mainContentClass = computed(() => {
+    return `${isSidebarOpen.value ? 'lg:pl-64' : 'lg:pl-0'}`
+})
 const sidebarClasses = computed(() => {
     return `fixed inset-y-0 left-0 z-20 flex w-64 flex-col border-r border-border bg-background
-      transition-all duration-300 ${isSidebarOpen.value ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`;
+      transition-all duration-300 ${isSidebarOpen.value ? 'translate-x-0' : '-translate-x-full'}`;
 });
 </script>
 
