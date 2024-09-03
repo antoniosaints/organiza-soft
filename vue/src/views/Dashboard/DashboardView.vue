@@ -14,7 +14,7 @@
               R$45,231.89
             </div>
             <p class="text-xs text-muted-foreground">
-              +20.1% from last month
+              +20.1% desde o mês passado
             </p>
           </CardContent>
         </Card>
@@ -30,7 +30,7 @@
               +2350
             </div>
             <p class="text-xs text-muted-foreground">
-              +180.1% from last month
+              +180.1% desde o mês passado
             </p>
           </CardContent>
         </Card>
@@ -46,7 +46,7 @@
               +12,234
             </div>
             <p class="text-xs text-muted-foreground">
-              +19% from last month
+              +19% desde o mês passado
             </p>
           </CardContent>
         </Card>
@@ -62,7 +62,7 @@
               +573
             </div>
             <p class="text-xs text-muted-foreground">
-              +201 since last hour
+              +201 desde o mês passado
             </p>
           </CardContent>
         </Card>
@@ -117,18 +117,18 @@
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Customer</TableHead>
+                  <TableHead>Cliente</TableHead>
                   <TableHead class="hidden xl:table-cell">
-                    Type
+                    Tipo
                   </TableHead>
                   <TableHead class="hidden xl:table-cell">
                     Status
                   </TableHead>
                   <TableHead class="hidden xl:table-cell">
-                    Date
+                    Data
                   </TableHead>
                   <TableHead class="text-right">
-                    Amount
+                    Valor
                   </TableHead>
                 </TableRow>
               </TableHeader>
