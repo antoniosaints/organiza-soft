@@ -15,23 +15,3 @@
 }
 
 /* Estilizando a barra de rolagem completa */
-::-webkit-scrollbar {
-  width: 12px; /* Largura da barra de rolagem */
-}
-
-/* Estilizando o "polegar" da barra de rolagem */
-::-webkit-scrollbar-thumb {
-  background-color: #555; /* Cor do polegar */
-  border-radius: 10px; /* Bordas arredondadas */
-  border: 3px solid #313030; /* Borda em torno do polegar */
-}
-
-/* Estilizando o "trilho" da barra de rolagem */
-::-webkit-scrollbar-track {
-  background: #313030; /* Cor do trilho */
-}
-
-/* Estilizando a barra de rolagem quando em estado "hover" */
-::-webkit-scrollbar-thumb:hover {
-  background: #888; /* Cor do polegar quando em hover */
-}
