@@ -8,9 +8,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch"
 import { Box, Lock, MessageCircle, PenTool, Users } from "lucide-vue-next"
 import { watch } from 'vue';
-
+import { useProfileStore } from '@/stores/perfil/perfilStore';
 
 const { t, locale } = useI18n();
+const profileOptions = useProfileStore();
 
 watch(locale, () => {
     localStorage.setItem('gestaocliente:locale', locale.value);
@@ -33,15 +34,15 @@ watch(locale, () => {
                 <CardContent class="space-y-4">
                     <div class="space-y-2">
                         <Label htmlFor="name">Nome completo</Label>
-                        <Input id="name" placeholder="Seu nome completo aqui..." />
+                        <Input id="name" v-model="profileOptions.userInfos.nome" placeholder="Seu nome completo aqui..." />
                     </div>
                     <div class="space-y-2">
                         <Label htmlFor="email">E-mail</Label>
-                        <Input id="email" type="email" placeholder="email@provedor.com" />
+                        <Input id="email" v-model="profileOptions.userInfos.email" type="email" placeholder="email@provedor.com" />
                     </div>
                     <div class="space-y-2">
                         <Label htmlFor="bio">Bio</Label>
-                        <Input id="bio" placeholder="Descreva sua biografia aqui..." />
+                        <Input id="bio" v-model="profileOptions.userInfos.bio" placeholder="Descreva sua biografia aqui..." />
                     </div>
                 </CardContent>
             </Card>
@@ -60,7 +61,7 @@ watch(locale, () => {
                             <Label htmlFor="public-profile">Permitir resetar senha</Label>
                             <p class="text-sm text-muted-foreground">Permite que usuários resetem suas senhas</p>
                         </div>
-                        <Switch id="public-profile" />
+                        <Switch id="public-profile" v-model:checked="profileOptions.privacy_permitir_resetar_senha" />
                     </div>
                     <div class="flex items-center justify-between">
                         <div class="space-y-0.5">
@@ -68,7 +69,7 @@ watch(locale, () => {
                             <p class="text-sm text-muted-foreground">Permite que lançamentos possam ser lançados
                                 retroativamente</p>
                         </div>
-                        <Switch id="show-email" />
+                        <Switch id="show-email" v-model:checked="profileOptions.privacy_permitir_lancamentos_retroativos" />
                     </div>
                 </CardContent>
             </Card>
@@ -87,14 +88,14 @@ watch(locale, () => {
                             <Label htmlFor="email-notifications">Notificar por email</Label>
                             <p class="text-sm text-muted-foreground">Receba notificações por email</p>
                         </div>
-                        <Switch id="email-notifications" />
+                        <Switch id="email-notifications" v-model:checked="profileOptions.notify_notificar_email" />
                     </div>
                     <div class="flex items-center justify-between">
                         <div class="space-y-0.5">
                             <Label htmlFor="push-notifications">Notificar por telegram</Label>
                             <p class="text-sm text-muted-foreground">Receba notificações por telegram</p>
                         </div>
-                        <Switch id="push-notifications" />
+                        <Switch id="push-notifications" v-model:checked="profileOptions.notify_notificar_telegram" />
                     </div>
                 </CardContent>
             </Card>
@@ -114,7 +115,7 @@ watch(locale, () => {
                             <p class="text-sm text-muted-foreground">Receba notificações por email em caso de estoque
                                 baixo</p>
                         </div>
-                        <Switch id="dark-mode" />
+                        <Switch id="monitorar-estoque" v-model:checked="profileOptions.stock_monitorar_estoque" />
                     </div>
                 </CardContent>
             </Card>

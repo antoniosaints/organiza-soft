@@ -73,7 +73,7 @@
                     <CardDescription>Resumo de vendas por mês</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <BarChart class="h-48 py-4" :data="data" index="name" :categories="['total', 'meta']"
+                    <BarChart class="h-48 py-4" :rounded-corners="4" :data="data" index="name" :categories="['total', 'meta']"
                         :y-formatter="formateTicketValue" />
                 </CardContent>
             </Card>
@@ -83,7 +83,7 @@
                     <CardDescription>Resumo de assinaturas por mês</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <BarChart class="h-48 py-4" :data="data" index="name" :categories="['total', 'meta']"
+                    <BarChart class="h-48 py-4" :rounded-corners="4" :data="data" index="name" :categories="['total', 'meta']"
                         :y-formatter="formateTicketValue" />
                 </CardContent>
             </Card>
@@ -93,7 +93,7 @@
                     <CardDescription>Resumo de lançamentos por mês</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <BarChart class="h-48 py-4" :data="data" index="name" :categories="['total', 'meta']"
+                    <BarChart class="h-48 py-4" :rounded-corners="4" :data="data" index="name" :categories="['total', 'meta']"
                         :y-formatter="formateTicketValue" />
                 </CardContent>
             </Card>
@@ -308,10 +308,10 @@ const formateTicketValue = (value: any) => {
 
 const data = [
   { name: 'Jan', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
-  { name: 'Feb', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
+  { name: 'Fev', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
   { name: 'Mar', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
-  { name: 'Apr', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
-  { name: 'May', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
+  { name: 'Abr', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
+  { name: 'Mar', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
   { name: 'Jun', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
   { name: 'Jul', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
 ]
