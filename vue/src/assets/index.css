@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -79,6 +78,9 @@
   }
 }
 
+::-webkit-scrollbar {
+  width: 0px; /* Largura da barra de rolagem */
+}
 
 @layer base {
   * {
