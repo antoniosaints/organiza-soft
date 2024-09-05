@@ -1,7 +1,7 @@
 <template>
     <Dialog v-model:open="UsuarioFormularioState.modalState">
         <DialogTrigger as-child>
-            <Button @click="defineSaveForm" size="sm" class="bg-primary hover:bg-primary/90"><UserPlus class="mr-1 h-3 w-3" /> Cadastrar Usuário</Button>
+            <Button @click="defineSaveForm" size="sm" class="bg-primary hover:bg-primary/90"><UserPlus class="mr-1 h-4 w-4" /> Cadastrar Usuário</Button>
         </DialogTrigger>
         <DialogContent aria-describedby="description" class="sm:max-w-xl">
             <DialogHeader>
