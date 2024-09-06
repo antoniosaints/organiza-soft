@@ -12,13 +12,13 @@
                     <Pencil class="mr-2 h-3 w-3" />
                     Editar
                 </DropdownMenuItem>
-                <DropdownMenuItem class="text-xs text-red-600" @click="confirmaDelete = true">
+                <DropdownMenuItem class="text-xs text-red-600" @click="openDialogDelete = true">
                     <Trash2 class="mr-2 h-3 w-3" />
                     Excluir
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
-        <AlertDialog v-model:open="confirmaDelete">
+        <AlertDialog v-model:open="openDialogDelete">
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>Deseja deletar o usuário?</AlertDialogTitle>
@@ -57,7 +57,7 @@ import { ref } from "vue";
 const UsuarioFormularioState = useUsuarioFormularioStore();
 const UsuarioState = useUsuarioStore();
 
-const confirmaDelete = ref(false);
+const openDialogDelete = ref(false);
 
 defineProps<{
     id: number|any
@@ -71,7 +71,7 @@ const onDeletarUsuario = async (id: number) => {
     try {
         await UsuariosRepository.delete(id);
         UsuarioState.getUsuarios();
-        confirmaDelete.value = false;
+        openDialogDelete.value = false;
         toastUtil.success("Usuário deletado com sucesso!", "Sucesso");
     } catch (e: any) {
         console.log(e);

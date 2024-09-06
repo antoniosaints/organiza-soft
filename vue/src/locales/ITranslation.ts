@@ -1,5 +1,3 @@
-import { LocaleMessages, VueMessageType } from "vue-i18n"
-
 export interface ITranslation {
     sidebar: IMenu,
     profile: IProfile
@@ -35,5 +33,3 @@ interface IProfile {
         language: string
     }
 }
-
-export type TranslationMessages = LocaleMessages<VueMessageType>;
