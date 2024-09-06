@@ -36,60 +36,63 @@
                 </TableBody>
             </Table>
         </div>
-        <div class="flex justify-between items-center mt-4">
-            <div class="flex items-center space-x-2">
-                <Label for="rows-per-page"> Registros por página </Label>
-                <Select id="rows-per-page" v-model="perPage">
-                    <SelectTrigger class="w-auto">
-                        <SelectValue placeholder="Quantidade de registros" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="10">
-                            10
-                        </SelectItem>
-                        <SelectItem value="25">
-                            25
-                        </SelectItem>
-                        <SelectItem value="50">
-                            50
-                        </SelectItem>
-                        <SelectItem value="75">
-                            75
-                        </SelectItem>
-                        <SelectItem value="100">
-                            100
-                        </SelectItem>
-                    </SelectContent>
-                </Select>
+        <div class="flex flex-col md:flex-row justify-between items-center mt-4">
+            <Label class="text-foreground/80">Mostrando de {{(page - 1) * Number(perPage) + 1}} até {{usuarioStore.usuarios.length}} de {{usuarioStore.total}}</Label>
+            <div class="flex item-center flex-col md:flex-row space-x-4">
+                <div class="flex items-center space-x-2">
+                    <Label for="rows-per-page"> Registros por página </Label>
+                    <Select id="rows-per-page" v-model="perPage">
+                        <SelectTrigger class="w-auto">
+                            <SelectValue placeholder="Quantidade de registros" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="10">
+                                10
+                            </SelectItem>
+                            <SelectItem value="25">
+                                25
+                            </SelectItem>
+                            <SelectItem value="50">
+                                50
+                            </SelectItem>
+                            <SelectItem value="75">
+                                75
+                            </SelectItem>
+                            <SelectItem value="100">
+                                100
+                            </SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <Pagination v-slot="{ page }" :total="usuarioStore.total" :items-per-page="Number(perPage)"
+                    :sibling-count="1" show-edges :default-page="page">
+                    <PaginationList v-slot="{ items }" class="flex items-center gap-1">
+                        <PaginationFirst as-child @click="loadUsers(1)">
+                            <ChevronFirst :size="14" />
+                        </PaginationFirst>
+                        <PaginationPrev as-child @click="loadUsers(page - 1)">
+                            <ChevronLeft :size="14" />
+                        </PaginationPrev>
+    
+                        <template v-for="(item, index) in items">
+                            <PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
+                                <Button @click="loadUsers(item.value)" class="w-10 h-10 p-0"
+                                    :variant="item.value === page ? 'default' : 'secondary'">
+                                    {{ item.value }}
+                                </Button>
+                            </PaginationListItem>
+                            <PaginationEllipsis v-else :key="item.type" :index="index" />
+                        </template>
+    
+                        <PaginationNext as-child @click="loadUsers(page + 1)">
+                            <ChevronRight :size="14" />
+                        </PaginationNext>
+                        <PaginationLast as-child @click="loadUsers(Math.ceil(usuarioStore.total / Number(perPage)))">
+                            <ChevronLast :size="14" />
+                        </PaginationLast>
+                    </PaginationList>
+                </Pagination>
             </div>
-            <Pagination v-slot="{ page }" :total="usuarioStore.total" :items-per-page="Number(perPage)"
-                :sibling-count="1" show-edges :default-page="page">
-                <PaginationList v-slot="{ items }" class="flex items-center gap-1">
-                    <PaginationFirst as-child @click="loadUsers(1)">
-                        <ChevronFirst :size="14" />
-                    </PaginationFirst>
-                    <PaginationPrev as-child @click="loadUsers(page - 1)">
-                        <ChevronLeft :size="14" />
-                    </PaginationPrev>
-
-                    <template v-for="(item, index) in items">
-                        <PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
-                            <Button @click="loadUsers(item.value)" class="w-10 h-10 p-0"
-                                :variant="item.value === page ? 'default' : 'secondary'">
-                                {{ item.value }}
-                            </Button>
-                        </PaginationListItem>
-                        <PaginationEllipsis v-else :key="item.type" :index="index" />
-                    </template>
-
-                    <PaginationNext as-child @click="loadUsers(page + 1)">
-                        <ChevronRight :size="14" />
-                    </PaginationNext>
-                    <PaginationLast as-child @click="loadUsers(Math.ceil(usuarioStore.total / Number(perPage)))">
-                        <ChevronLast :size="14" />
-                    </PaginationLast>
-                </PaginationList>
-            </Pagination>
         </div>
     </div>
 </template>
