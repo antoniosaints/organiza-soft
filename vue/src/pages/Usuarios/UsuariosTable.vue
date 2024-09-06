@@ -37,7 +37,7 @@
             </Table>
         </div>
         <div class="flex flex-col md:flex-row justify-between items-center mt-4">
-            <Label class="text-foreground/80">Mostrando de {{(page - 1) * Number(perPage) + 1}} até {{usuarioStore.usuarios.length}} de {{usuarioStore.total}}</Label>
+            <Label class="text-foreground/80">Mostrando de {{ rangeStart }} até {{ rangeEnd }} de {{ usuarioStore.total }}</Label>
             <div class="flex item-center flex-col md:flex-row space-x-4">
                 <div class="flex items-center space-x-2">
                     <Label for="rows-per-page"> Registros por página </Label>
@@ -46,7 +46,7 @@
                             <SelectValue placeholder="Quantidade de registros" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="10">
+                            <SelectItem value="3">
                                 10
                             </SelectItem>
                             <SelectItem value="25">
@@ -124,17 +124,21 @@ import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, Filter } from "lu
 import { Label } from "@/components/ui/label";
 import { useUsuarioStore } from "@/stores/usuarios/usuarioStore";
 import { onMounted, ref, watch } from "vue";
+import { computed } from "vue";
 
 const usuarioStore = useUsuarioStore();
 const perPage = ref('10');
 const page = ref(1);
+const rangeStart = computed(() => (page.value - 1) * Number(perPage.value) + 1);
+const rangeEnd = computed(() => (page.value - 1) * Number(perPage.value) + usuarioStore.usuarios.length);
 
 watch(perPage, () => {
     loadUsers(1);
 });
 
-const loadUsers = async (page: number) => {
-    await usuarioStore.getUsuarios(Number(perPage.value), page);
+const loadUsers = async (paginate: number) => {
+    page.value = paginate
+    await usuarioStore.getUsuarios(Number(perPage.value), paginate);
 };
 
 onMounted(() => {
