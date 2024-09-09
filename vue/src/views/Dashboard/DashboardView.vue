@@ -3,7 +3,7 @@
     <TabsDashboardView>
       <template v-slot:title>
         <div class="text-center mb-2">
-          <h2 class="text-2xl font-semibold">Bom dia, Antonio Costa 🎯</h2>
+          <h2 class="text-2xl font-semibold">{{ saudacaoDinamica() }}, Antonio Costa 🎯</h2>
           <p class="text-sm text-muted-foreground">Acompanhe o desempenho do seu negócio aqui.</p>
         </div>
       </template>
@@ -17,4 +17,16 @@
 <script setup lang="ts">
 import TabsDashboardView from "./TabsDashboardView.vue";
 import DashboardGeral from "./DashboardGeral.vue";
+
+const saudacaoDinamica = () => {
+  const horario = new Date().getHours();
+
+  if (horario < 12) {
+    return "Bom dia";
+  } else if (horario < 18) {
+    return "Boa tarde";
+  } else {
+    return "Boa noite";
+  }
+}
 </script>

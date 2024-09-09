@@ -23,7 +23,7 @@ const routes: Array<RouteRecordRaw> = [
                     {
                         path: "/administracao/usuarios",
                         name: "Usuarios",
-                        meta: { breadcrumb: 'Usuarios' },
+                        meta: { breadcrumb: 'Usuários' },
                         component: () => import("@/views/Usuarios/UsuariosView.vue")
                     }
                 ]
@@ -44,8 +44,9 @@ const routes: Array<RouteRecordRaw> = [
 ];
 
 export const Router = createRouter({
-    // linkActiveClass: 'dark:bg-gray-700 bg-gray-200',
-    linkExactActiveClass: 'border-indigo-700',
+    linkActiveClass: 'dark:bg-gray-700 bg-gray-200',
+    linkExactActiveClass: 'border-gray-700',
+    scrollBehavior: () => ({ top: 0, behavior: 'smooth' }),
     history: createWebHistory(),
     routes
 });

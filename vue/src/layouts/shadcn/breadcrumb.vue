@@ -3,7 +3,7 @@
         <breadcrumb-list>
             <breadcrumb-item v-for="(route, index) in breadcrumbRoutes" :key="index">
                 <template v-if="index !== breadcrumbRoutes.length - 1">
-                    <router-link :to="route.path">{{ route.meta.breadcrumb }}</router-link>
+                    <router-link class="dark:bg-gray-950 bg-white" :to="route.path">{{ route.meta.breadcrumb }}</router-link>
                     <breadcrumb-separator />
                 </template>
                 <template v-else>
