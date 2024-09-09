@@ -17,12 +17,12 @@
                         <House />
                         <span>Dashboard</span>
                     </router-link>
-                    <collapsible class="grid gap-2">
+                    <collapsible v-slot="{ open }" class="grid gap-2">
                         <collapsible-trigger
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
                             <LockKeyhole />
                             <span>Administração</span>
-                            <ChevronRight class="ml-auto h-4 w-4 transition-transform" />
+                            <ChevronRight class="ml-auto h-4 w-4 transition-transform" :class="{ 'rotate-90': open }" />
                         </collapsible-trigger>
                         <collapsible-content>
                             <div class="grid gap-2 pl-6">
@@ -39,12 +39,12 @@
                             </div>
                         </collapsible-content>
                     </collapsible>
-                    <collapsible class="grid gap-2">
+                    <collapsible v-slot="{ open }" class="grid gap-2">
                         <collapsible-trigger
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
                             <Tags />
                             <span>Vendas</span>
-                            <ChevronRight class="ml-auto h-4 w-4 transition-transform" />
+                            <ChevronRight class="ml-auto h-4 w-4 transition-transform" :class="{ 'rotate-90': open }" />
                         </collapsible-trigger>
                         <collapsible-content>
                             <div class="grid gap-2 pl-6">
@@ -61,12 +61,12 @@
                             </div>
                         </collapsible-content>
                     </collapsible>
-                    <collapsible class="grid gap-2">
+                    <collapsible v-slot="{ open }" class="grid gap-2">
                         <collapsible-trigger
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
                             <Landmark />
                             <span>Financeiro</span>
-                            <ChevronRight class="ml-auto h-4 w-4 transition-transform" />
+                            <ChevronRight class="ml-auto h-4 w-4 transition-transform" :class="{ 'rotate-90': open }" />
                         </collapsible-trigger>
                         <collapsible-content>
                             <div class="grid gap-2 pl-6">
@@ -83,12 +83,12 @@
                             </div>
                         </collapsible-content>
                     </collapsible>
-                    <collapsible class="grid gap-2">
+                    <collapsible v-slot="{ open }" class="grid gap-2">
                         <collapsible-trigger
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
                             <Package />
                             <span>Estoques</span>
-                            <ChevronRight class="ml-auto h-4 w-4 transition-transform" />
+                            <ChevronRight class="ml-auto h-4 w-4 transition-transform" :class="{ 'rotate-90': open }" />
                         </collapsible-trigger>
                         <collapsible-content>
                             <div class="grid gap-2 pl-6">
