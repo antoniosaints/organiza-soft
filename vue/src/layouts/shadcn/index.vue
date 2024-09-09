@@ -94,7 +94,7 @@ const afterLeave = () => {
     showComponent.value = true;
 };
 
-const isSidebarOpen = ref(true);
+const isSidebarOpen = ref(window.innerWidth <= 768 ? false : true);
 
 const toggleSidebar = () => {
     isSidebarOpen.value = !isSidebarOpen.value;

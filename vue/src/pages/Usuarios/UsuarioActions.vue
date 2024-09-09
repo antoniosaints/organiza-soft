@@ -2,9 +2,9 @@
     <div>
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" class="h-7 w-7 p-0">
+                <Button variant="ghost" size="sm" class="h-7 w-9 p-0">
                     <span class="sr-only">Abrir menu</span>
-                    <MenuIcon class="h-4 w-4" />
+                    <Ellipsis class="h-6 w-6" />
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" class="w-28">
@@ -52,7 +52,7 @@ import { UsuariosRepository } from "@/repositories/usuarios/usuariosRepository";
 import { useUsuarioFormularioStore } from "@/stores/usuarios/usuarioFormularioStore";
 import { useUsuarioStore } from "@/stores/usuarios/usuarioStore";
 import toastUtil from "@/utils/toastUtil";
-import { MenuIcon, Pencil, Trash2 } from "lucide-vue-next";
+import { Ellipsis, MenuIcon, Pencil, Trash2 } from "lucide-vue-next";
 import { ref } from "vue";
 const UsuarioFormularioState = useUsuarioFormularioStore();
 const UsuarioState = useUsuarioStore();

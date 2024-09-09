@@ -5,18 +5,22 @@ import { defineStore } from "pinia";
 import { Ref, ref } from "vue";
 
 interface IUsuarioStore {
-    getUsuarios(limit?: number, page?: number): Promise<void>;
+    getUsuarios(): Promise<void>;
     usuarios: Ref<IUsuario[]>;
+    limit: Ref<string>;
+    page: Ref<number>;
     total: Ref<number>;
 }
 
 export const useUsuarioStore = defineStore("usuarioStore", (): IUsuarioStore => {
     const usuarios = ref<IUsuario[]>([]);
     const total = ref<number>(0);
+    const limit = ref<string>('10');
+    const page = ref<number>(1);
 
-    const getUsuarios = async (limit: number = 10, page: number = 1): Promise<void> => {
+    const getUsuarios = async (): Promise<void> => {
         try {
-            const { data, total: totalUsuarios } = await UsuariosRepository.getAll(limit, page);
+            const { data, total: totalUsuarios } = await UsuariosRepository.getAll(Number(limit.value), page.value);
             usuarios.value = data;
             total.value = totalUsuarios;
         } catch (error: any) {
@@ -28,6 +32,8 @@ export const useUsuarioStore = defineStore("usuarioStore", (): IUsuarioStore => 
     return {
         getUsuarios,
         usuarios,
-        total
+        total,
+        limit,
+        page
     };
 });

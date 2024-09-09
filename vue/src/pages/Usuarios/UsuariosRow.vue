@@ -1,7 +1,7 @@
 <template>
     <TableRow class="hover:bg-foreground/5 transition-colors">
         <TableCell ><span class="px-2 py-1 bg-secondary rounded-md">#{{ usuario.id }}</span></TableCell>
-        <TableCell>
+        <TableCell >
             <HoverCard>
                 <HoverCardTrigger asChild>
                     <Button variant="ghost" class="p-0 h-auto font-normal hover:bg-transparent hover:text-primary/60 dark:hover:text-primary-foreground/50">
@@ -15,7 +15,7 @@
             </HoverCard>
         </TableCell>
         <TableCell class="hidden md:table-cell">{{ usuario.email }}</TableCell>
-        <TableCell>
+        <TableCell class="hidden md:table-cell">
             <UsuarioBadge :status="usuario.status" />
         </TableCell>
         <TableCell class="text-right">

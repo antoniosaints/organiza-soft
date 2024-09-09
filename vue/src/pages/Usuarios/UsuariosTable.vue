@@ -20,6 +20,10 @@
                 <UserDialog />
             </div>
         </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <Input type="search" id="rows-per-page" v-model="pesquisa" placeholder="Pesquisar usuário..." />
+            <Button variant="default" class="w-max"><Search class="w-4 h-4 mr-2" />Buscar</Button>
+        </div>
         <div class="rounded-lg border shadow-sm overflow-hidden">
             <Table>
                 <TableHeader>
@@ -27,7 +31,7 @@
                         <TableHead>ID</TableHead>
                         <TableHead>Nome</TableHead>
                         <TableHead class="hidden md:table-cell">Email</TableHead>
-                        <TableHead>Status</TableHead>
+                        <TableHead class="hidden md:table-cell">Status</TableHead>
                         <TableHead class="text-right">Ações</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -41,12 +45,12 @@
             <div class="flex item-center flex-col md:flex-row space-x-4">
                 <div class="flex items-center space-x-2">
                     <Label for="rows-per-page"> Registros por página </Label>
-                    <Select id="rows-per-page" v-model="perPage">
+                    <Select id="rows-per-page" v-model="usuarioStore.limit">
                         <SelectTrigger class="w-auto">
                             <SelectValue placeholder="Quantidade de registros" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="3">
+                            <SelectItem value="10">
                                 10
                             </SelectItem>
                             <SelectItem value="25">
@@ -64,30 +68,30 @@
                         </SelectContent>
                     </Select>
                 </div>
-                <Pagination v-slot="{ page }" :total="usuarioStore.total" :items-per-page="Number(perPage)"
-                    :sibling-count="1" show-edges :default-page="page">
+                <Pagination :total="usuarioStore.total" :items-per-page="Number(usuarioStore.limit)"
+                    :sibling-count="1" show-edges :default-page="usuarioStore.page">
                     <PaginationList v-slot="{ items }" class="flex items-center gap-1">
                         <PaginationFirst as-child @click="loadUsers(1)">
                             <ChevronFirst :size="14" />
                         </PaginationFirst>
-                        <PaginationPrev as-child @click="loadUsers(page - 1)">
+                        <PaginationPrev as-child @click="loadUsers(usuarioStore.page - 1)">
                             <ChevronLeft :size="14" />
                         </PaginationPrev>
     
                         <template v-for="(item, index) in items">
                             <PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
                                 <Button @click="loadUsers(item.value)" class="w-10 h-10 p-0"
-                                    :variant="item.value === page ? 'default' : 'secondary'">
+                                    :variant="item.value === usuarioStore.page ? 'default' : 'secondary'">
                                     {{ item.value }}
                                 </Button>
                             </PaginationListItem>
                             <PaginationEllipsis v-else :key="item.type" :index="index" />
                         </template>
     
-                        <PaginationNext as-child @click="loadUsers(page + 1)">
+                        <PaginationNext as-child @click="loadUsers(usuarioStore.page + 1)">
                             <ChevronRight :size="14" />
                         </PaginationNext>
-                        <PaginationLast as-child @click="loadUsers(Math.ceil(usuarioStore.total / Number(perPage)))">
+                        <PaginationLast as-child @click="loadUsers(Math.ceil(usuarioStore.total / Number(usuarioStore.limit)))">
                             <ChevronLast :size="14" />
                         </PaginationLast>
                     </PaginationList>
@@ -120,25 +124,26 @@ import {
 } from '@/components/ui/select'
 import UserDialog from "@/pages/Usuarios/Formulario/UsuarioModal.vue";
 import UsuariosRow from "@/pages/Usuarios/UsuariosRow.vue";
-import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, Filter } from "lucide-vue-next";
+import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, Filter, Search } from "lucide-vue-next";
 import { Label } from "@/components/ui/label";
 import { useUsuarioStore } from "@/stores/usuarios/usuarioStore";
 import { onMounted, ref, watch } from "vue";
 import { computed } from "vue";
+import Input from "@/components/ui/input/Input.vue";
 
 const usuarioStore = useUsuarioStore();
-const perPage = ref('10');
-const page = ref(1);
-const rangeStart = computed(() => (page.value - 1) * Number(perPage.value) + 1);
-const rangeEnd = computed(() => (page.value - 1) * Number(perPage.value) + usuarioStore.usuarios.length);
+const pesquisa = ref('');
+const perPage = computed(() => usuarioStore.limit);
+const rangeStart = computed(() => (usuarioStore.page - 1) * Number(usuarioStore.limit) + 1);
+const rangeEnd = computed(() => (usuarioStore.page - 1) * Number(usuarioStore.limit) + usuarioStore.usuarios.length);
 
 watch(perPage, () => {
     loadUsers(1);
 });
 
 const loadUsers = async (paginate: number) => {
-    page.value = paginate
-    await usuarioStore.getUsuarios(Number(perPage.value), paginate);
+    usuarioStore.page = paginate || 1;
+    await usuarioStore.getUsuarios();
 };
 
 onMounted(() => {
