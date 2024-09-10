@@ -14,9 +14,13 @@
         <Phone class="h-3 w-3 mr-1" />
         {{ usuario.telefone }}
       </p>
+      <p class="text-sm text-muted-foreground flex items-center">
+        <ShieldMinus class="h-3 w-3 mr-1" />
+        {{ usuario.regra.substring(0, 1).toUpperCase() + usuario.regra.substring(1) }}
+      </p>
       <div class="flex items-center pt-2">
         <span class="text-xs text-muted-foreground">
-          Última compra: {{ usuario.dataCriacao }}
+          Último login: {{ usuario.dataCriacao }}
         </span>
       </div>
     </div>
@@ -26,7 +30,7 @@
 <script setup lang="ts">
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import IUsuario from "@/types/usuarios/IUsuario";
-import { Mail, Phone } from "lucide-vue-next";
+import { Mail, Phone, ShieldMinus } from "lucide-vue-next";
 
 defineProps<{
     usuario: IUsuario

@@ -48,12 +48,12 @@
                         </collapsible-trigger>
                         <collapsible-content>
                             <div class="grid gap-2 pl-6">
-                                <router-link to="/financeiro/lancamentos"
+                                <router-link to="/vendas/pdv"
                                     class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
                                     <Computer />
                                     <span>PDV</span>
                                 </router-link>
-                                <router-link to="/financeiro/dre"
+                                <router-link to="/vendas/resumo"
                                     class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
                                     <FileText />
                                     <span>Resumo</span>
@@ -87,17 +87,22 @@
                         <collapsible-trigger
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
                             <Package />
-                            <span>Estoques</span>
+                            <span>Patrimônio</span>
                             <ChevronRight class="ml-auto h-4 w-4 transition-transform" :class="{ 'rotate-90': open }" />
                         </collapsible-trigger>
                         <collapsible-content>
                             <div class="grid gap-2 pl-6">
-                                <router-link to="/financeiro/lancamentos"
+                                <router-link to="/patrimonio/produtos"
                                     class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
                                     <Boxes />
                                     <span>Produtos</span>
                                 </router-link>
-                                <router-link to="/financeiro/dre"
+                                <router-link to="/patrimonio/servicos"
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
+                                    <BookOpenCheck />
+                                    <span>Serviços</span>
+                                </router-link>
+                                <router-link to="/patrimonio/categorias"
                                     class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
                                     <Group />
                                     <span>Categorias</span>
@@ -108,11 +113,12 @@
                 </nav>
             </div>
             <div class="mb-4 mx-3">
-                <router-link to="/login"
-                    class="flex text-red-500 items-center gap-2 rounded-md px-3 py-2 text-sm font-bold transition-colors hover:bg-muted">
+                <div 
+                    @click="LoginService.logout()"
+                    class="flex text-red-500 cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm font-bold transition-colors hover:bg-muted">
                     <LogOut />
                     <span>Logout</span>
-                </router-link>
+                </div>
             </div>
         </aside>
         <div class="flex-1" :class="mainContentClass">
@@ -143,9 +149,10 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { House, LockKeyhole, Users, List, Wallet, ChevronRight, LogOut, PanelLeftOpen, PanelLeftClose, Landmark, FileText, Package, Boxes, Group, Computer, Tags } from 'lucide-vue-next'
+import { House, LockKeyhole, Users, List, Wallet, ChevronRight, LogOut, PanelLeftOpen, PanelLeftClose, Landmark, FileText, Package, Boxes, Group, Computer, Tags, BookOpenCheck } from 'lucide-vue-next'
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible"
 import { BreadCrumb, ProfileHome, ToogleMode } from '.';
+import { LoginService } from '@/services/login/loginService';
 
 const showComponent = ref(true);
 const beforeEnter = () => {

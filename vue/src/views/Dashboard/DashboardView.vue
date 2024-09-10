@@ -4,7 +4,7 @@
       <template v-slot:title>
         <div class="text-center mb-2">
           <h2 class="text-2xl font-semibold">{{ saudacaoDinamica() }}, Antonio Costa 🎯</h2>
-          <p class="text-sm text-muted-foreground">Acompanhe o desempenho do seu negócio aqui.</p>
+          <p class="text-sm text-muted-foreground">Acompanhe o desempenho da sua empresa aqui.</p>
         </div>
       </template>
       <template v-slot:general>
