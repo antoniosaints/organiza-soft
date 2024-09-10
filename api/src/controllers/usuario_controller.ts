@@ -23,13 +23,18 @@ export const createUsuario = async (req: Request, res: Response) => {
 
 export const getUsuarios = async (req: Request, res: Response) => {
   try {
-    const {limit, page} = req.query;
+    const { limit, page, search } = req.query;
     const offset = (Number(page) - 1) * Number(limit);
 
     const usuarios = await prismaService.usuario.findMany({
       skip: offset || 0,
       take: Number(limit) || 10,
-      orderBy: { nome: "asc" },
+      where: {
+        OR: [
+          { nome: { contains: search as string } },
+          { email: { contains: search as string } }
+        ],
+      },
     });
 
     const totalRegisters = await prismaService.usuario.count({});
