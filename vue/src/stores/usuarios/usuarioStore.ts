@@ -10,6 +10,7 @@ interface IUsuarioStore {
     limit: Ref<string>;
     page: Ref<number>;
     total: Ref<number>;
+    search: Ref<string>;
 }
 
 export const useUsuarioStore = defineStore("usuarioStore", (): IUsuarioStore => {
@@ -17,10 +18,11 @@ export const useUsuarioStore = defineStore("usuarioStore", (): IUsuarioStore => 
     const total = ref<number>(0);
     const limit = ref<string>('10');
     const page = ref<number>(1);
+    const search = ref<string>('');
 
     const getUsuarios = async (): Promise<void> => {
         try {
-            const { data, total: totalUsuarios } = await UsuariosRepository.getAll(Number(limit.value), page.value);
+            const { data, total: totalUsuarios } = await UsuariosRepository.getAll(Number(limit.value), page.value, search.value);
             usuarios.value = data;
             total.value = totalUsuarios;
         } catch (error: any) {
@@ -34,6 +36,7 @@ export const useUsuarioStore = defineStore("usuarioStore", (): IUsuarioStore => 
         usuarios,
         total,
         limit,
-        page
+        page,
+        search
     };
 });

@@ -8,11 +8,11 @@
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" class="w-28">
-                <DropdownMenuItem class="text-xs" @click="onEditarUsuario(id)">
+                <DropdownMenuItem @click="onEditarUsuario(id)">
                     <Pencil class="mr-2 h-3 w-3" />
                     Editar
                 </DropdownMenuItem>
-                <DropdownMenuItem class="text-xs text-red-600" @click="openDialogDelete = true">
+                <DropdownMenuItem class="text-red-600" @click="openDialogDelete = true">
                     <Trash2 class="mr-2 h-3 w-3" />
                     Excluir
                 </DropdownMenuItem>
@@ -52,7 +52,7 @@ import { UsuariosRepository } from "@/repositories/usuarios/usuariosRepository";
 import { useUsuarioFormularioStore } from "@/stores/usuarios/usuarioFormularioStore";
 import { useUsuarioStore } from "@/stores/usuarios/usuarioStore";
 import toastUtil from "@/utils/toastUtil";
-import { Ellipsis, MenuIcon, Pencil, Trash2 } from "lucide-vue-next";
+import { Ellipsis, Pencil, Trash2 } from "lucide-vue-next";
 import { ref } from "vue";
 const UsuarioFormularioState = useUsuarioFormularioStore();
 const UsuarioState = useUsuarioStore();

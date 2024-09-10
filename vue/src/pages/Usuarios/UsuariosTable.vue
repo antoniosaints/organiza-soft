@@ -20,16 +20,21 @@
                 <UserDialog />
             </div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            <Input type="search" id="rows-per-page" v-model="pesquisa" placeholder="Pesquisar usuário..." />
-            <Button variant="default" class="w-max"><Search class="w-4 h-4 mr-2" />Buscar</Button>
+        <div class="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 gap-4 mb-4">
+            <Input type="search" @input="(event: any) => { if (event.target.value == '') reloadTableUsuarios() }"
+                @keyup.enter="reloadTableUsuarios" id="rows-per-page" v-model="usuarioStore.search"
+                placeholder="Pesquisar usuário..." />
+            <Button variant="default" class="w-max" @click="reloadTableUsuarios">
+                <Search class="w-4 h-4 mr-2" />Buscar
+            </Button>
         </div>
-        <div class="rounded-lg border shadow-sm overflow-hidden">
-            <Table>
+        <div class="rounded-lg border shadow-sm overflow-auto">
+            <Table v-if="UsuariosExists">
                 <TableHeader>
                     <TableRow class="bg-secondary">
                         <TableHead>ID</TableHead>
                         <TableHead>Nome</TableHead>
+                        <TableHead class="hidden sm:table-cell">Permissão</TableHead>
                         <TableHead class="hidden md:table-cell">Email</TableHead>
                         <TableHead class="hidden md:table-cell">Status</TableHead>
                         <TableHead class="text-right">Ações</TableHead>
@@ -39,9 +44,15 @@
                     <UsuariosRow v-for="usuario in usuarioStore.usuarios" :key="usuario.id" :usuario="usuario" />
                 </TableBody>
             </Table>
+
+            <div v-else class="w-full h-full text-blue-100 flex justify-center items-center">
+                <TreePalm />
+                <p class="ml-2 h-40 font-sans text-xl flex items-center">Nenhum para visualizar com ( {{ usuarioStore.search }} )</p>
+            </div>
         </div>
-        <div class="flex flex-col md:flex-row justify-between items-center mt-4">
-            <Label class="text-foreground/80">Mostrando de {{ rangeStart }} até {{ rangeEnd }} de {{ usuarioStore.total }}</Label>
+        <div v-if="UsuariosExists" class="flex flex-col md:flex-row justify-between items-center mt-4">
+            <Label class="text-foreground/80">Mostrando de {{ rangeStart }} até {{ rangeEnd }} de {{ usuarioStore.total
+                }}</Label>
             <div class="flex item-center flex-col md:flex-row space-x-4">
                 <div class="flex items-center space-x-2">
                     <Label for="rows-per-page"> Registros por página </Label>
@@ -68,8 +79,8 @@
                         </SelectContent>
                     </Select>
                 </div>
-                <Pagination :total="usuarioStore.total" :items-per-page="Number(usuarioStore.limit)"
-                    :sibling-count="1" show-edges :default-page="usuarioStore.page">
+                <Pagination :total="usuarioStore.total" :items-per-page="Number(usuarioStore.limit)" :sibling-count="1"
+                    show-edges :default-page="usuarioStore.page">
                     <PaginationList v-slot="{ items }" class="flex items-center gap-1">
                         <PaginationFirst as-child @click="loadUsers(1)">
                             <ChevronFirst :size="14" />
@@ -77,7 +88,7 @@
                         <PaginationPrev as-child @click="loadUsers(usuarioStore.page - 1)">
                             <ChevronLeft :size="14" />
                         </PaginationPrev>
-    
+
                         <template v-for="(item, index) in items">
                             <PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
                                 <Button @click="loadUsers(item.value)" class="w-10 h-10 p-0"
@@ -87,11 +98,12 @@
                             </PaginationListItem>
                             <PaginationEllipsis v-else :key="item.type" :index="index" />
                         </template>
-    
+
                         <PaginationNext as-child @click="loadUsers(usuarioStore.page + 1)">
                             <ChevronRight :size="14" />
                         </PaginationNext>
-                        <PaginationLast as-child @click="loadUsers(Math.ceil(usuarioStore.total / Number(usuarioStore.limit)))">
+                        <PaginationLast as-child
+                            @click="loadUsers(Math.ceil(usuarioStore.total / Number(usuarioStore.limit)))">
                             <ChevronLast :size="14" />
                         </PaginationLast>
                     </PaginationList>
@@ -124,18 +136,18 @@ import {
 } from '@/components/ui/select'
 import UserDialog from "@/pages/Usuarios/Formulario/UsuarioModal.vue";
 import UsuariosRow from "@/pages/Usuarios/UsuariosRow.vue";
-import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, Filter, Search } from "lucide-vue-next";
+import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, Filter, Search, TreePalm } from "lucide-vue-next";
 import { Label } from "@/components/ui/label";
 import { useUsuarioStore } from "@/stores/usuarios/usuarioStore";
-import { onMounted, ref, watch } from "vue";
+import { onMounted, watch } from "vue";
 import { computed } from "vue";
-import Input from "@/components/ui/input/Input.vue";
+import { Input } from "@/components/ui/input";
 
 const usuarioStore = useUsuarioStore();
-const pesquisa = ref('');
 const perPage = computed(() => usuarioStore.limit);
 const rangeStart = computed(() => (usuarioStore.page - 1) * Number(usuarioStore.limit) + 1);
 const rangeEnd = computed(() => (usuarioStore.page - 1) * Number(usuarioStore.limit) + usuarioStore.usuarios.length);
+const UsuariosExists = computed(() => usuarioStore.usuarios.length > 0);
 
 watch(perPage, () => {
     loadUsers(1);
@@ -143,6 +155,10 @@ watch(perPage, () => {
 
 const loadUsers = async (paginate: number) => {
     usuarioStore.page = paginate || 1;
+    await usuarioStore.getUsuarios();
+};
+
+const reloadTableUsuarios = async () => {
     await usuarioStore.getUsuarios();
 };
 
