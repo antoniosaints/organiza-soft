@@ -3,7 +3,7 @@
         <breadcrumb-list>
             <breadcrumb-item v-for="(route, index) in breadcrumbRoutes" :key="index">
                 <template v-if="index !== breadcrumbRoutes.length - 1">
-                    <router-link class="dark:bg-gray-950 bg-white" :to="route.path">{{ route.meta.breadcrumb }}</router-link>
+                    <router-link class="hidden_color_link" :to="route.path">{{ route.meta.breadcrumb }}</router-link>
                     <breadcrumb-separator>
                         <GitCommitHorizontal />
                     </breadcrumb-separator>
@@ -27,3 +27,9 @@ const breadcrumbRoutes = computed(() => {
     return route.matched.filter(route => route.meta && route.meta.breadcrumb)
 })
 </script>
+
+<style scoped>
+.hidden_color_link {
+    background-color: transparent !important;
+}
+</style>

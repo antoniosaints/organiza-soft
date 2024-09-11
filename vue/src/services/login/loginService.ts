@@ -30,6 +30,7 @@ export class LoginService {
         try {
             if (!StorageUtil.get("@gestao_inteligente:token")) return false;
             await AuthRepository.verify();
+            await loginStore.getUserData();
             loginStore.isAutenticated = true;
             return true;
         } catch (error: any) {

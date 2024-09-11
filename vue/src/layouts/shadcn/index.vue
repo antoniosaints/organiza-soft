@@ -1,25 +1,25 @@
 <template>
     <div class="flex min-h-screen w-full bg-background text-foreground">
         <aside :class="sidebarClasses">
-            <div class="flex h-16 items-center justify-between px-4">
-                <router-link to="/" class="flex items-center gap-2 font-bold dark:bg-gray-950 bg-white">
+            <div class="flex h-16 items-center bg-sidebar text-white justify-between px-4">
+                <div to="/" class="flex items-center gap-2 font-bold">
                     <Wallet />
                     <span class="text-lg">Organiza Soft</span>
-                </router-link>
+                </div>
                 <button type="button" class="lg:hidden" @click="toggleSidebar">
                     <PanelLeftClose />
                 </button>
             </div>
-            <div class="flex-1 overflow-y-auto px-2 py-4">
+            <div class="flex-1 overflow-y-auto bg-sidebar text-white px-2 py-4">
                 <nav class="grid gap-2">
                     <router-link to="/dashboard"
-                        class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
+                        class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                         <House />
                         <span>Dashboard</span>
                     </router-link>
                     <collapsible v-slot="{ open }" class="grid gap-2">
                         <collapsible-trigger
-                            class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
+                            class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <LockKeyhole />
                             <span>Administração</span>
                             <ChevronRight class="ml-auto h-4 w-4 transition-transform" :class="{ 'rotate-90': open }" />
@@ -27,12 +27,12 @@
                         <collapsible-content>
                             <div class="grid gap-2 pl-6">
                                 <router-link to="/administracao/usuarios"
-                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                                     <Users />
                                     <span>Usuários</span>
                                 </router-link>
                                 <router-link to="/administracao/produtos"
-                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                                     <List />
                                     <span>Logs</span>
                                 </router-link>
@@ -41,7 +41,7 @@
                     </collapsible>
                     <collapsible v-slot="{ open }" class="grid gap-2">
                         <collapsible-trigger
-                            class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
+                            class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <Tags />
                             <span>Vendas</span>
                             <ChevronRight class="ml-auto h-4 w-4 transition-transform" :class="{ 'rotate-90': open }" />
@@ -49,12 +49,12 @@
                         <collapsible-content>
                             <div class="grid gap-2 pl-6">
                                 <router-link to="/vendas/pdv"
-                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                                     <Computer />
                                     <span>PDV</span>
                                 </router-link>
                                 <router-link to="/vendas/resumo"
-                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                                     <FileText />
                                     <span>Resumo</span>
                                 </router-link>
@@ -63,7 +63,7 @@
                     </collapsible>
                     <collapsible v-slot="{ open }" class="grid gap-2">
                         <collapsible-trigger
-                            class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
+                            class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <Landmark />
                             <span>Financeiro</span>
                             <ChevronRight class="ml-auto h-4 w-4 transition-transform" :class="{ 'rotate-90': open }" />
@@ -71,12 +71,12 @@
                         <collapsible-content>
                             <div class="grid gap-2 pl-6">
                                 <router-link to="/financeiro/lancamentos"
-                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                                     <Wallet />
                                     <span>Lançamentos</span>
                                 </router-link>
                                 <router-link to="/financeiro/dre"
-                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                                     <FileText />
                                     <span>DRE</span>
                                 </router-link>
@@ -85,7 +85,7 @@
                     </collapsible>
                     <collapsible v-slot="{ open }" class="grid gap-2">
                         <collapsible-trigger
-                            class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
+                            class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <Package />
                             <span>Patrimônio</span>
                             <ChevronRight class="ml-auto h-4 w-4 transition-transform" :class="{ 'rotate-90': open }" />
@@ -93,17 +93,17 @@
                         <collapsible-content>
                             <div class="grid gap-2 pl-6">
                                 <router-link to="/patrimonio/produtos"
-                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                                     <Boxes />
                                     <span>Produtos</span>
                                 </router-link>
                                 <router-link to="/patrimonio/servicos"
-                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                                     <BookOpenCheck />
                                     <span>Serviços</span>
                                 </router-link>
                                 <router-link to="/patrimonio/categorias"
-                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                                     <Group />
                                     <span>Categorias</span>
                                 </router-link>
@@ -112,10 +112,10 @@
                     </collapsible>
                 </nav>
             </div>
-            <div class="mb-4 mx-3">
+            <div class="pb-4 px-3 bg-sidebar">
                 <div 
                     @click="LoginService.logout()"
-                    class="flex text-red-500 cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm font-bold transition-colors hover:bg-muted">
+                    class="flex text-white cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm font-bold transition-colors hover:bg-sidebar-hover">
                     <LogOut />
                     <span>Logout</span>
                 </div>
