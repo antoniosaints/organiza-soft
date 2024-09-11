@@ -5,6 +5,7 @@ import App from './App.vue';
 import { Router } from './routes/Router';
 import { createPinia } from 'pinia';
 import { LoginService } from './services/login/loginService';
+import { VueQueryPlugin } from '@tanstack/vue-query'
 import IconsUtil from './utils/iconsUtil';
 
 import pt from './locales/pt';
@@ -34,5 +35,6 @@ app.use(i18n);
 })();
 
 app.use(Router);
+app.use(VueQueryPlugin);
 app.component('IconFA', IconsUtil);
 app.mount('#app');

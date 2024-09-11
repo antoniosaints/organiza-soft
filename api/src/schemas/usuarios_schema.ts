@@ -24,6 +24,7 @@ const createUser = zodUtil.object({
         required_error: "A regra é obrigatória",
         invalid_type_error: "A regra deve ser uma string",
     }),
+    status: zodUtil.enum(["ativo", "inativo"]).optional(),
     grupoId: zodUtil.number({
         required_error: "O grupoId é obrigatório",
         invalid_type_error: "O grupoId deve ser um number",
@@ -51,6 +52,7 @@ const updateUser = zodUtil.object({
     regra: zodUtil.string({
         invalid_type_error: "A regra deve ser uma string",
     }).optional(),
+    status: zodUtil.enum(["ativo", "inativo"]).optional(),
     grupoId: zodUtil.number({
         invalid_type_error: "O grupoId deve ser um number",
     }).optional()

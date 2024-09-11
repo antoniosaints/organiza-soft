@@ -5,24 +5,38 @@ import { defineStore } from "pinia";
 import { Ref, ref } from "vue";
 
 interface IUsuarioStore {
-    getUsuarios(): Promise<IUsuario[] | undefined>;
+    getUsuarios(): Promise<void>;
     usuarios: Ref<IUsuario[]>;
+    limit: Ref<string>;
+    page: Ref<number>;
+    total: Ref<number>;
+    search: Ref<string>;
 }
 
-export const useUsuarioStore = defineStore("usuarioStore", () : IUsuarioStore => {
+export const useUsuarioStore = defineStore("usuarioStore", (): IUsuarioStore => {
     const usuarios = ref<IUsuario[]>([]);
-    const getUsuarios = async (): Promise<IUsuario[] | undefined> => {
+    const total = ref<number>(0);
+    const limit = ref<string>('10');
+    const page = ref<number>(1);
+    const search = ref<string>('');
+
+    const getUsuarios = async (): Promise<void> => {
         try {
-            const data = await UsuariosRepository.getAll();
+            const { data, total: totalUsuarios } = await UsuariosRepository.getAll(Number(limit.value), page.value, search.value);
             usuarios.value = data;
-            return data;
+            total.value = totalUsuarios;
         } catch (error: any) {
-            toastUtil.error(error.response.data.message, "Ops..");
+            const errorMessage = error?.response?.data?.message || "Erro desconhecido.";
+            toastUtil.error(errorMessage, "Ops..");
         }
     };
 
     return {
         getUsuarios,
-        usuarios
+        usuarios,
+        total,
+        limit,
+        page,
+        search
     };
 });

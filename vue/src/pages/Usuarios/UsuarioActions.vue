@@ -2,23 +2,23 @@
     <div>
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" class="h-7 w-7 p-0">
+                <Button variant="ghost" size="sm" class="h-7 w-9 p-0">
                     <span class="sr-only">Abrir menu</span>
-                    <MenuIcon class="h-4 w-4" />
+                    <Ellipsis class="h-6 w-6" />
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" class="w-28">
-                <DropdownMenuItem class="text-xs" @click="onEditarUsuario(id)">
+                <DropdownMenuItem @click="onEditarUsuario(id)">
                     <Pencil class="mr-2 h-3 w-3" />
                     Editar
                 </DropdownMenuItem>
-                <DropdownMenuItem class="text-xs text-red-600" @click="confirmaDelete = true">
+                <DropdownMenuItem class="text-red-600" @click="openDialogDelete = true">
                     <Trash2 class="mr-2 h-3 w-3" />
                     Excluir
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
-        <AlertDialog v-model:open="confirmaDelete">
+        <AlertDialog v-model:open="openDialogDelete">
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>Deseja deletar o usuário?</AlertDialogTitle>
@@ -52,12 +52,12 @@ import { UsuariosRepository } from "@/repositories/usuarios/usuariosRepository";
 import { useUsuarioFormularioStore } from "@/stores/usuarios/usuarioFormularioStore";
 import { useUsuarioStore } from "@/stores/usuarios/usuarioStore";
 import toastUtil from "@/utils/toastUtil";
-import { MenuIcon, Pencil, Trash2 } from "lucide-vue-next";
+import { Ellipsis, Pencil, Trash2 } from "lucide-vue-next";
 import { ref } from "vue";
 const UsuarioFormularioState = useUsuarioFormularioStore();
 const UsuarioState = useUsuarioStore();
 
-const confirmaDelete = ref(false);
+const openDialogDelete = ref(false);
 
 defineProps<{
     id: number|any
@@ -71,7 +71,7 @@ const onDeletarUsuario = async (id: number) => {
     try {
         await UsuariosRepository.delete(id);
         UsuarioState.getUsuarios();
-        confirmaDelete.value = false;
+        openDialogDelete.value = false;
         toastUtil.success("Usuário deletado com sucesso!", "Sucesso");
     } catch (e: any) {
         console.log(e);

@@ -6,9 +6,9 @@ export class UsuariosRepository {
         const { data } = await axiosService.get(`usuario/${id}`);
         return data.data;
     }
-    static async getAll(): Promise<IUsuario[]> {
-        const { data } = await axiosService.get(`usuario`);
-        return data.data;
+    static async getAll(limit: number, page: number, search?: string | undefined): Promise<{ data: IUsuario[], total: number}> {
+        const { data } = await axiosService.get(`usuario?limit=${limit}&page=${page}&search=${search}`);
+        return data;
     }
     static async create(user: IUsuario): Promise<any> {
         const { data } = await axiosService.post(`usuario`, user);
