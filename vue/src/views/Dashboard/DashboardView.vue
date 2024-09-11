@@ -2,8 +2,8 @@
   <div class="mx-auto max-w-7xl">
     <TabsDashboardView>
       <template v-slot:title>
-        <div class="text-center mb-2">
-          <h2 class="text-2xl font-semibold">{{ saudacaoDinamica() }}, Antonio Costa 🎯</h2>
+        <div class="text-left mb-2">
+          <h2 class="text-2xl font-semibold">{{ saudacaoDinamica() }}, {{loginStore.dataUserLogged?.name.split(' ')[0]}} 🎯</h2>
           <p class="text-sm text-muted-foreground">Acompanhe o desempenho da sua empresa aqui.</p>
         </div>
       </template>
@@ -17,7 +17,9 @@
 <script setup lang="ts">
 import TabsDashboardView from "./TabsDashboardView.vue";
 import DashboardGeral from "./DashboardGeral.vue";
+import { useLoginStore } from "@/stores/login/loginStore";
 
+const loginStore = useLoginStore();
 const saudacaoDinamica = () => {
   const horario = new Date().getHours();
 

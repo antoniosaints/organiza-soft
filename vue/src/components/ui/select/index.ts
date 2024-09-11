@@ -9,3 +9,5 @@ export { default as SelectLabel } from './SelectLabel.vue'
 export { default as SelectSeparator } from './SelectSeparator.vue'
 export { default as SelectScrollUpButton } from './SelectScrollUpButton.vue'
 export { default as SelectScrollDownButton } from './SelectScrollDownButton.vue'
+export { default as SelectMulti } from './SelectMulti.vue'
+
