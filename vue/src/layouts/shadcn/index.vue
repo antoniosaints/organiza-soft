@@ -121,7 +121,7 @@
                 </div>
             </div>
         </aside>
-        <div class="flex-1" :class="mainContentClass">
+        <div class="flex-1 w-[inherit]" :class="mainContentClass">
             <header
                 class="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-border bg-background px-4 shadow-sm lg:px-6">
                 <div class="flex items-center gap-4">
