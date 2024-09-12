@@ -14,7 +14,7 @@ export class LoginService {
             StorageUtil.set("@gestao_inteligente:token", data.token);
             StorageUtil.set("@gestao_inteligente:refreshtoken", data.refreshToken);
             loginStore.isAutenticated = true;
-            await Router.push({ path: "/dashboard" });
+            await Router.push("/dashboard")
             return true;
         } catch (error: any) {
             loginStore.isAutenticated = false;
@@ -37,8 +37,8 @@ export class LoginService {
             loginStore.isAutenticated = false;
             StorageUtil.remove("@gestao_inteligente:token");
             StorageUtil.remove("@gestao_inteligente:refreshtoken");
-            toastUtil.error(`Você  não tem permissão para realizar esta ação. ${error.response.data.message}`, "Ops...");
-            Router.push({ path: "/login" });
+            toastUtil.error(`Você não tem permissão para realizar esta ação. ${error.response.data.message}`, "Ops...");
+            Router.push("/login");
             return false;
         }
     }
@@ -49,6 +49,6 @@ export class LoginService {
         StorageUtil.remove("@gestao_inteligente:token");
         StorageUtil.remove("@gestao_inteligente:refreshtoken");
 
-        await Router.push({ path: "/login" });
+        await Router.push("/login");
     }
 }

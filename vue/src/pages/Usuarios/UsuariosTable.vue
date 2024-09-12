@@ -45,9 +45,9 @@
                 </TableBody>
             </Table>
 
-            <div v-else class="w-full h-full text-blue-100 flex justify-center items-center">
-                <TreePalm />
-                <p class="ml-2 h-40 font-sans text-xl flex items-center">Nenhum para visualizar com ( {{ usuarioStore.search }} )</p>
+            <div v-else class="w-full text-blue-100 flex flex-col justify-center items-center">
+                <img class="w-64" src="/not_found.svg" />
+                <p class="mb-6 font-sans text-xl text-black dark:text-white flex items-center">Nenhum registro encontrado com ( {{ usuarioStore.search }} )</p>
             </div>
         </div>
         <div v-if="UsuariosExists" class="flex flex-col md:flex-row justify-between items-center mt-4">
@@ -136,7 +136,7 @@ import {
 } from '@/components/ui/select'
 import UserDialog from "@/pages/Usuarios/Formulario/UsuarioModal.vue";
 import UsuariosRow from "@/pages/Usuarios/UsuariosRow.vue";
-import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, Filter, Search, TreePalm } from "lucide-vue-next";
+import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, Filter, Search } from "lucide-vue-next";
 import { Label } from "@/components/ui/label";
 import { useUsuarioStore } from "@/stores/usuarios/usuarioStore";
 import { onMounted, watch } from "vue";

@@ -2,15 +2,15 @@
     <form @submit.prevent="handleSubmit" class="space-y-4">
         <div class="space-y-2">
             <Label for="name">Nome</Label>
-            <Input id="name" v-model="UsuarioFormularioStore.data.nome" required />
+            <Input id="name" placeholder="Nome completo" v-model="UsuarioFormularioStore.data.nome" required />
         </div>
         <div class="space-y-2">
             <Label for="email">Email</Label>
-            <Input id="email" type="email" v-model="UsuarioFormularioStore.data.email" required />
+            <Input id="email" placeholder="Email de acesso" type="email" v-model="UsuarioFormularioStore.data.email" required />
         </div>
         <div class="space-y-2">
             <Label for="senha">Senha</Label>
-            <Input id="senha" type="password" v-model="UsuarioFormularioStore.data.senha" required />
+            <Input id="senha" placeholder="......" type="password" v-model="UsuarioFormularioStore.data.senha" required />
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="space-y-2">
@@ -29,9 +29,9 @@
                 </Select>
             </div>
             <div class="space-y-2">
-                <Label for="role">Status</Label>
+                <Label for="status">Status</Label>
                 <Select v-model="UsuarioFormularioStore.data.status" required>
-                    <SelectTrigger id="role">
+                    <SelectTrigger id="status">
                         <SelectValue placeholder="Selecione um status" />
                     </SelectTrigger>
                     <SelectContent>
@@ -44,7 +44,7 @@
         </div>
         <div class="space-y-2">
             <Label for="phone">Telefone</Label>
-            <Input id="phone" type="tel" v-model="UsuarioFormularioStore.data.telefone" />
+            <Input id="phone" placeholder="(00) 00000-0000" type="number" v-model="UsuarioFormularioStore.data.telefone" />
         </div>
         <div class="flex justify-end space-x-2">
             <Button type="submit"><CircleCheck class="w-4 h-4 mr-2" /> {{ UsuarioFormularioStore.ref_id == null ? 'Salvar' : 'Atualizar' }}</Button>
