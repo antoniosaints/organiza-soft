@@ -44,7 +44,7 @@ const routes: Array<RouteRecordRaw> = [
 ];
 
 export const Router = createRouter({
-    linkActiveClass: 'dark:bg-blue-800 dark:text-gray-100 bg-sidebar-hover text-gray-100',
+    linkActiveClass: 'bg-sidebar-hover text-gray-100',
     linkExactActiveClass: 'border-gray-700',
     scrollBehavior: () => ({ top: 0, behavior: 'smooth' }),
     history: createWebHistory(),

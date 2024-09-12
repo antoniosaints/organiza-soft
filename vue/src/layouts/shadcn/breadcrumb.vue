@@ -5,7 +5,7 @@
                 <template v-if="index !== breadcrumbRoutes.length - 1">
                     <router-link class="hidden_color_link" :to="route.path">{{ route.meta.breadcrumb }}</router-link>
                     <breadcrumb-separator>
-                        <GitCommitHorizontal />
+                        <ChevronRightIcon />
                     </breadcrumb-separator>
                 </template>
                 <template v-else>
@@ -20,7 +20,7 @@
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
-import { GitCommitHorizontal } from 'lucide-vue-next';
+import { ChevronRightIcon } from 'lucide-vue-next';
 
 const route = useRoute();
 const breadcrumbRoutes = computed(() => {
@@ -31,5 +31,6 @@ const breadcrumbRoutes = computed(() => {
 <style scoped>
 .hidden_color_link {
     background-color: transparent !important;
+    color: inherit;
 }
 </style>
