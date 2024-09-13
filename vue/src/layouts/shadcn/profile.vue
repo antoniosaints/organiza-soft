@@ -6,18 +6,18 @@
                 <AvatarFallback>JP</AvatarFallback>
             </avatar>
         </dropdown-menu-trigger>
-        <dropdown-menu-content>
+        <dropdown-menu-content class="w-40 mr-3 space-y-1">
             <dropdown-menu-item as-child>
                 <router-link to="/perfil">
-                    <iconFA class="h-3 w-3 mr-2" icon="fa-user" /> Perfil
+                    <User class="h-4 mr-1" /> Perfil
                 </router-link>
             </dropdown-menu-item>
             <dropdown-menu-item>
-                <iconFA class="h-3 w-3 mr-2" icon="fa-cogs" /> Configs
+                <Settings class="h-4 mr-1" /> Configurações
             </dropdown-menu-item>
             <dropdown-menu-separator />
             <dropdown-menu-item>
-                <iconFA class="h-3 w-3 mr-2" icon="fa-right-from-bracket" /> Sair
+                <LogOut class="h-4 mr-1" /> Sair
             </dropdown-menu-item>
         </dropdown-menu-content>
     </dropdown-menu>
@@ -26,4 +26,5 @@
 <script lang="ts" setup>
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
+import { LogOut, Settings, User } from "lucide-vue-next";
 </script>
