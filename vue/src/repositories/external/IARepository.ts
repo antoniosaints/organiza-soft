@@ -8,8 +8,7 @@ export class IARepository {
       messages: [
         {
           role: "system",
-          content:
-            `Você é responsável pra receber uma mensagem e entender o que o usuário quer lançar no sistema`,
+          content: `Você é responsável pra receber uma mensagem e entender o que o usuário quer lançar no sistema`,
         },
         {
           role: "user",
@@ -42,5 +41,47 @@ export class IARepository {
     console.log(speechFile);
     const buffer = Buffer.from(await mp3.arrayBuffer());
     await fs.promises.writeFile(speechFile, buffer);
+  }
+
+  static async getIAAssistants(): Promise<any> {
+    const response = await OpenAIService.beta.assistants.list({
+      order: "desc",
+      limit: 20,
+    });
+    return response.data;
+  }
+
+  static async createIAAssistant(
+    instructions: string,
+    name: string,
+    model: string = "gpt-4o-mini"
+  ): Promise<any> {
+    const assistant = await OpenAIService.beta.assistants.create({
+      name,
+      model,
+      instructions,
+    });
+
+    return assistant;
+  }
+
+  static async updateIAAssistant(
+    id: string,
+    instructions: string,
+    name: string,
+    model: string = "gpt-4o-mini"
+  ): Promise<any> {
+    const assistant = await OpenAIService.beta.assistants.update(id, {
+      name,
+      model,
+      instructions,
+    });
+
+    return assistant;
+  }
+
+  static async deleteIAAssistant(id: string): Promise<any> {
+    const assistant = await OpenAIService.beta.assistants.del(id);
+    return assistant;
   }
 }
