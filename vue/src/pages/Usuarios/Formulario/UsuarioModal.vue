@@ -3,11 +3,13 @@
         <DialogTrigger as-child>
             <Button @click="defineSaveForm" size="sm" class="bg-primary hover:bg-primary/90"><UserPlus class="mr-1 h-4 w-4" /> Cadastrar Usuário</Button>
         </DialogTrigger>
-        <DialogContent aria-describedby="description" class="sm:max-w-xl">
+        <DialogContent aria-describedby="description" class="sm:max-w-xl grid-rows-[auto_minmax(0,1fr)_auto] max-h-[90dvh]">
             <DialogHeader>
                 <DialogTitle> Cadastro de Usuário</DialogTitle>
             </DialogHeader>
-            <UserForm />
+            <div class="grid gap-4 py-4 overflow-y-auto">
+                <UserForm />
+            </div>
         </DialogContent>
     </Dialog>
 </template>
