@@ -10,7 +10,7 @@
                 <TooltipProvider>
                     <Tooltip>
                         <TooltipTrigger>
-                            <Button @click="getCompletetion" size="sm" variant="outline">
+                            <Button size="sm" variant="outline">
                                 <Filter class="w-4 h-4" />
                             </Button>
                         </TooltipTrigger>
@@ -142,7 +142,6 @@ import { useUsuarioStore } from "@/stores/usuarios/usuarioStore";
 import { onMounted, watch } from "vue";
 import { computed } from "vue";
 import { Input } from "@/components/ui/input";
-import { IARepository } from "@/repositories/external/IARepository";
 
 const usuarioStore = useUsuarioStore();
 const perPage = computed(() => usuarioStore.limit);
@@ -153,10 +152,6 @@ const UsuariosExists = computed(() => usuarioStore.usuarios.length > 0);
 watch(perPage, () => {
     loadUsers(1);
 });
-
-const getCompletetion = async () => {
-    console.log(await IARepository.getIAResponse(usuarioStore.search));
-}
 
 const loadUsers = async (paginate: number) => {
     usuarioStore.page = paginate || 1;
