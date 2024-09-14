@@ -4,7 +4,7 @@ import OpenAI from "openai";
 const APITOKEN = import.meta.env.VITE_OPENAI_API_KEY
 
 if (!APITOKEN) {
-    toastUtil.error("VITE_BASE_URL_BACKEND não informada nas variáveis de ambiente", "Ops..");
+    toastUtil.error("VITE_OPENAI_API_KEY não informada nas variáveis de ambiente", "Ops..");
 }
 
 const OpenAIService = new OpenAI({
