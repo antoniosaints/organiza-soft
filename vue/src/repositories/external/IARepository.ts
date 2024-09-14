@@ -2,22 +2,48 @@ import fs from "fs";
 import { OpenAIService } from "@/services/external/openai";
 
 export class IARepository {
-  static async getIAResponseMessage(question: string): Promise<any> {
+  static Conversations: any = [
+    {
+      role: "system",
+      content: "Meu nome é Saints, sou um assistente de sistema para ajudar pessoas a organizar e melhorar a experiencia e dar dicas finaceiras e estatísticas.",
+    }
+  ];
+  static async getIAResponse(question: string): Promise<any> {
+
+    this.Conversations.push({ role: "user", content: question });
+
     const response = await OpenAIService.chat.completions.create({
       model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content: `Você é responsável pra receber uma mensagem e entender o que o usuário quer lançar no sistema`,
-        },
-        {
-          role: "user",
-          content: question,
-        },
-      ],
+      messages: this.Conversations,
     });
 
+    this.Conversations.push({
+      role: "assistant",
+      content: response.choices[0].message.content,
+    })
+
     return response.choices[0].message;
+  }
+
+  static async getIAResponseStream(question: string): Promise<any> {
+
+    this.Conversations.push({ role: "user", content: question })
+
+    const response = await OpenAIService.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: this.Conversations,
+      stream: true,
+    });
+
+    let res = '';
+    for await (const chunk of response) res += chunk.choices[0].delta.content || '';
+
+    this.Conversations.push({
+      role: "assistant",
+      content: res,
+    })
+
+    return response;
   }
 
   static async getIAImage(question: string): Promise<any> {
