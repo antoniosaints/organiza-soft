@@ -7,7 +7,7 @@
             <DialogHeader>
                 <DialogTitle> Cadastro de Usuário</DialogTitle>
             </DialogHeader>
-            <div class="grid gap-4 py-4 overflow-y-auto">
+            <div class="grid gap-2 p-1 overflow-y-auto">
                 <UserForm />
             </div>
         </DialogContent>
