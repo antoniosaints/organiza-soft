@@ -13,6 +13,7 @@ export class LoginService {
             toastUtil.success(data.message, "Logado!");
             StorageUtil.set("@gestao_inteligente:token", data.token);
             StorageUtil.set("@gestao_inteligente:refreshtoken", data.refreshToken);
+            await loginStore.getUserData();
             loginStore.isAutenticated = true;
             await Router.push("/dashboard")
             return true;
