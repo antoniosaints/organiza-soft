@@ -15,7 +15,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "@radix-icons/vue": "^1.0.0",
-    "@tanstack/vue-query": "^5.54.2",
+    "@tanstack/vue-table": "^8.20.5",
     "@unovis/ts": "^1.4.3-beta.0",
     "@unovis/vue": "^1.4.3-beta.0",
     "@vueuse/core": "^11.0.3",
