@@ -29,6 +29,19 @@ const routes: Array<RouteRecordRaw> = [
                 ]
             },
             {
+                path: "/financeiro",
+                name: "Financeiro",
+                // meta: { breadcrumb: 'Administracao' },
+                children: [
+                    {
+                        path: "/financeiro/lancamentos",
+                        name: "Lancamentos",
+                        meta: { breadcrumb: 'Lançamentos financeiros' },
+                        component: () => import("@/views/Financeiro/Lancamentos.vue")
+                    }
+                ]
+            },
+            {
                 path: "/perfil",
                 name: "Perfil",
                 meta: { breadcrumb: 'Perfil' },

@@ -26,20 +26,21 @@ export const getUsuarios = async (req: Request, res: Response) => {
     const { limit, page, search } = req.query;
     const offset = (Number(page) - 1) * Number(limit);
 
-    const usuarios = await prismaService.usuario.findMany({
-      skip: offset || 0,
-      take: Number(limit) || 10,
-      where: {
-        OR: [
-          { nome: { contains: search as string } },
-          { email: { contains: search as string } }
-        ],
-      },
-    });
+    const [items, total] = await Promise.all([
+      prismaService.usuario.findMany({
+        skip: offset || 0,
+        take: Number(limit) || 10,
+        where: {
+          OR: [
+            { nome: { contains: search as string } },
+            { email: { contains: search as string } }
+          ],
+        },
+      }),
+      prismaService.usuario.count(),
+    ])
 
-    const totalRegisters = await prismaService.usuario.count({});
-
-    ResponseService.success(res, { data: usuarios, total: totalRegisters });
+    ResponseService.success(res, { data: items, total });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
   }
