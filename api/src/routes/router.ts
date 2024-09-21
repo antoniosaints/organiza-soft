@@ -12,6 +12,7 @@ import parcelamentoRouter from "./parcelamento_router";
 import contasRouter from "./contas_router";
 import gruposRouter from "./grupos_router";
 import permissoesRouter from "./permissoes_router";
+import stripeRouter from "./stripe/stripe_router";
 
 const router = Router();
 
@@ -27,5 +28,8 @@ router.use("/plano", auth_middleware, planoRouter);
 router.use("/usuario", auth_middleware, usuariosRouter);
 router.use("/bloqueio", auth_middleware, bloqueioRouter);
 router.use("/categoria", auth_middleware, categoriaRouter);
+
+// Rotas Stripe
+router.use("/stripe", auth_middleware, stripeRouter);
 
 export default router;
