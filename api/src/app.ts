@@ -1,17 +1,33 @@
+import cluster from "cluster";
+import os from "os";
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
 import router from "./routes/router";
 
-const app = express();
 const PORT = process.env.PORT || 6000;
+const numCPUs = os.cpus().length;
 
-app.use(cors());
-app.use(express.json());
+if (cluster.isPrimary) {
+  console.log(`Master process ${process.pid} is running`);
 
-app.use(router);
+  for (let i = 0; i < numCPUs; i++) {
+    cluster.fork();
+  }
 
-app.listen(PORT, () => {
-    console.log(`Servidor iniciado na porta ${PORT} às ${new Date().toLocaleString("pt-BR")}`);
-});
+  cluster.on("exit", (worker) => {
+    console.log(`Worker ${worker.process.pid} morreu. Iniciando um novo...`);
+    cluster.fork();
+  });
+} else {
+  const app = express();
 
+  app.use(cors());
+  app.use(express.json());
+
+  app.use(router);
+
+  app.listen(PORT, () => {
+    console.log(`Worker ${process.pid} iniciou o servidor na porta ${PORT} às ${new Date().toLocaleString("pt-BR")}`);
+  });
+}

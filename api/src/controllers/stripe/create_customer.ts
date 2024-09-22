@@ -16,34 +16,17 @@ export const createCustomerStripe = async (req: Request, res: Response) => {
     let customer;
 
     if (getContaByEmail) {
-      customer = await stripe.customers.retrieve(
-        getContaByEmail.stripeCustomerId
-      );
-      if (customer.deleted) {
-        customer = await StripeService.createCustomer(email, name);
-      } else {
-        customer = await stripe.customers.update(
-          getContaByEmail.stripeCustomerId,
-          {email, name}
-        );
-      }
-      contaSistema = await prismaService.contasSistema.update({
-        where: {
-          id: getContaByEmail.id,
-        },
-        data: { email, conta: name, stripeCustomerId: customer.id },
-      });
+      return res.status(400).json({ message: "Já existe uma conta com esse e-mail" });
     } else {
       customer = await StripeService.createCustomer(email, name);
       contaSistema = await prismaService.contasSistema.create({
         data: {
+          email: email,
           conta: name,
-          email,
-          status: "ativa",
-          stripeCustomerId: customer.id,
           user_create_id: 1,
-        },
-      });
+          stripeCustomerId: customer.id,
+        }
+      })
     }
 
     return res.status(200).json({ customer, contaSistema });

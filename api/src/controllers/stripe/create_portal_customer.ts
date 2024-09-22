@@ -11,7 +11,7 @@ export const createPortalCustomer = async (req: Request, res: Response) => {
           `${baseURL}/administracao/usuarios?backtoportal=true`
         );
         res.json(session);
-    }catch (error) {
-        res.status(500).send(error);
+    }catch (error: any) {
+        res.status(500).send({message: "Erro ao criar o portal do assinante", error: error.raw.message});
     }
 };
