@@ -13,6 +13,7 @@ import contasRouter from "./contas_router";
 import gruposRouter from "./grupos_router";
 import permissoesRouter from "./permissoes_router";
 import stripeRouter from "./stripe/stripe_router";
+import contasSistemaRouter from "./contas-sistema/contas_sistema_router";
 
 const router = Router();
 
@@ -31,5 +32,7 @@ router.use("/categoria", auth_middleware, categoriaRouter);
 
 // Rotas Stripe
 router.use("/stripe", stripeRouter);
+// Rotas de contas do sistema
+router.use("/contas-sistema", contasSistemaRouter);
 
 export default router;
