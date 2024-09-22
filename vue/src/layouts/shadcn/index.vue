@@ -319,6 +319,35 @@
                     </collapsible>
                 </nav>
             </div>
+            <div class="mt-auto px-3 py-4 bg-sidebar">
+                <Card v-if="!isProfessionalPlan">
+                    <CardHeader>
+                        <CardTitle>Assine Organiza PRO ✨</CardTitle>
+                        <CardDescription>
+                            Desbloqueie a versão PRO e tenha acesso a todos os
+                            serviços de forma ilimitada!
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <Button @click="sinatatureSubscription" size="sm" class="w-full">
+                            Assinar agora 🎯
+                        </Button>
+                    </CardContent>
+                </Card>
+                <Card v-else>
+                    <CardHeader>
+                        <CardTitle>Organiza PRO ✨</CardTitle>
+                        <CardDescription>
+                            Clique para gerenciar sua assinatura!
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <Button @click="accessPortalCaptive" size="sm" class="w-full">
+                            Gerenciar assinatura 🎯
+                        </Button>
+                    </CardContent>
+                </Card>
+            </div>
             <div class="pb-4 px-3 bg-sidebar">
                 <div @click="LoginService.logout()"
                     class="flex text-white cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm font-bold transition-colors hover:bg-sidebar-hover">
@@ -358,13 +387,28 @@ import { ref, computed } from 'vue';
 import { House, LockKeyhole, Users, List, Wallet, ChevronRight, LogOut, PanelLeftOpen, PanelLeftClose, Landmark, FileText, Package, Boxes, Group, Computer, Tags, BookOpenCheck, BadgeCheck, CalendarX2, FileChartPie, Settings2, PenTool, ClipboardCheck, Ticket, FileDigit, Archive, FileBadge2, FileStack, FileCheck, Layers, User, Contact, WalletMinimal, CircleDollarSign } from 'lucide-vue-next'
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible"
 import { BreadCrumb, ProfileHome, ToogleMode } from '.';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { LoginService } from '@/services/login/loginService';
 import { onMounted } from 'vue';
 import { onUnmounted } from 'vue';
 import { Badge } from '@/components/ui/badge';
+import { createCheckoutSession, createPortalCaptive } from '@/services/stripe/StripeService';
 
 const widthWindow = ref(window.innerWidth);
 const stateDevelopment = ref('beta');
+
+const isProfessionalPlan = ref(true);
+
+const sinatatureSubscription = async () => {
+    const url = await createCheckoutSession("cus_Qtfti37JpE7WCw");
+    window.open(url?.data, "_self");
+}
+const accessPortalCaptive = async () => {
+    const data = await createPortalCaptive("cus_Qtfti37JpE7WCw");
+    console.log(data);
+    window.open(data?.data?.url, "_self");
+}
 
 const handleResize = () => {
     widthWindow.value = window.innerWidth;

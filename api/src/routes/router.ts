@@ -30,6 +30,6 @@ router.use("/bloqueio", auth_middleware, bloqueioRouter);
 router.use("/categoria", auth_middleware, categoriaRouter);
 
 // Rotas Stripe
-router.use("/stripe", auth_middleware, stripeRouter);
+router.use("/stripe", stripeRouter);
 
 export default router;
