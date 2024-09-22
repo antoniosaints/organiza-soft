@@ -5,29 +5,22 @@ import prismaService from "./prisma_service";
 export class StripeService {
   constructor(readonly subscription: Stripe.Response<Stripe.Subscription>) {}
 
-  async managerSubscription(customerId: string): Promise<void> {
+  async managerSubscription(customerId: string, type: string): Promise<void> {
     try {
       const conta = await prismaService.contasSistema.findFirst({ where:{stripeCustomerId: customerId}})
       if (conta) {
-        if (this.isActive()) {
+        if (this.isActive() || this.isInTrialPeriod()) {
           await prismaService.contasSistema.update({ where:{id: conta.id}, 
             data:{
               plano: "pro",
               stripeSubscriptionId: this.subscription.id
             }
           })
-        }else if (this.isInTrialPeriod()) {
-          await prismaService.contasSistema.update({ where:{id: conta.id}, 
-            data:{
-              plano: "pro",
-              stripeSubscriptionId: this.subscription.id
-            }
-          })
-        }else if (!this.isActive()) {
+        }else {
           await prismaService.contasSistema.update({ where:{id: conta.id}, 
             data:{
               plano: "free",
-              stripeSubscriptionId: this.subscription.id
+              stripeSubscriptionId: type == "customer.subscription.deleted" ? null : this.subscription.id
             }
           })
         }
@@ -83,6 +76,17 @@ export class StripeService {
       periodStart,
       periodEnd
     };
+  }
+  static async cancelAccountByWebhook(customerId: string): Promise<any> {
+    const conta = await prismaService.contasSistema.findFirst({ where:{stripeCustomerId: customerId}})
+    if (conta) {
+      await prismaService.contasSistema.update({ where:{id: conta.id}, data: {
+        status: "inativa",
+        stripeCustomerId: "",
+        plano: "free",
+        stripeSubscriptionId: null
+      }})
+    }
   }
   static async createCustomer(email: string, name: string): Promise<any> {
     const customer = await stripe.customers.create({

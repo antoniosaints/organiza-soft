@@ -11,7 +11,10 @@ export const stripeWebhook = async (req: Request, res: Response) => {
     case "customer.subscription.created":
       const subscription = event.data.object;
       const StripeClass = new StripeService(subscription);
-      StripeClass.managerSubscription(subscription.customer);
+      await StripeClass.managerSubscription(subscription.customer, event.type);
+      break;
+    case "customer.deleted":
+      await StripeService.cancelAccountByWebhook(event.data.object.id);
       break;
     default:
       console.log(`Evento WEBHOOK: ${event.type}`);

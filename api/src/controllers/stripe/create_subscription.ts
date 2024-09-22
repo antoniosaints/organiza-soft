@@ -8,6 +8,6 @@ export const createSubscriptionStripe = async (req: Request, res: Response) => {
         const subscription = await StripeService.createSubscription(customerId, priceId);
         res.json(subscription);
     } catch (error: any) {
-        res.status(500).send(error);
+        res.status(500).send({message: "Erro ao criar assinatura", error: error.raw.message});
     }
 }
