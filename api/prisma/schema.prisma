@@ -8,18 +8,19 @@ datasource db {
 }
 
 model Usuario {
-  id          Int           @id @default(autoincrement())
-  nome        String        @db.VarChar(100)
-  email       String        @unique @db.VarChar(100)
-  senha       String        @db.VarChar(255)
-  regra       Permissao
-  anotacoes   String?       @db.Text
-  telefone    String?       @db.VarChar(20)
-  status      StatusUsuario @default(ativo)
-  dataCriacao DateTime      @default(now())
-  grupoId     Int
-  Contas      Contas[]
-  Grupos      Grupos        @relation(fields: [grupoId], references: [id])
+  id            Int             @id @default(autoincrement())
+  nome          String          @db.VarChar(100)
+  email         String          @unique @db.VarChar(100)
+  senha         String          @db.VarChar(255)
+  regra         Permissao
+  anotacoes     String?         @db.Text
+  telefone      String?         @db.VarChar(20)
+  status        StatusUsuario   @default(ativo)
+  dataCriacao   DateTime        @default(now())
+  grupoId       Int
+  Contas        Contas[]
+  Grupos        Grupos          @relation(fields: [grupoId], references: [id])
+  ContasSistema ContasSistema[]
 
   @@index([grupoId], map: "Usuario_grupoId_fkey")
 }
@@ -192,6 +193,32 @@ model Bloqueio {
   Assinatura      Assinatura @relation(fields: [assinaturaId], references: [id])
 
   @@index([assinaturaId], map: "Bloqueio_assinaturaId_fkey")
+}
+
+model ContasSistema {
+  id                   Int                 @id @default(autoincrement())
+  user_create_id       Int
+  UserCreate           Usuario             @relation(fields: [user_create_id], references: [id])
+  conta                String
+  email                String              @unique
+  slug                 String?
+  descricao            String?             @db.Text
+  plano                PlanosSistema       @default(free)
+  status               ContasSistemaStatus @default(ativa)
+  stripeCustomerId     String
+  stripeSubscriptionId String?
+  dataCriado           DateTime            @default(now())
+  dataAtualizada       DateTime            @updatedAt
+}
+
+enum ContasSistemaStatus {
+  ativa
+  inativa
+}
+
+enum PlanosSistema {
+  free
+  pro
 }
 
 enum PeriodoParcelas {

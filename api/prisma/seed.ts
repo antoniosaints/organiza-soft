@@ -16,7 +16,7 @@ async function main() {
     update: {},
     create: {
       nome: "Administrador",
-      email: "admin",
+      email: "admin@admin.com",
       senha: "admin",
       regra: "admin",
       anotacoes: "admin",
