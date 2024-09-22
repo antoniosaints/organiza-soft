@@ -44,7 +44,7 @@
         </div>
         <div class="space-y-2">
             <Label for="phone">Telefone</Label>
-            <Input id="phone" placeholder="(00) 00000-0000" type="number" v-model="UsuarioFormularioStore.data.telefone" />
+            <Input id="phone" placeholder="(00) 00000-0000" type="text" v-model="UsuarioFormularioStore.data.telefone" />
         </div>
         <div class="flex justify-end space-x-2">
             <Button type="submit"><CircleCheck class="w-4 h-4 mr-2" /> {{ UsuarioFormularioStore.ref_id == null ? 'Salvar' : 'Atualizar' }}</Button>
