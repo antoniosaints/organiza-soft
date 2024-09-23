@@ -28,7 +28,7 @@ async function main() {
       nome: "Administrador",
       email: "admin@admin.com",
       senha: "admin",
-      regra: "admin",
+      regra: "proprietario",
       anotacoes: "admin",
       grupoId: 1,
     },

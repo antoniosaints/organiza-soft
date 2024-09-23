@@ -16,6 +16,12 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import("@/views/Dashboard/DashboardView.vue")
             },
             {
+                path: "/assinatura",
+                name: "Assinatura",
+                meta: { breadcrumb: 'Assinatura' },
+                component: () => import("@/views/Assinatura/AssinaturaView.vue")
+            },
+            {
                 path: "/administracao",
                 name: "Administracao",
                 // meta: { breadcrumb: 'Administracao' },

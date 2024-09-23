@@ -10,10 +10,15 @@ import IconsUtil from './utils/iconsUtil';
 import pt from './locales/pt';
 import en from './locales/en';
 
+
 const pinia = createPinia();
 const app = createApp(App);
 
 app.use(pinia);
+
+(async () => {
+    await LoginService.verify();
+})();
 
 const i18n = createI18n({
     legacy: false,
@@ -28,10 +33,6 @@ const i18n = createI18n({
 i18n.global.locale.value = <any>localStorage.getItem('gestaocliente:locale') || 'pt';
 
 app.use(i18n);
-
-(async () => {
-    await LoginService.verify();
-})();
 
 app.use(Router);
 app.component('IconFA', IconsUtil);

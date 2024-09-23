@@ -17,7 +17,7 @@
                         <House />
                         <span>Dashboard</span>
                     </router-link>
-                    <collapsible v-slot="{ open }" class="grid gap-2">
+                    <collapsible v-if="loginStore.isAdminUser" v-slot="{ open }" class="grid gap-2">
                         <collapsible-trigger
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <LockKeyhole />
@@ -30,6 +30,15 @@
                                     class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                                     <Users />
                                     <span>Usuários</span>
+                                </router-link>
+                                <router-link to="/assinatura"
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                    <Crown />
+                                    <span>Assinatura</span>
+                                    <div class="ml-auto flex space-x-1 items-center">
+                                        <Badge :class="loginStore.isProAccount ? 'bg-orange-400 text-black' : 'bg-gray-500'"> {{
+                                            loginStore.isProAccount ? 'Pro' : 'Free' }} </Badge>
+                                    </div>
                                 </router-link>
                                 <router-link to="/administracao/regras"
                                     class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
@@ -320,31 +329,19 @@
                 </nav>
             </div>
             <div class="mt-auto px-3 py-4 bg-sidebar">
-                <Card v-if="!isProfessionalPlan">
-                    <CardHeader>
-                        <CardTitle>Assine Organiza PRO ✨</CardTitle>
+                <Card v-if="!loginStore.isProAccount && loginStore.isAdminUser">
+                    <CardHeader class="text-center">
+                        <CardTitle>OrganizaSoft PRO ✨</CardTitle>
                         <CardDescription>
-                            Desbloqueie a versão PRO e tenha acesso a todos os
-                            serviços de forma ilimitada!
+                            Acesse tudo de forma ilimitada, assine agora!
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <Button @click="sinatatureSubscription" size="sm" class="w-full">
-                            Assinar agora 🎯
-                        </Button>
-                    </CardContent>
-                </Card>
-                <Card v-else>
-                    <CardHeader>
-                        <CardTitle>Organiza PRO ✨</CardTitle>
-                        <CardDescription>
-                            Clique para gerenciar sua assinatura!
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <Button @click="accessPortalCaptive" size="sm" class="w-full">
-                            Gerenciar assinatura 🎯
-                        </Button>
+                        <RouterLink to="/assinatura">
+                            <Button size="sm" class="w-full">
+                                Assinar PRO 🎯
+                            </Button>
+                        </RouterLink>
                     </CardContent>
                 </Card>
             </div>
@@ -384,7 +381,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { House, LockKeyhole, Users, List, Wallet, ChevronRight, LogOut, PanelLeftOpen, PanelLeftClose, Landmark, FileText, Package, Boxes, Group, Computer, Tags, BookOpenCheck, BadgeCheck, CalendarX2, FileChartPie, Settings2, PenTool, ClipboardCheck, Ticket, FileDigit, Archive, FileBadge2, FileStack, FileCheck, Layers, User, Contact, WalletMinimal, CircleDollarSign } from 'lucide-vue-next'
+import { House, LockKeyhole, Users, List, Wallet, ChevronRight, LogOut, PanelLeftOpen, PanelLeftClose, Landmark, FileText, Package, Boxes, Group, Computer, Tags, BookOpenCheck, BadgeCheck, CalendarX2, FileChartPie, Settings2, PenTool, ClipboardCheck, Ticket, FileDigit, Archive, FileBadge2, FileStack, FileCheck, Layers, User, Contact, WalletMinimal, CircleDollarSign, Crown } from 'lucide-vue-next'
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible"
 import { BreadCrumb, ProfileHome, ToogleMode } from '.';
 import { Button } from '@/components/ui/button';
@@ -393,22 +390,13 @@ import { LoginService } from '@/services/login/loginService';
 import { onMounted } from 'vue';
 import { onUnmounted } from 'vue';
 import { Badge } from '@/components/ui/badge';
-import { createCheckoutSession, createPortalCaptive } from '@/services/stripe/StripeService';
+import { useLoginStore } from '@/stores/login/loginStore';
 
 const widthWindow = ref(window.innerWidth);
 const stateDevelopment = ref('beta');
 
-const isProfessionalPlan = ref(true);
-
-const sinatatureSubscription = async () => {
-    const url = await createCheckoutSession("cus_QtyGGLDTHtIijt");
-    window.open(url?.data, "_self");
-}
-const accessPortalCaptive = async () => {
-    const data = await createPortalCaptive("cus_QtyGGLDTHtIijt");
-    console.log(data);
-    window.open(data?.data?.url, "_self");
-}
+const loginStore = useLoginStore();
+const permissaoUser = loginStore.dataUserInfosLogged?.regra
 
 const handleResize = () => {
     widthWindow.value = window.innerWidth;
