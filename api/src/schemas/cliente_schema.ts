@@ -28,6 +28,10 @@ const createCliente = zodUtil.object({
   status: zodUtil.string({
     invalid_type_error: "O status do cliente deve ser uma string"
   }).optional(),
+  contaSistemaId: zodUtil.number({
+    required_error: "O contaSistemaId é obrigatorio",
+    invalid_type_error: "O contaSistemaId deve ser um number",
+  }),
 })
 
 const updateCliente = zodUtil.object({
@@ -51,6 +55,9 @@ const updateCliente = zodUtil.object({
   }).refine((val) => !isNaN(Date.parse(val)), {
     message: "Data de desbloqueio inválida."
   }).optional(),
+  contaSistemaId: zodUtil.number({
+    invalid_type_error: "O contaSistemaId deve ser um number",
+  }).optional()
 })
 
 export {

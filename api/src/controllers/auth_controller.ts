@@ -10,27 +10,19 @@ class AuthController {
   static async login(req: Request, res: Response) {
     const validationResult = validateSchema(createAuthSchema, req.body);
 
-    if (validationResult.error) {
-      return ResponseService.badRequest(res, validationResult.error.message);
-    }
+    if (validationResult.error) return ResponseService.badRequest(res, validationResult.error.message);
 
     const email = validationResult.email;
     const senha = validationResult.senha;
 
-    const user = await prisma_service.usuario.findFirst({
-      where: { email },
-    });
+    const user = await prisma_service.usuario.findFirst({ where: { email } });
 
-    if (!user) {
-      return ResponseService.notFound(res, "Usuário não encontrado");
-    }
+    if (!user) return ResponseService.notFound(res, "Usuário não encontrado");
 
-    if (user.senha !== senha) {
-      return ResponseService.unauthorized(res, "Credenciais inválidas");
-    }
+    if (user.senha !== senha) return ResponseService.unauthorized(res, "Credenciais inválidas");
 
     const refreshToken = JwtService.encode(
-      { userId: user.id, name: user.nome, grupoId: user.grupoId },
+      { userId: user.id, name: user.nome, grupoId: user.grupoId, contaId: user.contaSistemaId },
       "7d"
     );
     const token = JwtService.encode({ refreshToken }, "4h");

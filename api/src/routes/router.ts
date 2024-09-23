@@ -14,25 +14,25 @@ import gruposRouter from "./grupos_router";
 import permissoesRouter from "./permissoes_router";
 import stripeRouter from "./stripe/stripe_router";
 import contasSistemaRouter from "./contas-sistema/contas_sistema_router";
+import accountMiddleware from "../middlewares/account_middleware";
 
 const router = Router();
 
 router.use("/auth", authRouter);
-router.use("/cliente", auth_middleware, clienteRouter);
-router.use("/grupo", auth_middleware, gruposRouter);
-router.use("/permissoes", auth_middleware, permissoesRouter);
-router.use("/assinatura", auth_middleware, assinaturaRouter);
-router.use("/transacao", auth_middleware, transacaoRouter);
-router.use("/parcelamento", auth_middleware, parcelamentoRouter);
-router.use("/contas", auth_middleware, contasRouter);
-router.use("/plano", auth_middleware, planoRouter);
-router.use("/usuario", auth_middleware, usuariosRouter);
-router.use("/bloqueio", auth_middleware, bloqueioRouter);
-router.use("/categoria", auth_middleware, categoriaRouter);
-
+router.use("/cliente", auth_middleware, accountMiddleware, clienteRouter);
+router.use("/grupo", auth_middleware, accountMiddleware, gruposRouter);
+router.use("/permissoes", auth_middleware, accountMiddleware, permissoesRouter);
+router.use("/assinatura", auth_middleware, accountMiddleware, assinaturaRouter);
+router.use("/transacao", auth_middleware, accountMiddleware, transacaoRouter);
+router.use("/parcelamento", auth_middleware, accountMiddleware, parcelamentoRouter);
+router.use("/contas", auth_middleware, accountMiddleware, contasRouter);
+router.use("/plano", auth_middleware, accountMiddleware, planoRouter);
+router.use("/usuario", auth_middleware, accountMiddleware, usuariosRouter);
+router.use("/bloqueio", auth_middleware, accountMiddleware, bloqueioRouter);
+router.use("/categoria", auth_middleware, accountMiddleware, categoriaRouter);
 // Rotas Stripe
-router.use("/stripe", stripeRouter);
+router.use("/stripe", auth_middleware, accountMiddleware, stripeRouter);
 // Rotas de contas do sistema
-router.use("/contas-sistema", contasSistemaRouter);
+router.use("/contas-sistema", auth_middleware, contasSistemaRouter);
 
 export default router;

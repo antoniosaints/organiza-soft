@@ -22,7 +22,9 @@ export const createCliente = async (req: Request, res: Response) => {
 
 export const getClientes = async (req: Request, res: Response) => {
   try {
-    const clientes = await prismaService.cliente.findMany();
+    const clientes = await prismaService.cliente.findMany({
+      where: { contaSistemaId: req.body.contaSistemaId },
+    });
     ResponseService.success(res, { data: clientes });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
@@ -34,7 +36,7 @@ export const getCliente = async (req: Request, res: Response) => {
   try {
     if (!id) throw new Error("ID obrigatorio");
     const cliente = await prismaService.cliente.findUnique({
-      where: { id: Number(id) }
+      where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
     });
     ResponseService.success(res, { data: cliente });
   } catch (error: any) {
@@ -48,7 +50,7 @@ export const updateCliente = async (req: Request, res: Response) => {
   try {
     const validated = validateSchema(updateClienteSchema, req.body);
     const cliente = await prismaService.cliente.update({
-      where: { id: Number(id) },
+      where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
       data: validated,
     });
     ResponseService.success(res, {
@@ -64,7 +66,7 @@ export const deleteCliente = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const cliente = await prismaService.cliente.delete({
-      where: { id: Number(id) },
+      where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
     });
     ResponseService.success(res, {
       message: "Cliente deletado com sucesso",
