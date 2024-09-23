@@ -15,11 +15,13 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="space-y-2">
                 <Label for="role">Regra</Label>
-                <Select v-model="UsuarioFormularioStore.data.regra" required>
+                <Select :disabled="isGestorSistema" v-model="UsuarioFormularioStore.data.regra" required>
                     <SelectTrigger id="role">
                         <SelectValue placeholder="Selecione uma regra" />
                     </SelectTrigger>
                     <SelectContent>
+                        <SelectItem v-if="isGestorSistema" value="proprietario">Proprietário</SelectItem>
+                        <SelectItem v-if="isGestorSistema" value="socio">Sócio (Dono)</SelectItem>
                         <SelectItem value="admin">Administrador</SelectItem>
                         <SelectItem value="gerente">Gerente</SelectItem>
                         <SelectItem value="moderador">Moderador</SelectItem>       
@@ -62,9 +64,13 @@ import toastUtil from "@/utils/toastUtil";
 import { useUsuarioFormularioStore } from "@/stores/usuarios/usuarioFormularioStore";
 import { useUsuarioStore } from "@/stores/usuarios/usuarioStore";
 import { CircleCheck } from "lucide-vue-next";
+import { computed } from "vue";
 const UsuarioFormularioStore = useUsuarioFormularioStore();
 const UsuarioStore = useUsuarioStore();
 
+const isGestorSistema = computed(() => {
+    return UsuarioFormularioStore.data.regra == "proprietario" || UsuarioFormularioStore.data.regra == "socio";
+})
 const handleSubmit = async (): Promise<void> => {
     try {
         if (UsuarioFormularioStore.ref_id == null) {

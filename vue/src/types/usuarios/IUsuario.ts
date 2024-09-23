@@ -4,7 +4,7 @@ export default interface IUsuario {
   email: string;
   senha: string;
   status: 'ativo' | 'inativo';
-  regra:  'admin' | 'gerente' | 'moderador' | 'submoderador' | 'visualizador';
+  regra:  'proprietario' | 'socio' | 'admin' | 'gerente' | 'moderador' | 'submoderador' | 'visualizador';
   grupoId: number;
   anotacoes?: string;
   telefone?: string;

@@ -18,8 +18,10 @@ const axiosService = axios.create({
 
 axiosService.interceptors.request.use(config => {
     const token = StorageUtil.get("@gestao_inteligente:token");
+    const contaId = StorageUtil.get("@gestao_inteligente:contaId");
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
+        config.headers.AccountId = contaId;
     }
     return config;
 });
