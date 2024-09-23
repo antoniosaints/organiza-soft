@@ -24,6 +24,10 @@ const createConta = zodUtil.object({
     required_error: "O userId e obrigatorio",
     invalid_type_error: "O userId deve ser um number",
   }),
+  contaSistemaId: zodUtil.number({
+    required_error: "O contaSistemaId é obrigatorio",
+    invalid_type_error: "O contaSistemaId deve ser um number",
+  }),
 })
 
 const updateConta = zodUtil.object({
@@ -45,6 +49,9 @@ const updateConta = zodUtil.object({
   descricao: zodUtil.string({
     invalid_type_error: "A descricao deve ser uma string",
   }).optional(),
+  contaSistemaId: zodUtil.number({
+    invalid_type_error: "O contaSistemaId deve ser um number",
+  }).optional()
 })
 
 export {

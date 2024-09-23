@@ -25,6 +25,7 @@ export const getUsuarios = async (req: Request, res: Response) => {
   try {
     const { limit, page, search } = req.query;
     const offset = (Number(page) - 1) * Number(limit);
+    const busca = search as string || "";
 
     const [items, total] = await Promise.all([
       prismaService.usuario.findMany({
@@ -32,9 +33,10 @@ export const getUsuarios = async (req: Request, res: Response) => {
         take: Number(limit) || 10,
         where: {
           OR: [
-            { nome: { contains: search as string } },
-            { email: { contains: search as string } }
+            { nome: { contains: busca } },
+            { email: { contains: busca } }
           ],
+          contaSistemaId: req.body.contaSistemaId
         },
       }),
       prismaService.usuario.count(),
@@ -50,7 +52,7 @@ export const getUsuario = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const usuario = await prismaService.usuario.findUnique({
-      where: { id: Number(id) },
+      where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
     });
     ResponseService.success(res, { data: usuario });
   } catch (error: any) {
@@ -80,7 +82,7 @@ export const updateUsuario = async (req: Request, res: Response) => {
 export const deleteUsuario = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    await prismaService.usuario.delete({ where: { id: Number(id) } });
+    await prismaService.usuario.delete({ where: { id: Number(id), contaSistemaId: req.body.contaSistemaId } });
     ResponseService.success(res, { message: "Usuario excluido com sucesso" });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);

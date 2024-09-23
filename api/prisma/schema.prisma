@@ -8,19 +8,20 @@ datasource db {
 }
 
 model Usuario {
-  id            Int             @id @default(autoincrement())
-  nome          String          @db.VarChar(100)
-  email         String          @unique @db.VarChar(100)
-  senha         String          @db.VarChar(255)
-  regra         Permissao
-  anotacoes     String?         @db.Text
-  telefone      String?         @db.VarChar(20)
-  status        StatusUsuario   @default(ativo)
-  dataCriacao   DateTime        @default(now())
-  grupoId       Int
-  Contas        Contas[]
-  Grupos        Grupos          @relation(fields: [grupoId], references: [id])
-  ContasSistema ContasSistema[]
+  id             Int           @id @default(autoincrement())
+  contaSistemaId Int           @default(1)
+  ContaSistema   ContasSistema @relation(fields: [contaSistemaId], references: [id])
+  nome           String        @db.VarChar(100)
+  email          String        @unique @db.VarChar(100)
+  senha          String        @db.VarChar(255)
+  regra          Permissao
+  anotacoes      String?       @db.Text
+  telefone       String?       @db.VarChar(20)
+  status         StatusUsuario @default(ativo)
+  dataCriacao    DateTime      @default(now())
+  grupoId        Int
+  Contas         Contas[]
+  Grupos         Grupos        @relation(fields: [grupoId], references: [id])
 
   @@index([grupoId], map: "Usuario_grupoId_fkey")
 }
@@ -56,41 +57,47 @@ model Permissoes {
 }
 
 model Cliente {
-  id           Int           @id @default(autoincrement())
-  nome         String        @db.VarChar(100)
-  email        String        @unique @db.VarChar(100)
-  telefone     String?       @db.VarChar(20)
-  endereco     String?       @db.Text
-  dataCriacao  DateTime      @default(now())
-  status       StatusUsuario @default(ativo)
-  dataBloqueio DateTime?
-  Assinatura   Assinatura[]
-  Transacao    Transacao[]
+  id             Int           @id @default(autoincrement())
+  contaSistemaId Int           @default(1)
+  ContaSistema   ContasSistema @relation(fields: [contaSistemaId], references: [id])
+  nome           String        @db.VarChar(100)
+  email          String        @unique @db.VarChar(100)
+  telefone       String?       @db.VarChar(20)
+  endereco       String?       @db.Text
+  dataCriacao    DateTime      @default(now())
+  status         StatusUsuario @default(ativo)
+  dataBloqueio   DateTime?
+  Assinatura     Assinatura[]
+  Transacao      Transacao[]
 }
 
 model Plano {
-  id              Int          @id @default(autoincrement())
-  nome            String       @db.VarChar(100)
-  descricao       String?      @db.Text
+  id              Int           @id @default(autoincrement())
+  contaSistemaId  Int
+  ContaSistema    ContasSistema @relation(fields: [contaSistemaId], references: [id])
+  nome            String        @db.VarChar(100)
+  descricao       String?       @db.Text
   preco           Float
   cor             String
-  dataCriacao     DateTime     @default(now())
+  dataCriacao     DateTime      @default(now())
   dataAtualizacao DateTime?
   Assinatura      Assinatura[]
 }
 
 model Assinatura {
-  id              Int        @id @default(autoincrement())
+  id              Int           @id @default(autoincrement())
+  contaSistemaId  Int
+  ContaSistema    ContasSistema @relation(fields: [contaSistemaId], references: [id])
   clienteId       Int
   planoId         Int
   dataInicio      DateTime
   dataFim         DateTime
-  status          Status     @default(ativa)
+  status          Status        @default(ativa)
   dataBloqueio    DateTime?
-  dataCriacao     DateTime   @default(now())
+  dataCriacao     DateTime      @default(now())
   dataDesbloqueio DateTime
-  Cliente         Cliente    @relation(fields: [clienteId], references: [id])
-  Plano           Plano      @relation(fields: [planoId], references: [id])
+  Cliente         Cliente       @relation(fields: [clienteId], references: [id])
+  Plano           Plano         @relation(fields: [planoId], references: [id])
   Bloqueio        Bloqueio[]
 
   @@index([clienteId], map: "Assinatura_clienteId_fkey")
@@ -99,6 +106,8 @@ model Assinatura {
 
 model Transacao {
   id               Int               @id @default(autoincrement())
+  contaSistemaId   Int               @default(1)
+  ContaSistema     ContasSistema     @relation(fields: [contaSistemaId], references: [id])
   clienteId        Int
   valor            Float             @default(0)
   descricao        String?           @db.Text
@@ -129,21 +138,27 @@ model Transacao {
 }
 
 model Parcelas {
-  id         Int             @id @default(autoincrement())
-  nome       String
-  quantidade Int             @default(1)
-  periodo    PeriodoParcelas
+  id             Int             @id @default(autoincrement())
+  contaSistemaId Int             @default(1)
+  ContaSistema   ContasSistema   @relation(fields: [contaSistemaId], references: [id])
+  nome           String
+  quantidade     Int             @default(1)
+  periodo        PeriodoParcelas
 }
 
 model Configuracoes {
-  id          Int      @id @default(autoincrement())
-  chave       String
-  valor       String
-  dataCriacao DateTime @default(now())
+  id             Int           @id @default(autoincrement())
+  contaSistemaId Int
+  ContaSistema   ContasSistema @relation(fields: [contaSistemaId], references: [id])
+  chave          String
+  valor          String
+  dataCriacao    DateTime      @default(now())
 }
 
 model Parcelamento {
   id              Int             @id @default(autoincrement())
+  contaSistemaId  Int
+  ContaSistema    ContasSistema   @relation(fields: [contaSistemaId], references: [id])
   transacaoId     Int
   parcela         Int
   status          StatusTransacao @default(pendente)
@@ -157,48 +172,54 @@ model Parcelamento {
 }
 
 model FormasPagamento {
-  id        Int         @id @default(autoincrement())
-  forma     String
-  cor       String?
-  Transacao Transacao[]
+  id             Int           @id @default(autoincrement())
+  contaSistemaId Int           @default(1)
+  ContaSistema   ContasSistema @relation(fields: [contaSistemaId], references: [id])
+  forma          String
+  cor            String?
+  Transacao      Transacao[]
 }
 
 model Categorias {
-  id        Int         @id @default(autoincrement())
-  categoria String
-  cor       String
-  Transacao Transacao[]
+  id             Int           @id @default(autoincrement())
+  contaSistemaId Int           @default(1)
+  ContaSistema   ContasSistema @relation(fields: [contaSistemaId], references: [id])
+  categoria      String
+  cor            String
+  Transacao      Transacao[]
 }
 
 model Contas {
-  id        Int         @id @default(autoincrement())
-  conta     String      @db.VarChar(200)
-  saldo     Float       @default(0)
-  regra     Regra       @default(privada)
-  userId    Int
-  cor       String?
-  descricao String      @db.Text
-  Usuario   Usuario     @relation(fields: [userId], references: [id])
-  Transacao Transacao[]
+  id             Int           @id @default(autoincrement())
+  contaSistemaId Int           @default(1)
+  ContaSistema   ContasSistema @relation(fields: [contaSistemaId], references: [id])
+  conta          String        @db.VarChar(200)
+  saldo          Float         @default(0)
+  regra          Regra         @default(privada)
+  userId         Int
+  cor            String?
+  descricao      String        @db.Text
+  Usuario        Usuario       @relation(fields: [userId], references: [id])
+  Transacao      Transacao[]
 
   @@index([userId], map: "Contas_userId_fkey")
 }
 
 model Bloqueio {
-  id              Int        @id @default(autoincrement())
-  motivo          String     @db.Text
+  id              Int           @id @default(autoincrement())
+  contaSistemaId  Int
+  ContaSistema    ContasSistema @relation(fields: [contaSistemaId], references: [id])
+  motivo          String        @db.Text
   dataBloqueio    DateTime
   dataDesbloqueio DateTime?
   assinaturaId    Int
-  Assinatura      Assinatura @relation(fields: [assinaturaId], references: [id])
+  Assinatura      Assinatura    @relation(fields: [assinaturaId], references: [id])
 
   @@index([assinaturaId], map: "Bloqueio_assinaturaId_fkey")
 }
 
 model ContasSistema {
   id                   Int                 @id @default(autoincrement())
-  user_create_id       Int
-  UserCreate           Usuario             @relation(fields: [user_create_id], references: [id])
   conta                String
   email                String              @unique
   slug                 String?
@@ -209,6 +230,18 @@ model ContasSistema {
   stripeSubscriptionId String?
   dataCriado           DateTime            @default(now())
   dataAtualizada       DateTime            @updatedAt
+  Contas               Contas[]
+  Categorias           Categorias[]
+  FormasPagamento      FormasPagamento[]
+  Parcelamento         Parcelamento[]
+  Cliente              Cliente[]
+  Plano                Plano[]
+  Assinatura           Assinatura[]
+  Transacao            Transacao[]
+  Parcelas             Parcelas[]
+  Configuracoes        Configuracoes[]
+  Bloqueio             Bloqueio[]
+  Usuario              Usuario[]
 }
 
 enum ContasSistemaStatus {
@@ -219,6 +252,7 @@ enum ContasSistemaStatus {
 enum PlanosSistema {
   free
   pro
+  admin
 }
 
 enum PeriodoParcelas {

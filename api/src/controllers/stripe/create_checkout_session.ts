@@ -8,6 +8,7 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
     const { customerId, priceId } = req.body;
 
     const session = await stripe.checkout.sessions.create({
+      customer: customerId, // substituir pelo ID da conta do usuário logado
       line_items: [
         {
           price: priceId || "price_1Q1U3kAUZiS59tgnCLrglvkm",
@@ -15,7 +16,7 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
         },
       ],
       mode: "subscription",
-      customer: customerId, // substituir pelo ID da conta do usuário logado
+      client_reference_id: "1",
       success_url: `${baseURL}/administracao/usuarios?success=true`,
       cancel_url: `${baseURL}/administracao/usuarios?canceled=true`,
     });

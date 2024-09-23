@@ -20,7 +20,9 @@ export const createBloqueio = async (req: Request, res: Response) => {
 
 export const getBloqueios = async (req: Request, res: Response) => {
     try {
-        const bloqueios = await prismaService.bloqueio.findMany();
+        const bloqueios = await prismaService.bloqueio.findMany({
+            where: { contaSistemaId: req.body.contaSistemaId },
+        });
         ResponseService.success(res, { data: bloqueios });
     } catch (error: any) {
         HttpErrorService.hadle(error, res);
@@ -30,7 +32,7 @@ export const getBloqueios = async (req: Request, res: Response) => {
 export const getBloqueio = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-        const bloqueio = await prismaService.bloqueio.findUnique({ where: { id: Number(id) } });
+        const bloqueio = await prismaService.bloqueio.findUnique({ where: { id: Number(id), contaSistemaId: req.body.contaSistemaId } });
         ResponseService.success(res, { data: bloqueio });
     } catch (error: any) {
         HttpErrorService.hadle(error, res);
@@ -42,7 +44,7 @@ export const updateBloqueio = async (req: Request, res: Response) => {
     try {
         const validated = validateSchema(updateBloqueio, req.body)
         const bloqueio = await prismaService.bloqueio.update({
-            where: { id: Number(id)},
+            where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
             data: validated
         });
         ResponseService.success(res, { message: "Bloqueio atualizado com sucesso", data: bloqueio });
@@ -54,7 +56,7 @@ export const updateBloqueio = async (req: Request, res: Response) => {
 export const deleteBloqueio = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-        await prismaService.bloqueio.delete({ where: { id: Number(id) } });
+        await prismaService.bloqueio.delete({ where: { id: Number(id), contaSistemaId: req.body.contaSistemaId } });
         ResponseService.success(res, { message: "Bloqueio excluido com sucesso" });
     } catch (error: any) {
         HttpErrorService.hadle(error, res);

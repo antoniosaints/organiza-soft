@@ -26,7 +26,7 @@ export const updateAssinatura = async (req: Request, res: Response) => {
   try {
     const validated = validateSchema(updateAssinaturaSchema, req.body);
     const assinatura = await prismaService.assinatura.update({
-      where: { id: Number(id) },
+      where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
       data: validated,
     });
     ResponseService.success(res, {
@@ -40,7 +40,9 @@ export const updateAssinatura = async (req: Request, res: Response) => {
 
 export const getAssinaturas = async (req: Request, res: Response) => {
   try {
-    const assinaturas = await prismaService.assinatura.findMany();
+    const assinaturas = await prismaService.assinatura.findMany({
+      where: { contaSistemaId: req.body.contaSistemaId },
+    });
     ResponseService.success(res, { data: assinaturas });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
@@ -51,7 +53,7 @@ export const getAssinatura = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const assinatura = await prismaService.assinatura.findUnique({
-      where: { id: Number(id) },
+      where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
     });
     if (assinatura) {
       ResponseService.success(res, { data: assinatura });
@@ -66,7 +68,7 @@ export const getAssinatura = async (req: Request, res: Response) => {
 export const deleteAssinatura = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    await prismaService.assinatura.delete({ where: { id: Number(id) } });
+    await prismaService.assinatura.delete({ where: { id: Number(id), contaSistemaId: req.body.contaSistemaId } });
     ResponseService.success(res, {
       message: "Assinatura excluída com sucesso",
     });

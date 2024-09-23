@@ -22,7 +22,9 @@ export const createcategoria = async (req: Request, res: Response) => {
 
 export const getcategorias = async (req: Request, res: Response) => {
   try {
-    const categorias = await prismaService.categorias.findMany();
+    const categorias = await prismaService.categorias.findMany({
+      where: { contaSistemaId: req.body.contaSistemaId },
+    });
     ResponseService.success(res, { data: categorias });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
@@ -33,7 +35,7 @@ export const getcategoria = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const categoria = await prismaService.categorias.findUnique({
-      where: { id: Number(id) },
+      where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
     });
     ResponseService.success(res, { data: categoria });
   } catch (error: any) {
@@ -47,7 +49,7 @@ export const updatecategoria = async (req: Request, res: Response) => {
     if (!id) throw new ValidationError("ID obrigatorio");
     const validated = validateSchema(updateCategoriaSchema, req.body);
     const received = await prismaService.categorias.update({
-      where: { id: Number(id) },
+      where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
       data: validated,
     });
     ResponseService.success(res, {
@@ -62,7 +64,7 @@ export const updatecategoria = async (req: Request, res: Response) => {
 export const deletecategoria = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    await prismaService.categorias.delete({ where: { id: Number(id) } });
+    await prismaService.categorias.delete({ where: { id: Number(id), contaSistemaId: req.body.contaSistemaId } });
     ResponseService.success(res, { message: "Categoria excluida com sucesso" });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);

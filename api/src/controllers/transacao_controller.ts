@@ -28,7 +28,11 @@ export const createTransacao = async (req: Request, res: Response) => {
 // Obter todas as transações
 export const getTransacoes = async (req: Request, res: Response) => {
   try {
-    const transacoes = await prismaService.transacao.findMany();
+    const transacoes = await prismaService.transacao.findMany({
+      where: {
+        contaSistemaId: req.body.contaSistemaId
+      }
+    });
     ResponseService.success(res, { data: transacoes });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
@@ -40,7 +44,7 @@ export const getTransacao = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const transacao = await prismaService.transacao.findUnique({
-      where: { id: Number(id) },
+      where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
     });
     ResponseService.success(res, { data: transacao });
   } catch (error: any) {
@@ -53,9 +57,8 @@ export const updateTransacao = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const validated = validateSchema(updateTransacaoSchema, req.body)
-    const dataISO = new Date(validated.dataEfetivado).toISOString();
     const transacao = await prismaService.transacao.update({
-      where: { id: Number(id) },
+      where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
       data: validated
     });
 
@@ -131,7 +134,7 @@ export const renameComprovante = async (req: Request, res: Response) => {
 export const deleteTransacao = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    await prismaService.transacao.delete({ where: { id: Number(id) } });
+    await prismaService.transacao.delete({ where: { id: Number(id), contaSistemaId: req.body.contaSistemaId } });
     ResponseService.success(res, { message: "Transação excluída com sucesso" });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);

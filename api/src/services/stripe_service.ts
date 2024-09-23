@@ -3,7 +3,7 @@ import { stripe } from "../libs/stripe";
 import prismaService from "./prisma_service";
 
 export class StripeService {
-  constructor(readonly subscription: Stripe.Response<Stripe.Subscription>) {}
+  constructor(readonly subscription: Stripe.Subscription) {}
 
   async managerSubscription(customerId: string, type: string): Promise<void> {
     try {

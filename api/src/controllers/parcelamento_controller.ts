@@ -22,7 +22,9 @@ export const createParcelamento = async (req: Request, res: Response) => {
 
 export const getParcelamentos = async (req: Request, res: Response) => {
   try {
-    const parcelamentos = await prismaService.parcelamento.findMany();
+    const parcelamentos = await prismaService.parcelamento.findMany({
+      where: { contaSistemaId: req.body.contaSistemaId },
+    });
     ResponseService.success(res, { data: parcelamentos });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
@@ -33,7 +35,7 @@ export const getParcelamento = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const parcelamento = await prismaService.parcelamento.findUnique({
-      where: { id: Number(id) },
+      where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
     });
     ResponseService.success(res, { data: parcelamento });
   } catch (error: any) {
@@ -47,7 +49,7 @@ export const updateParcelamento = async (req: Request, res: Response) => {
     if (!id) throw new ValidationError("ID obrigatorio");
     const validated = validateSchema(updateParcelamentoSchema, req.body);
     const received = await prismaService.parcelamento.update({
-      where: { id: Number(id) },
+      where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
       data: validated,
     });
     ResponseService.success(res, {
@@ -62,7 +64,7 @@ export const updateParcelamento = async (req: Request, res: Response) => {
 export const deleteParcelamento = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    await prismaService.parcelamento.delete({ where: { id: Number(id) } });
+    await prismaService.parcelamento.delete({ where: { id: Number(id), contaSistemaId: req.body.contaSistemaId } });
     ResponseService.success(res, {
       message: "parcelamento excluida com sucesso",
     });
