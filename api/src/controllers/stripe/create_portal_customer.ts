@@ -8,7 +8,7 @@ export const createPortalCustomer = async (req: Request, res: Response) => {
         const {customerId} = req.body;
         const session = await StripeService.createCustomerPortal(
           customerId,
-          `${baseURL}/administracao/usuarios?backtoportal=true`
+          `${baseURL}/assinatura?backtoportal=true`
         );
         res.json(session);
     }catch (error: any) {

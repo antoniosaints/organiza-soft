@@ -12,7 +12,7 @@ model Usuario {
   contaSistemaId Int           @default(1)
   ContaSistema   ContasSistema @relation(fields: [contaSistemaId], references: [id])
   nome           String        @db.VarChar(100)
-  email          String        @unique @db.VarChar(100)
+  email          String        @db.VarChar(100)
   senha          String        @db.VarChar(255)
   regra          Permissao
   anotacoes      String?       @db.Text
@@ -24,6 +24,7 @@ model Usuario {
   Grupos         Grupos        @relation(fields: [grupoId], references: [id])
 
   @@index([grupoId], map: "Usuario_grupoId_fkey")
+  @@unique([email, contaSistemaId])
 }
 
 model Grupos {
@@ -302,6 +303,8 @@ enum StatusUsuario {
 }
 
 enum Permissao {
+  proprietario
+  socio
   admin
   gerente
   moderador

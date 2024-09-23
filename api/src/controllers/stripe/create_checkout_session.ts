@@ -16,9 +16,9 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
         },
       ],
       mode: "subscription",
-      client_reference_id: "1",
-      success_url: `${baseURL}/administracao/usuarios?success=true`,
-      cancel_url: `${baseURL}/administracao/usuarios?canceled=true`,
+      client_reference_id: customerId,
+      success_url: `${baseURL}/assinatura?success=true`,
+      cancel_url: `${baseURL}/assinatura?canceled=true`,
     });
   
     if (!session.url) {

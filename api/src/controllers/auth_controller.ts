@@ -29,7 +29,7 @@ class AuthController {
 
     return ResponseService.success(
       res,
-      { token, refreshToken },
+      { token, refreshToken, contaId: user.contaSistemaId },
       "Login realizado com sucesso"
     );
   }

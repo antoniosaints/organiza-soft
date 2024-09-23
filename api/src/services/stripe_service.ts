@@ -91,7 +91,7 @@ export class StripeService {
   static async createCustomer(email: string, name: string): Promise<any> {
     const customer = await stripe.customers.create({
       email,
-      name,
+      name
     });
     return customer;
   }

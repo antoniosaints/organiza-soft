@@ -132,8 +132,8 @@ export const renameComprovante = async (req: Request, res: Response) => {
 
 // Excluir transação
 export const deleteTransacao = async (req: Request, res: Response) => {
-  const { id } = req.params;
   try {
+    const { id } = req.params;
     await prismaService.transacao.delete({ where: { id: Number(id), contaSistemaId: req.body.contaSistemaId } });
     ResponseService.success(res, { message: "Transação excluída com sucesso" });
   } catch (error: any) {

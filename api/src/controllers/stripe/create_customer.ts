@@ -23,7 +23,6 @@ export const createCustomerStripe = async (req: Request, res: Response) => {
         data: {
           email: email,
           conta: name,
-          user_create_id: 1,
           stripeCustomerId: customer.id,
         }
       })
