@@ -39,7 +39,9 @@ export const getUsuarios = async (req: Request, res: Response) => {
           contaSistemaId: req.body.contaSistemaId
         },
       }),
-      prismaService.usuario.count(),
+      prismaService.usuario.count({
+        where: {contaSistemaId: req.body.contaSistemaId},
+      }),
     ])
 
     ResponseService.success(res, { data: items, total });

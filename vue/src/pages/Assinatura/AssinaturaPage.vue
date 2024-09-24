@@ -40,7 +40,10 @@ const sinatatureSubscription = async () => {
                 <CardHeader>
                     <CardTitle
                         class="flex items-center justify-between text-2xl font-bold dark:text-gray-300 text-gray-500">
-                        Plano Free
+                        <div>
+                            <p class="text-xl font-bold">Plano Grátis</p>
+                            <p class="text-3xl font-bold">{{ parametros.quota.free.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</p>
+                        </div>
                         <Badge variant="default" v-if="!loginStore.isProAccount">Atual</Badge>
                     </CardTitle>
                     <CardDescription>Perfeito para começar</CardDescription>
@@ -81,7 +84,11 @@ const sinatatureSubscription = async () => {
             </Card>
             <Card class="md:min-w-[400px]">
                 <CardHeader>
-                    <CardTitle class="flex items-center justify-between text-2xl font-bold dark:text-blue-300 text-blue-600">Plano Pro
+                    <CardTitle class="flex items-center justify-between text-2xl font-bold">
+                        <div>
+                            <p class="text-xl font-bold">Plano Pro</p>
+                            <p class="text-3xl font-bold dark:text-blue-500 text-blue-600">{{ parametros.quota.pro.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</p>
+                        </div>
                         <Badge variant="default" v-if="loginStore.isProAccount">Atual</Badge>
                     </CardTitle>
                     <CardDescription>Recursos ilimitados para seu negócio</CardDescription>

@@ -18,7 +18,7 @@
     "@tanstack/vue-table": "^8.20.5",
     "@unovis/ts": "^1.4.3-beta.0",
     "@unovis/vue": "^1.4.3-beta.0",
-    "@vueuse/core": "^11.0.3",
+    "@vueuse/core": "^11.1.0",
     "axios": "^1.7.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
