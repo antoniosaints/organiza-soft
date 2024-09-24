@@ -87,6 +87,7 @@ h2 {
 
 h1 {
     text-align: center;
+    font-size: large;
     margin-top: 20px;
 }
 

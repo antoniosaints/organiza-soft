@@ -2,48 +2,88 @@
 import { Avatar } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { useColorMode } from '@vueuse/core';
-import { RouterLink, RouterView } from 'vue-router';
+import { ref } from 'vue';
+import { RouterLink, RouterView, useRouter } from 'vue-router';
 
 useColorMode();
+const isMenuOpen = ref(false);
+const router = useRouter();
+
+const navigate = (path: string) => {
+    router.push(path);
+};
 </script>
 
 <template>
     <div class="flex flex-col min-h-screen">
-        <header
-            class="px-4 lg:px-6 h-14 flex items-center sticky top-0 z-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-600">
-            <RouterLink class="flex items-center bg-transparent justify-center transition-all duration-300 ease-in-out"
-                to="/site/home">
-                <Avatar class="h-8 w-8">
-                    <img src="/OS.png" alt="logo" />
-                </Avatar>
-                <span class="text-3xl text-black dark:text-white font-bold ml-2">Organiza Soft</span>
-            </RouterLink>
-
-            <nav class="ml-auto flex items-center gap-4 sm:gap-6 text-blue-900 dark:text-white">
-                <a class="md:text-md font-medium transition-all bg-inherit duration-300 hover:text-blue-600 hover:underline underline-offset-4"
-                    href="#features">
-                    Recursos
-                </a>
-                <a class="md:text-md font-medium transition-all bg-inherit duration-300 hover:text-blue-600 hover:underline underline-offset-4"
-                    href="#pricing">
-                    Preços
-                </a>
-                <a class="md:text-md font-medium transition-all bg-inherit duration-300 hover:text-blue-600 hover:underline underline-offset-4"
-                    href="#about">
-                    Sobre
-                </a>
-                <RouterLink
-                    class="md:text-md font-medium transition-all bg-transparent text-blue-400 duration-300 hover:text-blue-600 hover:underline underline-offset-4"
-                    to="/site/cadastro">
-                    Criar conta
-                </RouterLink>
-                <RouterLink
-                    class="md:text-md font-medium transition-all bg-inherit duration-300 hover:text-blue-600 hover:underline underline-offset-4"
-                    to="/login">
-                    <Button variant="default" class="rounded-full"> Login </Button>
-                </RouterLink>
-
-            </nav>
+        <header class="dark:bg-gray-900 bg-white sticky top-0 left-0 shadow-none">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex h-16 items-center justify-between">
+                    <a href="#" @click.prevent="navigate('/site/home')" class="text-sm font-medium text-foreground">
+                        <div class="flex items-center">
+                            <Avatar class="h-8 w-8">
+                                <img src="/OS.png" alt="logo" />
+                            </Avatar>
+                            <span class="ml-2 text-xl font-semibold">Organiza Soft</span>
+                        </div>
+                    </a>
+                    <nav class="hidden md:flex items-center space-x-4">
+                        <a href="#features" class="text-sm font-medium text-foreground hover:text-blue-400">
+                            Recursos
+                        </a>
+                        <a href="#pricing" class="text-sm font-medium text-foreground hover:text-blue-400">
+                            Preços
+                        </a>
+                        <a href="#about" class="text-sm font-medium text-foreground hover:text-blue-400">
+                            Sobre
+                        </a>
+                        <a href="#" @click.prevent="navigate('/site/cadastro')"
+                            class="text-sm font-medium text-foreground hover:text-blue-400">
+                            Criar conta
+                        </a>
+                        <RouterLink
+                            class="md:text-md font-medium transition-all bg-inherit duration-300 hover:text-blue-600 hover:underline underline-offset-4"
+                            to="/login">
+                            <Button variant="default" class="rounded-full"> Login </Button>
+                        </RouterLink>
+                    </nav>
+                    <div class="flex md:hidden">
+                        <button @click="isMenuOpen = !isMenuOpen"
+                            class="bg-inherit text-gray-600 dark:text-gray-200 hover:bg-gray-800 focus:outline-none h-10 w-10 rounded-full flex items-center justify-center">
+                            <span class="sr-only">Abrir menu</span>
+                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <!-- Menu móvel -->
+                <nav v-if="isMenuOpen" class="md:hidden mt-4 space-y-2 py-4">
+                    <a href="#features" @click="isMenuOpen = false"
+                        class="block text-md text-center py-2 font-medium text-muted-foreground hover:text-primary">
+                        Recursos
+                    </a>
+                    <a href="#pricing" @click="isMenuOpen = false"
+                        class="block text-md text-center py-2 font-medium text-muted-foreground hover:text-primary">
+                        Preços
+                    </a>
+                    <a href="#about" @click="isMenuOpen = false"
+                        class="block text-md text-center py-2 font-medium text-muted-foreground hover:text-primary">
+                        Sobre
+                    </a>
+                    <a href="#" @click.prevent="navigate('/site/cadastro'); isMenuOpen = false"
+                        class="block text-md text-center py-2 font-medium text-muted-foreground hover:text-primary">
+                        Criar conta
+                    </a>
+                    <RouterLink
+                        class="md:text-md font-medium transition-all bg-inherit duration-300 hover:text-blue-600 hover:underline underline-offset-4"
+                        to="/login">
+                        <button class="bg-blue-900 text-white px-4 py-2 mt-2 rounded-full w-full">Login</button>
+                    </RouterLink>
+                </nav>
+            </div>
         </header>
         <main class="flex-1 flex flex-col justify-center items-center">
             <RouterView />
@@ -51,11 +91,13 @@ useColorMode();
         <footer class="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
             <p class="text-xs text-gray-500 dark:text-gray-400">© 2024 Organiza Soft. Todos os direitos reservados.</p>
             <nav class="sm:ml-auto flex gap-4 sm:gap-6">
-                <RouterLink class="text-sm bg-transparent text-blue-400 hover:text-blue-600 cursor-pointer transition-all duration-300 hover:underline underline-offset-4"
+                <RouterLink
+                    class="text-sm bg-transparent text-blue-400 hover:text-blue-600 cursor-pointer transition-all duration-300 hover:underline underline-offset-4"
                     to="/site/termos">
                     Termos de Serviço
                 </RouterLink>
-                <RouterLink class="text-sm bg-transparent text-blue-400 hover:text-blue-600 cursor-pointer transition-all duration-300 hover:underline underline-offset-4"
+                <RouterLink
+                    class="text-sm bg-transparent text-blue-400 hover:text-blue-600 cursor-pointer transition-all duration-300 hover:underline underline-offset-4"
                     to="/site/politica">
                     Privacidade
                 </RouterLink>

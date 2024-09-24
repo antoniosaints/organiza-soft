@@ -18,13 +18,13 @@
       </div>
       <form class="w-full max-w-lg" @submit.prevent="loginUsuario">
         <div class="mb-5">
-          <Label for="email">E-mail</Label>
-          <Input class="border-2 border-gray-600" v-model="usuario.email" required type="email" label="E-mail"
+          <Label for="email" class="text-md">E-mail</Label>
+          <Input class="border h-12 text-md rounded-xl border-gray-600" v-model="usuario.email" required type="email" label="E-mail"
             placeholder="Seu e-mail" />
         </div>
         <div class="mb-5">
-          <Label for="password">Senha</Label>
-          <Input class="border-2 border-gray-600" v-model="usuario.senha" required type="password" label="Senha"
+          <Label for="password" class="text-md">Senha</Label>
+          <Input class="border h-12 text-md rounded-xl border-gray-600" v-model="usuario.senha" required type="password" label="Senha"
             placeholder="•••••••••" />
         </div>
         <div class="flex items-start mb-5">
