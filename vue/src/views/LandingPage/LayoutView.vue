@@ -4,8 +4,9 @@ import { Button } from '@/components/ui/button';
 import { useColorMode } from '@vueuse/core';
 import { ref } from 'vue';
 import { RouterLink, RouterView, useRouter } from 'vue-router';
+import { Moon, Sun } from 'lucide-vue-next';
 
-useColorMode();
+const mode = useColorMode();
 const isMenuOpen = ref(false);
 const router = useRouter();
 
@@ -18,8 +19,8 @@ const navigate = (path: string) => {
     <div class="flex flex-col min-h-screen">
         <header class="dark:bg-gray-900 bg-white sticky top-0 left-0 shadow-none">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex h-16 items-center justify-between">
-                    <a href="#" @click.prevent="navigate('/site/home')" class="text-sm font-medium text-foreground">
+                <div class="flex max-w-7xl mx-auto h-16 items-center justify-between">
+                    <a href="#" @click.prevent="navigate('/site/home')" class="text-sm w-full md:w-1/3 font-medium text-foreground">
                         <div class="flex items-center">
                             <Avatar class="h-8 w-8">
                                 <img src="/OS.png" alt="logo" />
@@ -27,7 +28,7 @@ const navigate = (path: string) => {
                             <span class="ml-2 text-xl font-semibold">Organiza Soft</span>
                         </div>
                     </a>
-                    <nav class="hidden md:flex items-center space-x-4">
+                    <nav class="hidden md:flex items-center justify-center space-x-4 w-1/3">
                         <a href="#features" class="text-sm font-medium text-foreground hover:text-blue-400">
                             Recursos
                         </a>
@@ -47,6 +48,12 @@ const navigate = (path: string) => {
                             <Button variant="default" class="rounded-full"> Login </Button>
                         </RouterLink>
                     </nav>
+                    <button class="md:flex hidden w-1/3 items-end justify-end">
+                        <Sun v-if="mode === 'light'" @click="mode = 'dark'"
+                            class="h-8 w-8 p-1 bg-inherit text-gray-600 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none rounded-full flex items-center justify-center" />
+                        <Moon v-if="mode === 'dark'" @click="mode = 'light'"
+                            class="h-8 w-8 p-1 bg-inherit text-gray-600 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none rounded-full flex items-center justify-center" />
+                    </button>
                     <div class="flex md:hidden">
                         <button @click="isMenuOpen = !isMenuOpen"
                             class="bg-inherit text-gray-600 dark:text-gray-200 hover:bg-gray-800 focus:outline-none h-10 w-10 rounded-full flex items-center justify-center">
