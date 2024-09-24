@@ -6,6 +6,7 @@ type IparamsQuote = {
   services: number;
   sales: number;
   suport: string;
+  ai: boolean;
 };
 type IPlanQuota = {
   free: IparamsQuote;
@@ -23,6 +24,7 @@ export const systemParamsAccount: IPamans = {
       products: 10,
       services: 10,
       sales: 100,
+      ai: false,
       suport: "Suporte pelo site",
     },
     pro: {
@@ -32,6 +34,7 @@ export const systemParamsAccount: IPamans = {
       products: 0,
       services: 0,
       sales: 0,
+      ai: true,
       suport: "Suporte por whatsapp",
     },
   },

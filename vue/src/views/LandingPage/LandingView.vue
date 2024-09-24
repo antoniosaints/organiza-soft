@@ -1,40 +1,15 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { systemParamsAccount } from '@/parametros';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useColorMode } from '@vueuse/core';
-import { Check } from 'lucide-vue-next'; // Certifique-se de ter instalado o lucide-vue-next
+import PlanosPrecosView from './PlanosPrecosView.vue';
 
 useColorMode();
-const parametros = systemParamsAccount;
 // Dados dinâmicos para as seções de recursos e planos
 const features = [
     { icon: "💰", title: 'Controle financeiro', description: 'Tenha funcionalidades de controle financeiro prontas e 100% testadas em várias empresas, trouxemos os insights necessarios para criar algo simples e funcional.' },
     { icon: "📦", title: 'Venda serviços, produtos e muito mais.', description: 'No Organiza Soft, você possui acesso à ferramentas que permitem criar, estocar e vender qualquer tipo de serviço ou produto que tenha em mente.' },
     { icon: "📈", title: 'Insights e Dashboards', description: 'Tenha tudo que precisa para monitorar e acompanhar o desempenho de um negócio em um só lugar, as integrações que o Saas oferece vão te surpreender.' },
-];
-
-const plans = [
-    {
-        title: '🔗 Grátis', price: parametros.quota.free.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }), features: [
-            `${parametros.quota.free.users} usuários`,
-            `${parametros.quota.free.services} serviços`,
-            `${parametros.quota.free.products} produtos`,
-            `${parametros.quota.free.sales} vendas`,
-            `${parametros.quota.free.signatures} assinaturas`,
-            parametros.quota.free.suport
-        ]
-    },
-    {
-        title: '👑 Pro', price: parametros.quota.pro.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }), features: [
-            `${parametros.quota.pro.users == 0 ? '♾️' : parametros.quota.pro.users} usuários`,
-            `${parametros.quota.pro.services == 0 ? '♾️' : parametros.quota.pro.services} serviços`,
-            `${parametros.quota.pro.products == 0 ? '♾️' : parametros.quota.pro.products} produtos`,
-            `${parametros.quota.pro.sales == 0 ? '♾️' : parametros.quota.pro.sales} vendas`,
-            `${parametros.quota.pro.signatures == 0 ? '♾️' : parametros.quota.pro.signatures} assinaturas`,
-            parametros.quota.pro.suport
-        ]
-    }
 ];
 
 </script>
@@ -55,10 +30,8 @@ const plans = [
                 </div>
                 <div class="space-x-4">
                     <RouterLink to="/site/cadastro">
-                        <Button class="transition-transform duration-300 hover:scale-105">Comece Grátis 🎯</Button>
+                        <Button size="lg" class="transition-transform duration-300 hover:scale-105">Comece Grátis 🎯</Button>
                     </RouterLink>
-                    <Button variant="outline" class="transition-transform duration-300">Saiba
-                        Mais</Button>
                 </div>
             </div>
         </div>
@@ -70,7 +43,7 @@ const plans = [
             </h2>
             <div class="grid gap-8 lg:grid-cols-3 lg:gap-12">
                 <Card v-for="feature in features" :key="feature.title"
-                    class="transform transition duration-300 hover:-translate-y-2 hover:shadow-lg rounded-lg overflow-hidden bg-white dark:bg-gray-800 shadow-md">
+                    class="transition duration-300 hover:-translate-y-2 hover:shadow-lg rounded-lg bg-white dark:bg-gray-800 shadow-md">
                     <CardHeader class="p-6 border-b border-gray-200 dark:border-gray-600">
                         <CardTitle class="text-xl font-semibold text-gray-900 dark:text-white">
                             {{ feature.icon }} {{ feature.title }}
@@ -84,34 +57,7 @@ const plans = [
         </div>
     </section>
 
-    <section id="pricing" class="max-w-7xl py-12 md:py-24 lg:py-32">
-        <div class="container px-4 md:px-6">
-            <h2 class="text-2xl font-bold tracking-tighter sm:text-5xl text-center mb-12">Planos e Preços</h2>
-            <div class="grid gap-6 lg:grid-cols-2 lg:gap-12">
-                <Card v-for="plan in plans" :key="plan.title" class="flex flex-col w-[400px]">
-                    <CardHeader>
-                        <CardTitle class="text-xl font-semibold">{{ plan.title }}</CardTitle>
-                        <CardDescription>
-                            <span class="text-3xl font-bold">{{ plan.price }}</span>
-                            <span v-if="plan.price !== 'Personalizado'" class="text-xl">/mês</span>
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent class="flex-1">
-                        <ul class="space-y-2">
-                            <li v-for="feature in plan.features" :key="feature" class="flex items-center">
-                                <Check class="mr-2 h-4 w-4" />
-                                {{ feature }}
-                            </li>
-                        </ul>
-                    </CardContent>
-                    <CardFooter>
-                        <Button class="w-full transition-transform duration-300 hover:scale-105">Escolher
-                            Plano</Button>
-                    </CardFooter>
-                </Card>
-            </div>
-        </div>
-    </section>
+    <PlanosPrecosView />
     <!-- Seção "Sobre Nós" adicionada ao final -->
     <section id="about" class="w-full py-16 md:py-28 lg:py-36 bg-white dark:bg-gray-900">
         <div class="container px-4 md:px-6">

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Check, X } from "lucide-vue-next"; // Adaptado para Vue
+import { Check, MessageCircle, X } from "lucide-vue-next"; // Adaptado para Vue
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -75,6 +75,10 @@ const sinatatureSubscription = async () => {
                     </div>
                     <div class="flex items-center">
                         <X class="mr-2 h-4 w-4 text-red-500" />
+                        <span class="text-muted-foreground">Assistente de IA</span>
+                    </div>
+                    <div class="flex items-center">
+                        <X class="mr-2 h-4 w-4 text-red-500" />
                         <span class="text-muted-foreground">Recursos avançados</span>
                     </div>
                 </CardContent>
@@ -121,7 +125,12 @@ const sinatatureSubscription = async () => {
                     </div>
                     <div class="flex items-center">
                         <Check class="mr-2 h-4 w-4 text-green-500" />
+                        <MessageCircle class="mr-2 h-4 w-4 text-green-500" />
                         <span>Suporte por whatsapp</span>
+                    </div>
+                    <div class="flex items-center">
+                        <Check class="mr-2 h-4 w-4 text-green-500" />
+                        <span>✨ Assistente de IA</span>
                     </div>
                     <div class="flex items-center">
                         <Check class="mr-2 h-4 w-4 text-green-500" />
