@@ -15,6 +15,7 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
           quantity: 1,
         },
       ],
+      allow_promotion_codes: true,
       mode: "subscription",
       client_reference_id: customerId,
       success_url: `${baseURL}/assinatura?success=true`,
