@@ -23,7 +23,6 @@ export const stripeWebhook = async (req: Request, res: Response) => {
   switch (event.type) {
     case "customer.subscription.deleted":
     case "customer.subscription.updated":
-    case "customer.subscription.created":
       const subscription = event.data.object;
       const StripeClass = new StripeService(subscription);
       await StripeClass.managerSubscription(subscription.customer as string, event.type);

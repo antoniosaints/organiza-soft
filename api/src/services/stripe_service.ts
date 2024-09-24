@@ -9,7 +9,7 @@ export class StripeService {
     try {
       const conta = await prismaService.contasSistema.findFirst({ where:{stripeCustomerId: customerId}})
       if (conta) {
-        if (this.isActive() || this.isInTrialPeriod()) {
+        if (this.isActive()) {
           await prismaService.contasSistema.update({ where:{id: conta.id}, 
             data:{
               plano: "pro",
@@ -29,22 +29,9 @@ export class StripeService {
       console.log(error)
     }
   }
-  isInTrialPeriod(): boolean {
-    const currentTimestamp = Math.floor(Date.now() / 1000); // Timestamp atual em segundos
-    if (!this.subscription.trial_end) {
-      return false;
-    }
-    return (
-      this.subscription.status === "trialing" &&
-      currentTimestamp < this.subscription.trial_end
-    );
-  }
   isActive(): boolean {
-    const currentTimestamp = Math.floor(Date.now() / 1000); // Timestamp atual em segundos
     return (
-      this.subscription.status === "active" &&
-      currentTimestamp >= this.subscription.current_period_start &&
-      currentTimestamp <= this.subscription.current_period_end
+      this.subscription.status === "active"
     );
   }
   isCanceled(): boolean {

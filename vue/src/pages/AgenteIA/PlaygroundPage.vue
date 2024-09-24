@@ -1,0 +1,224 @@
+<script setup lang="ts">
+import { Bird, Rabbit, SendIcon, Turtle } from 'lucide-vue-next'
+
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Textarea } from '@/components/ui/textarea'
+import { nextTick, ref } from 'vue'
+import { IARepository } from '@/repositories/external/IARepository'
+
+// Definição do tipo Message
+interface IMessageIA {
+  role: "user" | "assistant" | "system"
+  content: string
+}
+
+const inputMessage = ref('')
+const messages = ref<IMessageIA[]>([])
+
+const scrollArea = ref<any>(null)
+
+const scrollToBottom = () => {
+  if (scrollArea.value) {
+    console.log(scrollArea.value)
+    scrollArea.value.scrollTop = scrollArea.value.scrollHeight
+  }
+}
+
+
+const handleSendMessage = async () => {
+  if (inputMessage.value.trim() !== '') {
+    const newMessage: IMessageIA = {
+      content: inputMessage.value,
+      role: 'user'
+    };
+
+    messages.value = [...messages.value, newMessage];
+    inputMessage.value = '';
+
+    nextTick(() => {
+      scrollToBottom();
+    });
+
+    const botResponseText = await IARepository.getIAResponse(messages.value);
+
+    const botResponse: IMessageIA = {
+      content: botResponseText.content,
+      role: 'assistant'
+    };
+
+    messages.value = [...messages.value, botResponse];
+    nextTick(() => {
+      scrollToBottom();
+    });
+  }
+};
+
+</script>
+
+<template>
+    <div class="grid h-[calc(100vh - 12rem)] w-full pl-0 md:pl-[53px]">
+        <div class="flex flex-col">
+            <main class="grid flex-1 gap-4 overflow-auto p-4 md:grid-cols-2 lg:grid-cols-3">
+                <div class="relative hidden flex-col items-start gap-8 md:flex">
+                    <form class="grid w-full items-start gap-6">
+                        <fieldset class="grid gap-6 rounded-lg border p-4">
+                            <legend class="-ml-1 px-1 text-sm font-medium">
+                                Configurações do agente
+                            </legend>
+                            <div class="grid gap-3">
+                                <Label for="model">Model</Label>
+                                <Select>
+                                    <SelectTrigger id="model" class="items-start [&_[data-description]]:hidden">
+                                        <SelectValue placeholder="Selecione um modelo de IA" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="genesis">
+                                            <div class="flex items-start gap-3 text-muted-foreground">
+                                                <Rabbit class="size-5" />
+                                                <div class="grid gap-0.5">
+                                                    <p>
+                                                        Neural
+                                                        <span class="font-medium text-foreground">
+                                                            Genesis
+                                                        </span>
+                                                    </p>
+                                                    <p class="text-xs" data-description>
+                                                        Our fastest model for general use cases.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </SelectItem>
+                                        <SelectItem value="explorer">
+                                            <div class="flex items-start gap-3 text-muted-foreground">
+                                                <Bird class="size-5" />
+                                                <div class="grid gap-0.5">
+                                                    <p>
+                                                        Neural
+                                                        <span class="font-medium text-foreground">
+                                                            Explorer
+                                                        </span>
+                                                    </p>
+                                                    <p class="text-xs" data-description>
+                                                        Performance and speed for efficiency.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </SelectItem>
+                                        <SelectItem value="quantum">
+                                            <div class="flex items-start gap-3 text-muted-foreground">
+                                                <Turtle class="size-5" />
+                                                <div class="grid gap-0.5">
+                                                    <p>
+                                                        Neural
+                                                        <span class="font-medium text-foreground">
+                                                            Quantum
+                                                        </span>
+                                                    </p>
+                                                    <p class="text-xs" data-description>
+                                                        The most powerful model for complex computations.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div class="grid gap-3">
+                                <Label for="temperature">Temperatura</Label>
+                                <Input id="temperature" type="number" placeholder="0.4" />
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="grid gap-3">
+                                    <Label for="top-p">Top P</Label>
+                                    <Input id="top-p" type="number" placeholder="0.7" />
+                                </div>
+                                <div class="grid gap-3">
+                                    <Label for="top-k">Top K</Label>
+                                    <Input id="top-k" type="number" placeholder="0.0" />
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="grid gap-6 rounded-lg border p-4">
+                            <legend class="-ml-1 px-1 text-sm font-medium">
+                                Mensagens
+                            </legend>
+                            <div class="grid gap-3">
+                                <Label for="role">Regra</Label>
+                                <Select default-value="system">
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select a role" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="system">
+                                            Sistema
+                                        </SelectItem>
+                                        <SelectItem value="user">
+                                            Usuário
+                                        </SelectItem>
+                                        <SelectItem value="assistant">
+                                            Agente
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div class="grid gap-3">
+                                <Label for="content">Conteúdo</Label>
+                                <Textarea id="content" placeholder="Você é um..." class="min-h-[9.5rem]" />
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div
+                    class="relative flex h-[calc(100vh-12rem)] min-h-[50vh] flex-col rounded-xl bg-muted/50 p-4 lg:col-span-2">
+                    <!-- Badge -->
+                    <Badge variant="outline" class="absolute right-3 top-3">Saída</Badge>
+
+                    <!-- Scrollable Area -->
+                    <div ref="scrollArea" class="flex-grow p-4 overflow-y-auto">
+                        <div v-for="message in messages" :key="message.role" class="flex mb-4"
+                            :class="message.role === 'user' ? 'justify-end' : 'justify-start'">
+                            <div class="flex items-end max-w-[80%]"
+                                :class="message.role === 'user' ? 'flex-row-reverse' : 'flex-row'">
+                                <Avatar class="w-8 h-8">
+                                    <AvatarImage :src="message.role === 'user' ? '/user-avatar.png' : '/OS.png'" />
+                                    <AvatarFallback>{{ message.role === 'user' ? 'U' : 'B' }}</AvatarFallback>
+                                </Avatar>
+                                <div class="mx-2 py-2 px-3 rounded-2xl" :class="message.role === 'user'
+                                    ? 'bg-primary text-primary-foreground rounded-br-none'
+                                    : 'bg-secondary text-secondary-foreground rounded-bl-none'">
+                                    <p class="text-sm">{{ message.content }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Message Input Form -->
+                    <div class="mt-auto">
+                        <form @submit.prevent="handleSendMessage"
+                            class="relative overflow-hidden rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring">
+                            <Label for="message" class="sr-only">Message</Label>
+
+                            <!-- Textarea -->
+                            <Textarea v-model="inputMessage" id="message" placeholder="Escreva sua mensagem aqui..."
+                                class="min-h-[48px] bg-white dark:bg-slate-950 resize-none border-0 p-3 shadow-none focus-visible:ring-0" />
+
+                            <!-- Submit Button -->
+                            <div class="flex items-center p-3 pt-0">
+                                <Button type="submit" size="sm" class="ml-auto gap-1.5">
+                                    Enviar
+                                    <SendIcon class="size-3.5" />
+                                </Button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+</template>
