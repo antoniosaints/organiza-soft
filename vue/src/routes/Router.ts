@@ -52,6 +52,20 @@ const routes: Array<RouteRecordRaw> = [
                 name: "Perfil",
                 meta: { breadcrumb: 'Perfil' },
                 component: () => import("@/views/Perfil/InformacoesView.vue")
+            },
+            {
+                path: "/agentesia",
+                redirect: "/agentesia/playground",
+                name: "AgenteDeIa",
+                meta: { breadcrumb: 'Assistente de IA' },
+                children: [
+                    {
+                        path: "/agentesia/playground",
+                        name: "Playground",
+                        meta: { breadcrumb: 'Playground' },
+                        component: () => import("@/views/AgenteIA/PlaygroundView.vue")
+                    }
+                ]
             }
         ]
     },

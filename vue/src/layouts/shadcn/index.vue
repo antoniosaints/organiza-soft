@@ -51,6 +51,27 @@
                     <collapsible v-slot="{ open }" class="grid gap-2">
                         <collapsible-trigger
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                            <Cpu />
+                            <span>Assistente de IA</span>
+                            <div class="ml-auto flex space-x-1 items-center">
+                                <Badge v-if="true" variant="secondary"> <Waypoints class="h-4 w-4" /> </Badge>
+                                <ChevronRight class="ml-auto h-4 w-4 transition-transform"
+                                    :class="{ 'rotate-90': open }" />
+                            </div>
+                        </collapsible-trigger>
+                        <collapsible-content>
+                            <div class="grid gap-2 pl-6">
+                                <router-link to="/agentesia/playground"
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                    <SquareTerminal />
+                                    <span>Playground</span>
+                                </router-link>
+                            </div>
+                        </collapsible-content>
+                    </collapsible>
+                    <collapsible v-slot="{ open }" class="grid gap-2">
+                        <collapsible-trigger
+                            class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <Layers />
                             <span>CRM</span>
                             <div class="ml-auto flex space-x-1 items-center">
@@ -381,7 +402,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { House, LockKeyhole, Users, List, Wallet, ChevronRight, LogOut, PanelLeftOpen, PanelLeftClose, Landmark, FileText, Package, Boxes, Group, Computer, Tags, BookOpenCheck, BadgeCheck, CalendarX2, FileChartPie, Settings2, PenTool, ClipboardCheck, Ticket, FileDigit, Archive, FileBadge2, FileStack, FileCheck, Layers, User, Contact, WalletMinimal, CircleDollarSign, Crown } from 'lucide-vue-next'
+import { House, LockKeyhole, Users, List, Wallet, ChevronRight, LogOut, PanelLeftOpen, PanelLeftClose, Landmark, FileText, Package, Boxes, Group, Computer, Tags, BookOpenCheck, BadgeCheck, CalendarX2, FileChartPie, Settings2, PenTool, ClipboardCheck, Ticket, FileDigit, Archive, FileBadge2, FileStack, FileCheck, Layers, User, Contact, WalletMinimal, CircleDollarSign, Crown, Cpu, Waypoints, SquareTerminal } from 'lucide-vue-next'
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible"
 import { BreadCrumb, ProfileHome, ToogleMode } from '.';
 import { Button } from '@/components/ui/button';

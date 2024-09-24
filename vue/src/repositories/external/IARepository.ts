@@ -1,49 +1,48 @@
 import fs from "fs";
 import { OpenAIService } from "@/services/external/openai";
 
+interface IMessageIA {
+  role: "user" | "assistant" | "system";
+  content: string;
+}
 export class IARepository {
-  static Conversations: any = [
+  static Conversations: IMessageIA[] = [
     {
       role: "system",
-      content: "Meu nome é Saints, sou um assistente de sistema para ajudar pessoas a organizar e melhorar a experiencia e dar dicas finaceiras e estatísticas.",
-    }
+      content:
+        "Meu nome é Saints, sou um assistente de sistema para ajudar pessoas a organizar e melhorar a experiencia e dar dicas finaceiras e estatísticas.",
+    },
   ];
-  static async getIAResponse(question: string): Promise<any> {
-
-    this.Conversations.push({ role: "user", content: question });
-
+  static async getIAResponse(conversation: IMessageIA[]): Promise<any> {
     const response = await OpenAIService.chat.completions.create({
       model: "gpt-4o-mini",
-      messages: this.Conversations,
+      messages: conversation,
     });
-
-    this.Conversations.push({
-      role: "assistant",
-      content: response.choices[0].message.content,
-    })
 
     return response.choices[0].message;
   }
 
-  static async getIAResponseStream(question: string): Promise<any> {
-
-    this.Conversations.push({ role: "user", content: question })
-
+  static async getIAResponseStream(conversation: IMessageIA[]): Promise<any> {
     const response = await OpenAIService.chat.completions.create({
       model: "gpt-4o-mini",
-      messages: this.Conversations,
+      messages: conversation,
       stream: true,
     });
 
-    let res = '';
-    for await (const chunk of response) res += chunk.choices[0].delta.content || '';
+    const [stream1, stream2] = response.tee();
+    let res = "";
 
-    this.Conversations.push({
-      role: "assistant",
-      content: res,
-    })
+    for await (const chunk of stream1) {
+      res += chunk.choices[0].delta.content || "";
+    }
 
-    return response;
+    (async () => {
+      for await (const chunk of stream2) {
+        continue;
+      }
+    })();
+
+    return res; // Retorne a resposta completa
   }
 
   static async getIAImage(question: string): Promise<any> {
