@@ -18,7 +18,9 @@ interface IMessageIA {
 }
 
 const inputMessage = ref('')
-const messages = ref<IMessageIA[]>([])
+const messages = ref<IMessageIA[]>([
+    {role: "system", content: "Você é um agente de ajuda do sistema OrganizaSoft, seja breve e claro nas respostas e responda apenas assuntos relacionados ao sistema!"}
+])
 
 const scrollArea = ref<any>(null)
 
@@ -181,7 +183,7 @@ const handleSendMessage = async () => {
                     <!-- Scrollable Area -->
                     <div ref="scrollArea" class="flex-grow p-4 overflow-y-auto">
                         <div v-for="message in messages" :key="message.role" class="flex mb-4"
-                            :class="message.role === 'user' ? 'justify-end' : 'justify-start'">
+                            :class="message.role === 'user' ? 'justify-end' : (message.role === 'assistant' ? 'justify-start' : 'hidden')">
                             <div class="flex items-end max-w-[80%]"
                                 :class="message.role === 'user' ? 'flex-row-reverse' : 'flex-row'">
                                 <Avatar class="w-8 h-8">
