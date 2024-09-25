@@ -3,7 +3,7 @@
         <div class="container px-4 md:px-6">
             <h2 class="text-2xl font-bold tracking-tighter sm:text-5xl text-center mb-12">Planos e Preços</h2>
             <div class="grid gap-6 lg:grid-cols-2 lg:gap-12">
-                <Card v-for="plan in plans" :key="plan.title" class="flex flex-col w-[400px]">
+                <Card v-for="plan in plans" :key="plan.title" class="flex flex-col w-[400px] dark:bg-slate-800">
                     <CardHeader>
                         <CardTitle class="text-xl font-semibold">{{ plan.title }}</CardTitle>
                         <CardDescription>
@@ -21,8 +21,10 @@
                         </ul>
                     </CardContent>
                     <CardFooter>
-                        <Button class="w-full transition-transform duration-300 hover:scale-105">Escolher
-                            Plano</Button>
+                        <RouterLink class="w-full" to="/site/cadastro">
+                            <Button class="w-full transition-transform duration-300 hover:scale-105">Escolher
+                                Plano</Button>
+                        </RouterLink>
                     </CardFooter>
                 </Card>
             </div>

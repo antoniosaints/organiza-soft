@@ -135,13 +135,11 @@ const prevStep = () => {
             </form>
         </CardContent>
         <CardFooter class="flex justify-between">
-            <div class="mr-auto flex gap-2">
-                <RouterLink to="/site/home" class="mr-auto">
-                    <Button variant="outline" class="mr-auto">
-                        Voltar ao site
-                    </Button>
-                </RouterLink>
-            </div>
+            <RouterLink to="/site" class="mr-auto bg-transparent">
+                <Button variant="outline" class="mr-auto">
+                    Voltar ao site
+                </Button>
+            </RouterLink>
             <div class="flex gap-2">
                 <Button v-if="step === 2" variant="outline" @click="prevStep">
                     Anterior

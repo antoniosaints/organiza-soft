@@ -5,11 +5,11 @@ import prismaService from "./prisma_service";
 export class StripeService {
   constructor(readonly subscription: Stripe.Subscription) {}
 
-  async managerSubscription(customerId: string, type: string): Promise<void> {
+  async managerSubscription(customerId: string): Promise<void> {
     try {
       const conta = await prismaService.contasSistema.findFirst({ where:{stripeCustomerId: customerId}})
       if (conta) {
-        if (this.isActive()) {
+        if (this.isActive() || this.isTrial()) {
           await prismaService.contasSistema.update({ where:{id: conta.id}, 
             data:{
               plano: "pro",
@@ -27,12 +27,12 @@ export class StripeService {
             }
           })
         }
-        else {
+        else if (this.isCanceled()){
           await prismaService.contasSistema.update({ where:{id: conta.id}, 
             data:{
               plano: "free",
-              status: "inativa",
-              stripeSubscriptionId: type == "customer.subscription.deleted" ? null : this.subscription.id
+              status: "cancelada",
+              stripeSubscriptionId: null
             }
           })
         }
@@ -41,18 +41,17 @@ export class StripeService {
       console.log(error)
     }
   }
+  isTrial(): boolean {
+    return this.subscription.status === "trialing";
+  }
   isActive(): boolean {
-    return (
-      this.subscription.status === "active"
-    );
+    return this.subscription.status === "active";
   }
   isPastDue(): boolean {
-    return (
-      this.subscription.status === "past_due"
-    );
+    return this.subscription.status === "past_due";
   }
   isCanceled(): boolean {
-    return this.subscription.cancel_at_period_end;
+    return this.subscription.status === "canceled";
   }
   getCancelDate() {
     if (this.isCanceled() && this.subscription.canceled_at) {
