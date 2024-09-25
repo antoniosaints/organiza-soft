@@ -20,7 +20,7 @@ const navigate = (path: string) => {
         <header class="dark:bg-gray-900 bg-white sticky top-0 left-0 shadow-none">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex max-w-7xl mx-auto h-16 items-center justify-between">
-                    <a href="#" @click.prevent="navigate('/site/home')" class="text-sm w-full md:w-1/3 font-medium text-foreground">
+                    <a href="#" @click.prevent="navigate('/site')" class="text-sm w-full md:w-1/3 font-medium text-foreground">
                         <div class="flex items-center">
                             <Avatar class="h-8 w-8">
                                 <img src="/OS.png" alt="logo" />

@@ -60,11 +60,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UsuariosRepository } from "@/repositories/usuarios/usuariosRepository";
-import toastUtil from "@/utils/toastUtil";
 import { useUsuarioFormularioStore } from "@/stores/usuarios/usuarioFormularioStore";
 import { useUsuarioStore } from "@/stores/usuarios/usuarioStore";
 import { CircleCheck } from "lucide-vue-next";
 import { computed } from "vue";
+import { ScToastUtil } from "@/utils/scToastUtil";
 const UsuarioFormularioStore = useUsuarioFormularioStore();
 const UsuarioStore = useUsuarioStore();
 
@@ -75,15 +75,15 @@ const handleSubmit = async (): Promise<void> => {
     try {
         if (UsuarioFormularioStore.ref_id == null) {
             await UsuariosRepository.create(UsuarioFormularioStore.data);
-            toastUtil.success("Usuário criado com sucesso!", "Sucesso");
+            ScToastUtil.success("Usuário criado com sucesso!");
         }else {
             await UsuariosRepository.update(UsuarioFormularioStore.ref_id, UsuarioFormularioStore.data);
-            toastUtil.success("Usuário atualizado com sucesso!", "Sucesso");
+            ScToastUtil.success("Usuário atualizado com sucesso!");
         }
         UsuarioFormularioStore.modalState = false;
         UsuarioStore.getUsuarios();
     }catch (error: any) {
-        toastUtil.warning(error.response.data.message, "Ops..");
+        ScToastUtil.warning(error.response.data.message);
     }
 };
 </script>

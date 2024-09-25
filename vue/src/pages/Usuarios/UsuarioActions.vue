@@ -51,6 +51,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { UsuariosRepository } from "@/repositories/usuarios/usuariosRepository";
 import { useUsuarioFormularioStore } from "@/stores/usuarios/usuarioFormularioStore";
 import { useUsuarioStore } from "@/stores/usuarios/usuarioStore";
+import { ScToastUtil } from '@/utils/scToastUtil';
 import toastUtil from "@/utils/toastUtil";
 import { Ellipsis, Pencil, Trash2 } from "lucide-vue-next";
 import { ref } from "vue";
@@ -72,10 +73,9 @@ const onDeletarUsuario = async (id: number) => {
         await UsuariosRepository.delete(id);
         UsuarioState.getUsuarios();
         openDialogDelete.value = false;
-        toastUtil.success("Usuário deletado com sucesso!", "Sucesso");
+        ScToastUtil.success("Usuário deletado com sucesso!");
     } catch (e: any) {
-        console.log(e);
-        toastUtil.warning(e.response.data.message, "Ops..");
+        ScToastUtil.warning(e.response.data.message);
     }
 }
 

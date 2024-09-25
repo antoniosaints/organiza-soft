@@ -80,7 +80,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/LandingPage/LayoutView.vue"),
         children: [
             {
-                path: "/site/home",
+                path: "/site",
                 name: "HomePageSite",
                 component: () => import("@/views/LandingPage/LandingView.vue"),
             },

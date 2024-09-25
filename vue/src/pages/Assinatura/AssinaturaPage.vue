@@ -7,42 +7,68 @@ import { Badge } from "@/components/ui/badge";
 import { systemParamsAccount } from "@/parametros";
 import { useLoginStore } from "@/stores/login/loginStore";
 import { createCheckoutSession, createPortalCaptive } from "@/services/stripe/StripeService";
-import toastUtil from "@/utils/toastUtil";
+import { ScToastUtil } from "@/utils/scToastUtil";
 
 const parametros = systemParamsAccount;
 const loginStore = useLoginStore();
 const proAccount = computed(() => loginStore.isProAccount);
-const isPastDue = computed(() => loginStore.dataAccountLogged?.status === 'vencida');
+// Computed properties
+const isPastDue = computed(() => loginStore.statusAccount === "vencida");
+
+const hasStripeAccount = computed(() => {
+    if (loginStore.statusAccount === "inativa" || !loginStore.dataAccountLogged?.stripeCustomerId) {
+        return null;
+    }
+    return loginStore.dataAccountLogged?.stripeCustomerId;
+});
+
 const showCardFree = computed(() => !proAccount.value && !isPastDue.value);
-console.log(proAccount.value, isPastDue.value);
 
 const accessPortalCaptive = async () => {
-    if (!loginStore.dataAccountLogged?.stripeCustomerId) return toastUtil.warning("Nenhuma conta encontrada, recarregue a página", "Ops..");
-    const data = await createPortalCaptive(loginStore.dataAccountLogged?.stripeCustomerId);
-    console.log(data);
-    window.open(data?.data?.url, "_self");
-}
+    if (!hasStripeAccount.value) {
+        ScToastUtil.warning("Ocorreu uma falha ao acessar o portal, tente novamente mais tarde!");
+        return;
+    }
+    try {
+        const data = await createPortalCaptive(hasStripeAccount.value);
+        window.open(data?.data?.url, "_self");
+    } catch (error) {
+        ScToastUtil.error("Erro ao acessar o portal, tente novamente mais tarde!");
+    }
+};
 
 const sinatatureSubscription = async () => {
-    if (!loginStore.dataAccountLogged?.stripeCustomerId) return toastUtil.warning("Ocorreu um erro ao assinar o plano, recarregue a página", "Ops..");
-    const url = await createCheckoutSession(loginStore.dataAccountLogged?.stripeCustomerId);
-    window.open(url?.data, "_self");
-}
+    if (!hasStripeAccount.value) {
+        ScToastUtil.warning("Por favor, recarregue a página e tente novamente mais tarde.");
+        return;
+    }
+    try {
+        const url = await createCheckoutSession(hasStripeAccount.value);
+        window.open(url?.data, "_self");
+    } catch (error) {
+        ScToastUtil.error("Erro ao criar sessão de checkout, tente novamente mais tarde.");
+    }
+};
+
 </script>
 
 <template>
     <div class="container mx-auto max-w-4xl px-4 py-8">
         <div v-if="proAccount" class="mb-8 flex flex-col items-center justify-center text-center">
             <h1 class="text-3xl font-bold text-center">Seu plano atual é PRO!</h1>
-            <p class="mt-2 text-lg max-w-md text-muted-foreground">O plano PRO é o plano ideal para o seu negócio, tenha todos os recursos ilimitados e suporte total.</p>
+            <p class="mt-2 text-lg max-w-md text-muted-foreground">O plano PRO é o plano ideal para o seu negócio,
+                tenha todos os recursos ilimitados e suporte total.</p>
         </div>
         <div v-else-if="isPastDue" class="mb-8 flex flex-col items-center justify-center text-center">
             <h1 class="text-3xl font-bold text-center">Sua assinatura PRO expirou!</h1>
-            <p class="mt-2 text-lg max-w-md text-muted-foreground">Acesse o link abaixo e gerencie sua assinatura.</p>
+            <p class="mt-2 text-lg max-w-md text-muted-foreground">Com isso, seu plano fica limitado aos recursos do
+                plano grátis, acesse o link abaixo e gerencie sua assinatura para voltar a utilizar todos os recursos do
+                PRO.</p>
         </div>
         <div v-else class="mb-8 flex flex-col items-center justify-center text-center">
             <h1 class="text-3xl font-bold text-center">Escolha o plano!</h1>
-            <p class="mt-2 text-lg max-w-md text-muted-foreground">Tenha todos os recursos ilimitados e suporte total assinando o plano PRO.</p>
+            <p class="mt-2 text-lg max-w-md text-muted-foreground">Tenha todos os recursos ilimitados e suporte total
+                assinando o plano PRO.</p>
         </div>
         <div class="flex flex-col md:flex-row justify-center gap-4">
             <Card class="md:min-w-[400px]" v-if="showCardFree">
@@ -51,7 +77,8 @@ const sinatatureSubscription = async () => {
                         class="flex items-center justify-between text-2xl font-bold dark:text-gray-300 text-gray-500">
                         <div>
                             <p class="text-xl font-bold">Plano Grátis</p>
-                            <p class="text-3xl font-bold">{{ parametros.quota.free.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</p>
+                            <p class="text-3xl font-bold">{{ parametros.quota.free.price.toLocaleString('pt-BR', {
+                                style: 'currency', currency: 'BRL' }) }}</p>
                         </div>
                         <Badge variant="default" v-if="showCardFree">Atual</Badge>
                     </CardTitle>
@@ -100,9 +127,12 @@ const sinatatureSubscription = async () => {
                     <CardTitle class="flex items-center justify-between text-2xl font-bold">
                         <div>
                             <p class="text-xl font-bold">Plano Pro</p>
-                            <p class="text-3xl font-bold dark:text-blue-500 text-blue-600">{{ parametros.quota.pro.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</p>
+                            <p class="text-3xl font-bold dark:text-blue-500 text-blue-600">{{
+                                parametros.quota.pro.price.toLocaleString('pt-BR', {
+                                    style: 'currency', currency: 'BRL'
+                                }) }}</p>
                         </div>
-                        <Badge variant="default" v-if="proAccount || isPastDue">Atual</Badge>
+                        <Badge variant="default" v-if="proAccount">Atual</Badge>
                     </CardTitle>
                     <CardDescription>Recursos ilimitados para seu negócio</CardDescription>
                 </CardHeader>
@@ -147,8 +177,10 @@ const sinatatureSubscription = async () => {
                     </div>
                 </CardContent>
                 <CardFooter>
-                    <Button v-if="showCardFree" @click="sinatatureSubscription" class="w-full">Fazer upgrade para Pro ✨</Button>
-                    <Button v-else="isProAccount" @click="accessPortalCaptive" class="w-full">Gerencie sua assinatura ✨</Button>
+                    <Button v-if="showCardFree" @click="sinatatureSubscription" class="w-full">Fazer upgrade para Pro
+                        ✨</Button>
+                    <Button v-else="isProAccount" @click="accessPortalCaptive" class="w-full">Gerencie sua assinatura
+                        ✨</Button>
                 </CardFooter>
             </Card>
         </div>

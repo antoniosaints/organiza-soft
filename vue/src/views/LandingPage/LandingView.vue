@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useColorMode } from '@vueuse/core';
 import PlanosPrecosView from './PlanosPrecosView.vue';
+import PromotionalCodeView from './PromotionalCodeView.vue';
 
 useColorMode();
 // Dados dinâmicos para as seções de recursos e planos
@@ -36,6 +37,7 @@ const features = [
             </div>
         </div>
     </section>
+    <PromotionalCodeView />
     <section id="features" class="w-full py-12 md:py-24 lg:py-32">
         <div class="container px-4 md:px-6">
             <h2 class="text-3xl font-bold tracking-tight sm:text-5xl text-center mb-16 text-gray-900 dark:text-white">

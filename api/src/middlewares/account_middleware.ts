@@ -15,7 +15,7 @@ const accountMiddleware = async (req: Request, res: Response, next: any) => {
         return ResponseService.unauthorized(res, "Operação não permitida devido à conflitos de conta e sessão!");
     } 
 
-    req.body.contaSistemaId = Number(req.body.userAccountId);
+    req.body.contaSistemaId = accountUser.id;
 
     next();
 };

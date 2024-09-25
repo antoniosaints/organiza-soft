@@ -12,6 +12,7 @@ interface IUserData {
     contaId: number,
     exp: number
 }
+type TStatusAccount = "ativa" | "inativa" | "cancelada" | "vencida";
 interface IAccountData {
     id: number,
     conta: string,
@@ -19,7 +20,7 @@ interface IAccountData {
     slug: string,
     descricao: string,
     plano: "free" | "pro" | "admin",
-    status: "ativa" | "inativa",
+    status: "ativa" | "inativa" | "cancelada" | "vencida",
     stripeCustomerId: string,
     stripeSubscriptionId: string | null,
     dataCriado: string,
@@ -30,6 +31,7 @@ export const useLoginStore = defineStore("login", () => {
     const isAutenticated = ref(true);
     const isProAccount = ref(false);
     const isAdminUser = ref(false);
+    const statusAccount = ref<TStatusAccount>('inativa');
     const dataUserLogged = ref<IUserData>();
     const dataUserInfosLogged = ref<IUsuario>();
     const dataAccountLogged = ref<IAccountData>();
@@ -50,6 +52,7 @@ export const useLoginStore = defineStore("login", () => {
             const idAccount = StorageUtil.get("@gestao_inteligente:contaId");
             const { data: response } = await axiosService.get(`/contas-sistema/get-conta-sistema/${idAccount}`);
             dataAccountLogged.value = response;
+            statusAccount.value = dataAccountLogged.value?.status || "inativa";
             isProAccount.value = response.plano == "pro" ? true : false
         }catch (error: any) {
             console.log(error);
@@ -60,6 +63,7 @@ export const useLoginStore = defineStore("login", () => {
         isAutenticated,
         isProAccount,
         isAdminUser,
+        statusAccount,
         dataUserLogged,
         dataUserInfosLogged,
         dataAccountLogged,
