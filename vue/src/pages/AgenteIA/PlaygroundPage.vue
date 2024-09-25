@@ -225,7 +225,7 @@ const renderMarkdown = (content: any) => {
                             <Label for="message" class="sr-only">Message</Label>
 
                             <!-- Textarea -->
-                            <Textarea v-model="inputMessage" id="message" placeholder="Escreva sua mensagem aqui..."
+                            <Textarea @keydown.ctrl.enter="handleSendMessage" v-model="inputMessage" id="message" placeholder="Escreva sua mensagem aqui..."
                                 class="min-h-[48px] bg-white dark:bg-slate-950 resize-none border-0 p-3 shadow-none focus-visible:ring-0" />
 
                             <!-- Submit Button -->
