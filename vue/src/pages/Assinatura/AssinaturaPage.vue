@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { Check, MessageCircle, X } from "lucide-vue-next"; // Adaptado para Vue
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,6 +11,10 @@ import toastUtil from "@/utils/toastUtil";
 
 const parametros = systemParamsAccount;
 const loginStore = useLoginStore();
+const proAccount = computed(() => loginStore.isProAccount);
+const isPastDue = computed(() => loginStore.dataAccountLogged?.status === 'vencida');
+const showCardFree = computed(() => !proAccount.value && !isPastDue.value);
+console.log(proAccount.value, isPastDue.value);
 
 const accessPortalCaptive = async () => {
     if (!loginStore.dataAccountLogged?.stripeCustomerId) return toastUtil.warning("Nenhuma conta encontrada, recarregue a página", "Ops..");
@@ -27,16 +32,20 @@ const sinatatureSubscription = async () => {
 
 <template>
     <div class="container mx-auto max-w-4xl px-4 py-8">
-        <div v-if="loginStore.isProAccount" class="mb-8 flex flex-col items-center justify-center text-center">
+        <div v-if="proAccount" class="mb-8 flex flex-col items-center justify-center text-center">
             <h1 class="text-3xl font-bold text-center">Seu plano atual é PRO!</h1>
             <p class="mt-2 text-lg max-w-md text-muted-foreground">O plano PRO é o plano ideal para o seu negócio, tenha todos os recursos ilimitados e suporte total.</p>
+        </div>
+        <div v-else-if="isPastDue" class="mb-8 flex flex-col items-center justify-center text-center">
+            <h1 class="text-3xl font-bold text-center">Sua assinatura PRO expirou!</h1>
+            <p class="mt-2 text-lg max-w-md text-muted-foreground">Acesse o link abaixo e gerencie sua assinatura.</p>
         </div>
         <div v-else class="mb-8 flex flex-col items-center justify-center text-center">
             <h1 class="text-3xl font-bold text-center">Escolha o plano!</h1>
             <p class="mt-2 text-lg max-w-md text-muted-foreground">Tenha todos os recursos ilimitados e suporte total assinando o plano PRO.</p>
         </div>
         <div class="flex flex-col md:flex-row justify-center gap-4">
-            <Card class="md:min-w-[400px]" v-if="!loginStore.isProAccount">
+            <Card class="md:min-w-[400px]" v-if="showCardFree">
                 <CardHeader>
                     <CardTitle
                         class="flex items-center justify-between text-2xl font-bold dark:text-gray-300 text-gray-500">
@@ -44,7 +53,7 @@ const sinatatureSubscription = async () => {
                             <p class="text-xl font-bold">Plano Grátis</p>
                             <p class="text-3xl font-bold">{{ parametros.quota.free.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</p>
                         </div>
-                        <Badge variant="default" v-if="!loginStore.isProAccount">Atual</Badge>
+                        <Badge variant="default" v-if="showCardFree">Atual</Badge>
                     </CardTitle>
                     <CardDescription>Perfeito para começar</CardDescription>
                 </CardHeader>
@@ -93,7 +102,7 @@ const sinatatureSubscription = async () => {
                             <p class="text-xl font-bold">Plano Pro</p>
                             <p class="text-3xl font-bold dark:text-blue-500 text-blue-600">{{ parametros.quota.pro.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</p>
                         </div>
-                        <Badge variant="default" v-if="loginStore.isProAccount">Atual</Badge>
+                        <Badge variant="default" v-if="proAccount || isPastDue">Atual</Badge>
                     </CardTitle>
                     <CardDescription>Recursos ilimitados para seu negócio</CardDescription>
                 </CardHeader>
@@ -138,7 +147,7 @@ const sinatatureSubscription = async () => {
                     </div>
                 </CardContent>
                 <CardFooter>
-                    <Button v-if="!loginStore.isProAccount" @click="sinatatureSubscription" class="w-full">Fazer upgrade para Pro ✨</Button>
+                    <Button v-if="showCardFree" @click="sinatatureSubscription" class="w-full">Fazer upgrade para Pro ✨</Button>
                     <Button v-else="isProAccount" @click="accessPortalCaptive" class="w-full">Gerencie sua assinatura ✨</Button>
                 </CardFooter>
             </Card>
