@@ -8,8 +8,9 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Textarea } from '@/components/ui/textarea'
-import { nextTick, ref } from 'vue'
+import { nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { IARepository } from '@/repositories/external/IARepository'
+import { marked } from 'marked'
 
 // Definição do tipo Message
 interface IMessageIA {
@@ -19,7 +20,7 @@ interface IMessageIA {
 
 const inputMessage = ref('')
 const messages = ref<IMessageIA[]>([
-    {role: "system", content: "Você é um agente de ajuda do sistema OrganizaSoft, seja breve e claro nas respostas e responda apenas assuntos relacionados ao sistema!"}
+    {role: "system", content: "Você é um agente de ajuda do sistema OrganizaSoft, seja breve e claro nas respostas, use emojis as vezes pra deixar a resposta mais bonita!"},
 ])
 
 const scrollArea = ref<any>(null)
@@ -30,7 +31,6 @@ const scrollToBottom = () => {
     scrollArea.value.scrollTop = scrollArea.value.scrollHeight
   }
 }
-
 
 const handleSendMessage = async () => {
   if (inputMessage.value.trim() !== '') {
@@ -60,13 +60,31 @@ const handleSendMessage = async () => {
   }
 };
 
+const hiddenSidebarPlayground = ref(false)
+const widthWindow = ref(window.innerWidth);
+const handleResize = () => {
+    widthWindow.value = window.innerWidth;
+    hiddenSidebarPlayground.value = widthWindow.value < 751;
+};
+onMounted(() => {
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Para verificar o estado inicial
+});
+onUnmounted(() => {
+    window.removeEventListener('resize', handleResize);
+});
+const renderMarkdown = (content: any) => {
+  return marked(content);
+};
+
+
 </script>
 
 <template>
-    <div class="grid h-[calc(100vh - 12rem)] w-full pl-0 md:pl-[53px]">
+    <div class="grid h-[calc(100vh - 12rem)] w-full pl-0">
         <div class="flex flex-col">
-            <main class="grid flex-1 gap-4 overflow-auto p-4 md:grid-cols-2 lg:grid-cols-3">
-                <div class="relative hidden flex-col items-start gap-8 md:flex">
+            <main class="grid flex-1 gap-4 overflow-auto p-0 md:p-4 md:grid-cols-2 lg:grid-cols-3">
+                <div :class="hiddenSidebarPlayground ? 'hidden' : 'block'" class="relative flex-col items-start gap-8">
                     <form class="grid w-full items-start gap-6">
                         <fieldset class="grid gap-6 rounded-lg border p-4">
                             <legend class="-ml-1 px-1 text-sm font-medium">
@@ -176,15 +194,16 @@ const handleSendMessage = async () => {
                     </form>
                 </div>
                 <div
-                    class="relative flex h-[calc(100vh-12rem)] min-h-[50vh] flex-col rounded-xl bg-muted/50 p-4 lg:col-span-2">
+                    :class="hiddenSidebarPlayground ? 'lg:col-span-3' : 'lg:col-span-2'"
+                    class="relative flex h-[calc(100vh-12rem)] min-h-[50vh] flex-col rounded-xl bg-muted/50 p-4">
                     <!-- Badge -->
-                    <Badge variant="outline" class="absolute right-3 top-3">Saída</Badge>
+                    <Badge variant="outline" class="absolute right-3 top-3 text-secondary-foreground/40">Saída</Badge>
 
                     <!-- Scrollable Area -->
                     <div ref="scrollArea" class="flex-grow p-4 overflow-y-auto">
                         <div v-for="message in messages" :key="message.role" class="flex mb-4"
                             :class="message.role === 'user' ? 'justify-end' : (message.role === 'assistant' ? 'justify-start' : 'hidden')">
-                            <div class="flex items-end max-w-[80%]"
+                            <div class="flex items-end max-w-[100%] lg:max-w-[80%]"
                                 :class="message.role === 'user' ? 'flex-row-reverse' : 'flex-row'">
                                 <Avatar class="w-8 h-8">
                                     <AvatarImage :src="message.role === 'user' ? '/user-avatar.png' : '/OS.png'" />
@@ -192,8 +211,8 @@ const handleSendMessage = async () => {
                                 </Avatar>
                                 <div class="mx-2 py-2 px-3 rounded-2xl" :class="message.role === 'user'
                                     ? 'bg-primary text-primary-foreground rounded-br-none'
-                                    : 'bg-secondary text-secondary-foreground rounded-bl-none'">
-                                    <p class="text-sm">{{ message.content }}</p>
+                                    : 'bg-secondary text-secondary-foreground rounded-bl-none'" >
+                                    <p class="text-sm" v-html="renderMarkdown(message.content)"></p>
                                 </div>
                             </div>
                         </div>

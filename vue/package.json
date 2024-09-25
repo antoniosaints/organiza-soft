@@ -27,6 +27,7 @@
     "flowbite-vue": "^0.1.5",
     "izitoast": "^1.4.0",
     "lucide-vue-next": "^0.436.0",
+    "marked": "^14.1.2",
     "openai": "^4.60.0",
     "pinia": "^2.2.0",
     "radix-vue": "^1.9.4",

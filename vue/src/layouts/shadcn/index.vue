@@ -17,7 +17,7 @@
                         <House />
                         <span>Dashboard</span>
                     </router-link>
-                    <collapsible v-if="loginStore.isAdminUser" v-slot="{ open }" class="grid gap-2">
+                    <collapsible v-if="menuStore.permissions.admin" v-slot="{ open }" class="grid gap-2">
                         <collapsible-trigger
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <LockKeyhole />
@@ -48,13 +48,13 @@
                             </div>
                         </collapsible-content>
                     </collapsible>
-                    <collapsible v-slot="{ open }" class="grid gap-2">
+                    <collapsible v-if="menuStore.permissions.assistente" v-slot="{ open }" class="grid gap-2">
                         <collapsible-trigger
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <Cpu />
                             <span>Assistente de IA</span>
                             <div class="ml-auto flex space-x-1 items-center">
-                                <Badge v-if="true" variant="secondary"> <Waypoints class="h-4 w-4" /> </Badge>
+                                <Badge v-if="true" class="bg-transparent shadow-none hover:bg-transparent"> <Waypoints class="h-4 w-4 text-orange-300" /> </Badge>
                                 <ChevronRight class="ml-auto h-4 w-4 transition-transform"
                                     :class="{ 'rotate-90': open }" />
                             </div>
@@ -69,7 +69,7 @@
                             </div>
                         </collapsible-content>
                     </collapsible>
-                    <collapsible v-slot="{ open }" class="grid gap-2">
+                    <collapsible v-if="menuStore.permissions.crm" v-slot="{ open }" class="grid gap-2">
                         <collapsible-trigger
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <Layers />
@@ -118,7 +118,7 @@
                             </div>
                         </collapsible-content>
                     </collapsible>
-                    <collapsible v-slot="{ open }" class="grid gap-2">
+                    <collapsible v-if="menuStore.permissions.vendas" v-slot="{ open }" class="grid gap-2">
                         <collapsible-trigger
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <Tags />
@@ -149,7 +149,7 @@
                             </div>
                         </collapsible-content>
                     </collapsible>
-                    <collapsible v-slot="{ open }" class="grid gap-2">
+                    <collapsible v-if="menuStore.permissions.financeiro" v-slot="{ open }" class="grid gap-2">
                         <collapsible-trigger
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <Landmark />
@@ -208,7 +208,7 @@
                             </div>
                         </collapsible-content>
                     </collapsible>
-                    <collapsible v-slot="{ open }" class="grid gap-2">
+                    <collapsible v-if="menuStore.permissions.patrimonio" v-slot="{ open }" class="grid gap-2">
                         <collapsible-trigger
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <Package />
@@ -257,7 +257,7 @@
                             </div>
                         </collapsible-content>
                     </collapsible>
-                    <collapsible v-slot="{ open }" class="grid gap-2">
+                    <collapsible v-if="menuStore.permissions.servicos" v-slot="{ open }" class="grid gap-2">
                         <collapsible-trigger
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <FileDigit />
@@ -311,7 +311,7 @@
                             </div>
                         </collapsible-content>
                     </collapsible>
-                    <collapsible v-slot="{ open }" class="grid gap-2">
+                    <collapsible v-if="menuStore.permissions.assinantes" v-slot="{ open }" class="grid gap-2">
                         <collapsible-trigger
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <PenTool />
@@ -412,12 +412,13 @@ import { onMounted } from 'vue';
 import { onUnmounted } from 'vue';
 import { Badge } from '@/components/ui/badge';
 import { useLoginStore } from '@/stores/login/loginStore';
+import { useMenuStore } from '@/stores/menuStore';
 
 const widthWindow = ref(window.innerWidth);
 const stateDevelopment = ref('beta');
 
 const loginStore = useLoginStore();
-const permissaoUser = loginStore.dataUserInfosLogged?.regra
+const menuStore = useMenuStore();
 
 const handleResize = () => {
     widthWindow.value = window.innerWidth;
@@ -452,6 +453,7 @@ const sidebarClasses = computed(() => {
     return `fixed inset-y-0 left-0 z-20 flex w-64 flex-col border-r border-border bg-background
       transition-all duration-300 ${isSidebarOpen.value ? 'translate-x-0' : '-translate-x-full'}`;
 });
+
 </script>
 
 <style scoped>

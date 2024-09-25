@@ -1,16 +1,13 @@
 import fs from "fs";
 import { OpenAIService } from "@/services/external/openai";
+import { IMessageIA } from "@/types/external/IMessageIA";
 
-interface IMessageIA {
-  role: "user" | "assistant" | "system";
-  content: string;
-}
 export class IARepository {
   static Conversations: IMessageIA[] = [
     {
       role: "system",
       content:
-        "Meu nome é Saints, sou um assistente de sistema para ajudar pessoas a organizar e melhorar a experiencia e dar dicas finaceiras e estatísticas.",
+        "Meu nome é Saints, sou um assistente de sistema para ajudar pessoas a organizar e melhorar a experiencia e dar dicas finaceiras e estatísticas.Responsa as mensagens usando HTML, pois preciso da resposta nesse formato, assim, pode usar <ul> para listas, <h1> para titulos e etc",
     },
   ];
   static async getIAResponse(conversation: IMessageIA[]): Promise<any> {
@@ -37,7 +34,7 @@ export class IARepository {
     }
 
     (async () => {
-      for await (const chunk of stream2) {
+      for await (const _ of stream2) {
         continue;
       }
     })();

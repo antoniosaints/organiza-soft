@@ -1,17 +1,9 @@
 import { UsuariosRepository } from "@/repositories/usuarios/usuariosRepository";
 import IUsuario from "@/types/usuarios/IUsuario";
+import { IUsuarioStore } from "@/types/usuarios/IUsuarioStore";
 import toastUtil from "@/utils/toastUtil";
 import { defineStore } from "pinia";
-import { Ref, ref } from "vue";
-
-interface IUsuarioStore {
-    getUsuarios(): Promise<void>;
-    usuarios: Ref<IUsuario[]>;
-    limit: Ref<string>;
-    page: Ref<number>;
-    total: Ref<number>;
-    search: Ref<string>;
-}
+import { ref } from "vue";
 
 export const useUsuarioStore = defineStore("usuarioStore", (): IUsuarioStore => {
     const usuarios = ref<IUsuario[]>([]);

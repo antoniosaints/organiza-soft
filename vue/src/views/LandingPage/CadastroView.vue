@@ -136,7 +136,7 @@ const prevStep = () => {
         </CardContent>
         <CardFooter class="flex justify-between">
             <RouterLink to="/site" class="mr-auto bg-transparent">
-                <Button variant="outline" class="mr-auto">
+                <Button variant="outline" class="mr-auto text-secondary-foreground">
                     Voltar ao site
                 </Button>
             </RouterLink>
