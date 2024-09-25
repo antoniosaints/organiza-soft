@@ -1,31 +1,12 @@
 import axiosService from "@/services/http/axiosService";
+import { IAccountData } from "@/types/contas/IAccountData";
+import { IUserData } from "@/types/usuarios/IUserdata";
 import IUsuario from "@/types/usuarios/IUsuario";
 import StorageUtil from "@/utils/storageUtil";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-interface IUserData {
-    userId: number,
-    name: string,
-    grupoId: number,
-    iat: number,
-    contaId: number,
-    exp: number
-}
 type TStatusAccount = "ativa" | "inativa" | "cancelada" | "vencida";
-interface IAccountData {
-    id: number,
-    conta: string,
-    email: string,
-    slug: string,
-    descricao: string,
-    plano: "free" | "pro" | "admin",
-    status: "ativa" | "inativa" | "cancelada" | "vencida",
-    stripeCustomerId: string,
-    stripeSubscriptionId: string | null,
-    dataCriado: string,
-    dataAtualizada: string
-}
 
 export const useLoginStore = defineStore("login", () => {
     const isAutenticated = ref(true);

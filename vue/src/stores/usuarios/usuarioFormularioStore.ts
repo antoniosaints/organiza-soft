@@ -1,13 +1,7 @@
 import IUsuario from "@/types/usuarios/IUsuario";
+import { IUsuarioFormularioStore } from "@/types/usuarios/IUsuarioFormularioStore";
 import { defineStore } from "pinia";
-import { Ref, ref } from "vue";
-
-interface IUsuarioFormularioStore {
-    data_default: Ref<IUsuario>
-    data: Ref<IUsuario>
-    ref_id: Ref<number|null>
-    modalState: Ref<boolean>
-}
+import { ref } from "vue";
 
 export const useUsuarioFormularioStore = defineStore("usuarioFormularioStore", () : IUsuarioFormularioStore => {
     const data_default = ref<IUsuario>({
