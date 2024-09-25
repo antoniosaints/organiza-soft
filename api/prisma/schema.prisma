@@ -247,6 +247,7 @@ model ContasSistema {
 
 enum ContasSistemaStatus {
   ativa
+  vencida
   inativa
 }
 

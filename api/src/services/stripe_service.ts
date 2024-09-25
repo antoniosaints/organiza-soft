@@ -13,13 +13,25 @@ export class StripeService {
           await prismaService.contasSistema.update({ where:{id: conta.id}, 
             data:{
               plano: "pro",
+              status: "ativa",
               stripeSubscriptionId: this.subscription.id
             }
           })
-        }else {
+        }
+        else if (this.isPastDue()){
           await prismaService.contasSistema.update({ where:{id: conta.id}, 
             data:{
               plano: "free",
+              status: "vencida",
+              stripeSubscriptionId: this.subscription.id
+            }
+          })
+        }
+        else {
+          await prismaService.contasSistema.update({ where:{id: conta.id}, 
+            data:{
+              plano: "free",
+              status: "inativa",
               stripeSubscriptionId: type == "customer.subscription.deleted" ? null : this.subscription.id
             }
           })
@@ -32,6 +44,11 @@ export class StripeService {
   isActive(): boolean {
     return (
       this.subscription.status === "active"
+    );
+  }
+  isPastDue(): boolean {
+    return (
+      this.subscription.status === "past_due"
     );
   }
   isCanceled(): boolean {
