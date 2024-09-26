@@ -1,5 +1,5 @@
 <template>
-    <Dialog v-model:open="UsuarioFormularioState.modalState">
+    <Dialog v-model:open="UsuarioFormularioState.isModalOpen">
         <DialogTrigger as-child>
             <Button @click="defineSaveForm" size="sm" class="bg-primary hover:bg-primary/90"><UserPlus class="mr-1 h-4 w-4" /> Cadastrar Usuário</Button>
         </DialogTrigger>
@@ -23,8 +23,8 @@ import { useUsuarioFormularioStore } from "@/stores/usuarios/usuarioFormularioSt
 const UsuarioFormularioState = useUsuarioFormularioStore();
 
 const defineSaveForm = () => {
-    UsuarioFormularioState.ref_id = null
-    UsuarioFormularioState.data = UsuarioFormularioState.data_default
+    UsuarioFormularioState.userId = null
+    UsuarioFormularioState.resetData();
 }
 
 </script>

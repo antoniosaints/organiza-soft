@@ -69,7 +69,7 @@ export const updateUsuario = async (req: Request, res: Response) => {
     const usuarioToUpdate = await prismaService.usuario.findUnique({ where: { id: Number(id), contaSistemaId: req.body.contaSistemaId } });
     if (!usuarioToUpdate) throw new ValidationError("Usuário não encontrado!");
     const validated = validateSchema(updateUser, req.body);
-    if (usuarioToUpdate.regra === "socio" || usuarioToUpdate.regra === "proprietario") {
+    if (["socio", "proprietario"].includes(usuarioToUpdate.regra)) {
       validated.regra = usuarioToUpdate.regra;
       validated.status = "ativo";
     }
@@ -89,6 +89,10 @@ export const updateUsuario = async (req: Request, res: Response) => {
 export const deleteUsuario = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
+    if (!id) throw new ValidationError("ID obrigatorio");
+    const usuarioDelete = await prismaService.usuario.findUnique({ where: { id: Number(id), contaSistemaId: req.body.contaSistemaId } });
+    const canDelete = ["socio", "proprietario"].includes(usuarioDelete?.regra as string);
+    if (canDelete) throw new ValidationError("Esse usuário não pode ser excluído pois ele é um proprietário ou socio!");
     await prismaService.usuario.delete({ where: { id: Number(id), contaSistemaId: req.body.contaSistemaId } });
     ResponseService.success(res, { message: "Usuario excluido com sucesso" });
   } catch (error: any) {

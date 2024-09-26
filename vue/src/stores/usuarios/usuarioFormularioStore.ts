@@ -3,8 +3,8 @@ import { IUsuarioFormularioStore } from "@/types/usuarios/IUsuarioFormularioStor
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-export const useUsuarioFormularioStore = defineStore("usuarioFormularioStore", () : IUsuarioFormularioStore => {
-    const data_default = ref<IUsuario>({
+export const useUsuarioFormularioStore = defineStore("usuarioFormularioStore", (): IUsuarioFormularioStore => {
+    const defaultData = ref<IUsuario>({
         nome: "",
         email: "",
         grupoId: 1,
@@ -12,19 +12,21 @@ export const useUsuarioFormularioStore = defineStore("usuarioFormularioStore", (
         regra: "gerente",
         senha: "",
         status: "ativo",
-    })
-
-    const data = ref<IUsuario>({
-        ...data_default.value
     });
 
-    const ref_id = ref<number|null>(null);
-    const modalState = ref(false);
+    const data = ref<IUsuario>({ ...defaultData.value });
+    const userId = ref<number | null>(null);
+    const isModalOpen = ref(false);
+
+    const resetData = () => {
+        data.value = { ...defaultData.value };
+    };
 
     return {
         data,
-        data_default,
-        ref_id,
-        modalState
+        defaultData,
+        userId,
+        isModalOpen,
+        resetData
     };
-})
+});
