@@ -1,6 +1,6 @@
-import { IMessageIA } from "@/types/external/IMessageIA";
 import {
   ChatCompletionMessage,
+  ChatCompletionMessageParam,
   ChatCompletionTool,
 } from "openai/resources/index.mjs";
 
@@ -36,7 +36,7 @@ export const saveVendaIntoDatabaseTool: ChatCompletionTool = {
   },
 };
 
-export const saveVendaIntoDatabase = async (response: ChatCompletionMessage): Promise<IMessageIA> => {
+export const saveVendaIntoDatabase = async (response: ChatCompletionMessage): Promise<ChatCompletionMessageParam> => {
   try {
     if (response.tool_calls) {
         const function_arguments = JSON.parse(response.tool_calls[0].function.arguments);

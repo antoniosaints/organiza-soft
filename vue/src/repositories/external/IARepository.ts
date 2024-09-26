@@ -1,11 +1,11 @@
 import fs from "fs";
 import { OpenAIService } from "@/services/external/openai";
-import { IMessageIA } from "@/types/external/IMessageIA";
 import { getToolsIA } from "./openai/functions/registerToolsIA";
 import { registerFunctionsIA } from "./openai/functions/registerFunctionsIA";
+import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 
 export class IARepository {
-  static async getIAResponse(conversation: IMessageIA[]): Promise<any> {
+  static async getIAResponse(conversation: ChatCompletionMessageParam[]): Promise<ChatCompletionMessageParam> {
 
     const response = await OpenAIService.chat.completions.create({
       model: "gpt-4o-mini",
@@ -21,7 +21,7 @@ export class IARepository {
     return response.choices[0].message;
   }
 
-  static async getIAResponseStream(conversation: IMessageIA[]): Promise<any> {
+  static async getIAResponseStream(conversation: ChatCompletionMessageParam[]): Promise<any> {
     const response = await OpenAIService.chat.completions.create({
       model: "gpt-4o-mini",
       messages: conversation,
