@@ -27,7 +27,6 @@ const scrollArea = ref<any>(null)
 
 const scrollToBottom = () => {
   if (scrollArea.value) {
-    console.log(scrollArea.value)
     scrollArea.value.scrollTop = scrollArea.value.scrollHeight
   }
 }
