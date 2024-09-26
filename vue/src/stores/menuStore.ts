@@ -2,13 +2,13 @@ import { defineStore } from "pinia";
 import { reactive } from "vue";
 import { useLoginStore } from "./login/loginStore";
 import { IMenuStore } from "@/types/interface/IMenuStore";
-const loginStore = useLoginStore();
 
 export const useMenuStore = defineStore("menuStore", () => {
+    const loginStore = useLoginStore();
     const permissions = reactive<IMenuStore>({
-        admin: loginStore.isAdminUser,
-        assistente: loginStore.isProAccount,
-        crm: (loginStore.dataUserInfosLogged?.regra !== "visualizador" ),
+        admin: false,
+        assistente: false,
+        crm: true,
         vendas: true,
         financeiro: true,
         patrimonio: true,
@@ -16,5 +16,16 @@ export const useMenuStore = defineStore("menuStore", () => {
         assinantes: true
     });
 
-    return { permissions };
+    const setConfigs = () => {
+        permissions.admin = loginStore.isAdminUser,
+        permissions.assistente = loginStore.isProAccount,
+        permissions.crm = (loginStore.dataUserInfosLogged?.regra !== "visualizador" ),
+        permissions.vendas= true,
+        permissions.financeiro= true,
+        permissions.patrimonio= true,
+        permissions.servicos= true,
+        permissions.assinantes=true
+    }
+
+    return { permissions, setConfigs };
 });

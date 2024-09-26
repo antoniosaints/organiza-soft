@@ -1,25 +1,31 @@
-import toastUtil from "@/utils/toastUtil";
 import axiosService from "../http/axiosService";
+import { ScToastUtil } from "@/utils/scToastUtil";
 
 export const createCheckoutSession = async (customerId: string) => {
     try {
+        if (!customerId) {
+            ScToastUtil.error("Erro ao criar checkout de assinatura");
+        }
         const session = await axiosService.post("stripe/create-checkout-session", {
             customerId
         });
         return session
     } catch (error) {
         console.log(error)
-        toastUtil.error("Erro ao criar checkout de assinatura", "Ops..");
+        ScToastUtil.error("Erro ao criar checkout de assinatura");
     }
 };
 export const createPortalCaptive = async (customerId: string) => {
     try {
+        if (!customerId) {
+            ScToastUtil.error("Erro ao criar o portal do assinante");
+        }
         const session: any = await axiosService.post("stripe/create-customer-portal", {
             customerId
         });
         return session
     } catch (error) {
         console.log(error)
-        toastUtil.error("Erro ao criar o portal do assinante", "Ops..");
+        ScToastUtil.error("Erro ao criar o portal do assinante");
     }
 };

@@ -1,7 +1,7 @@
 import { UsuariosRepository } from "@/repositories/usuarios/usuariosRepository";
 import IUsuario from "@/types/usuarios/IUsuario";
 import { IUsuarioStore } from "@/types/usuarios/IUsuarioStore";
-import toastUtil from "@/utils/toastUtil";
+import { ScToastUtil } from "@/utils/scToastUtil";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
@@ -19,7 +19,7 @@ export const useUsuarioStore = defineStore("usuarioStore", (): IUsuarioStore => 
             total.value = totalUsuarios;
         } catch (error: any) {
             const errorMessage = error?.response?.data?.message || "Erro desconhecido.";
-            toastUtil.error(errorMessage, "Ops..");
+            ScToastUtil.error(errorMessage);
         }
     };
 

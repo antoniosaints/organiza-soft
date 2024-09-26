@@ -4,20 +4,19 @@ import './assets/index.css';
 import App from './App.vue';
 import { Router } from './routes/Router';
 import { createPinia } from 'pinia';
-import { LoginService } from './services/login/loginService';
 import IconsUtil from './utils/iconsUtil';
 
 import pt from './locales/pt';
 import en from './locales/en';
-
+import { useMainStore } from './stores/mainStore';
 
 const pinia = createPinia();
 const app = createApp(App);
-
 app.use(pinia);
 
+const bootstrap = useMainStore();
 (async () => {
-    await LoginService.verify();
+    await bootstrap.init();
 })();
 
 const i18n = createI18n({

@@ -1,14 +1,12 @@
+import { LoginService } from "@/services/login/loginService";
 import { defineStore } from "pinia";
-import { ref } from "vue";
-import StorageUtil from "../utils/storageUtil";
+import { useMenuStore } from "./menuStore";
 
 export const useMainStore = defineStore("mainStore", () => {
-    const darkMode = ref(JSON.parse(StorageUtil.get("@gestao_inteligente:darkMode")) || false);
-
-    const toggleDarkMode = () => {
-        darkMode.value = !darkMode.value;
-        StorageUtil.set("@gestao_inteligente:darkMode", darkMode.value);
-    }
-
-    return { darkMode, toggleDarkMode };
+    const menuStore = useMenuStore();
+    const init = async () => {
+        await LoginService.verify();
+        menuStore.setConfigs();
+    };
+    return { init };
 });
