@@ -1,3 +1,4 @@
+import { ContasRepository } from "@/repositories/contas/contasRepository";
 import axiosService from "@/services/http/axiosService";
 import { IAccountData } from "@/types/contas/IAccountData";
 import { IUserData } from "@/types/usuarios/IUserdata";
@@ -38,12 +39,10 @@ export const useLoginStore = defineStore("login", () => {
     try {
       const idAccount = StorageUtil.get("@gestao_inteligente:contaId");
       if (!idAccount) throw new Error("Account ID not found");
-      const { data: response } = await axiosService.get(
-        `/contas-sistema/get-conta-sistema/${idAccount}`
-      );
-      dataAccountLogged.value = response;
+      const data = await ContasRepository.get(Number(idAccount));
+      dataAccountLogged.value = data;
       statusAccount.value = dataAccountLogged.value?.status || "inativa";
-      isProAccount.value = response.plano == "pro";
+      isProAccount.value = data.plano == "pro";
     } catch (error: any) {
       console.log(error);
     }

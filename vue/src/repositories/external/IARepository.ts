@@ -1,56 +1,21 @@
 import fs from "fs";
 import { OpenAIService } from "@/services/external/openai";
 import { IMessageIA } from "@/types/external/IMessageIA";
+import { getToolsIA } from "./openai/functions/registerToolsIA";
+import { registerFunctionsIA } from "./openai/functions/registerFunctionsIA";
 
 export class IARepository {
-  static Conversations: IMessageIA[] = [
-    {
-      role: "system",
-      content:
-        "Meu nome é Saints, sou um assistente de sistema para ajudar pessoas a organizar e melhorar a experiencia e dar dicas finaceiras e estatísticas.Responsa as mensagens usando HTML, pois preciso da resposta nesse formato, assim, pode usar <ul> para listas, <h1> para titulos e etc",
-    },
-  ];
   static async getIAResponse(conversation: IMessageIA[]): Promise<any> {
-    const get_delivery_date = (order_id: string) => {
-      alert(`Você esta tentando acessar informaçõe sobre o pedido ${order_id}`);
-    }
+
     const response = await OpenAIService.chat.completions.create({
       model: "gpt-4o-mini",
       messages: conversation,
-      tools: [
-        {
-          type: "function",
-          function: {
-            name: "get_delivery_date",
-            description:
-              "Get the delivery date for a customer's order. Call this whenever you need to know the delivery date, for example when a customer asks 'Where is my package'",
-            parameters: {
-              type: "object",
-              properties: {
-                order_id: {
-                  type: "string",
-                  description: "The customer's order ID.",
-                },
-              },
-              required: ["order_id"],
-              additionalProperties: false,
-            },
-          },
-        },
-      ],
+      tools: getToolsIA()
     });
     
     if (response.choices[0].message.tool_calls) {
-      const function_name = response.choices[0].message.tool_calls[0].function.name;
-      const function_arguments = JSON.parse(response.choices[0].message.tool_calls[0].function.arguments);
-      if (function_name == "get_delivery_date") {
-        get_delivery_date(function_arguments.order_id);
-      }
-
-      return {
-        role: "assistant",
-        content: `O seu pedido é ${function_arguments.order_id}`,
-      }
+      const res = await registerFunctionsIA(response.choices[0].message);
+      if (res) return res;
     }
 
     return response.choices[0].message;
