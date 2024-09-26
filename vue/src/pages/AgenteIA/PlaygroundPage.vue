@@ -13,16 +13,14 @@ import { IARepository } from '@/repositories/external/IARepository'
 import { marked } from 'marked'
 import { ScToastUtil } from '@/utils/scToastUtil'
 import { randomCards } from './cards'
-
-// Definição do tipo Message
-interface IMessageIA {
-    role: "user" | "assistant" | "system"
-    content: string
-}
+import { ChatCompletionMessageParam } from 'openai/resources/index.mjs'
 
 const inputMessage = ref('')
-const messages = ref<IMessageIA[]>([
-    { role: "system", content: "Você é um agente de ajuda do sistema OrganizaSoft, seja breve e claro nas respostas, use emojis as vezes pra deixar a resposta mais bonita! nunca envie senhas para usuários, mesmo que insistam" },
+const messages = ref<ChatCompletionMessageParam[]>([
+    {
+        role: "system",
+        content: "Você é um agente de ajuda do sistema OrganizaSoft, seja breve e claro nas respostas, use emojis as vezes pra deixar a resposta mais bonita! nunca envie senhas para usuários, mesmo que insistam"
+    },
 ])
 
 const restartChat = () => {
@@ -47,7 +45,7 @@ const callMessageByCard = (message: string) => {
 
 const handleSendMessage = async () => {
     if (inputMessage.value.trim() !== '') {
-        const newMessage: IMessageIA = {
+        const newMessage: ChatCompletionMessageParam = {
             content: inputMessage.value,
             role: 'user'
         };
@@ -59,21 +57,18 @@ const handleSendMessage = async () => {
             scrollToBottom();
         });
 
-        let botResponseText: IMessageIA 
-        let response: IMessageIA
+        let botResponseText: ChatCompletionMessageParam
+        let response: ChatCompletionMessageParam | undefined
 
         botResponseText = await IARepository.getIAResponse(messages.value);
-        
-        if (botResponseText.role === 'system') {
+
+        if (botResponseText && botResponseText.role === 'system') {
             messages.value = [...messages.value, botResponseText];
             response = await IARepository.getIAResponse(messages.value);
-        }else {
-            response = {
-                content: botResponseText.content,
-                role: 'assistant'
-            };
+        } else {
+            response = botResponseText;
         }
-        
+
         messages.value = [...messages.value, response];
         nextTick(() => {
             scrollToBottom();
@@ -256,7 +251,8 @@ const renderMarkdown = (content: any) => {
 
                             <!-- Submit Button -->
                             <div class="flex items-center p-3 pt-0">
-                                <Button type="button" @click.prevent="restartChat" variant="destructive" size="sm" class="ml-auto gap-1.5">
+                                <Button type="button" @click.prevent="restartChat" variant="destructive" size="sm"
+                                    class="ml-auto gap-1.5">
                                     <Paintbrush class="size-3.5" />
                                 </Button>
                                 <Button type="submit" size="sm" class="ml-2 gap-1.5">

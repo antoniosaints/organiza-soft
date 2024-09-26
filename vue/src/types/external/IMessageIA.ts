@@ -1,4 +1,4 @@
 export interface IMessageIA {
-  role: "user" | "assistant" | "system";
+  role: "user" | "assistant" | "system" | "tool";
   content: string;
 }

@@ -1,7 +1,7 @@
 import { UsuariosRepository } from "@/repositories/usuarios/usuariosRepository";
-import { IMessageIA } from "@/types/external/IMessageIA";
 import {
   ChatCompletionMessage,
+  ChatCompletionMessageParam,
   ChatCompletionTool,
 } from "openai/resources/index.mjs";
 
@@ -25,7 +25,7 @@ export const getUserByIDTool: ChatCompletionTool = {
   },
 };
 
-export const getUserByID = async (response: ChatCompletionMessage): Promise<IMessageIA> => {
+export const getUserByID = async (response: ChatCompletionMessage): Promise<ChatCompletionMessageParam> => {
   try {
     if (response.tool_calls) {
         const function_arguments = JSON.parse(response.tool_calls[0].function.arguments);

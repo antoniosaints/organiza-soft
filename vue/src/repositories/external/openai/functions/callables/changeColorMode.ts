@@ -1,7 +1,7 @@
-import { IMessageIA } from "@/types/external/IMessageIA";
 import { useColorMode } from "@vueuse/core";
 import {
   ChatCompletionMessage,
+  ChatCompletionMessageParam,
   ChatCompletionTool,
 } from "openai/resources/index.mjs";
 
@@ -25,7 +25,7 @@ export const changeColorModeTool: ChatCompletionTool = {
   },
 };
 
-export const changeColorMode = async (response: ChatCompletionMessage): Promise<IMessageIA> => {
+export const changeColorMode = async (response: ChatCompletionMessage): Promise<ChatCompletionMessageParam> => {
   try {
     if (response.tool_calls) {
       const colormode = useColorMode();
