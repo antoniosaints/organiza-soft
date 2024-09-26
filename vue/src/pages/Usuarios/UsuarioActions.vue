@@ -52,7 +52,6 @@ import { UsuariosRepository } from "@/repositories/usuarios/usuariosRepository";
 import { useUsuarioFormularioStore } from "@/stores/usuarios/usuarioFormularioStore";
 import { useUsuarioStore } from "@/stores/usuarios/usuarioStore";
 import { ScToastUtil } from '@/utils/scToastUtil';
-import toastUtil from "@/utils/toastUtil";
 import { Ellipsis, Pencil, Trash2 } from "lucide-vue-next";
 import { ref } from "vue";
 const UsuarioFormularioState = useUsuarioFormularioStore();
@@ -66,7 +65,7 @@ defineProps<{
 
 const onDeletarUsuario = async (id: number) => {
     if (id === 1) {
-        toastUtil.warning("O usuário master não pode ser excluído.", "Ops..");
+        ScToastUtil.warning("O usuário master não pode ser excluído.");
         return;
     }
     try {
@@ -80,8 +79,8 @@ const onDeletarUsuario = async (id: number) => {
 }
 
 const onEditarUsuario = async (id: number) => {
-    UsuarioFormularioState.ref_id = id;
+    UsuarioFormularioState.userId = id;
     UsuarioFormularioState.data = await UsuariosRepository.get(id);
-    UsuarioFormularioState.modalState = true;
+    UsuarioFormularioState.isModalOpen = true;
 }
 </script>

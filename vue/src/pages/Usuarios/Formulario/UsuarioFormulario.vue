@@ -49,7 +49,7 @@
             <Input id="phone" placeholder="(00) 00000-0000" type="text" v-model="UsuarioFormularioStore.data.telefone" />
         </div>
         <div class="flex justify-end space-x-2">
-            <Button type="submit"><CircleCheck class="w-4 h-4 mr-2" /> {{ UsuarioFormularioStore.ref_id == null ? 'Salvar' : 'Atualizar' }}</Button>
+            <Button type="submit"><CircleCheck class="w-4 h-4 mr-2" /> {{ UsuarioFormularioStore.userId == null ? 'Salvar' : 'Atualizar' }}</Button>
         </div>
     </form>
 </template>
@@ -73,14 +73,14 @@ const isGestorSistema = computed(() => {
 })
 const handleSubmit = async (): Promise<void> => {
     try {
-        if (UsuarioFormularioStore.ref_id == null) {
+        if (UsuarioFormularioStore.userId == null) {
             await UsuariosRepository.create(UsuarioFormularioStore.data);
             ScToastUtil.success("Usuário criado com sucesso!");
         }else {
-            await UsuariosRepository.update(UsuarioFormularioStore.ref_id, UsuarioFormularioStore.data);
+            await UsuariosRepository.update(UsuarioFormularioStore.userId, UsuarioFormularioStore.data);
             ScToastUtil.success("Usuário atualizado com sucesso!");
         }
-        UsuarioFormularioStore.modalState = false;
+        UsuarioFormularioStore.isModalOpen = false;
         UsuarioStore.getUsuarios();
     }catch (error: any) {
         ScToastUtil.warning(error.response.data.message);
