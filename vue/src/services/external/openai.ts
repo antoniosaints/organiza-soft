@@ -1,10 +1,10 @@
-import toastUtil from "@/utils/toastUtil";
+import { ScToastUtil } from "@/utils/scToastUtil";
 import OpenAI from "openai";
 
 const APITOKEN = import.meta.env.VITE_OPENAI_API_KEY
 
 if (!APITOKEN) {
-    toastUtil.error("VITE_OPENAI_API_KEY não informada nas variáveis de ambiente", "Ops..");
+    ScToastUtil.error("VITE_OPENAI_API_KEY não informada nas variáveis de ambiente");
 }
 
 const OpenAIService = new OpenAI({

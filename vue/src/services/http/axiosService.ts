@@ -1,11 +1,11 @@
 import axios from "axios";
 import StorageUtil from "@/utils/storageUtil";
-import toastUtil from "@/utils/toastUtil";
+import { ScToastUtil } from "@/utils/scToastUtil";
 
 const BASEURL = import.meta.env.VITE_BASE_URL_BACKEND
 
 if (!BASEURL) {
-    toastUtil.error("VITE_BASE_URL_BACKEND não informada nas variáveis de ambiente", "Ops..");
+    ScToastUtil.error("VITE_BASE_URL_BACKEND não informada nas variáveis de ambiente");
 }
 
 const axiosService = axios.create({
