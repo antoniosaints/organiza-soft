@@ -8,26 +8,26 @@ datasource db {
 }
 
 model Usuario {
-  id             Int           @id @default(autoincrement())
-  contaSistemaId Int           @default(1)
-  ContaSistema   ContasSistema @relation(fields: [contaSistemaId], references: [id])
-  nome           String        @db.VarChar(100)
-  email          String        @db.VarChar(100)
-  senha          String        @db.VarChar(255)
+  id             Int                @id @default(autoincrement())
+  contaSistemaId Int                @default(1)
+  ContaSistema   ContasSistema      @relation(fields: [contaSistemaId], references: [id])
+  nome           String             @db.VarChar(100)
+  email          String             @db.VarChar(100)
+  senha          String             @db.VarChar(255)
   regra          Permissao
-  anotacoes      String?       @db.Text
-  telefone       String?       @db.VarChar(20)
-  status         StatusUsuario @default(ativo)
-  dataCriacao    DateTime      @default(now())
+  anotacoes      String?            @db.Text
+  telefone       String?            @db.VarChar(20)
+  status         StatusUsuario      @default(ativo)
+  dataCriacao    DateTime           @default(now())
   grupoId        Int
-  Contas         Contas[]
-  Grupos         Grupos        @relation(fields: [grupoId], references: [id])
+  Contas         FinanceiroContas[]
+  Grupos         PermissoesGrupos   @relation(fields: [grupoId], references: [id])
 
-  @@index([grupoId], map: "Usuario_grupoId_fkey")
   @@unique([email, contaSistemaId])
+  @@index([grupoId], map: "Usuario_grupoId_fkey")
 }
 
-model Grupos {
+model PermissoesGrupos {
   id         Int                  @id @default(autoincrement())
   grupo      String               @db.VarChar(100)
   createdAt  DateTime             @default(now())
@@ -38,10 +38,10 @@ model Grupos {
 
 model PermissoesOnGrupos {
   grupoId       Int
-  createdAt     DateTime   @default(now())
+  createdAt     DateTime         @default(now())
   permissaoSlug String
-  Grupo         Grupos     @relation(fields: [grupoId], references: [id])
-  Permissao     Permissoes @relation(fields: [permissaoSlug], references: [slug])
+  Grupo         PermissoesGrupos @relation(fields: [grupoId], references: [id])
+  Permissao     Permissoes       @relation(fields: [permissaoSlug], references: [slug])
 
   @@id([permissaoSlug, grupoId])
   @@index([grupoId], map: "PermissoesOnGrupos_grupoId_fkey")
@@ -58,21 +58,41 @@ model Permissoes {
 }
 
 model Cliente {
-  id             Int           @id @default(autoincrement())
-  contaSistemaId Int           @default(1)
-  ContaSistema   ContasSistema @relation(fields: [contaSistemaId], references: [id])
-  nome           String        @db.VarChar(100)
-  email          String        @unique @db.VarChar(100)
-  telefone       String?       @db.VarChar(20)
-  endereco       String?       @db.Text
-  dataCriacao    DateTime      @default(now())
-  status         StatusUsuario @default(ativo)
+  id             Int                   @id @default(autoincrement())
+  contaSistemaId Int                   @default(1)
+  ContaSistema   ContasSistema         @relation(fields: [contaSistemaId], references: [id])
+  nome           String                @db.VarChar(100)
+  email          String                @unique @db.VarChar(100)
+  telefone       String?               @db.VarChar(20)
+  endereco       String?               @db.Text
+  dataCriacao    DateTime              @default(now())
+  status         StatusUsuario         @default(ativo)
   dataBloqueio   DateTime?
   Assinatura     Assinatura[]
-  Transacao      Transacao[]
+  Transacao      FinanceiroTransacao[]
 }
 
-model Plano {
+model Assinatura {
+  id              Int                  @id @default(autoincrement())
+  contaSistemaId  Int
+  ContaSistema    ContasSistema        @relation(fields: [contaSistemaId], references: [id])
+  clienteId       Int
+  planoId         Int
+  dataInicio      DateTime
+  dataFim         DateTime
+  status          Status               @default(ativa)
+  dataBloqueio    DateTime?
+  dataCriacao     DateTime             @default(now())
+  dataDesbloqueio DateTime
+  Cliente         Cliente              @relation(fields: [clienteId], references: [id])
+  Plano           AssinaturaPlano      @relation(fields: [planoId], references: [id])
+  Bloqueio        AssinaturaBloqueio[]
+
+  @@index([clienteId], map: "Assinatura_clienteId_fkey")
+  @@index([planoId], map: "Assinatura_planoId_fkey")
+}
+
+model AssinaturaPlano {
   id              Int           @id @default(autoincrement())
   contaSistemaId  Int
   ContaSistema    ContasSistema @relation(fields: [contaSistemaId], references: [id])
@@ -85,128 +105,7 @@ model Plano {
   Assinatura      Assinatura[]
 }
 
-model Assinatura {
-  id              Int           @id @default(autoincrement())
-  contaSistemaId  Int
-  ContaSistema    ContasSistema @relation(fields: [contaSistemaId], references: [id])
-  clienteId       Int
-  planoId         Int
-  dataInicio      DateTime
-  dataFim         DateTime
-  status          Status        @default(ativa)
-  dataBloqueio    DateTime?
-  dataCriacao     DateTime      @default(now())
-  dataDesbloqueio DateTime
-  Cliente         Cliente       @relation(fields: [clienteId], references: [id])
-  Plano           Plano         @relation(fields: [planoId], references: [id])
-  Bloqueio        Bloqueio[]
-
-  @@index([clienteId], map: "Assinatura_clienteId_fkey")
-  @@index([planoId], map: "Assinatura_planoId_fkey")
-}
-
-model Transacao {
-  id               Int               @id @default(autoincrement())
-  contaSistemaId   Int               @default(1)
-  ContaSistema     ContasSistema     @relation(fields: [contaSistemaId], references: [id])
-  clienteId        Int
-  valor            Float             @default(0)
-  descricao        String?           @db.Text
-  categoriasId     Int
-  contaId          Int
-  dataEfetivado    DateTime?
-  dataLancamento   DateTime          @default(now())
-  desconto         Float?            @default(0)
-  formaPagamentoId Int
-  natureza         NaturezaTransacao
-  operacao         TipoOperacao
-  parcelado        Parcelado         @default(nao)
-  parcelamentoId   Int?              @default(0)
-  planoId          Int?
-  servicoId        Int?
-  status           StatusTransacao   @default(pendente)
-  valorFinal       Float             @default(0)
-  Parcelamento     Parcelamento[]
-  Categoria        Categorias        @relation(fields: [categoriasId], references: [id])
-  Cliente          Cliente           @relation(fields: [clienteId], references: [id])
-  Conta            Contas            @relation(fields: [contaId], references: [id])
-  FormaPagamento   FormasPagamento   @relation(fields: [formaPagamentoId], references: [id])
-
-  @@index([categoriasId], map: "Transacao_categoriasId_fkey")
-  @@index([clienteId], map: "Transacao_clienteId_fkey")
-  @@index([contaId], map: "Transacao_contaId_fkey")
-  @@index([formaPagamentoId], map: "Transacao_formaPagamentoId_fkey")
-}
-
-model Parcelas {
-  id             Int             @id @default(autoincrement())
-  contaSistemaId Int             @default(1)
-  ContaSistema   ContasSistema   @relation(fields: [contaSistemaId], references: [id])
-  nome           String
-  quantidade     Int             @default(1)
-  periodo        PeriodoParcelas
-}
-
-model Configuracoes {
-  id             Int           @id @default(autoincrement())
-  contaSistemaId Int
-  ContaSistema   ContasSistema @relation(fields: [contaSistemaId], references: [id])
-  chave          String
-  valor          String
-  dataCriacao    DateTime      @default(now())
-}
-
-model Parcelamento {
-  id              Int             @id @default(autoincrement())
-  contaSistemaId  Int
-  ContaSistema    ContasSistema   @relation(fields: [contaSistemaId], references: [id])
-  transacaoId     Int
-  parcela         Int
-  status          StatusTransacao @default(pendente)
-  valor           Float
-  valorRecebido   Float?
-  dataRecebimento DateTime?
-  dataCadastro    DateTime        @default(now())
-  Transacao       Transacao       @relation(fields: [transacaoId], references: [id], onDelete: Cascade)
-
-  @@index([transacaoId], map: "Parcelamento_transacaoId_fkey")
-}
-
-model FormasPagamento {
-  id             Int           @id @default(autoincrement())
-  contaSistemaId Int           @default(1)
-  ContaSistema   ContasSistema @relation(fields: [contaSistemaId], references: [id])
-  forma          String
-  cor            String?
-  Transacao      Transacao[]
-}
-
-model Categorias {
-  id             Int           @id @default(autoincrement())
-  contaSistemaId Int           @default(1)
-  ContaSistema   ContasSistema @relation(fields: [contaSistemaId], references: [id])
-  categoria      String
-  cor            String
-  Transacao      Transacao[]
-}
-
-model Contas {
-  id             Int           @id @default(autoincrement())
-  contaSistemaId Int           @default(1)
-  ContaSistema   ContasSistema @relation(fields: [contaSistemaId], references: [id])
-  conta          String        @db.VarChar(200)
-  saldo          Float         @default(0)
-  regra          Regra         @default(privada)
-  userId         Int
-  cor            String?
-  descricao      String        @db.Text
-  Usuario        Usuario       @relation(fields: [userId], references: [id])
-  Transacao      Transacao[]
-
-  @@index([userId], map: "Contas_userId_fkey")
-}
-
-model Bloqueio {
+model AssinaturaBloqueio {
   id              Int           @id @default(autoincrement())
   contaSistemaId  Int
   ContaSistema    ContasSistema @relation(fields: [contaSistemaId], references: [id])
@@ -219,30 +118,205 @@ model Bloqueio {
   @@index([assinaturaId], map: "Bloqueio_assinaturaId_fkey")
 }
 
+model Configuracoes {
+  id             Int           @id @default(autoincrement())
+  contaSistemaId Int
+  ContaSistema   ContasSistema @relation(fields: [contaSistemaId], references: [id])
+  chave          String
+  valor          String
+  dataCriacao    DateTime      @default(now())
+}
+
+model FinanceiroTransacao {
+  id                     Int                      @id @default(autoincrement())
+  contaSistemaId         Int                      @default(1)
+  ContaSistema           ContasSistema            @relation(fields: [contaSistemaId], references: [id])
+  clienteId              Int
+  valor                  Float                    @default(0)
+  descricao              String?                  @db.Text
+  categoriasId           Int
+  contaId                Int
+  dataEfetivado          DateTime?
+  dataLancamento         DateTime                 @default(now())
+  desconto               Float?                   @default(0)
+  formaPagamentoId       Int
+  natureza               NaturezaTransacao
+  operacao               TipoOperacao
+  parcelado              Parcelado                @default(nao)
+  status                 StatusTransacao          @default(pendente)
+  valorFinal             Float                    @default(0)
+  Categoria              FinanceiroCategorias     @relation(fields: [categoriasId], references: [id])
+  Cliente                Cliente                  @relation(fields: [clienteId], references: [id])
+  Conta                  FinanceiroContas         @relation(fields: [contaId], references: [id])
+  FormaPagamento         FianceiroFormasPagamento @relation(fields: [formaPagamentoId], references: [id])
+  FinanceiroParcelamento FinanceiroParcelamento[]
+
+  @@index([categoriasId], map: "Transacao_categoriasId_fkey")
+  @@index([clienteId], map: "Transacao_clienteId_fkey")
+  @@index([contaId], map: "Transacao_contaId_fkey")
+  @@index([formaPagamentoId], map: "Transacao_formaPagamentoId_fkey")
+}
+
+model FinanceiroParcelas {
+  id             Int             @id @default(autoincrement())
+  contaSistemaId Int             @default(1)
+  ContaSistema   ContasSistema   @relation(fields: [contaSistemaId], references: [id])
+  nome           String
+  quantidade     Int             @default(1)
+  periodo        PeriodoParcelas
+}
+
+model FinanceiroParcelamento {
+  id              Int                 @id @default(autoincrement())
+  contaSistemaId  Int
+  ContaSistema    ContasSistema       @relation(fields: [contaSistemaId], references: [id])
+  transacaoId     Int
+  parcela         Int
+  status          StatusTransacao     @default(pendente)
+  valor           Float
+  desconto        Float?
+  valorRecebido   Float?
+  dataRecebimento DateTime?
+  dataCadastro    DateTime            @default(now())
+  Transacao       FinanceiroTransacao @relation(fields: [transacaoId], references: [id], onDelete: Cascade)
+
+  @@index([transacaoId], map: "Parcelamento_transacaoId_fkey")
+}
+
+model FianceiroFormasPagamento {
+  id                  Int                   @id @default(autoincrement())
+  contaSistemaId      Int                   @default(1)
+  ContaSistema        ContasSistema         @relation(fields: [contaSistemaId], references: [id])
+  forma               String
+  cor                 String?
+  FinanceiroTransacao FinanceiroTransacao[]
+}
+
+model FinanceiroCategorias {
+  id                  Int                   @id @default(autoincrement())
+  contaSistemaId      Int                   @default(1)
+  ContaSistema        ContasSistema         @relation(fields: [contaSistemaId], references: [id])
+  categoria           String
+  cor                 String
+  FinanceiroTransacao FinanceiroTransacao[]
+}
+
+model FinanceiroContas {
+  id                  Int                   @id @default(autoincrement())
+  contaSistemaId      Int                   @default(1)
+  ContaSistema        ContasSistema         @relation(fields: [contaSistemaId], references: [id])
+  conta               String                @db.VarChar(200)
+  saldo               Float                 @default(0)
+  regra               Regra                 @default(privada)
+  userId              Int
+  cor                 String?
+  descricao           String                @db.Text
+  Usuario             Usuario               @relation(fields: [userId], references: [id])
+  FinanceiroTransacao FinanceiroTransacao[]
+
+  @@index([userId], map: "Contas_userId_fkey")
+}
+
 model ContasSistema {
-  id                   Int                 @id @default(autoincrement())
-  conta                String
-  email                String              @unique
-  slug                 String?
-  descricao            String?             @db.Text
-  plano                PlanosSistema       @default(free)
-  status               ContasSistemaStatus @default(ativa)
-  stripeCustomerId     String
-  stripeSubscriptionId String?
-  dataCriado           DateTime            @default(now())
-  dataAtualizada       DateTime            @updatedAt
-  Contas               Contas[]
-  Categorias           Categorias[]
-  FormasPagamento      FormasPagamento[]
-  Parcelamento         Parcelamento[]
-  Cliente              Cliente[]
-  Plano                Plano[]
-  Assinatura           Assinatura[]
-  Transacao            Transacao[]
-  Parcelas             Parcelas[]
-  Configuracoes        Configuracoes[]
-  Bloqueio             Bloqueio[]
-  Usuario              Usuario[]
+  id                       Int                        @id @default(autoincrement())
+  conta                    String
+  email                    String                     @unique
+  slug                     String?
+  descricao                String?                    @db.Text
+  plano                    PlanosSistema              @default(free)
+  status                   ContasSistemaStatus        @default(ativa)
+  stripeCustomerId         String
+  stripeSubscriptionId     String?
+  dataCriado               DateTime                   @default(now())
+  dataAtualizada           DateTime                   @updatedAt
+  Usuario                  Usuario[]
+  Cliente                  Cliente[]
+  AssinaturaPlano          AssinaturaPlano[]
+  Assinatura               Assinatura[]
+  Configuracoes            Configuracoes[]
+  FinanceiroTransacao      FinanceiroTransacao[]
+  FinanceiroParcelas       FinanceiroParcelas[]
+  FinanceiroParcelamento   FinanceiroParcelamento[]
+  FianceiroFormasPagamento FianceiroFormasPagamento[]
+  FinanceiroCategorias     FinanceiroCategorias[]
+  FinanceiroContas         FinanceiroContas[]
+  Bloqueio                 AssinaturaBloqueio[]
+}
+
+model PatrimonioProdutos {
+  id                            Int                             @id @default(autoincrement())
+  produto                       String
+  descricao                     String                          @db.Text
+  sku                           String
+  preco                         Float                           @db.Double
+  dataCriado                    DateTime                        @default(now())
+  dataAtualizado                DateTime                        @updatedAt
+  PatrimonioProdutosEstoques    PatrimonioProdutosEstoques[]
+  PatrimonioProdutosMovimentos  PatrimonioProdutosMovimentos[]
+  PatrimonioComprasFornecedores PatrimonioComprasFornecedores[]
+}
+
+model PatrimonioArmazenamentos {
+  id                           Int                            @id @default(autoincrement())
+  armazen                      String
+  local                        String?
+  dataCriado                   DateTime                       @default(now())
+  dataAtualizado               DateTime                       @updatedAt
+  PatrimonioProdutosEstoques   PatrimonioProdutosEstoques[]
+  PatrimonioProdutosMovimentos PatrimonioProdutosMovimentos[]
+}
+
+model PatrimonioProdutosEstoques {
+  id             Int                      @id @default(autoincrement())
+  Produto        PatrimonioProdutos       @relation(fields: [produtoId], references: [id])
+  produtoId      Int
+  Armazen        PatrimonioArmazenamentos @relation(fields: [armazenId], references: [id])
+  armazenId      Int
+  estoqueMinimo  Int
+  quantidade     Int                      @default(0)
+  dataCriado     DateTime                 @default(now())
+  dataAtualizado DateTime                 @updatedAt
+
+  @@unique([produtoId, armazenId])
+}
+
+model PatrimonioProdutosMovimentos {
+  id            Int                      @id @default(autoincrement())
+  Produto       PatrimonioProdutos       @relation(fields: [produtoId], references: [id])
+  produtoId     Int
+  Armazen       PatrimonioArmazenamentos @relation(fields: [armazenId], references: [id])
+  armazenId     Int
+  tipo          PatrimonioTipoMovimento
+  quantidade    Int
+  dataMovimento DateTime                 @default(now())
+  descricao     String?
+
+  @@index([produtoId])
+  @@index([armazenId])
+}
+
+model PatrimonioFornecedores {
+  id              Int                             @id @default(autoincrement())
+  nome            String
+  contato         String?
+  email           String?
+  descricao       String?                         @db.Text
+  dataCriado      DateTime                        @default(now())
+  dataAtualizado  DateTime                        @updatedAt
+  ComprasProdutos PatrimonioComprasFornecedores[]
+}
+
+model PatrimonioComprasFornecedores {
+  id           Int                    @id @default(autoincrement())
+  Produto      PatrimonioProdutos     @relation(fields: [produtoId], references: [id])
+  produtoId    Int
+  Fornecedor   PatrimonioFornecedores @relation(fields: [fornecedorId], references: [id])
+  fornecedorId Int
+}
+
+enum PatrimonioTipoMovimento {
+  entrada
+  saida
 }
 
 enum ContasSistemaStatus {
