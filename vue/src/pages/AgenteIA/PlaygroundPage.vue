@@ -12,8 +12,9 @@ import { nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { IARepository } from '@/repositories/external/IARepository'
 import { marked } from 'marked'
 import { ScToastUtil } from '@/utils/scToastUtil'
-import { randomCards } from './cards'
+import { cardData, randomCards } from './cards'
 import { ChatCompletionMessageParam } from 'openai/resources/index.mjs'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 
 const inputMessage = ref('')
 const messages = ref<ChatCompletionMessageParam[]>([
@@ -45,6 +46,7 @@ const callMessageByCard = (message: string) => {
 
 const handleSendMessage = async () => {
     if (inputMessage.value.trim() !== '') {
+        showCardsPlayground.value = false
         const newMessage: ChatCompletionMessageParam = {
             content: inputMessage.value,
             role: 'user'
@@ -92,12 +94,14 @@ onUnmounted(() => {
 const renderMarkdown = (content: any) => {
     return marked(content);
 };
+
+const showCardsPlayground = ref(true)
 </script>
 
 <template>
     <div class="grid h-[calc(100vh - 12rem)] w-full pl-0">
         <div class="flex flex-col">
-            <main class="grid flex-1 gap-4 overflow-auto p-0 md:p-4 md:grid-cols-2 lg:grid-cols-3">
+            <main class="grid flex-1 gap-4 overflow-auto p-0 md:p-4 lg:grid-cols-3">
                 <div :class="hiddenSidebarPlayground ? 'hidden' : 'block'" class="relative flex-col items-start gap-8">
                     <form class="grid w-full items-start gap-6">
                         <fieldset class="grid gap-6 rounded-lg border p-4">
@@ -214,11 +218,18 @@ const renderMarkdown = (content: any) => {
 
                     <!-- Scrollable Area -->
                     <div ref="scrollArea" class="flex-grow p-4 overflow-y-auto">
-                        <div v-if="messages.length === 1" class="flex gap-2 items-center justify-center h-full">
-                            <div v-for="card in randomCards" :key="card.id" @click="callMessageByCard(card.message)"
-                                class="max-w-52 border dark:border-slate-700 cursor-pointer min-h-32 bg-muted p-4 rounded-lg flex flex-col items-start">
-                                <component :is="card.icon" />
-                                <p class="text-foreground/50 mt-2 text-sm">{{ card.message }}</p>
+                        <div v-if="showCardsPlayground"
+                            class="flex flex-col md:flex-col gap-6 items-center justify-center h-full">
+                            <Avatar class="w-10 h-10 cursor-pointer">
+                                <AvatarImage src="/OS.png" />
+                                <AvatarFallback>AI</AvatarFallback>
+                            </Avatar>
+                            <div class="flex flex-col md:flex-row gap-2 items-center justify-center">
+                                <div v-for="card in randomCards" :key="card.id" @click="callMessageByCard(card.message)"
+                                    class="max-w-52 border dark:border-slate-700 cursor-pointer min-h-32 bg-muted p-4 rounded-lg flex flex-col items-start">
+                                    <component :is="card.icon" />
+                                    <p class="text-foreground/50 mt-2 text-sm">{{ card.message }}</p>
+                                </div>
                             </div>
                         </div>
                         <div v-else v-for="message in messages" :key="message.role" class="flex mb-4"
@@ -247,10 +258,31 @@ const renderMarkdown = (content: any) => {
                             <!-- Textarea -->
                             <Textarea @keydown.ctrl.enter="handleSendMessage" v-model="inputMessage" id="message"
                                 placeholder="Escreva sua mensagem aqui..."
-                                class="min-h-[48px] bg-white dark:bg-slate-950 resize-none border-0 p-3 shadow-none focus-visible:ring-0" />
+                                class="min-h-[48px] bg-background resize-none border-0 p-3 shadow-none focus-visible:ring-0" />
 
                             <!-- Submit Button -->
                             <div class="flex items-center p-3 pt-0">
+                                <div>
+                                    <Popover>
+                                        <PopoverTrigger as="button">
+                                            <Button variant="outline" role="combobox" aria-expanded="false"
+                                                class="w-auto border-none rounded-lg bg-secondary justify-between">
+                                                ✨
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent class="w-auto px-2">
+                                            <div class="max-h-[300px] overflow-y-auto">
+                                                <div v-for="card in cardData" :key="card.id"
+                                                    class="relative gap-2 flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground"
+                                                    @click="callMessageByCard(card.message)">
+                                                    <component class="w-5 h-5" :class="card.iconColor"
+                                                        :is="card.icon" />
+                                                    {{ card.message }}
+                                                </div>
+                                            </div>
+                                        </PopoverContent>
+                                    </Popover>
+                                </div>
                                 <Button type="button" @click.prevent="restartChat" variant="destructive" size="sm"
                                     class="ml-auto gap-1.5">
                                     <Paintbrush class="size-3.5" />

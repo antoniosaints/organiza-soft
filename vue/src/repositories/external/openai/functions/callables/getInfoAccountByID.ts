@@ -33,7 +33,7 @@ export const getInfosAccountByID = async (response: ChatCompletionMessage): Prom
         if (res) {
           return {
             role: "system",
-            content: `Retorne esses dados para o usuário formatados em texto, ${JSON.stringify(res)}`,
+            content: `Retorne esses dados para o usuário em formato legível, ${JSON.stringify(res)}`,
           };
         }else {
           return {

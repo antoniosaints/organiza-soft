@@ -8,18 +8,19 @@ export const saveVendaIntoDatabaseTool: ChatCompletionTool = {
   type: "function",
   function: {
     name: "saveVendaIntoDatabase",
+    strict: true,
     description:
-      "Recebe os dados necssários para cadastrar uma venda no sistema",
+      "Recebe os dados necssários para cadastrar uma venda no sistema, o usuário deve preencher as informações pois precisamos dessas para realizar a persistência",
     parameters: {
       type: "object",
       properties: {
         clienteId: {
           type: "string",
-          description: "O Id do cliente.",
+          description: "O Id do cliente no sistema.",
         },
         preco: {
           type: "string",
-          description: "O valor da venda",
+          description: "O valor da venda, é um campo obrigatório",
         },
         quantidade: {
           type: "string",
@@ -27,7 +28,7 @@ export const saveVendaIntoDatabaseTool: ChatCompletionTool = {
         },
         confirmacao: {
           type: "string",
-          description: "Confirma os dados inseridos?",
+          description: "Confirmação se pode lançar essa venda no sistema, deve ser questionada toda vez antes de realizar a persistência",
         }
       },
       required: ["clienteId", "preco", "quantidade", "confirmacao"],
