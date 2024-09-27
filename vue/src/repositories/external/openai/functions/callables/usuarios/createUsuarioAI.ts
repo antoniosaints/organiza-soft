@@ -10,6 +10,7 @@ export const createUsuarioAITool: ChatCompletionTool = {
   type: "function",
   function: {
     name: "createUsuarioAI",
+    strict: true,
     description:
       "Responsável por criar novos usuários no sistema com base nos dados coletados do usuário",
     parameters: {
@@ -29,47 +30,47 @@ export const createUsuarioAITool: ChatCompletionTool = {
         },
         confirmacao: {
           type: "string",
-          description: "Confirma os dados inseridos? sempre guarde sim ou não",
+          description:
+            "Confirmação se pode lançar essa venda no sistema, deve ser questionada toda vez antes de realizar a persistência",
         },
-      }, 
+      },
       required: ["nome", "email", "senha", "confirmacao"],
       additionalProperties: false,
     },
   },
 };
 
-export const createUsuarioAI = async (response: ChatCompletionMessage): Promise<ChatCompletionMessageParam> => {
+export const createUsuarioAI = async (
+  response: ChatCompletionMessage
+): Promise<ChatCompletionMessageParam> => {
   try {
     if (response.tool_calls) {
-        const function_arguments = JSON.parse(response.tool_calls[0].function.arguments);
-        if (function_arguments.confirmacao == "sim") {
-          const res = await UsuariosRepository.create({
-            email: function_arguments.email,
-            grupoId: 1,
-            nome: function_arguments.nome,
-            senha: function_arguments.senha,
-            regra: "visualizador",
-            status: "ativo",
-          });
-          if (res) {
-            ScToastUtil.success(`Usuario ${function_arguments.nome} criado com sucesso!`);
-            return {
-              role: "assistant",
-              content: `Usuario ${function_arguments.nome} criado com sucesso!`,
-            };
-          } else {
-            return {
-              role: "assistant",
-              content: "Ocorreu um erro ao criar o usuário, tente novamente",
-            };
-          }
-        } else {
-          return {
-            role: "assistant",
-            content: `Poderia enviar novamente?`,
-          };
-        }
-    }else {
+      const function_arguments = JSON.parse(
+        response.tool_calls[0].function.arguments
+      );
+      const res = await UsuariosRepository.create({
+        email: function_arguments.email,
+        grupoId: 1,
+        nome: function_arguments.nome,
+        senha: function_arguments.senha,
+        regra: "visualizador",
+        status: "ativo",
+      });
+      if (res) {
+        ScToastUtil.success(
+          `Usuario ${function_arguments.nome} criado com sucesso!`
+        );
+        return {
+          role: "assistant",
+          content: `Usuario ${function_arguments.nome} criado com sucesso!`,
+        };
+      } else {
+        return {
+          role: "assistant",
+          content: "Ocorreu um erro ao criar o usuário, tente novamente",
+        };
+      }
+    } else {
       return {
         role: "assistant",
         content: `Poderia enviar novamente?`,

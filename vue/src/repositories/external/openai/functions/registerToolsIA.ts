@@ -5,5 +5,11 @@ import { saveVendaIntoDatabaseTool } from "./callables/saveVenda";
 import { createUsuarioAITool } from "./callables/usuarios/createUsuarioAI";
 
 export const getToolsIA = () => {
-  return [getIdAccountTool, getUserByIDTool, saveVendaIntoDatabaseTool, changeColorModeTool, createUsuarioAITool];
+  return [
+    getIdAccountTool, 
+    getUserByIDTool, 
+    saveVendaIntoDatabaseTool, 
+    changeColorModeTool, 
+    createUsuarioAITool
+  ];
 };

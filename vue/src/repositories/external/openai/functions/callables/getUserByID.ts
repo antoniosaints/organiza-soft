@@ -10,13 +10,13 @@ export const getUserByIDTool: ChatCompletionTool = {
   function: {
     name: "getUserByID",
     description:
-      "Retorna informações sobre um usuário do sistema coletando o id do mesmo, retorne os dados sempre formatado",
+      "Retorna informações sobre um usuário do sistema coletando o id do mesmo, essa função tem a única função de buscar o usuário no backend e retornar para o usuário",
     parameters: {
       type: "object",
       properties: {
         userId: {
           type: "string",
-          description: "O ID do usuário a ser pesquisado",
+          description: "O ID do usuário a ser pesquisado, precisa ser informado pois com ele vamos buscar o usuário no banco",
         },
       }, 
       required: ["userId"],

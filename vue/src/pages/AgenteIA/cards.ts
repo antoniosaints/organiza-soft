@@ -1,7 +1,7 @@
-import { ChartCandlestick, Fingerprint, TreePalm, User } from "lucide-vue-next";
+import { ChartCandlestick, Fingerprint, Tag, TreePalm, User } from "lucide-vue-next";
 import { computed, h, ref } from "vue";
 
-const cardData = ref([
+export const cardData = ref([
   {
     id: 1,
     message: "Me ajude a planejar uma viagem de férias",
@@ -25,6 +25,18 @@ const cardData = ref([
     message: "Me ajude a calcular o balanço da minha empresa",
     icon: ChartCandlestick,
     iconColor: "text-orange-500",
+  },
+  {
+    id: 5,
+    message: "Quero lançar uma nova venda no sistema",
+    icon: Tag,
+    iconColor: "text-cyan-500",
+  },
+  {
+    id: 6,
+    message: "Me ajude a lançar um novo usuário",
+    icon: User,
+    iconColor: "text-purple-500",
   },
 ]);
 
