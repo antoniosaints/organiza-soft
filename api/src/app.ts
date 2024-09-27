@@ -21,6 +21,7 @@ if (cluster.isPrimary) {
   app.use(cors());
   app.post("/stripe/webhook", express.raw({ type: "application/json" }), stripeWebhook);
   app.use(express.json());
+  app.use('/uploads', express.static('uploads')); 
   app.use(router);
   app.listen(PORT, () => {
     console.log(`Worker ${process.pid} iniciou o servidor na porta ${PORT} às ${new Date().toLocaleString("pt-BR")}`);
