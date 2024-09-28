@@ -9,9 +9,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@editorjs/checklist": "^1.6.0",
+    "@editorjs/code": "^2.9.2",
     "@editorjs/editorjs": "^2.30.6",
-    "@editorjs/image": "^2.9.3",
+    "@editorjs/header": "^2.8.7",
     "@editorjs/list": "^1.10.0",
+    "@editorjs/simple-image": "^1.6.0",
     "@editorjs/table": "^2.4.1",
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-brands-svg-icons": "^6.6.0",

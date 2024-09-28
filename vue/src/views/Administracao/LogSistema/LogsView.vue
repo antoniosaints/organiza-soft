@@ -4,8 +4,11 @@
 <script setup lang="ts">
 import EditorJS, { OutputData } from '@editorjs/editorjs';
 import ListTool from '@editorjs/list';
-import ImageTool from '@editorjs/image';
+import SimpleImage from "@editorjs/simple-image";
 import Table from '@editorjs/table'
+import CodeTool from '@editorjs/code';
+import Header from '@editorjs/header';
+import Checklist from '@editorjs/checklist'
 import { onMounted, onUnmounted, ref, watch } from 'vue';
 
 const logEditorMessageJs = ref<HTMLElement | null>(null);
@@ -48,9 +51,74 @@ onMounted((): void => {
         placeholder: props.placeholder || 'Descreva algo ou use "/" para mostrar as opções',
         inlineToolbar: ['bold', 'italic', 'link'],
         tools: {
+            header: {
+                class: Header as any,
+                inlineToolbar: true,
+                config: {
+                    placeholder: 'Escreva um título',
+                    levels: [2, 3, 4],
+                    defaultLevel: 3
+                }
+            },
             list: ListTool,
-            image: ImageTool,
-            table: Table
+            image: SimpleImage,
+            table: {
+                class: Table as any,
+                inlineToolbar: true
+            },
+            code: CodeTool,
+            checklist: Checklist,
+        },
+        i18n: {
+            messages: {
+                ui: {
+                    "toolbox": {
+                        "add": "Adicionar bloco",
+                        "delete": "Deletar bloco",
+                    },
+                    "blockTunes": {
+                        "toggler": {
+                            "clickToTune": "Clique para ajustar",
+                            "clickToDelete": "Clique para deletar"
+                        }
+                    },
+                    "inlineToolbar": {
+                        "converter": {
+                            "convertTo": "Converter para"
+                        }
+                    },
+                    "toolbar": {
+                        "toolbox": {
+                            "add": "Adicionar bloco"
+                        }
+                    }
+                },
+                toolNames: {
+                    "Text": "Texto",
+                    "Heading": "Cabeçalho",
+                    "List": "Lista",
+                    "Checklist": "Lista de Tarefas",
+                    "Quote": "Citação",
+                    "Code": "Código",
+                    "Link": "Link",
+                    "Table": "Tabela",
+                    "Bold": "Negrito",
+                    "Italic": "Itálico",
+                    "Image": "Imagem",
+                },
+                blockTunes: {
+                    "delete": {
+                        "title": "Deletar",
+                        "text": "Tem certeza que deseja deletar este bloco?"
+                    },
+                    "moveUp": {
+                        "title": "Mover para cima"
+                    },
+                    "moveDown": {
+                        "title": "Mover para baixo"
+                    }
+                },
+            }
         },
         minHeight: 300,
         data: props.modelValue,
@@ -70,30 +138,119 @@ onUnmounted((): void => {
 });
 </script>
 
-<style scoped>
-/* Estilos customizados para o modo escuro com Tailwind */
-.editorjs-container {
-    @apply bg-white text-black border border-gray-300;
+<style>
+.dark .ce-popover,
+.dark .ce-popover-item,
+.dark .ce-popover-item__icon,
+.dark .ce-popover-items,
+.dark .ce-popover__container .dark .ce-popover-item:hover {
+    --color-background-item-hover: hsl(var(--background));
+    background-color: hsl(var(--background));
+    border-color: hsl(var(--border-editorjs));
+    background: hsl(var(--background));
 }
 
-.dark .editorjs-container {
-    @apply bg-gray-800 text-gray-100 border-gray-600;
+.dark .ce-popover__container, .ce-code__textarea {
+    background: hsl(var(--background));
+    border-color: hsl(var(--border-editorjs));
+    color: hsl(var(--foreground));
 }
 
-/* Estilos internos dos blocos EditorJS */
-.editorjs-container .ce-block__content {
-    @apply bg-transparent text-inherit;
+.dark .ce-popover--opened>.ce-popover__container {
+    border: 1px solid hsl(var(--border-editorjs));
 }
 
-/* Estilizando a barra de ferramentas */
-.editorjs-container .ce-toolbar__content {
-    @apply bg-gray-700 text-gray-100;
+.dark .ce-popover-item-separator__line {
+    border: 1px solid hsl(var(--border-editorjs));
 }
 
-.dark .editorjs-container .ce-toolbar__content {
-    @apply bg-gray-900 text-white;
+.dark .ce-toolbar__plus,
+.dark .ce-toolbar__settings-btn,
+.dark .ce-popover-item__title,
+.dark .ce-inline-tool .dark .ce-inline-tool--link .dark .ce-popover-item__icon {
+    color: hsl(var(--foreground));
 }
-.dark .editorjs-container .ce-toolbar__settings-btn {
-    @apply bg-gray-900 text-white;
+
+.dark .cdx-search-field.ce-popover__search {
+    background-color: hsl(var(--muted) / 0.3);
+    border-color: hsl(var(--border-editorjs));
+}
+
+.dark .cdx-search-field__input,
+.ce-inline-tool-input--showed,
+.cdx-checklist__item-checkbox-check {
+    color: hsl(var(--foreground));
+    background-color: hsl(var(--background));
+    border-color: hsl(var(--border-editorjs));
+}
+
+.dark .ce-popover-item .ce-popover-item--confirmation {
+    color: hsl(var(--foreground));
+    background-color: hsl(var(--destructive) / 0.2);
+}
+
+.dark .cdx-block,
+.dark .ce-block {
+    color: hsl(var(--foreground));
+}
+
+.dark .ce-inline-toolbar,
+.dark .ce-conversion-tool__icon,
+.dark .ce-popover-item__icon,
+.dark .tc-popover__item-icon {
+    color: hsl(var(--foreground));
+    background-color: hsl(var(--background));
+    border-color: hsl(var(--border-editorjs));
+}
+
+.dark .ce-popover,
+.dark .ce-conversion-toolbar,
+.dark .ce-inline-toolbar,
+.dark .tc-popover {
+    background-color: hsl(var(--popover));
+    border-color: hsl(var(--border-editorjs));
+    box-shadow: 0 3px 15px -3px hsl(var(--border-editorjs) / 0.2);
+}
+
+.dark .ce-inline-tool {
+    color: hsl(var(--foreground));
+}
+
+.dark .ce-inline-tool:hover,
+.dark .ce-inline-toolbar__dropdown:hover,
+.dark .ce-toolbar__plus:hover,
+.dark .ce-toolbar__settings-btn:hover,
+.dark .ce-conversion-tool:hover,
+.dark .ce-popover-item:hover {
+    background-color: hsl(var(--accent) / 0.2);
+}
+
+.dark *::selection,
+.dark .ce-block.ce-block--selected .ce-block__content {
+    background-color: hsl(var(--primary) / 0.5);
+}
+
+.dark .ce-popover__items {
+    scrollbar-color: hsl(var(--border-editorjs)) hsl(var(--background));
+}
+
+/* table class wrapper */
+.dark .tc-wrap,
+.dark .tc-wrap * {
+    --color-border: hsl(var(--border-editorjs));
+    --color-text-secondary: hsl(var(--foreground));
+    --color-background: hsl(var(--accent) / 0.2);
+    --toggler-dots-color: hsl(var(--accent) / 0.2);
+    --toggler-dots-color-hovered: hsl(var(--foreground));
+}
+
+@media (max-width: 650px) {
+
+    .dark .ce-toolbar__settings-btn,
+    .dark .ce-toolbar__plus {
+        background-color: hsl(var(--popover));
+        border-color: hsl(var(--border-editorjs));
+        box-shadow: 0 3px 15px -3px hsl(var(--border-editorjs) / 0.2);
+    }
 }
 </style>
