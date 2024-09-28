@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import { useLoginStore } from "@/stores/login/loginStore";
 
-const routes: Array<RouteRecordRaw> = [
+const routes: RouteRecordRaw[] = [
     {
         path: "/",
         name: "DefaultLayout",
@@ -31,6 +31,12 @@ const routes: Array<RouteRecordRaw> = [
                         name: "Usuarios",
                         meta: { breadcrumb: 'Usuários' },
                         component: () => import("@/views/Usuarios/UsuariosView.vue")
+                    },
+                    {
+                        path: "/administracao/logs",
+                        name: "Logs",
+                        meta: { breadcrumb: 'Logs do sistema' },
+                        component: () => import("@/views/Administracao/LogSistema/LogsView.vue")
                     }
                 ]
             },
