@@ -1,10 +1,7 @@
 import {Request, Response} from 'express';
-import HttpErrorService from "../../services/http_error_service";
-import prismaService from "../../services/prisma_service";
-import ResponseService from "../../services/response_service";
 import { ValidationError } from "../../utils/http/lancar_erro";
 import { createPermissoes as createPermissoesSchema, updatePermissoes as updatePermissoesSchema } from '../../schemas/permissoes/permissoes_schema';
-import validateSchema from '../../services/validade_schema';
+import { HttpErrorService, prismaService, ResponseService, validateSchema } from '../../services';
 export const createPermissoes = async (req: Request, res: Response) => {
   
   try {

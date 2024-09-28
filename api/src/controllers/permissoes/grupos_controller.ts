@@ -1,9 +1,6 @@
 import {Request, Response} from 'express';
-import HttpErrorService from "../../services/http_error_service";
-import prismaService from "../../services/prisma_service";
-import ResponseService from "../../services/response_service";
 import { createGrupos as createGruposSchema, updateGrupos as updateGruposSchema } from '../../schemas/permissoes/grupos_schema';
-import validateSchema from '../../services/validade_schema';
+import { HttpErrorService, prismaService, ResponseService, validateSchema } from '../../services';
 export const createGrupos = async (req: Request, res: Response) => {
   
   try {

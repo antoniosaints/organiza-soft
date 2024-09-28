@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { StripeService } from "../../services/stripe_service";
 import "dotenv/config";
+import { StripeService } from "../../services";
 
 export const createPortalCustomer = async (req: Request, res: Response) => {
     try {

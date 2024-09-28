@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
-import prismaService from "../../services/prisma_service";
 import { stripe } from "../../libs/stripe";
-import ResponseService from "../../services/response_service";
+import { prismaService, ResponseService } from "../../services";
 
 export const updateCustomer = async (request: Request, response: Response) => {
   try {

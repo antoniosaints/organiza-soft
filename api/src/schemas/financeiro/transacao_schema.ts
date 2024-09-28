@@ -40,24 +40,24 @@ const createTransacao = zodUtil.object({
     required_error: "A formaPagamentoId é obrigatória",
     invalid_type_error: "A formaPagamentoId deve ser um number",
   }),
-  natureza: zodUtil.string({
+  natureza: zodUtil.enum(["receita", "despesa"], {
+    invalid_type_error: "A natureza deve ser receita ou despesa",
     required_error: "A natureza é obrigatória",
-    invalid_type_error: "A natureza deve ser uma string",
   }),
-  operacao: zodUtil.string({
+  operacao: zodUtil.enum(["entrada", "saida", "transferencia", "ajuste"], {
+    invalid_type_error:
+      "A operação deve ser entrada, saida, transferencia ou ajuste",
     required_error: "A operação é obrigatória",
-    invalid_type_error: "A operação deve ser uma string",
   }),
-  parcelado: zodUtil.string({
-    required_error: "O parcelado é obrigatório",
-    invalid_type_error: "O parcelado deve ser uma string",
-  }),
-  status: zodUtil
-    .string({
-      required_error: "O status é obrigatório",
-      invalid_type_error: "O status deve ser uma string",
+  parcelado: zodUtil
+    .enum(["sim", "nao"], {
+      invalid_type_error: "O parcelado deve ser sim ou não",
     })
     .optional(),
+  status: zodUtil.enum(["pendente", "recebido", "cancelada"], {
+    invalid_type_error: "O status deve ser pendente, recebido ou cancelada",
+    required_error: "O status é obrigatório",
+  }),
   valorFinal: zodUtil.number({
     required_error: "O valorFinal é obrigatório",
     invalid_type_error: "O valorFinal deve ser um number",
@@ -115,23 +115,24 @@ const updateTransacao = zodUtil.object({
     })
     .optional(),
   natureza: zodUtil
-    .string({
-      invalid_type_error: "A natureza deve ser uma string",
+    .enum(["receita", "despesa"], {
+      invalid_type_error: "A natureza deve ser receita ou despesa",
     })
     .optional(),
   operacao: zodUtil
-    .string({
-      invalid_type_error: "A operação deve ser uma string",
+    .enum(["entrada", "saida", "transferencia", "ajuste"], {
+      invalid_type_error:
+        "A operação deve ser entrada, saida, transferencia ou ajuste",
     })
     .optional(),
   parcelado: zodUtil
-    .string({
-      invalid_type_error: "O parcelado deve ser uma string",
+    .enum(["sim", "nao"], {
+      invalid_type_error: "O parcelado deve ser sim ou não",
     })
     .optional(),
   status: zodUtil
-    .string({
-      invalid_type_error: "O status deve ser uma string",
+    .enum(["pendente", "recebido", "cancelada"], {
+      invalid_type_error: "O status deve ser pendente, recebido ou cancelada",
     })
     .optional(),
   valorFinal: zodUtil

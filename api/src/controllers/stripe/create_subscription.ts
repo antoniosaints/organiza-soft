@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { StripeService } from "../../services/stripe_service";
+import { StripeService } from "../../services";
 
 export const createSubscriptionStripe = async (req: Request, res: Response) => {
     const { customerId, priceId } = req.body;

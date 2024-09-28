@@ -1,61 +1,60 @@
-import { Request, Response } from 'express';
-import HttpErrorService from "../../services/http_error_service";
-import JwtService from "../../services/jwt_service";
-import prisma_service from "../../services/prisma_service";
-import ResponseService from "../../services/response_service";
-import { createAuth as createAuthSchema } from '../../schemas/administracao/auth_schema';
-import validateSchema from '../../services/validade_schema';
+import { Request, Response } from "express";
+import { createAuth as createAuthSchema } from "../../schemas/administracao/auth_schema";
+import {
+  HttpErrorService,
+  JwtService,
+  prismaService,
+  ResponseService,
+  validateSchema,
+} from "../../services";
 
 class AuthController {
   static async login(req: Request, res: Response) {
-    const validationResult = validateSchema(createAuthSchema, req.body);
+    try {
+      const { email, senha } = validateSchema(createAuthSchema, req.body);
 
-    if (validationResult.error) return ResponseService.badRequest(res, validationResult.error.message);
+      const user = await prismaService.usuario.findFirst({
+        where: { email, senha },
+      });
 
-    const email = validationResult.email;
-    const senha = validationResult.senha;
+      if (!user)
+        return ResponseService.notFound(res, "Usuário não encontrado!");
 
-    const user = await prisma_service.usuario.findFirst({ where: { email } });
+      const payload = {
+        userId: user.id,
+        name: user.nome,
+        grupoId: user.grupoId,
+        contaId: user.contaSistemaId,
+      };
 
-    if (!user) return ResponseService.notFound(res, "Usuário não encontrado");
+      const refreshToken = JwtService.encode(payload, "7d");
+      const token = JwtService.encode({ refreshToken }, "8h");
 
-    if (user.senha !== senha) return ResponseService.unauthorized(res, "Credenciais inválidas");
-
-    const refreshToken = JwtService.encode(
-      { userId: user.id, name: user.nome, grupoId: user.grupoId, contaId: user.contaSistemaId },
-      "7d"
-    );
-    const token = JwtService.encode({ refreshToken }, "4h");
-
-    return ResponseService.success(
-      res,
-      { token, refreshToken, contaId: user.contaSistemaId },
-      "Login realizado com sucesso"
-    );
+      return ResponseService.success(
+        res,
+        { token, refreshToken, contaId: user.contaSistemaId },
+        "Login realizado com sucesso"
+      );
+    } catch (error) {
+      HttpErrorService.hadle(error, res);
+    }
   }
 
   static async verify(req: Request, res: Response) {
     try {
-      const authHeader = req.headers.authorization;
+      const token = req.headers.authorization?.split(" ")[1];
 
-      if (!authHeader) {
+      if (!token) {
         return ResponseService.unauthorized(res, "Token não informado");
       }
 
-      const parts = authHeader.split(" ");
-
-      if (parts.length !== 2) {
-        return ResponseService.unauthorized(res, "Token mal formatado");
-      }
-
-      const [scheme, token] = parts;
-
-      if (!/^Bearer$/i.test(scheme)) {
-        return ResponseService.unauthorized(res, "Token mal formatado");
-      }
-
       JwtService.verify(token);
-      ResponseService.success(res, { token }, "Token verificado com sucesso");
+
+      return ResponseService.success(
+        res,
+        { token },
+        "Token verificado com sucesso"
+      );
     } catch (err) {
       HttpErrorService.hadle(err, res);
     }
@@ -65,43 +64,45 @@ class AuthController {
     try {
       const authHeader = req.headers.authorization;
 
-      if (!authHeader) return ResponseService.unauthorized(res, "Token não informado");
+      if (!authHeader)
+        return ResponseService.unauthorized(res, "Token não informado");
 
-      const parts = authHeader.split(" ");
+      const [scheme, token] = authHeader.split(" ");
 
-      if (parts.length !== 2) return ResponseService.unauthorized(res, "Token mal formatado");
-
-      const [scheme, token] = parts;
-
-      if (!/^Bearer$/i.test(scheme)) return ResponseService.unauthorized(res, "Token mal formatado");
-
+      if (scheme !== "Bearer")
+        return ResponseService.unauthorized(res, "Token mal formatado");
       const { refreshToken } = JwtService.decode(token);
       const data = JwtService.decode(refreshToken);
 
-      ResponseService.success(res, { data }, "Token decodificado com sucesso");
-    } catch (err) {
-      HttpErrorService.hadle(err, res);
+      return ResponseService.success(
+        res,
+        { data },
+        "Token decodificado com sucesso"
+      );
+    } catch (error) {
+      return HttpErrorService.hadle(error, res);
     }
   }
 
   static async refreshToken(req: Request, res: Response) {
-
     try {
       const { refreshToken } = req.body;
-  
-      if (!refreshToken) {
-        return ResponseService.unauthorized(res, "Token inválido");
-      }
-  
-      JwtService.verify(refreshToken)
-  
-      const token = JwtService.encode({ refreshToken }, "4h");
-      return ResponseService.success(res, { token }, "Token atualizado com sucesso");
 
-    }catch (error) {
+      if (!refreshToken) {
+        return ResponseService.unauthorized(res, "Token não informado");
+      }
+
+      JwtService.verify(refreshToken);
+
+      const token = JwtService.encode({ refreshToken }, "8h");
+      return ResponseService.success(
+        res,
+        { token },
+        "Token atualizado com sucesso"
+      );
+    } catch (error) {
       HttpErrorService.hadle(error, res);
     }
-
   }
 }
 

@@ -5,23 +5,6 @@ const createBloqueio = zodUtil.object({
     required_error: "O ID da assinatura é obrigatorio.",
     invalid_type_error: "O ID da assinatura deve ser um number",
   }),
-  dataBloqueio: zodUtil
-    .string({
-      required_error: "A data de bloqueio é obrigatorio.",
-      invalid_type_error: "A data de bloqueio deve ser uma string",
-    })
-    .refine((val) => !isNaN(Date.parse(val)), {
-      message: "Data de bloqueio inválida.",
-    })
-    .optional(),
-  dataDesbloqueio: zodUtil
-    .string({
-      invalid_type_error: "A data de desbloqueio deve ser uma string",
-    })
-    .refine((val) => !isNaN(Date.parse(val)), {
-      message: "Data de desbloqueio inválida.",
-    })
-    .optional(),
   motivo: zodUtil.string({
     required_error: "O motivo do bloqueio é obrigatorio.",
     invalid_type_error: "O motivo do bloqueio deve ser uma string",
@@ -33,6 +16,9 @@ const createBloqueio = zodUtil.object({
 });
 
 const updateBloqueio = zodUtil.object({
+  motivo: zodUtil.string({
+    invalid_type_error: "O motivo do bloqueio deve ser uma string",
+  }).optional(),
   assinaturaId: zodUtil
     .number({
       invalid_type_error: "O ID da assinatura deve ser um number",

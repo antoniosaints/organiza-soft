@@ -21,9 +21,9 @@ export const createAssinatura = async (req: Request, res: Response) => {
 };
 
 export const updateAssinatura = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
+  
   try {
+    const { id } = req.params;
     const validated = validateSchema(updateAssinaturaSchema, req.body);
     const assinatura = await prismaService.assinatura.update({
       where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
@@ -50,8 +50,8 @@ export const getAssinaturas = async (req: Request, res: Response) => {
 };
 
 export const getAssinatura = async (req: Request, res: Response) => {
-  const { id } = req.params;
   try {
+    const { id } = req.params;
     const assinatura = await prismaService.assinatura.findUnique({
       where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
     });
@@ -66,8 +66,8 @@ export const getAssinatura = async (req: Request, res: Response) => {
 };
 
 export const deleteAssinatura = async (req: Request, res: Response) => {
-  const { id } = req.params;
   try {
+    const { id } = req.params;
     await prismaService.assinatura.delete({ where: { id: Number(id), contaSistemaId: req.body.contaSistemaId } });
     ResponseService.success(res, {
       message: "Assinatura excluída com sucesso",

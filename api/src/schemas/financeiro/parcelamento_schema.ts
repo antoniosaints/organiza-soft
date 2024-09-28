@@ -9,9 +9,9 @@ const createParcelamento = zodUtil.object({
     required_error: "A parcela é obrigatória",
     invalid_type_error: "A parcela deve ser um número",
   }),
-  status: zodUtil.string({
+  status: zodUtil.enum(["pendente", "recebido", "cancelada"], {
+    invalid_type_error: "O status deve ser pendente, recebido ou cancelada",
     required_error: "O status é obrigatório",
-    invalid_type_error: "O status deve ser uma string",
   }),
   valor: zodUtil.number({
     required_error: "O valor é obrigatório",
@@ -43,8 +43,8 @@ const updateParcelamento = zodUtil.object({
   parcela: zodUtil.number({
     invalid_type_error: "A parcela deve ser um number",
   }).optional(),
-  status: zodUtil.string({
-    invalid_type_error: "O status deve ser uma string",
+  status: zodUtil.enum(["pendente", "recebido", "cancelada"], {
+    invalid_type_error: "O status deve ser pendente, recebido ou cancelada",
   }).optional(),
   valor: zodUtil.number({
     invalid_type_error: "O valor deve ser um number",

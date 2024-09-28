@@ -9,7 +9,7 @@ datasource db {
 
 model Usuario {
   id             Int                @id @default(autoincrement())
-  contaSistemaId Int                @default(1)
+  contaSistemaId Int               
   ContaSistema   ContasSistema      @relation(fields: [contaSistemaId], references: [id])
   nome           String             @db.VarChar(100)
   email          String             @db.VarChar(100)
@@ -59,7 +59,7 @@ model Permissoes {
 
 model Cliente {
   id             Int                   @id @default(autoincrement())
-  contaSistemaId Int                   @default(1)
+  contaSistemaId Int                 
   ContaSistema   ContasSistema         @relation(fields: [contaSistemaId], references: [id])
   nome           String                @db.VarChar(100)
   email          String                @unique @db.VarChar(100)
@@ -83,7 +83,7 @@ model Assinatura {
   status          Status               @default(ativa)
   dataBloqueio    DateTime?
   dataCriacao     DateTime             @default(now())
-  dataDesbloqueio DateTime
+  dataDesbloqueio DateTime?
   Cliente         Cliente              @relation(fields: [clienteId], references: [id])
   Plano           AssinaturaPlano      @relation(fields: [planoId], references: [id])
   Bloqueio        AssinaturaBloqueio[]
@@ -110,7 +110,7 @@ model AssinaturaBloqueio {
   contaSistemaId  Int
   ContaSistema    ContasSistema @relation(fields: [contaSistemaId], references: [id])
   motivo          String        @db.Text
-  dataBloqueio    DateTime
+  dataBloqueio    DateTime?
   dataDesbloqueio DateTime?
   assinaturaId    Int
   Assinatura      Assinatura    @relation(fields: [assinaturaId], references: [id])
@@ -129,7 +129,7 @@ model Configuracoes {
 
 model FinanceiroTransacao {
   id                     Int                      @id @default(autoincrement())
-  contaSistemaId         Int                      @default(1)
+  contaSistemaId         Int                   
   ContaSistema           ContasSistema            @relation(fields: [contaSistemaId], references: [id])
   clienteId              Int
   valor                  Float                    @default(0)
@@ -159,7 +159,7 @@ model FinanceiroTransacao {
 
 model FinanceiroParcelas {
   id             Int             @id @default(autoincrement())
-  contaSistemaId Int             @default(1)
+  contaSistemaId Int          
   ContaSistema   ContasSistema   @relation(fields: [contaSistemaId], references: [id])
   nome           String
   quantidade     Int             @default(1)
@@ -185,7 +185,7 @@ model FinanceiroParcelamento {
 
 model FianceiroFormasPagamento {
   id                  Int                   @id @default(autoincrement())
-  contaSistemaId      Int                   @default(1)
+  contaSistemaId      Int                 
   ContaSistema        ContasSistema         @relation(fields: [contaSistemaId], references: [id])
   forma               String
   cor                 String?
@@ -194,7 +194,7 @@ model FianceiroFormasPagamento {
 
 model FinanceiroCategorias {
   id                  Int                   @id @default(autoincrement())
-  contaSistemaId      Int                   @default(1)
+  contaSistemaId      Int                 
   ContaSistema        ContasSistema         @relation(fields: [contaSistemaId], references: [id])
   categoria           String
   cor                 String
@@ -203,7 +203,7 @@ model FinanceiroCategorias {
 
 model FinanceiroContas {
   id                  Int                   @id @default(autoincrement())
-  contaSistemaId      Int                   @default(1)
+  contaSistemaId      Int                
   ContaSistema        ContasSistema         @relation(fields: [contaSistemaId], references: [id])
   conta               String                @db.VarChar(200)
   saldo               Float                 @default(0)

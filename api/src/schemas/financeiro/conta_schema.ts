@@ -8,9 +8,9 @@ const createConta = zodUtil.object({
     required_error: "O saldo e obrigatorio",
     invalid_type_error: "O saldo deve ser um number",
   }),
-  regra: zodUtil.string({
-    required_error: "A regra e obrigatorio",
-    invalid_type_error: "A regra deve ser uma string",
+  regra: zodUtil.enum(["privada", "publica"], {
+    invalid_type_error: "A regra deve ser privada ou publica",
+    required_error: "A regra e obrigatoria",
   }),
   cor: zodUtil.string({
     required_error: "A cor e obrigatorio",
@@ -37,8 +37,8 @@ const updateConta = zodUtil.object({
   saldo: zodUtil.number({
     invalid_type_error: "O saldo deve ser um number",
   }).optional(),
-  regra: zodUtil.string({
-    invalid_type_error: "A regra deve ser uma string",
+  regra: zodUtil.enum(["privada", "publica"], {
+    invalid_type_error: "A regra deve ser privada ou publica",
   }).optional(),
   userId: zodUtil.number({
     invalid_type_error: "O userId deve ser um number",

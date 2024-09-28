@@ -1,10 +1,7 @@
 import {Request, Response} from 'express';
-import HttpErrorService from "../../services/http_error_service";
-import prismaService from "../../services/prisma_service";
-import ResponseService from "../../services/response_service";
 import { ValidationError } from "../../utils/http/lancar_erro";
-import validateSchema from '../../services/validade_schema';
 import { createParcelamento as createParcelamentoSchema, updateParcelamento as updateParcelamentoSchema } from '../../schemas/financeiro/parcelamento_schema';
+import { HttpErrorService, prismaService, ResponseService, validateSchema } from '../../services';
 export const createParcelamento = async (req: Request, res: Response) => {
   try {
     const validated = validateSchema(createParcelamentoSchema, req.body);

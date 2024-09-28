@@ -5,9 +5,9 @@ const createPermissoes = zodUtil.object({
     required_error: "A permissão e obrigatorio",
     invalid_type_error: "A permissão deve ser uma string",
   }),
-  status: zodUtil.string({
-    required_error: "O status e obrigatorio",
-    invalid_type_error: "O status deve ser uma string",
+  status: zodUtil.enum(["ativo", "inativo"], {
+    invalid_type_error: "O status deve ser ativo ou inativo",
+    required_error: "O status é obrigatório",
   }),
   slug: zodUtil.string({
     required_error: "O slug e obrigatorio",
@@ -22,8 +22,8 @@ const updatePermissoes = zodUtil.object({
   permissao: zodUtil.string({
     invalid_type_error: "A permissão deve ser uma string",
   }).optional(),
-  status: zodUtil.string({
-    invalid_type_error: "O status deve ser uma string",
+  status: zodUtil.enum(["ativo", "inativo"], {
+    invalid_type_error: "O status deve ser ativo ou inativo",
   }).optional(),
   slug: zodUtil.string({
     invalid_type_error: "O slug deve ser uma string",

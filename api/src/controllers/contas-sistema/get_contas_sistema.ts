@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import prismaService from "../../services/prisma_service";
+import { prismaService } from "../../services";
 
 export const getContasSistema = async (req: Request, res: Response) => {
     try {
