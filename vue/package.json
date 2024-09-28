@@ -9,12 +9,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@editorjs/editorjs": "^2.30.6",
+    "@editorjs/image": "^2.9.3",
+    "@editorjs/list": "^1.10.0",
+    "@editorjs/table": "^2.4.1",
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-brands-svg-icons": "^6.6.0",
     "@fortawesome/free-regular-svg-icons": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "@radix-icons/vue": "^1.0.0",
+    "@tailwindcss/typography": "^0.5.15",
     "@tanstack/vue-table": "^8.20.5",
     "@unovis/ts": "^1.4.3-beta.0",
     "@unovis/vue": "^1.4.3-beta.0",
