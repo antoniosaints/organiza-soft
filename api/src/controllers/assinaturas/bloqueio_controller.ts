@@ -30,8 +30,8 @@ export const getBloqueios = async (req: Request, res: Response) => {
 };
 
 export const getBloqueio = async (req: Request, res: Response) => {
-    const { id } = req.params;
     try {
+        const { id } = req.params;
         const bloqueio = await prismaService.assinaturaBloqueio.findUnique({ where: { id: Number(id), contaSistemaId: req.body.contaSistemaId } });
         ResponseService.success(res, { data: bloqueio });
     } catch (error: any) {
@@ -40,9 +40,9 @@ export const getBloqueio = async (req: Request, res: Response) => {
 };
 
 export const updateBloqueio = async (req: Request, res: Response) => {
-    const { id } = req.params;
     try {
-        const validated = validateSchema(updateBloqueio, req.body)
+        const { id } = req.params;
+        const validated = validateSchema(updateBloqueioSchemae, req.body)
         const bloqueio = await prismaService.assinaturaBloqueio.update({
             where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
             data: validated

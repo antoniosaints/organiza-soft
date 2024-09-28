@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
-import { StripeService } from "../../services/stripe_service";
-import prismaService from "../../services/prisma_service";
-import { stripe } from "../../libs/stripe";
+import { prismaService, StripeService } from "../../services";
 
 export const createCustomerStripe = async (req: Request, res: Response) => {
   const { name, email } = req.body;

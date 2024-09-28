@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import "dotenv/config";
-import { StripeService } from "../../services/stripe_service";
 import Stripe from "stripe";
 import { stripe } from "../../libs/stripe";
+import { StripeService } from "../../services";
 
 export const stripeWebhook = async (req: Request, res: Response) => {
   const sig = req.headers['stripe-signature'] as string;

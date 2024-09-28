@@ -1,11 +1,6 @@
-import { deleteFileService, renameFileService } from "../../services/file_service";
 import { Request, Response } from 'express';
-import HttpErrorService from "../../services/http_error_service";
-import prismaService from "../../services/prisma_service";
-import ResponseService from "../../services/response_service";
-import uploadService from "../../services/upload_service";
 import { createTransacao as createTransacaoSchema, updateTransacao as updateTransacaoSchema } from "../../schemas/financeiro/transacao_schema";
-import validateSchema from "../../services/validade_schema";
+import { deleteFileService, HttpErrorService, prismaService, renameFileService, ResponseService, uploadService, validateSchema } from '../../services';
 
 // Criação de transação
 export const createTransacao = async (req: Request, res: Response) => {

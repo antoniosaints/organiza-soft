@@ -19,15 +19,7 @@ const createCliente = zodUtil.object({
     required_error: "O endereço e obrigatorio",
     invalid_type_error: "O endereço deve ser uma string",
   }).optional(),
-  dataDesbloqueio: zodUtil.string({
-    required_error: "A data de desbloqueio é obrigatorio.",
-    invalid_type_error: "A data de desbloqueio deve ser uma string"
-  }).refine((val) => !isNaN(Date.parse(val)), {
-    message: "Data de desbloqueio inválida."
-  }).optional(),
-  status: zodUtil.string({
-    invalid_type_error: "O status do cliente deve ser uma string"
-  }).optional(),
+  status: zodUtil.enum(["ativo", "inativo"]).optional(),
   contaSistemaId: zodUtil.number({
     required_error: "O contaSistemaId é obrigatorio",
     invalid_type_error: "O contaSistemaId deve ser um number",
@@ -49,7 +41,8 @@ const updateCliente = zodUtil.object({
   endereco: zodUtil.string({
     invalid_type_error: "O endereço deve ser uma string",
   }).optional(),
-  dataDesbloqueio: zodUtil.string({
+  status: zodUtil.enum(["ativo", "inativo"]).optional(),
+  dataBloqueio: zodUtil.string({
     required_error: "A data de desbloqueio é obrigatorio.",
     invalid_type_error: "A data de desbloqueio deve ser uma string"
   }).refine((val) => !isNaN(Date.parse(val)), {

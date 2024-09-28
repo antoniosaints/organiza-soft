@@ -12,7 +12,8 @@ async function main() {
       stripeCustomerId: "",
     },
   })
-  await prisma.grupos.upsert({
+
+  await prisma.permissoesGrupos.upsert({
     where: { id: 1 },
     update: {},
     create: {
@@ -25,6 +26,7 @@ async function main() {
     where: { id: 1 },
     update: {},
     create: {
+      contaSistemaId: 1,
       nome: "Administrador",
       email: "admin@admin.com",
       senha: "admin",
@@ -33,10 +35,11 @@ async function main() {
       grupoId: 1,
     },
   }); 
-  await prisma.parcelas.upsert({
+  await prisma.financeiroParcelas.upsert({
     where: { id: 1 },
     update: {},
     create: {
+      contaSistemaId: 1,
       periodo: "mensal",
       nome: "1 vez",
       quantidade: 1,

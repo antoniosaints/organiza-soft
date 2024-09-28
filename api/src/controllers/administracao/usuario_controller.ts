@@ -1,10 +1,7 @@
 import { Request, Response } from "express";
 import { createUser, updateUser } from "../../schemas/administracao/usuarios_schema";
-import HttpErrorService from "../../services/http_error_service";
-import prismaService from "../../services/prisma_service";
-import ResponseService from "../../services/response_service";
-import validateSchema from "../../services/validade_schema";
 import { ValidationError } from "../../utils/http/lancar_erro";
+import { HttpErrorService, prismaService, ResponseService, validateSchema } from "../../services";
 
 export const createUsuario = async (req: Request, res: Response) => {
   try {

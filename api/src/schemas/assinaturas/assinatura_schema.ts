@@ -25,18 +25,9 @@ const createAssinatura = zodUtil.object({
     .refine((val) => !isNaN(Date.parse(val)), {
       message: "Data de fim inválida.",
     }),
-  status: zodUtil.string({
-    required_error: "O status da assinatura é obrigatoria.",
-    invalid_type_error: "O status da assinatura deve ser uma String",
-  }),
-  dataBloqueio: zodUtil
-    .string({
-      invalid_type_error: "A data de bloqueio deve ser uma string",
-    })
-    .refine((val) => !val || !isNaN(Date.parse(val)), {
-      message: "Data de bloqueio inválida",
-    })
-    .optional(),
+  status: zodUtil.enum(["ativa", "vencida", "cancelada"], {
+    invalid_type_error: "O status deve ser (ativa, vencida ou cancelada)",
+  }).optional(),
   contaSistemaId: zodUtil.number({
     required_error: "O contaSistemaId é obrigatorio",
     invalid_type_error: "O contaSistemaId deve ser um number",
@@ -70,11 +61,9 @@ const updateAssinatura = zodUtil.object({
       message: "Data de fim inválida",
     })
     .optional(),
-  status: zodUtil
-    .string({
-      invalid_type_error: "O status deve ser uma string",
-    })
-    .optional(),
+  status: zodUtil.enum(["ativa", "vencida", "cancelada"], {
+    invalid_type_error: "O status deve ser (ativa, vencida ou cancelada)",
+  }).optional(),
   dataDesbloqueio: zodUtil
     .string({
       invalid_type_error: "A data de desbloqueio deve ser uma string",
