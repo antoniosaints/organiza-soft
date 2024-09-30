@@ -54,7 +54,7 @@
                             <Cpu />
                             <span>Assistente de IA</span>
                             <div class="ml-auto flex space-x-1 items-center">
-                                <Badge v-if="true" class="bg-transparent shadow-none hover:bg-transparent"> <Waypoints class="h-4 w-4 text-orange-300" /> </Badge>
+                                <Skeleton v-if="true" class="bg-blue-500 rounded-full h-3 w-3 shadow-none" />
                                 <ChevronRight class="ml-auto h-4 w-4 transition-transform"
                                     :class="{ 'rotate-90': open }" />
                             </div>
@@ -63,8 +63,8 @@
                             <div class="grid gap-2 pl-6">
                                 <router-link to="/agentesia/playground"
                                     class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
-                                    <SquareTerminal />
-                                    <span>Playground</span>
+                                    <MessageCircle />
+                                    <span>Chat Integrado ✨</span>
                                 </router-link>
                             </div>
                         </collapsible-content>
@@ -402,7 +402,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { House, LockKeyhole, Users, List, Wallet, ChevronRight, LogOut, PanelLeftOpen, PanelLeftClose, Landmark, FileText, Package, Boxes, Group, Computer, Tags, BookOpenCheck, BadgeCheck, CalendarX2, FileChartPie, Settings2, PenTool, ClipboardCheck, Ticket, FileDigit, Archive, FileBadge2, FileStack, FileCheck, Layers, User, Contact, WalletMinimal, CircleDollarSign, Crown, Cpu, Waypoints, SquareTerminal } from 'lucide-vue-next'
+import { House, LockKeyhole, Users, List, Wallet, ChevronRight, LogOut, PanelLeftOpen, PanelLeftClose, Landmark, FileText, Package, Boxes, Group, Computer, Tags, BookOpenCheck, BadgeCheck, CalendarX2, FileChartPie, Settings2, PenTool, ClipboardCheck, Ticket, FileDigit, Archive, FileBadge2, FileStack, FileCheck, Layers, User, Contact, WalletMinimal, CircleDollarSign, Crown, Cpu, MessageCircle } from 'lucide-vue-next'
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible"
 import { BreadCrumb, ProfileHome, ToogleMode } from '.';
 import { Button } from '@/components/ui/button';
@@ -413,6 +413,7 @@ import { onUnmounted } from 'vue';
 import { Badge } from '@/components/ui/badge';
 import { useLoginStore } from '@/stores/login/loginStore';
 import { useMenuStore } from '@/stores/menuStore';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const widthWindow = ref(window.innerWidth);
 const stateDevelopment = ref('beta');

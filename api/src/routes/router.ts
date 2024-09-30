@@ -7,6 +7,7 @@ import { contasSistemaRouter } from "./contas-sistema";
 import { categoriaRouter, contasRouter, parcelamentoRouter, transacaoRouter } from "./financeiro";
 import { gruposRouter, permissoesRouter } from "./permissoes";
 import { stripeRouter } from "./stripe";
+import produtosRouter from "./patrimonio/produtos_router";
 
 const router = Router();
 
@@ -30,5 +31,7 @@ router.use("/categoria", auth_middleware, accountMiddleware, categoriaRouter);
 router.use("/stripe", auth_middleware, accountMiddleware, stripeRouter);
 // Rotas de contas do sistema
 router.use("/contas-sistema", auth_middleware, contasSistemaRouter);
+// Rotas de patrimonio
+router.use("/patrimonio/produto", auth_middleware, accountMiddleware, produtosRouter);
 
 export default router;

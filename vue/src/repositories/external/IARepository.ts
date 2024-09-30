@@ -16,6 +16,7 @@ export class IARepository {
     if (response.choices[0].message.tool_calls) {
       const res = await registerFunctionsIA(response.choices[0].message);
       if (res) return res;
+      return response.choices[0].message;
     }
 
     return response.choices[0].message;
