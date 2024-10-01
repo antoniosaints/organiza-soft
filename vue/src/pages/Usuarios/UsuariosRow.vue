@@ -22,7 +22,7 @@
             <UsuarioBadge :status="usuario.status" />
         </TableCell>
         <TableCell class="text-right">
-            <UsuarioActions :id="usuario.id" />
+            <UsuarioActions :user="usuario" />
         </TableCell>
     </TableRow>
 </template>
