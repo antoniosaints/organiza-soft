@@ -36,7 +36,7 @@ export const useUsuarioStore = defineStore("usuarioStore", (): IUsuarioStore => 
   
       const deleteSelectedItens = async () => {
         try {
-          if (!Autorize.can("deletar", "clientes")) return;
+          if (!Autorize.can("deletar", "usuarios")) return;
           await Promise.all(
             selectedItens.value.map(async (id) => {
               await UsuariosRepository.delete(id);

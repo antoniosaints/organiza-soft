@@ -1,5 +1,6 @@
 <template>
-    <TableRow @click="clienteStore.handleSelectItens(cliente.id as number)" :class="{ 'bg-primary/40 hover:bg-primary/30': hasSelected }" class="transition-colors">
+    <TableRow :class="{ 'bg-primary/40 hover:bg-primary/30': hasSelected }" class="transition-colors">
+        <TableCell ><Checkbox :checked="hasSelected" @click="clienteStore.handleSelectItens(cliente.id as number)" /></TableCell>
         <TableCell ><span class="px-2 py-1 bg-secondary rounded-md">#{{ cliente.id }}</span></TableCell>
         <TableCell >
             <HoverCard>
@@ -32,6 +33,7 @@ import ICliente from "@/types/clientes/ICliente";
 import { ClienteAction, ClienteBadge, ClienteDetails } from ".";
 import { useClienteStore } from "@/stores/crm/clientes/clienteStore";
 import { computed } from "vue";
+import { Checkbox } from "@/components/ui/checkbox";
 const clienteStore = useClienteStore();
 
 const hasSelected = computed(() => {
