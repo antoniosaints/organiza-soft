@@ -8,7 +8,7 @@
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" class="w-28">
-                <DropdownMenuItem @click="onEditarUsuario(id)">
+                <DropdownMenuItem @click="onEditarUsuario(user.id as number)">
                     <Pencil class="mr-2 h-3 w-3" />
                     Editar
                 </DropdownMenuItem>
@@ -28,7 +28,7 @@
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                    <AlertDialogAction class="bg-destructive hover:bg-destructive/90 text-destructive-foreground" @click="onDeletarUsuario(id)">Deletar</AlertDialogAction>
+                    <AlertDialogAction class="bg-destructive hover:bg-destructive/90 text-destructive-foreground" @click="onDeletarUsuario(user)">Deletar</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
@@ -52,6 +52,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { UsuariosRepository } from "@/repositories/usuarios/usuariosRepository";
 import { useUsuarioFormularioStore } from "@/stores/usuarios/usuarioFormularioStore";
 import { useUsuarioStore } from "@/stores/usuarios/usuarioStore";
+import IUsuario from '@/types/usuarios/IUsuario';
 import { ScToastUtil } from '@/utils/scToastUtil';
 import { Ellipsis, Pencil, Trash2 } from "lucide-vue-next";
 import { ref } from "vue";
@@ -61,17 +62,17 @@ const UsuarioState = useUsuarioStore();
 const openDialogDelete = ref(false);
 
 defineProps<{
-    id: number|any
+    user: IUsuario
 }>()
 
-const onDeletarUsuario = async (id: number) => {
+const onDeletarUsuario = async (user: IUsuario) => {
     if (!Autorize.can("deletar", "usuarios")) return;
-    if (id === 1) {
+    if (["proprietario", "socio"].includes(user.regra)) {
         ScToastUtil.warning("O usuário master não pode ser excluído.");
         return;
     }
     try {
-        await UsuariosRepository.delete(id);
+        await UsuariosRepository.delete(user.id as number);
         UsuarioState.getUsuarios();
         openDialogDelete.value = false;
         ScToastUtil.success("Usuário deletado com sucesso!");
