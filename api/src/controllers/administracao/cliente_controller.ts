@@ -19,10 +19,27 @@ export const createCliente = async (req: Request, res: Response) => {
 
 export const getClientes = async (req: Request, res: Response) => {
   try {
-    const clientes = await prismaService.cliente.findMany({
-      where: { contaSistemaId: req.body.contaSistemaId },
-    });
-    ResponseService.success(res, { data: clientes });
+    const { limit, page, search } = req.query;
+    const offset = (Number(page) - 1) * Number(limit);
+    const busca = search as string || "";
+
+    const [items, total] = await Promise.all([
+      prismaService.cliente.findMany({
+        skip: offset || 0,
+        take: Number(limit) || 10,
+        where: {
+          OR: [
+            { nome: { contains: busca } },
+            { email: { contains: busca } }
+          ],
+          contaSistemaId: req.body.contaSistemaId
+        },
+      }),
+      prismaService.cliente.count({
+        where: {contaSistemaId: req.body.contaSistemaId},
+      }),
+    ])
+    ResponseService.success(res, { data: items, total });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
   }

@@ -31,9 +31,9 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { HoverCard, HoverCardTrigger, HoverCardContent } from "@/components/ui/hover-card";
-import UsuarioDetails from "@/pages/Usuarios/UsuarioDetails.vue";
-import UsuarioBadge from "@/pages/Usuarios/UsuarioBadge.vue";
-import UsuarioActions from "@/pages/Usuarios/UsuarioActions.vue";
+import UsuarioDetails from "@/pages/Administracao/Usuarios/UsuarioDetails.vue";
+import UsuarioBadge from "@/pages/Administracao/Usuarios/UsuarioBadge.vue";
+import UsuarioActions from "@/pages/Administracao/Usuarios/UsuarioActions.vue";
 import IUsuario from "@/types/usuarios/IUsuario";
 import { Crown, ShieldMinus } from "lucide-vue-next";
 

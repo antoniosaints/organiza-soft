@@ -5,5 +5,5 @@
 </template>
 
 <script setup lang="ts">
-import UsuariosTable from '@/pages/Usuarios/UsuariosTable.vue';
+import UsuariosTable from '@/pages/Administracao/Usuarios/UsuariosTable.vue';
 </script>

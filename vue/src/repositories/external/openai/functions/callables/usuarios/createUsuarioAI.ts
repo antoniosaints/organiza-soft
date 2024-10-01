@@ -1,4 +1,4 @@
-import { UsuariosRepository } from "@/repositories/usuarios/usuariosRepository";
+import { UsuariosRepository } from "@/repositories/administracao/usuarios/usuariosRepository";
 import { ScToastUtil } from "@/utils/scToastUtil";
 import {
   ChatCompletionMessage,
