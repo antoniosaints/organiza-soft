@@ -1,0 +1,5 @@
+export { default as ClienteAction } from './ClienteActions.vue'
+export { default as ClienteTable } from './ClienteTable.vue'
+export { default as ClienteBadge } from './ClienteBadge.vue'
+export { default as ClienteDetails } from './ClienteDetails.vue'
+export { default as ClienteRow } from './ClienteRow.vue'

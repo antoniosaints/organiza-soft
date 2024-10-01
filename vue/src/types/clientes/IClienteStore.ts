@@ -1,9 +1,9 @@
 import { Ref } from "vue";
-import IUsuario from "./IUsuario";
+import ICliente from "./ICliente";
 
-export interface IUsuarioStore {
-    getUsuarios(): Promise<void>;
-    usuarios: Ref<IUsuario[]>;
+export interface IClienteStore {
+    getClientes(): Promise<void>;
+    clientes: Ref<ICliente[]>;
     limit: Ref<string>;
     page: Ref<number>;
     total: Ref<number>;

@@ -30,13 +30,26 @@ const routes: RouteRecordRaw[] = [
                         path: "/administracao/usuarios",
                         name: "Usuarios",
                         meta: { breadcrumb: 'Usuários' },
-                        component: () => import("@/views/Usuarios/UsuariosView.vue")
+                        component: () => import("@/views/Administracao/Usuarios/UsuariosView.vue")
                     },
                     {
                         path: "/administracao/logs",
                         name: "Logs",
                         meta: { breadcrumb: 'Logs do sistema' },
                         component: () => import("@/views/Administracao/LogSistema/LogsView.vue")
+                    }
+                ]
+            },
+            {
+                path: "/crm",
+                name: "crm",
+                // meta: { breadcrumb: 'Administracao' },
+                children: [
+                    {
+                        path: "/crm/clientes",
+                        name: "Clientes",
+                        meta: { breadcrumb: 'Clientes' },
+                        component: () => import("@/views/Crm/Clientes/ClienteView.vue")
                     }
                 ]
             },

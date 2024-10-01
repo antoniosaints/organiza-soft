@@ -49,9 +49,9 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { UsuariosRepository } from "@/repositories/usuarios/usuariosRepository";
-import { useUsuarioFormularioStore } from "@/stores/usuarios/usuarioFormularioStore";
-import { useUsuarioStore } from "@/stores/usuarios/usuarioStore";
+import { UsuariosRepository } from "@/repositories/administracao/usuarios/usuariosRepository";
+import { useUsuarioFormularioStore } from "@/stores/administracao/usuarios/usuarioFormularioStore";
+import { useUsuarioStore } from "@/stores/administracao/usuarios/usuarioStore";
 import IUsuario from '@/types/usuarios/IUsuario';
 import { ScToastUtil } from '@/utils/scToastUtil';
 import { Ellipsis, Pencil, Trash2 } from "lucide-vue-next";

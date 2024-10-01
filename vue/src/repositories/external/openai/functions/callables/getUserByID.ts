@@ -1,5 +1,5 @@
 import { Autorize } from "@/autorization";
-import { UsuariosRepository } from "@/repositories/usuarios/usuariosRepository";
+import { UsuariosRepository } from "@/repositories/administracao/usuarios/usuariosRepository";
 import {
   ChatCompletionMessage,
   ChatCompletionMessageParam,
