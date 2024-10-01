@@ -6,11 +6,13 @@
         </div>
         <div class="space-y-2">
             <Label for="email">Email</Label>
-            <Input id="email" placeholder="Email de acesso" type="email" v-model="UsuarioFormularioStore.data.email" required />
+            <Input id="email" placeholder="Email de acesso" type="email" v-model="UsuarioFormularioStore.data.email"
+                required />
         </div>
         <div class="space-y-2">
             <Label for="senha">Senha</Label>
-            <Input id="senha" placeholder="......" type="password" v-model="UsuarioFormularioStore.data.senha" required />
+            <Input id="senha" placeholder="......" type="password" v-model="UsuarioFormularioStore.data.senha"
+                required />
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="space-y-2">
@@ -24,8 +26,8 @@
                         <SelectItem v-if="isGestorSistema" value="socio">Sócio (Dono)</SelectItem>
                         <SelectItem value="admin">Administrador</SelectItem>
                         <SelectItem value="gerente">Gerente</SelectItem>
-                        <SelectItem value="moderador">Moderador</SelectItem>       
-                        <SelectItem value="submoderador">Submoderador</SelectItem>       
+                        <SelectItem value="moderador">Moderador</SelectItem>
+                        <SelectItem value="submoderador">Submoderador</SelectItem>
                         <SelectItem value="visualizador">Visualizador</SelectItem>
                     </SelectContent>
                 </Select>
@@ -46,10 +48,14 @@
         </div>
         <div class="space-y-2">
             <Label for="phone">Telefone</Label>
-            <Input id="phone" placeholder="(00) 00000-0000" type="text" v-model="UsuarioFormularioStore.data.telefone" />
+            <Input id="phone" placeholder="(00) 00000-0000" type="text"
+                v-model="UsuarioFormularioStore.data.telefone" />
         </div>
         <div class="flex justify-end space-x-2">
-            <Button type="submit"><CircleCheck class="w-4 h-4 mr-2" /> {{ UsuarioFormularioStore.userId == null ? 'Salvar' : 'Atualizar' }}</Button>
+            <Button type="submit">
+                <CircleCheck class="w-4 h-4 mr-2" /> {{ UsuarioFormularioStore.userId == null ? 'Salvar' : 'Atualizar'
+                }}
+            </Button>
         </div>
     </form>
 </template>
@@ -76,13 +82,15 @@ const handleSubmit = async (): Promise<void> => {
         if (UsuarioFormularioStore.userId == null) {
             await UsuariosRepository.create(UsuarioFormularioStore.data);
             ScToastUtil.success("Usuário criado com sucesso!");
-        }else {
-            await UsuariosRepository.update(UsuarioFormularioStore.userId, UsuarioFormularioStore.data);
-            ScToastUtil.success("Usuário atualizado com sucesso!");
+        } else {
+            const data = await UsuariosRepository.update(UsuarioFormularioStore.userId, UsuarioFormularioStore.data);
+            if (data) {
+                ScToastUtil.success("Usuário atualizado com sucesso!");
+            }
         }
         UsuarioFormularioStore.isModalOpen = false;
         UsuarioStore.getUsuarios();
-    }catch (error: any) {
+    } catch (error: any) {
         ScToastUtil.warning(error.response.data.message);
     }
 };
