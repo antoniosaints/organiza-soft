@@ -32,8 +32,8 @@
                     <Button variant="outline"> <CircleChevronDown class="w-4 h-4 mr-2" /> Ações</Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                    <DropdownMenuItem @click="clienteStore.deleteSelectedItens">
-                        <Trash2 class="w-4 h-4 mr-2" /> Deletar Selecionados
+                    <DropdownMenuItem class="hover:bg-destructive cursor-pointer" @click="clienteStore.deleteSelectedItens">
+                        <Trash2 class="w-4 h-4 mr-2" /> Deletar registros
                     </DropdownMenuItem>
                 </DropdownMenuContent>
                 <DropdownMenuSeparator />
@@ -43,6 +43,7 @@
             <Table v-if="dataExists">
                 <TableHeader>
                     <TableRow class="bg-secondary">
+                        <TableHead></TableHead>
                         <TableHead>ID</TableHead>
                         <TableHead>Nome</TableHead>
                         <TableHead class="hidden sm:table-cell">E-nail</TableHead>
