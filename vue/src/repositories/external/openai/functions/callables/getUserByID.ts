@@ -1,3 +1,4 @@
+import { Autorize } from "@/autorization";
 import { UsuariosRepository } from "@/repositories/usuarios/usuariosRepository";
 import {
   ChatCompletionMessage,
@@ -29,6 +30,10 @@ export const getUserByID = async (response: ChatCompletionMessage): Promise<Chat
   try {
     if (response.tool_calls) {
         const function_arguments = JSON.parse(response.tool_calls[0].function.arguments);
+        if (!Autorize.can("detalhar", "usuarios")) return {
+          role: "assistant",
+          content: "Não tens permissão para realizar esta ação, tente novamente mais tarde",
+        };
         const res = await UsuariosRepository.get(Number(function_arguments.userId));
         if (res) {
           return {

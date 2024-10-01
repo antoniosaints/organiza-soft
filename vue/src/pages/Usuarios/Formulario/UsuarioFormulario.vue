@@ -65,12 +65,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { UsuariosRepository } from "@/repositories/usuarios/usuariosRepository";
 import { useUsuarioFormularioStore } from "@/stores/usuarios/usuarioFormularioStore";
 import { useUsuarioStore } from "@/stores/usuarios/usuarioStore";
 import { CircleCheck } from "lucide-vue-next";
 import { computed } from "vue";
-import { ScToastUtil } from "@/utils/scToastUtil";
+import { UsuarioService } from "@/services/administracao/usuarioService";
 const UsuarioFormularioStore = useUsuarioFormularioStore();
 const UsuarioStore = useUsuarioStore();
 
@@ -78,20 +77,12 @@ const isGestorSistema = computed(() => {
     return UsuarioFormularioStore.data.regra == "proprietario" || UsuarioFormularioStore.data.regra == "socio";
 })
 const handleSubmit = async (): Promise<void> => {
-    try {
-        if (UsuarioFormularioStore.userId == null) {
-            await UsuariosRepository.create(UsuarioFormularioStore.data);
-            ScToastUtil.success("Usuário criado com sucesso!");
-        } else {
-            const data = await UsuariosRepository.update(UsuarioFormularioStore.userId, UsuarioFormularioStore.data);
-            if (data) {
-                ScToastUtil.success("Usuário atualizado com sucesso!");
-            }
-        }
+    let res = null;
+    if (UsuarioFormularioStore.userId == null) res = await UsuarioService.create(UsuarioFormularioStore.data);
+    else res = await UsuarioService.update(UsuarioFormularioStore.userId, UsuarioFormularioStore.data);
+    if (res) {
         UsuarioFormularioStore.isModalOpen = false;
         UsuarioStore.getUsuarios();
-    } catch (error: any) {
-        ScToastUtil.warning(error.response.data.message);
     }
 };
 </script>

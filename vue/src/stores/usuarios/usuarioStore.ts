@@ -1,3 +1,4 @@
+import { Autorize } from "@/autorization";
 import { UsuariosRepository } from "@/repositories/usuarios/usuariosRepository";
 import IUsuario from "@/types/usuarios/IUsuario";
 import { IUsuarioStore } from "@/types/usuarios/IUsuarioStore";
@@ -14,6 +15,7 @@ export const useUsuarioStore = defineStore("usuarioStore", (): IUsuarioStore => 
 
     const getUsuarios = async (): Promise<void> => {
         try {
+            if (!Autorize.can("visualizar", "usuarios")) return;
             const { data, total: totalUsuarios } = await UsuariosRepository.getAll(Number(limit.value), page.value, search.value);
             usuarios.value = data;
             total.value = totalUsuarios;
