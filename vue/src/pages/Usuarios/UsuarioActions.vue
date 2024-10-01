@@ -36,6 +36,7 @@
 </template>
 
 <script setup lang="ts">
+import { Autorize } from '@/autorization';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -64,6 +65,7 @@ defineProps<{
 }>()
 
 const onDeletarUsuario = async (id: number) => {
+    if (!Autorize.can("deletar", "usuarios")) return;
     if (id === 1) {
         ScToastUtil.warning("O usuário master não pode ser excluído.");
         return;
@@ -79,6 +81,7 @@ const onDeletarUsuario = async (id: number) => {
 }
 
 const onEditarUsuario = async (id: number) => {
+    if (!Autorize.can("atualizar", "usuarios")) return;
     UsuarioFormularioState.userId = id;
     UsuarioFormularioState.data = await UsuariosRepository.get(id);
     UsuarioFormularioState.isModalOpen = true;

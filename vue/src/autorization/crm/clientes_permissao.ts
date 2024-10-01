@@ -1,27 +1,24 @@
 import { ScToastUtil } from '@/utils/scToastUtil';
-import { IAbility, IEntity, IRole } from '../types';
+import { IAbility, IEntity } from '../types';
+import IUsuario from '@/types/usuarios/IUsuario';
+import { ACLgerente, ACLmanager } from '../default';
+import { IRegra } from '@/types/usuarios/IRegra';
 
 export class ClientesPermissoesACL {
-    static rolePermissions: Record<IRole, IAbility[]> = {
-        proprietario: ["criar", "visualizar", "atualizar", "deletar"],
-        socio: ["criar", "visualizar", "atualizar", "deletar"],
-        admin: ["criar", "visualizar", "atualizar", "deletar"],
-        gerente: ["criar", "visualizar", "atualizar"],
+    static rolePermissions: Record<IRegra, IAbility[]> = {
+        proprietario: ACLmanager,
+        socio: ACLmanager,
+        admin: ACLmanager,
+        gerente: ACLgerente,
         moderador: ["visualizar", "atualizar"],
         submoderador: ["visualizar"],
         visualizador: ["visualizar"]
     };
 
-    static can(role: IRole, ability: IAbility, entity: IEntity): boolean {
-        if (role === "admin") {
-            return true;
-        }
-
-        const allowedAbilities = this.rolePermissions[role] || [];
+    static can(subject: IUsuario, ability: IAbility, entity: IEntity): boolean {
+        const allowedAbilities = this.rolePermissions[subject.regra] || [];
         const res = allowedAbilities.includes(ability);
-        if (!res) {
-            ScToastUtil.warning(`Você não tem permissão para ${ability} ${entity}.`);
-        }
+        if (!res) ScToastUtil.warning(`Você não tem permissão para ${ability} ${entity}.`);
         return res;
     }
 }

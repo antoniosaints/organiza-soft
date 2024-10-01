@@ -1,0 +1,1 @@
+export type IRegra = "proprietario" | "socio" | "admin" | "gerente" | "moderador" | "submoderador" | "visualizador";
