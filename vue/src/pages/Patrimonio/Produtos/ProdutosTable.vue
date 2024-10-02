@@ -84,6 +84,7 @@
                 </Button>
             </div>
         </div>
+        <DetalhesProduto />
         <div v-if="dataExists" class="flex flex-col md:flex-row justify-between items-center mt-4">
             <Label class="text-foreground/80">Mostrando de {{ rangeStart }} até {{ rangeEnd }} de {{ mainStore.total
                 }}</Label>
@@ -180,6 +181,7 @@ import { useProdutoStore } from "@/stores/patrimonio/produtos/produtoStore";
 import { useProdutoFormularioStore } from "@/stores/patrimonio/produtos/produtoFormularioStore";
 import { ProdutosRow } from ".";
 import ProdutoModal from "./Formulario/ProdutoModal.vue";
+import DetalhesProduto from "./Infos/DetalhesProduto.vue";
 
 const mainStore = useProdutoStore();
 const formularioStore = useProdutoFormularioStore();
