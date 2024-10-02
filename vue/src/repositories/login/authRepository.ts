@@ -1,5 +1,5 @@
 import axiosService from "../../services/http/axiosService";
-import IUserLogin from "../../types/login/IUserLogin";
+import IUserLogin from "../../types/administracao/login/IUserLogin";
 
 export default class AuthRepository {
     static async login(usuario: IUserLogin): Promise<any> {

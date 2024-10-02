@@ -1,4 +1,5 @@
 import IParcelamento from "./IParcelamento";
+import { IStatusTransacao } from "./IStatusTransacao";
 
 export default interface ITransacao {
     id?: number;
@@ -10,10 +11,7 @@ export default interface ITransacao {
     categoriasId: number;
     parcelado: string;
     valor: number;
-    status: 'recebido' | 'pendente' | 'cancelada';
-    planoId?: number;
-    servicoId?: number;
-    parcelamentoId?: number;
+    status: IStatusTransacao;
     desconto?: number;
     valorFinal: number;
     dataEfetivado?: Date;

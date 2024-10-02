@@ -52,7 +52,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { ClientesRepository } from '@/repositories/crm/clientes/clientesRepository';
 import { useClienteFormularioStore } from '@/stores/crm/clientes/clienteFormularioStore';
 import { useClienteStore } from '@/stores/crm/clientes/clienteStore';
-import ICliente from '@/types/clientes/ICliente';
+import ICliente from '@/types/administracao/clientes/ICliente';
 import { ScToastUtil } from '@/utils/scToastUtil';
 import { Ellipsis, Pencil, Trash2 } from "lucide-vue-next";
 import { ref } from "vue";
@@ -70,6 +70,7 @@ const onDeletar = async (cliente: ICliente) => {
     try {
         await ClientesRepository.delete(cliente.id as number);
         ClienteState.getClientes();
+        ClienteState.selectedItens = [];
         openDialogDelete.value = false;
         ScToastUtil.success("Cliente deletado com sucesso!");
     } catch (e: any) {

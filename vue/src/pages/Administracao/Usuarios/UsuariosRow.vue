@@ -34,7 +34,7 @@ import { HoverCard, HoverCardTrigger, HoverCardContent } from "@/components/ui/h
 import UsuarioDetails from "@/pages/Administracao/Usuarios/UsuarioDetails.vue";
 import UsuarioBadge from "@/pages/Administracao/Usuarios/UsuarioBadge.vue";
 import UsuarioActions from "@/pages/Administracao/Usuarios/UsuarioActions.vue";
-import IUsuario from "@/types/usuarios/IUsuario";
+import IUsuario from "@/types/administracao/usuarios/IUsuario";
 import { Crown, ShieldMinus } from "lucide-vue-next";
 
 const colorBadgePermissao = (regra: string) => {

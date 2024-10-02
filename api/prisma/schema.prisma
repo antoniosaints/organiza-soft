@@ -21,7 +21,7 @@ model Usuario {
   dataCriacao    DateTime           @default(now())
   grupoId        Int
   Contas         FinanceiroContas[]
-  Grupos         PermissoesGrupos   @relation(fields: [grupoId], references: [id])
+  Grupos         PermissoesGrupos   @relation(fields: [grupoId], references: [id], onDelete: Restrict)
 
   @@unique([email, contaSistemaId])
   @@index([grupoId], map: "Usuario_grupoId_fkey")
@@ -40,8 +40,8 @@ model PermissoesOnGrupos {
   grupoId       Int
   createdAt     DateTime         @default(now())
   permissaoSlug String
-  Grupo         PermissoesGrupos @relation(fields: [grupoId], references: [id])
-  Permissao     Permissoes       @relation(fields: [permissaoSlug], references: [slug])
+  Grupo         PermissoesGrupos @relation(fields: [grupoId], references: [id], onDelete: Restrict)
+  Permissao     Permissoes       @relation(fields: [permissaoSlug], references: [slug], onDelete: Restrict)
 
   @@id([permissaoSlug, grupoId])
   @@index([grupoId], map: "PermissoesOnGrupos_grupoId_fkey")
@@ -84,8 +84,8 @@ model Assinatura {
   dataBloqueio    DateTime?
   dataCriacao     DateTime             @default(now())
   dataDesbloqueio DateTime?
-  Cliente         Cliente              @relation(fields: [clienteId], references: [id])
-  Plano           AssinaturaPlano      @relation(fields: [planoId], references: [id])
+  Cliente         Cliente              @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+  Plano           AssinaturaPlano      @relation(fields: [planoId], references: [id], onDelete: Restrict)
   Bloqueio        AssinaturaBloqueio[]
 
   @@index([clienteId], map: "Assinatura_clienteId_fkey")
@@ -113,7 +113,7 @@ model AssinaturaBloqueio {
   dataBloqueio    DateTime?
   dataDesbloqueio DateTime?
   assinaturaId    Int
-  Assinatura      Assinatura    @relation(fields: [assinaturaId], references: [id])
+  Assinatura      Assinatura    @relation(fields: [assinaturaId], references: [id], onDelete: Cascade)
 
   @@index([assinaturaId], map: "Bloqueio_assinaturaId_fkey")
 }
@@ -145,10 +145,10 @@ model FinanceiroTransacao {
   parcelado              Parcelado                @default(nao)
   status                 StatusTransacao          @default(pendente)
   valorFinal             Float                    @default(0)
-  Categoria              FinanceiroCategorias     @relation(fields: [categoriasId], references: [id])
-  Cliente                Cliente                  @relation(fields: [clienteId], references: [id])
-  Conta                  FinanceiroContas         @relation(fields: [contaId], references: [id])
-  FormaPagamento         FianceiroFormasPagamento @relation(fields: [formaPagamentoId], references: [id])
+  Categoria              FinanceiroCategorias     @relation(fields: [categoriasId], references: [id], onDelete: Restrict)
+  Cliente                Cliente                  @relation(fields: [clienteId], references: [id], onDelete: Restrict)
+  Conta                  FinanceiroContas         @relation(fields: [contaId], references: [id], onDelete: Restrict)
+  FormaPagamento         FianceiroFormasPagamento @relation(fields: [formaPagamentoId], references: [id], onDelete: Restrict)
   FinanceiroParcelamento FinanceiroParcelamento[]
 
   @@index([categoriasId], map: "Transacao_categoriasId_fkey")
@@ -211,7 +211,7 @@ model FinanceiroContas {
   userId              Int
   cor                 String?
   descricao           String                @db.Text
-  Usuario             Usuario               @relation(fields: [userId], references: [id])
+  Usuario             Usuario               @relation(fields: [userId], references: [id], onDelete: Restrict)
   FinanceiroTransacao FinanceiroTransacao[]
 
   @@index([userId], map: "Contas_userId_fkey")
@@ -255,7 +255,7 @@ model PatrimonioProdutos {
   produto                       String
   cor                           String
   contaSistemaId                Int
-  ContaSistema                  ContasSistema                   @relation(fields: [contaSistemaId], references: [id])
+  ContaSistema                  ContasSistema                   @relation(fields: [contaSistemaId], references: [id], onDelete: Restrict)
   categoriaId                   Int
   Categoria                     PatrimonioProdutoCategoria      @relation(fields: [categoriaId], references: [id])
   descricao                     String                          @db.Text
@@ -273,9 +273,10 @@ model PatrimonioProdutos {
 model PatrimonioProdutoCategoria {
   id                 Int                  @id @default(autoincrement())
   categoria          String
+  cor                String               @default("blue")
   contaSistemaId     Int
   ContaSistema       ContasSistema        @relation(fields: [contaSistemaId], references: [id])
-  descricao          String               @db.Text
+  descricao          String?              @db.Text
   dataCriado         DateTime             @default(now())
   dataAtualizado     DateTime             @updatedAt
   PatrimonioProdutos PatrimonioProdutos[]
@@ -295,9 +296,9 @@ model PatrimonioArmazenamentos {
 
 model PatrimonioProdutosEstoques {
   id             Int                      @id @default(autoincrement())
-  Produto        PatrimonioProdutos       @relation(fields: [produtoId], references: [id])
+  Produto        PatrimonioProdutos       @relation(fields: [produtoId], references: [id], onDelete: Restrict)
   produtoId      Int
-  Armazen        PatrimonioArmazenamentos @relation(fields: [armazenId], references: [id])
+  Armazen        PatrimonioArmazenamentos @relation(fields: [armazenId], references: [id], onDelete: Restrict)
   armazenId      Int
   contaSistemaId Int
   ContaSistema   ContasSistema            @relation(fields: [contaSistemaId], references: [id])
@@ -311,9 +312,9 @@ model PatrimonioProdutosEstoques {
 
 model PatrimonioProdutosMovimentos {
   id             Int                      @id @default(autoincrement())
-  Produto        PatrimonioProdutos       @relation(fields: [produtoId], references: [id])
+  Produto        PatrimonioProdutos       @relation(fields: [produtoId], references: [id], onDelete: Cascade)
   produtoId      Int
-  Armazen        PatrimonioArmazenamentos @relation(fields: [armazenId], references: [id])
+  Armazen        PatrimonioArmazenamentos @relation(fields: [armazenId], references: [id], onDelete: Restrict)
   armazenId      Int
   contaSistemaId Int
   ContaSistema   ContasSistema            @relation(fields: [contaSistemaId], references: [id])
@@ -341,9 +342,9 @@ model PatrimonioFornecedores {
 
 model PatrimonioComprasFornecedores {
   id             Int                    @id @default(autoincrement())
-  Produto        PatrimonioProdutos     @relation(fields: [produtoId], references: [id])
+  Produto        PatrimonioProdutos     @relation(fields: [produtoId], references: [id], onDelete: Cascade)
   produtoId      Int
-  Fornecedor     PatrimonioFornecedores @relation(fields: [fornecedorId], references: [id])
+  Fornecedor     PatrimonioFornecedores @relation(fields: [fornecedorId], references: [id], onDelete: Restrict)
   fornecedorId   Int
   contaSistemaId Int
   ContaSistema   ContasSistema          @relation(fields: [contaSistemaId], references: [id])

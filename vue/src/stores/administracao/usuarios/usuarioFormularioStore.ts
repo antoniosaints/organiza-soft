@@ -1,5 +1,5 @@
-import IUsuario from "@/types/usuarios/IUsuario";
-import { IUsuarioFormularioStore } from "@/types/usuarios/IUsuarioFormularioStore";
+import IUsuario from "@/types/administracao/usuarios/IUsuario";
+import { IUsuarioFormularioStore } from "@/types/administracao/usuarios/IUsuarioFormularioStore";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 

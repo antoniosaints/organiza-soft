@@ -29,15 +29,33 @@
             </Button>
             <DropdownMenu v-if="clienteStore.selectedItens.length > 0">
                 <DropdownMenuTrigger asChild>
-                    <Button variant="outline"> <CircleChevronDown class="w-4 h-4 mr-2" /> Ações</Button>
+                    <Button variant="outline">
+                        <CircleChevronDown class="w-4 h-4 mr-2" /> Ações
+                    </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                    <DropdownMenuItem class="hover:bg-destructive cursor-pointer" @click="clienteStore.deleteSelectedItens">
+                    <DropdownMenuItem class="hover:bg-destructive cursor-pointer"
+                        @click="openDialogMultilineDelete = true">
                         <Trash2 class="w-4 h-4 mr-2" /> Deletar registros
                     </DropdownMenuItem>
                 </DropdownMenuContent>
                 <DropdownMenuSeparator />
             </DropdownMenu>
+            <AlertDialog v-model:open="openDialogMultilineDelete">
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Confirma essa operação de exclusão?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Após a confirmação, todos os registros selecionados serão deletados.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                        <AlertDialogAction class="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
+                            @click="deleteMultilineSelects">Deletar</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
         <div class="rounded-lg border shadow-sm overflow-auto">
             <Table v-if="dataExists">
@@ -59,8 +77,11 @@
 
             <div v-else class="w-full text-blue-100 flex flex-col justify-center items-center">
                 <img class="w-64" src="/not_found.svg" />
-                <p class="mb-6 font-sans text-xl text-black dark:text-white flex items-center">Nenhum registro encontrado {{ clienteStore.search == '' ? '' : ' com: ' + clienteStore.search }}</p>
-                <Button @click="openFormularioNovoCliente" class="bg-primary mb-6 hover:bg-primary/90"><UserPlus2 class="mr-1 h-4 w-4" />  Novo cliente</Button>
+                <p class="mb-6 font-sans text-xl text-black dark:text-white flex items-center">Nenhum registro
+                    encontrado {{ clienteStore.search == '' ? '' : ' com: ' + clienteStore.search }}</p>
+                <Button @click="openFormularioNovoCliente" class="bg-primary mb-6 hover:bg-primary/90">
+                    <UserPlus2 class="mr-1 h-4 w-4" /> Novo cliente
+                </Button>
             </div>
         </div>
         <div v-if="dataExists" class="flex flex-col md:flex-row justify-between items-center mt-4">
@@ -157,6 +178,8 @@ import { ClienteRow } from ".";
 import ClienteModal from "./Formulario/ClienteModal.vue";
 import { useClienteFormularioStore } from "@/stores/crm/clientes/clienteFormularioStore";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { ref } from "vue";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
 const clienteStore = useClienteStore();
 const clienteFormularioStore = useClienteFormularioStore();
@@ -168,6 +191,13 @@ const dataExists = computed(() => clienteStore.clientes.length > 0);
 watch(perPage, () => {
     loadDataChange(1);
 });
+
+const openDialogMultilineDelete = ref(false);
+
+const deleteMultilineSelects = async () => {
+    await clienteStore.deleteSelectedItens()
+    openDialogMultilineDelete.value = false
+}
 
 const openFormularioNovoCliente = () => {
     clienteFormularioStore.isModalOpen = true

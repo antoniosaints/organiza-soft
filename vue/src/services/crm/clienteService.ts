@@ -1,6 +1,6 @@
 import { Autorize } from "@/autorization";
 import { ClientesRepository } from "@/repositories/crm/clientes/clientesRepository";
-import ICliente from "@/types/clientes/ICliente";
+import ICliente from "@/types/administracao/clientes/ICliente";
 import { ScToastUtil } from "@/utils/scToastUtil";
 
 export class ClienteService {

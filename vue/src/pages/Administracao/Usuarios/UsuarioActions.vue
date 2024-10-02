@@ -52,7 +52,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { UsuariosRepository } from "@/repositories/administracao/usuarios/usuariosRepository";
 import { useUsuarioFormularioStore } from "@/stores/administracao/usuarios/usuarioFormularioStore";
 import { useUsuarioStore } from "@/stores/administracao/usuarios/usuarioStore";
-import IUsuario from '@/types/usuarios/IUsuario';
+import IUsuario from '@/types/administracao/usuarios/IUsuario';
 import { ScToastUtil } from '@/utils/scToastUtil';
 import { Ellipsis, Pencil, Trash2 } from "lucide-vue-next";
 import { ref } from "vue";

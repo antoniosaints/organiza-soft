@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import IUsuario from "@/types/usuarios/IUsuario";
+import IUsuario from "@/types/administracao/usuarios/IUsuario";
 import { Mail, Phone, ShieldMinus } from "lucide-vue-next";
 
 defineProps<{
