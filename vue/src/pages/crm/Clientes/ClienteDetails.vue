@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import ICliente from "@/types/clientes/ICliente";
+import ICliente from "@/types/administracao/clientes/ICliente";
 import { Mail, Phone, ShieldMinus } from "lucide-vue-next";
 
 defineProps<{

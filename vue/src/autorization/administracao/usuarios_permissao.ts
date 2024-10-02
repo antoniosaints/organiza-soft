@@ -1,8 +1,8 @@
 import { ScToastUtil } from '@/utils/scToastUtil';
 import { IAbility, IEntity } from '../types';
-import IUsuario from '@/types/usuarios/IUsuario';
+import IUsuario from '@/types/administracao/usuarios/IUsuario';
 import { ACLmanager } from '../default';
-import { IRegra } from '@/types/usuarios/IRegra';
+import { IRegra } from '@/types/administracao/usuarios/IRegra';
 
 export class UsuariosPermissoesACL {
     static rolePermissions: Record<IRegra, IAbility[]> = {

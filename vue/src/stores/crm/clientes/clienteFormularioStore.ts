@@ -1,5 +1,5 @@
-import ICliente from "@/types/clientes/ICliente";
-import { IClienteFormularioStore } from "@/types/clientes/IClienteFormularioStore";
+import ICliente from "@/types/administracao/clientes/ICliente";
+import { IClienteFormularioStore } from "@/types/administracao/clientes/IClienteFormularioStore";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 

@@ -66,7 +66,7 @@
 
 <script setup lang="ts">
 import { reactive, ref } from "vue";
-import IUserLogin from "@/types/login/IUserLogin";
+import IUserLogin from "@/types/administracao/login/IUserLogin";
 import { LoginService } from "@/services/login/loginService";
 import StorageUtil from "@/utils/storageUtil";
 import Button from "@/components/ui/button/Button.vue";

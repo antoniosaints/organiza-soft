@@ -1,6 +1,6 @@
 import { Autorize } from "@/autorization";
 import { UsuariosRepository } from "@/repositories/administracao/usuarios/usuariosRepository";
-import IUsuario from "@/types/usuarios/IUsuario";
+import IUsuario from "@/types/administracao/usuarios/IUsuario";
 import { ScToastUtil } from "@/utils/scToastUtil";
 
 export class UsuarioService {

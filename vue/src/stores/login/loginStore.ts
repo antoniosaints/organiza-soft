@@ -1,8 +1,8 @@
 import { ContasRepository } from "@/repositories/contas/contasRepository";
 import axiosService from "@/services/http/axiosService";
-import { IAccountData } from "@/types/contas/IAccountData";
-import { IUserData } from "@/types/usuarios/IUserdata";
-import IUsuario from "@/types/usuarios/IUsuario";
+import { IAccountData } from "@/types/administracao/contas/IAccountData";
+import { IUserData } from "@/types/administracao/usuarios/IUserdata";
+import IUsuario from "@/types/administracao/usuarios/IUsuario";
 import StorageUtil from "@/utils/storageUtil";
 import { defineStore } from "pinia";
 import { ref } from "vue";

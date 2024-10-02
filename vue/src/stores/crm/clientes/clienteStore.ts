@@ -1,7 +1,7 @@
 import { Autorize } from "@/autorization";
 import { ClientesRepository } from "@/repositories/crm/clientes/clientesRepository";
-import ICliente from "@/types/clientes/ICliente";
-import { IClienteStore } from "@/types/clientes/IClienteStore";
+import ICliente from "@/types/administracao/clientes/ICliente";
+import { IClienteStore } from "@/types/administracao/clientes/IClienteStore";
 import { ScToastUtil } from "@/utils/scToastUtil";
 import { defineStore } from "pinia";
 import { ref } from "vue";

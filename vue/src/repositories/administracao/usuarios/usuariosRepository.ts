@@ -1,5 +1,5 @@
 import axiosService from "@/services/http/axiosService";
-import IUsuario from "@/types/usuarios/IUsuario";
+import IUsuario from "@/types/administracao/usuarios/IUsuario";
 
 export class UsuariosRepository {
     static async get(id: number): Promise<IUsuario> {

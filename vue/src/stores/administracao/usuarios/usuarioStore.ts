@@ -1,7 +1,7 @@
 import { Autorize } from "@/autorization";
 import { UsuariosRepository } from "@/repositories/administracao/usuarios/usuariosRepository";
-import IUsuario from "@/types/usuarios/IUsuario";
-import { IUsuarioStore } from "@/types/usuarios/IUsuarioStore";
+import IUsuario from "@/types/administracao/usuarios/IUsuario";
+import { IUsuarioStore } from "@/types/administracao/usuarios/IUsuarioStore";
 import { ScToastUtil } from "@/utils/scToastUtil";
 import { defineStore } from "pinia";
 import { ref } from "vue";

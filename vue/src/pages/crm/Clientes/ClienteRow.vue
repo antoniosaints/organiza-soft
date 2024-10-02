@@ -29,7 +29,7 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { HoverCard, HoverCardTrigger, HoverCardContent } from "@/components/ui/hover-card";
-import ICliente from "@/types/clientes/ICliente";
+import ICliente from "@/types/administracao/clientes/ICliente";
 import { ClienteAction, ClienteBadge, ClienteDetails } from ".";
 import { useClienteStore } from "@/stores/crm/clientes/clienteStore";
 import { computed } from "vue";

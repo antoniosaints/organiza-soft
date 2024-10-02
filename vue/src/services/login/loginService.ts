@@ -2,7 +2,7 @@ import { useMenuStore } from "@/stores/menuStore";
 import AuthRepository from "../../repositories/login/authRepository";
 import { Router } from "../../routes/Router";
 import { useLoginStore } from "../../stores/login/loginStore";
-import IUserLogin from "../../types/login/IUserLogin";
+import IUserLogin from "../../types/administracao/login/IUserLogin";
 import StorageUtil from "../../utils/storageUtil";
 import { ScToastUtil } from "@/utils/scToastUtil";
 

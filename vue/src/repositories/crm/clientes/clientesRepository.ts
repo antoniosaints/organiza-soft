@@ -1,5 +1,5 @@
 import axiosService from "@/services/http/axiosService";
-import ICliente from "@/types/clientes/ICliente";
+import ICliente from "@/types/administracao/clientes/ICliente";
 
 export class ClientesRepository {
     static async get(id: number): Promise<ICliente> {
