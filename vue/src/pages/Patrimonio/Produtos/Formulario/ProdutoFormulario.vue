@@ -25,7 +25,7 @@
         <div class="grid md:grid-cols-2 gap-4">
             <div class="space-y-2">
                 <Label for="color">Cor</Label>
-                <Input id="color" class="p-0" ceholder="(00) 00000-0000" type="color"
+                <Input id="color" placeholder="Cor do produto" type="text"
                     v-model="formularioStore.data.cor" />
             </div>
             <div class="space-y-2">
