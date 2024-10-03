@@ -1,30 +1,27 @@
 <template>
-    <Sheet v-model:open="isOpen">
-        <SheetTrigger asChild>
-            <Button variant="outline">View Product Details</Button>
-        </SheetTrigger>
+    <Sheet v-model:open="formularioStore.isModalDetalhesOpen">
         <SheetContent class="w-full sm:w-[540px] sm:max-w-[calc(100vw-2rem)]" side="right">
             <SheetHeader>
                 <SheetTitle class="text-2xl font-bold">Produto </SheetTitle>
                 <SheetDescription>
-                    Details about Super Widget 3000
+                    Detalhes do produto
                 </SheetDescription>
             </SheetHeader>
             <div class="mt-6">
-                <Tabs v-model="activeTab" defaultValue="details" class="w-full">
+                <Tabs v-model="activeTab" defaultValue="detalhes" class="w-full">
                     <TabsList class="grid w-full grid-cols-3">
-                        <TabsTrigger value="details">Details</TabsTrigger>
-                        <TabsTrigger value="pricing">Pricing</TabsTrigger>
-                        <TabsTrigger value="inventory">Inventory</TabsTrigger>
+                        <TabsTrigger value="detalhes">Detalhes</TabsTrigger>
+                        <TabsTrigger value="pricing">Preços</TabsTrigger>
+                        <TabsTrigger value="inventory">Inventário</TabsTrigger>
                     </TabsList>
-                    <TabsContent value="details">
+                    <TabsContent value="detalhes">
                         <div class="space-y-4">
                             <div class="grid grid-cols-3 gap-4">
-                                <div class="font-semibold">Product Name:</div>
+                                <div class="font-semibold">Produto:</div>
                                 <div class="col-span-2">Super Widget 3000</div>
                                 <div class="font-semibold">SKU:</div>
                                 <div class="col-span-2">SW3000-01</div>
-                                <div class="font-semibold">Category:</div>
+                                <div class="font-semibold">Categoria:</div>
                                 <div class="col-span-2">
                                     <Badge variant="secondary">Electronics</Badge>
                                 </div>
@@ -34,7 +31,7 @@
                                 </div>
                             </div>
                             <div>
-                                <h4 class="font-semibold mb-2">Description:</h4>
+                                <h4 class="font-semibold mb-2">Descrição:</h4>
                                 <p class="text-sm text-muted-foreground">
                                     The Super Widget 3000 is our flagship product, designed for enterprise-level
                                     performance. It features advanced AI capabilities, seamless integration with
@@ -112,8 +109,8 @@
                 </Tabs>
             </div>
             <div class="mt-6">
-                <Button variant="outline" @click="isOpen = false" class="w-full">
-                    Close
+                <Button variant="outline" @click="formularioStore.isModalDetalhesOpen = false">
+                    Fechar
                 </Button>
             </div>
         </SheetContent>
@@ -121,13 +118,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { Badge } from '@/components/ui/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useProdutoFormularioStore } from "@/stores/patrimonio/produtos/produtoFormularioStore";
+import { ProdutosRepository } from '@/repositories/patrimonio/produtos/produtosRepository'
+const formularioStore = useProdutoFormularioStore()
 
-const isOpen = ref(false)
-const activeTab = ref('details')
+const activeTab = ref('detalhes')
 </script>

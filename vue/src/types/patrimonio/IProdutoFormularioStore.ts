@@ -6,5 +6,6 @@ export interface IProdutoFormularioStore {
     data: Ref<IPatrimonioProduto>
     refId: Ref<number|null>
     isModalOpen: Ref<boolean>,
+    isModalDetalhesOpen: Ref<boolean>,
     resetData: () => void
 }

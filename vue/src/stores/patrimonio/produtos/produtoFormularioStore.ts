@@ -15,6 +15,7 @@ export const useProdutoFormularioStore = defineStore("patrimonioProdutoFormulari
     const data = ref<IPatrimonioProduto>({ ...defaultData.value });
     const refId = ref<number | null>(null);
     const isModalOpen = ref(false);
+    const isModalDetalhesOpen = ref(false);
 
     const resetData = () => {
         data.value = { ...defaultData.value };
@@ -25,6 +26,7 @@ export const useProdutoFormularioStore = defineStore("patrimonioProdutoFormulari
         defaultData,
         refId,
         isModalOpen,
-        resetData
+        resetData,
+        isModalDetalhesOpen
     };
 });
