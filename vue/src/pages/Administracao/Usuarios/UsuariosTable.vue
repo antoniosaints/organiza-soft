@@ -32,7 +32,6 @@
             <Table v-if="UsuariosExists">
                 <TableHeader>
                     <TableRow class="bg-secondary">
-                        <TableHead>ID</TableHead>
                         <TableHead>Nome</TableHead>
                         <TableHead class="hidden sm:table-cell">Permissão</TableHead>
                         <TableHead class="hidden md:table-cell">Email</TableHead>

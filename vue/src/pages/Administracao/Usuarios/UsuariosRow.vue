@@ -1,12 +1,15 @@
 <template>
     <TableRow class="hover:bg-foreground/5 transition-colors">
-        <TableCell ><span class="px-2 py-1 bg-secondary rounded-md">#{{ usuario.id }}</span></TableCell>
-        <TableCell >
+        <TableCell>
             <HoverCard>
                 <HoverCardTrigger asChild>
-                    <Button variant="ghost" class="p-0 h-auto font-bold text-gray-600 dark:text-gray-300 hover:bg-transparent hover:text-primary/60 dark:hover:text-primary-foreground/50">
+                    <Button variant="ghost"
+                        class="px-2 py-1 h-auto font-bold text-gray-600 dark:text-gray-300 hover:bg-transparent hover:text-primary/60 dark:hover:text-primary-foreground/50">
                         {{ usuario.nome }}
-                        <span v-if="usuario.id == 1" title="Administrador geral do sistema" class="px-1 py-1 text-[10px] ml-1 text-blue-700 dark:text-blue-400 rounded-md flex items-center"><Crown class="w-3 h-3" /></span>
+                        <span v-if="usuario.id == 1" title="Administrador geral do sistema"
+                            class="px-1 py-1 text-[10px] ml-1 text-blue-700 dark:text-blue-400 rounded-md flex items-center">
+                            <Crown class="w-3 h-3" />
+                        </span>
                     </Button>
                 </HoverCardTrigger>
                 <HoverCardContent class="w-80">
@@ -15,7 +18,11 @@
             </HoverCard>
         </TableCell>
         <TableCell class="hidden sm:table-cell">
-            <span class="px-2 py-1 flex items-center w-max font-medium rounded-md" :class="colorBadgePermissao(usuario.regra)"><ShieldMinus class="w-3 h-3 mr-1" /> {{ usuario.regra.substring(0, 1).toUpperCase() + usuario.regra.substring(1) }}</span>
+            <span class="px-2 py-1 flex items-center w-max font-medium rounded-md"
+                :class="colorBadgePermissao(usuario.regra)">
+                <ShieldMinus class="w-3 h-3 mr-1" /> {{ usuario.regra.substring(0, 1).toUpperCase() +
+                    usuario.regra.substring(1) }}
+            </span>
         </TableCell>
         <TableCell class="hidden md:table-cell">{{ usuario.email }}</TableCell>
         <TableCell class="hidden md:table-cell">

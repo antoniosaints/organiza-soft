@@ -7,6 +7,6 @@ export interface IPatrimonioProduto {
   descricao?: string;
   sku: string;
   preco: number;
-  dataCriado?: Date;
-  dataAtualizado?: Date;
+  dataCriado?: string;
+  dataAtualizado?: string;
 }
