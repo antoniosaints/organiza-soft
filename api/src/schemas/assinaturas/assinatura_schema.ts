@@ -9,29 +9,33 @@ const createAssinatura = zodUtil.object({
     required_error: "O ID do plano é obrigatorio.",
     invalid_type_error: "O ID do plano deve ser um number.",
   }),
-  dataInicio: zodUtil
-    .string({
-      required_error: "A data de inicio é obrigatorio.",
-      invalid_type_error: "A data de inicio deve ser uma String.",
+  dataInicio: zodUtil.date({
+    required_error: "A data de inicio é obrigatorio.",
+    invalid_type_error: "A data de inicio deve ser uma data valida.",
+  }),
+  dataFim: zodUtil.date({
+    required_error: "A data de fim é obrigatoria.",
+    invalid_type_error: "A data de fim deve ser uma data valida.",
+  }),
+  status: zodUtil
+    .enum(["ativa", "vencida", "cancelada"], {
+      invalid_type_error: "O status deve ser (ativa, vencida ou cancelada)",
     })
-    .refine((val) => !isNaN(Date.parse(val)), {
-      message: "Data de início inválida.",
-    }),
-  dataFim: zodUtil
-    .string({
-      required_error: "A data de fim é obrigatoria.",
-      invalid_type_error: "A data de fim deve ser uma String.",
-    })
-    .refine((val) => !isNaN(Date.parse(val)), {
-      message: "Data de fim inválida.",
-    }),
-  status: zodUtil.enum(["ativa", "vencida", "cancelada"], {
-    invalid_type_error: "O status deve ser (ativa, vencida ou cancelada)",
-  }).optional(),
+    .optional(),
   contaSistemaId: zodUtil.number({
     required_error: "O contaSistemaId é obrigatorio",
     invalid_type_error: "O contaSistemaId deve ser um number",
   }),
+  dataBloqueio: zodUtil
+    .date({
+      invalid_type_error: "A data de bloqueio deve ser uma data valida.",
+    })
+    .optional(),
+  dataDesbloqueio: zodUtil
+    .date({
+      invalid_type_error: "A data de desbloqueio deve ser uma data valida.",
+    })
+    .optional(),
 });
 
 const updateAssinatura = zodUtil.object({
@@ -46,38 +50,28 @@ const updateAssinatura = zodUtil.object({
     })
     .optional(),
   dataInicio: zodUtil
-    .string({
-      invalid_type_error: "A data de início deve ser uma string",
-    })
-    .refine((val) => !val || !isNaN(Date.parse(val)), {
-      message: "Data de início inválida",
+    .date({
+      invalid_type_error: "A data de início deve ser uma data válida",
     })
     .optional(),
   dataFim: zodUtil
-    .string({
-      invalid_type_error: "A data de fim deve ser uma string",
-    })
-    .refine((val) => !val || !isNaN(Date.parse(val)), {
-      message: "Data de fim inválida",
+    .date({
+      invalid_type_error: "A data de fim deve ser uma data válida",
     })
     .optional(),
-  status: zodUtil.enum(["ativa", "vencida", "cancelada"], {
-    invalid_type_error: "O status deve ser (ativa, vencida ou cancelada)",
-  }).optional(),
-  dataDesbloqueio: zodUtil
-    .string({
-      invalid_type_error: "A data de desbloqueio deve ser uma string",
+  status: zodUtil
+    .enum(["ativa", "vencida", "cancelada"], {
+      invalid_type_error: "O status deve ser (ativa, vencida ou cancelada)",
     })
-    .refine((val) => !val || !isNaN(Date.parse(val)), {
-      message: "Data de desbloqueio inválida",
+    .optional(),
+  dataDesbloqueio: zodUtil
+    .date({
+      invalid_type_error: "A data de desbloqueio deve ser uma data válida",
     })
     .optional(),
   dataBloqueio: zodUtil
-    .string({
-      invalid_type_error: "A data de bloqueio deve ser uma string",
-    })
-    .refine((val) => !val || !isNaN(Date.parse(val)), {
-      message: "Data de bloqueio inválida",
+    .date({
+      invalid_type_error: "A data de bloqueio deve ser uma data válida",
     })
     .optional(),
   contaSistemaId: zodUtil
