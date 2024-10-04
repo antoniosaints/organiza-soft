@@ -1,6 +1,10 @@
 import zodUtil from "../../utils/validations/zod_util";
 
 const createProdutoSchema = zodUtil.object({
+  produtoId: zodUtil.string({
+    required_error: "O nome do produtoId é obrigatorio",
+    invalid_type_error: "O nome do produto deve ser uma string",
+  }),
   produto: zodUtil.string({
     required_error: "O nome do produto é obrigatorio",
     invalid_type_error: "O nome do produto deve ser uma string",

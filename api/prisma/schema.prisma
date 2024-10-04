@@ -252,6 +252,7 @@ model ContasSistema {
 
 model PatrimonioProdutos {
   id                            Int                             @id @default(autoincrement())
+  produtoId                     String                          @unique
   produto                       String
   cor                           String
   contaSistemaId                Int
@@ -314,6 +315,8 @@ model PatrimonioProdutosMovimentos {
   id             Int                      @id @default(autoincrement())
   Produto        PatrimonioProdutos       @relation(fields: [produtoId], references: [id], onDelete: Cascade)
   produtoId      Int
+  valorUnitario  Float                    @db.Double
+  notaFiscal     String?
   Armazen        PatrimonioArmazenamentos @relation(fields: [armazenId], references: [id], onDelete: Restrict)
   armazenId      Int
   contaSistemaId Int
@@ -321,6 +324,7 @@ model PatrimonioProdutosMovimentos {
   tipo           PatrimonioTipoMovimento
   quantidade     Int
   dataMovimento  DateTime                 @default(now())
+  motivoAjuste   String?
   descricao      String?
 
   @@index([produtoId])
@@ -328,16 +332,18 @@ model PatrimonioProdutosMovimentos {
 }
 
 model PatrimonioFornecedores {
-  id              Int                             @id @default(autoincrement())
-  nome            String
-  contato         String?
-  email           String?
-  descricao       String?                         @db.Text
-  contaSistemaId  Int
-  ContaSistema    ContasSistema                   @relation(fields: [contaSistemaId], references: [id])
-  dataCriado      DateTime                        @default(now())
-  dataAtualizado  DateTime                        @updatedAt
-  ComprasProdutos PatrimonioComprasFornecedores[]
+  id               Int                             @id @default(autoincrement())
+  nome             String
+  cpf_cnpj         String
+  contato          String?
+  email            String?
+  descricao        String?                         @db.Text
+  contaSistemaId   Int
+  ContaSistema     ContasSistema                   @relation(fields: [contaSistemaId], references: [id])
+  dataUltimaCompra DateTime?
+  dataCriado       DateTime                        @default(now())
+  dataAtualizado   DateTime                        @updatedAt
+  ComprasProdutos  PatrimonioComprasFornecedores[]
 }
 
 model PatrimonioComprasFornecedores {
@@ -346,6 +352,7 @@ model PatrimonioComprasFornecedores {
   produtoId      Int
   Fornecedor     PatrimonioFornecedores @relation(fields: [fornecedorId], references: [id], onDelete: Restrict)
   fornecedorId   Int
+  quantidade     Float
   contaSistemaId Int
   ContaSistema   ContasSistema          @relation(fields: [contaSistemaId], references: [id])
 
@@ -355,6 +362,7 @@ model PatrimonioComprasFornecedores {
 enum PatrimonioTipoMovimento {
   entrada
   saida
+  ajuste
 }
 
 enum ContasSistemaStatus {
