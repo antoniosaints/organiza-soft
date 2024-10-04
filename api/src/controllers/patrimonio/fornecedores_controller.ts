@@ -5,30 +5,29 @@ import {
   ResponseService,
   validateSchema,
 } from "../../services";
-import { createProdutoSchema, updateProdutoSchema } from "../../schemas/patrimonio/produto_schema";
-import { generateUniqueId } from "../../utils/tools/UniqueId";
+import { createFornecedorSchema, updateFornecedorSchema } from "../../schemas/patrimonio/fornecedores_schema";
 
-export const getProdutos = async (req: Request, res: Response) => {
+export const getFornecedores = async (req: Request, res: Response) => {
   try {
     const { limit, page, search } = req.query;
     const offset = (Number(page) - 1) * Number(limit);
     const busca = search as string || "";
 
     const [items, total] = await Promise.all([
-      prismaService.patrimonioProdutos.findMany({
+      prismaService.patrimonioFornecedores.findMany({
         skip: offset || 0,
         take: Number(limit) || 10,
         where: {
           OR: [
-            { produto: { contains: busca } },
-            { sku: { contains: busca } },
-            { sku: { contains: busca } },
-            { descricao: { contains: busca } },
+            { nome: { contains: busca } },
+            { cpf_cnpj: { contains: busca } },
+            { email: { contains: busca } },
+            { contato: { contains: busca } },
           ],
           contaSistemaId: req.body.contaSistemaId
         },
       }),
-      prismaService.patrimonioProdutos.count({
+      prismaService.patrimonioFornecedores.count({
         where: {contaSistemaId: req.body.contaSistemaId},
       }),
     ])
@@ -38,61 +37,60 @@ export const getProdutos = async (req: Request, res: Response) => {
   }
 };
 
-export const getProduto = async (req: Request, res: Response) => {
+export const getFornecedor = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const produto = await prismaService.patrimonioProdutos.findUnique({
+    const data = await prismaService.patrimonioFornecedores.findUnique({
       where: {
         id: Number(id),
         contaSistemaId: req.body.contaSistemaId,
       },
     });
-    ResponseService.success(res, { data: produto });
+    ResponseService.success(res, { data });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
   }
 };
 
-export const createProduto = async (req: Request, res: Response) => {
+export const createFornecedor = async (req: Request, res: Response) => {
   try {
-    req.body.produtoId = generateUniqueId("prd_");
-    const validated = validateSchema(createProdutoSchema, req.body);
-    const produtos = await prismaService.patrimonioProdutos.create({
+    const validated = validateSchema(createFornecedorSchema, req.body);
+    const data = await prismaService.patrimonioFornecedores.create({
       data: validated,
     });
-    ResponseService.created(res, { data: produtos });
+    ResponseService.created(res, { data });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
   }
 };
 
-export const updateProduto = async (req: Request, res: Response) => {
+export const updateFornecedor = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const validated = validateSchema(updateProdutoSchema, req.body);
-    const produtos = await prismaService.patrimonioProdutos.update({
+    const validated = validateSchema(updateFornecedorSchema, req.body);
+    const data = await prismaService.patrimonioFornecedores.update({
       where: {
         id: Number(id),
         contaSistemaId: req.body.contaSistemaId,
       },
       data: validated,
     });
-    ResponseService.success(res, { data: produtos });
+    ResponseService.success(res, { data });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
   }
 };
 
-export const deleteProduto = async (req: Request, res: Response) => {
+export const deleteFornecedor = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const produtos = await prismaService.patrimonioProdutos.delete({
+    const data = await prismaService.patrimonioFornecedores.delete({
       where: {
         id: Number(id),
         contaSistemaId: req.body.contaSistemaId,
       },
     });
-    ResponseService.success(res, { data: produtos });
+    ResponseService.success(res, { data });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
   }
