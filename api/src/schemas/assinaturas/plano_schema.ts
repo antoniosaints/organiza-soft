@@ -18,8 +18,8 @@ const createPlano = zodUtil.object({
     invalid_type_error: "A cor deve ser uma string",
   }),
   dataAtualizacao: zodUtil
-    .string({
-      invalid_type_error: "A dataAtualizacao deve ser uma string",
+    .date({
+      invalid_type_error: "A dataAtualizacao deve ser uma data válida",
     })
     .optional(),
   contaSistemaId: zodUtil.number({
@@ -50,13 +50,13 @@ const updatePlano = zodUtil.object({
     })
     .optional(),
   dataCriacao: zodUtil
-    .string({
-      invalid_type_error: "A dataCriacao deve ser uma string",
+    .date({
+      invalid_type_error: "A dataCriacao deve ser uma data válida",
     })
     .optional(),
   dataAtualizacao: zodUtil
-    .string({
-      invalid_type_error: "A dataAtualizacao deve ser uma string",
+    .date({
+      invalid_type_error: "A dataAtualizacao deve ser uma data válida",
     })
     .optional(),
   contaSistemaId: zodUtil
