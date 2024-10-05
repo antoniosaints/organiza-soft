@@ -16,23 +16,29 @@ const createBloqueio = zodUtil.object({
 });
 
 const updateBloqueio = zodUtil.object({
-  motivo: zodUtil.string({
-    invalid_type_error: "O motivo do bloqueio deve ser uma string",
-  }).optional(),
+  motivo: zodUtil
+    .string({
+      invalid_type_error: "O motivo do bloqueio deve ser uma string",
+    })
+    .optional(),
   assinaturaId: zodUtil
     .number({
       invalid_type_error: "O ID da assinatura deve ser um number",
     })
     .optional(),
   dataBloqueio: zodUtil
-    .date({
-      invalid_type_error: "A data de bloqueio deve ser uma data válida",
-    })
+    .string()
+    .refine((val) => !isNaN(Date.parse(val)), {
+      message: "Data de bloqueio invalida",
+    }) // valida a string
+    .transform((val) => new Date(val))
     .optional(),
   dataDesbloqueio: zodUtil
-    .date({
-      invalid_type_error: "A data de desbloqueio deve ser uma data válida",
-    })
+    .string()
+    .refine((val) => !isNaN(Date.parse(val)), {
+      message: "Data de desbloqueio invalida",
+    }) // valida a string
+    .transform((val) => new Date(val))
     .optional(),
   contaSistemaId: zodUtil
     .number({

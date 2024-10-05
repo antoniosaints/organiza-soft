@@ -23,7 +23,6 @@ class AuthController {
       const payload = {
         userId: user.id,
         name: user.nome,
-        grupoId: user.grupoId,
         contaId: user.contaSistemaId,
       };
 

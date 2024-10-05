@@ -19,42 +19,9 @@ model Usuario {
   telefone       String?            @db.VarChar(20)
   status         StatusUsuario      @default(ativo)
   dataCriacao    DateTime           @default(now())
-  grupoId        Int
   Contas         FinanceiroContas[]
-  Grupos         PermissoesGrupos   @relation(fields: [grupoId], references: [id], onDelete: Restrict)
 
   @@unique([email, contaSistemaId])
-  @@index([grupoId], map: "Usuario_grupoId_fkey")
-}
-
-model PermissoesGrupos {
-  id         Int                  @id @default(autoincrement())
-  grupo      String               @db.VarChar(100)
-  createdAt  DateTime             @default(now())
-  cor        String?              @default("white")
-  Permissoes PermissoesOnGrupos[]
-  Usuario    Usuario[]
-}
-
-model PermissoesOnGrupos {
-  grupoId       Int
-  createdAt     DateTime         @default(now())
-  permissaoSlug String
-  Grupo         PermissoesGrupos @relation(fields: [grupoId], references: [id], onDelete: Restrict)
-  Permissao     Permissoes       @relation(fields: [permissaoSlug], references: [slug], onDelete: Restrict)
-
-  @@id([permissaoSlug, grupoId])
-  @@index([grupoId], map: "PermissoesOnGrupos_grupoId_fkey")
-}
-
-model Permissoes {
-  id        Int                  @id @default(autoincrement())
-  cor       String?              @default("white")
-  permissao String
-  createdAt DateTime             @default(now())
-  status    StatusUsuario        @default(ativo)
-  slug      String               @unique
-  Grupos    PermissoesOnGrupos[]
 }
 
 model Cliente {
@@ -341,6 +308,7 @@ model PatrimonioFornecedores {
   contaSistemaId   Int
   ContaSistema     ContasSistema                   @relation(fields: [contaSistemaId], references: [id])
   dataUltimaCompra DateTime?
+  status           StatusUsuario                   @default(ativo)
   dataCriado       DateTime                        @default(now())
   dataAtualizado   DateTime                        @updatedAt
   ComprasProdutos  PatrimonioComprasFornecedores[]

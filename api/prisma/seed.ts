@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { assemblyPermissoes } from "../src/permissoes";
 const prisma = new PrismaClient();
 async function main() {
   await prisma.contasSistema.upsert({
@@ -13,15 +12,6 @@ async function main() {
     },
   })
 
-  await prisma.permissoesGrupos.upsert({
-    where: { id: 1 },
-    update: {},
-    create: {
-      grupo: "Administrador",
-      cor: "#00ff00",
-    },
-  });
-  
   await prisma.usuario.upsert({
     where: { id: 1 },
     update: {},
@@ -31,8 +21,7 @@ async function main() {
       email: "admin@admin.com",
       senha: "admin",
       regra: "proprietario",
-      anotacoes: "admin",
-      grupoId: 1,
+      anotacoes: "admin"
     },
   }); 
   await prisma.financeiroParcelas.upsert({
@@ -46,18 +35,6 @@ async function main() {
     },
   });
 
-  const permissoes = assemblyPermissoes();
-
-  for (const permissao of permissoes) {
-    await prisma.permissoes.upsert({
-      where: { slug: permissao.slug },
-      update: {},
-      create: {
-        permissao: permissao.permissao,
-        slug: permissao.slug,
-      },
-    });
-  }
 }
 
 main()

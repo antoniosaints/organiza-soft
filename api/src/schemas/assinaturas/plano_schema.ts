@@ -17,11 +17,6 @@ const createPlano = zodUtil.object({
     required_error: "A cor é obrigatória",
     invalid_type_error: "A cor deve ser uma string",
   }),
-  dataAtualizacao: zodUtil
-    .date({
-      invalid_type_error: "A dataAtualizacao deve ser uma data válida",
-    })
-    .optional(),
   contaSistemaId: zodUtil.number({
     required_error: "O contaSistemaId é obrigatorio",
     invalid_type_error: "O contaSistemaId deve ser um number",
@@ -47,16 +42,6 @@ const updatePlano = zodUtil.object({
   cor: zodUtil
     .string({
       invalid_type_error: "A cor deve ser uma string",
-    })
-    .optional(),
-  dataCriacao: zodUtil
-    .date({
-      invalid_type_error: "A dataCriacao deve ser uma data válida",
-    })
-    .optional(),
-  dataAtualizacao: zodUtil
-    .date({
-      invalid_type_error: "A dataAtualizacao deve ser uma data válida",
     })
     .optional(),
   contaSistemaId: zodUtil
