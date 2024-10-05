@@ -1,3 +1,4 @@
+import { VueQueryPlugin } from '@tanstack/vue-query'
 import { createApp } from 'vue';
 import { createI18n } from 'vue-i18n';
 import './assets/index.css';
@@ -12,6 +13,7 @@ import { useMainStore } from './stores/mainStore';
 
 const pinia = createPinia();
 const app = createApp(App);
+app.use(VueQueryPlugin)
 app.use(pinia);
 
 const bootstrap = useMainStore();
