@@ -10,6 +10,7 @@ import { stripeRouter } from "./stripe";
 import produtosRouter from "./patrimonio/produtos_router";
 import produtoCategoriaRouter from "./patrimonio/produto_categoria_router";
 import fornecedoresRouter from "./patrimonio/fornecedores_router";
+import armazensRouter from "./patrimonio/armazens_router";
 
 const router = Router();
 
@@ -37,5 +38,6 @@ router.use("/contas-sistema", auth_middleware, contasSistemaRouter);
 router.use("/patrimonio/produto", auth_middleware, accountMiddleware, produtosRouter);
 router.use("/patrimonio/categoria", auth_middleware, accountMiddleware, produtoCategoriaRouter);
 router.use("/patrimonio/fornecedor", auth_middleware, accountMiddleware, fornecedoresRouter);
+router.use("/patrimonio/armazen", auth_middleware, accountMiddleware, armazensRouter);
 
 export default router;
