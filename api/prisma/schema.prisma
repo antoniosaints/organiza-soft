@@ -29,7 +29,7 @@ model Cliente {
   contaSistemaId Int
   ContaSistema   ContasSistema         @relation(fields: [contaSistemaId], references: [id])
   nome           String                @db.VarChar(100)
-  email          String                @unique @db.VarChar(100)
+  email          String                @db.VarChar(100)
   telefone       String?               @db.VarChar(20)
   endereco       String?               @db.Text
   dataCriacao    DateTime              @default(now())

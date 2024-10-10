@@ -58,10 +58,6 @@ const createUser = zodUtil.object({
     }
   ),
   status: zodUtil.enum(["ativo", "inativo"]).optional(),
-  grupoId: zodUtil.number({
-    required_error: "O grupoId é obrigatório",
-    invalid_type_error: "O grupoId deve ser um number",
-  }),
   contaSistemaId: zodUtil.number({
     required_error: "O contaSistemaId é obrigatório",
     invalid_type_error: "O contaSistemaId deve ser um number",
@@ -122,11 +118,6 @@ const updateUser = zodUtil.object({
     ])
     .optional(),
   status: zodUtil.enum(["ativo", "inativo"]).optional(),
-  grupoId: zodUtil
-    .number({
-      invalid_type_error: "O grupoId deve ser um number",
-    })
-    .optional(),
   contaSistemaId: zodUtil
     .number({
       invalid_type_error: "O contaSistemaId deve ser um number",
