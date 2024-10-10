@@ -192,6 +192,7 @@ model ContasSistema {
   descricao                     String?                         @db.Text
   plano                         PlanosSistema                   @default(free)
   status                        ContasSistemaStatus             @default(ativa)
+  telefone                      String                          @default("")
   stripeCustomerId              String
   stripeSubscriptionId          String?
   dataCriado                    DateTime                        @default(now())

@@ -21,6 +21,7 @@ export const stripeWebhook = async (req: Request, res: Response) => {
   }
   
   switch (event.type) {
+    case "customer.subscription.created":
     case "customer.subscription.deleted":
     case "customer.subscription.updated":
       const subscription = event.data.object;

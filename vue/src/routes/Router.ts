@@ -103,7 +103,7 @@ const routes: RouteRecordRaw[] = [
     },
     {
         path: "/login",
-        name: "Login",
+        name: "LoginPage",
         component: () => import("@/views/LoginView.vue")
     },
     {

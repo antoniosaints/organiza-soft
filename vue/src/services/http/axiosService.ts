@@ -10,7 +10,6 @@ if (!BASEURL) {
 
 const axiosService = axios.create({
     baseURL: BASEURL,
-    timeout: 1000,
     headers: {
         "Content-Type": "application/json",
     }

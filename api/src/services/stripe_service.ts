@@ -91,10 +91,20 @@ export class StripeService {
       }})
     }
   }
-  static async createCustomer(email: string, name: string): Promise<any> {
+  static async createCustomer(email: string, name: string, description: string = "", phone: string = "", address: any = {}): Promise<any> {
     const customer = await stripe.customers.create({
       email,
-      name
+      name,
+      description,
+      phone,
+      address: {
+        city: address?.city || "",
+        country: address?.country || "",
+        line1: address?.line1 || "",
+        line2: address?.line2 || "",
+        postal_code: address?.postal_code || "",
+        state: address?.state || "",
+      }
     });
     return customer;
   }

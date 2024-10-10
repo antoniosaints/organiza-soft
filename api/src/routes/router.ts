@@ -31,7 +31,7 @@ router.use("/financeiro/parcelamento", auth_middleware, accountMiddleware, parce
 router.use("/financeiro/contas", auth_middleware, accountMiddleware, contasRouter);
 router.use("/financeiro/categoria", auth_middleware, accountMiddleware, categoriaRouter);
 // Rotas Stripe
-router.use("/stripe", auth_middleware, accountMiddleware, stripeRouter);
+router.use("/stripe", stripeRouter);
 // Rotas de contas do sistema
 router.use("/contas-sistema", auth_middleware, contasSistemaRouter);
 // Rotas de patrimonio
