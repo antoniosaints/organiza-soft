@@ -22,7 +22,7 @@ const auth_middleware = (req: Request, res: Response, next: any) => {
     try {
         JwtService.verify(token);
     } catch (err) {
-        return ResponseService.unauthorized(res, "Token inválido");
+        return ResponseService.unauthorized(res, "Token invalido");
     }
 
     const decodeToken = JwtService.decode(token);
