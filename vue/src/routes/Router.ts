@@ -76,6 +76,12 @@ const routes: RouteRecordRaw[] = [
                         name: "Produtos",
                         meta: { breadcrumb: 'Produtos' },
                         component: () => import("@/views/Patrimonio/ProdutosView.vue")
+                    },
+                    {
+                        path: "/patrimonio/fornecedores",
+                        name: "Fornecedores",
+                        meta: { breadcrumb: 'Fornecedores' },
+                        component: () => import("@/views/Patrimonio/FornecedoresView.vue")
                     }
                 ]
             },

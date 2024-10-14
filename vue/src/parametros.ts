@@ -19,11 +19,11 @@ export const systemParamsAccount: IPamans = {
   quota: {
     free: {
       price: 0,
-      users: 5,
-      signatures: 50,
-      products: 10,
-      services: 10,
-      sales: 100,
+      users: 2,
+      signatures: 10,
+      products: 5,
+      services: 5,
+      sales: 50,
       ai: false,
       suport: "Suporte pelo site",
     },

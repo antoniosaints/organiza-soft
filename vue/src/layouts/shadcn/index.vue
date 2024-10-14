@@ -251,6 +251,11 @@
                                                 <Group />
                                                 <span>Categorias</span>
                                             </router-link>
+                                            <router-link to="/patrimonio/fornecedores"
+                                                class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                                <Group />
+                                                <span>Fornecedores</span>
+                                            </router-link>
                                         </div>
                                     </collapsible-content>
                                 </collapsible>
