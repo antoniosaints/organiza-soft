@@ -21,7 +21,7 @@ model Usuario {
   dataCriacao    DateTime           @default(now())
   Contas         FinanceiroContas[]
 
-  @@unique([email, contaSistemaId])
+  @@unique([email, contaSistemaId, senha])
 }
 
 model Cliente {

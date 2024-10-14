@@ -3,7 +3,7 @@ import { NotFoundError, ValidationError } from "../utils/http/lancar_erro";
 
 const errosPrisma: any = {
     P2025: "Registro não encontrado",
-    P2002: "Chave duplicada",
+    P2002: "Já existe um registro salvo com esses valores",
     P1000: "Erro de autenticação entre o banco de dados e o servidor",
     P1001: "Não é possível acessar o servidor de banco de dados",
     P1002: "O servidor de banco de dados atindo o limite de tentativas de autenticação",
