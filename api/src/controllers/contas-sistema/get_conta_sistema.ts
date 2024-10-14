@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { prismaService } from "../../services";
+import { HttpErrorService, prismaService } from "../../services";
 
 export const getContaSistema = async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -9,6 +9,6 @@ export const getContaSistema = async (req: Request, res: Response) => {
     });
     res.json(account);
   } catch (error: any) {
-    res.status(500).send(error.message);
+    HttpErrorService.hadle(error, res);
   }
 };

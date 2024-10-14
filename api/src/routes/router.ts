@@ -5,7 +5,6 @@ import { authRouter, clienteRouter, usuariosRouter } from "./administracao";
 import { assinaturaRouter, bloqueioRouter, planoRouter } from "./assinaturas";
 import { contasSistemaRouter } from "./contas-sistema";
 import { categoriaRouter, contasRouter, parcelamentoRouter, transacaoRouter } from "./financeiro";
-import { gruposRouter, permissoesRouter } from "./permissoes";
 import { stripeRouter } from "./stripe";
 import produtosRouter from "./patrimonio/produtos_router";
 import produtoCategoriaRouter from "./patrimonio/produto_categoria_router";
@@ -13,10 +12,6 @@ import fornecedoresRouter from "./patrimonio/fornecedores_router";
 import armazensRouter from "./patrimonio/armazens_router";
 
 const router = Router();
-
-// Rotas de Permissoes
-router.use("/grupo", auth_middleware, accountMiddleware, gruposRouter);
-router.use("/permissoes", auth_middleware, accountMiddleware, permissoesRouter);
 // Rotas de assinatura
 router.use("/assinatura", auth_middleware, accountMiddleware, assinaturaRouter);
 router.use("/plano", auth_middleware, accountMiddleware, planoRouter);
