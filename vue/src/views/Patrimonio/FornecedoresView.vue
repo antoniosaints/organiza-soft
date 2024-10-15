@@ -1,53 +1,26 @@
 <script setup lang="ts">
-import * as z from 'zod'
-import { h } from 'vue'
-import { Button } from '@/components/ui/button'
-import { toast } from '@/components/ui/toast'
-import { AutoForm, AutoFormField } from '@/components/ui/auto-form'
+import { ref } from 'vue';
+import { UsuariosRepository } from '@/repositories/administracao/usuarios/usuariosRepository';
+import SelectSearchAjax from '@/components/ui/select/SelectSearchAjax.vue';
 
+const selectedId = ref<number | null>(null)
 
-const schema = z.object({
-    username: z
-        .string({
-            required_error: 'O Nome de usuário é obrigatório.',
+const fetchUsuarios = async (query: string, id?: number) => {
+    if (id) {
+        return await UsuariosRepository.get(id).then(response => {
+            return [{ id: response.id as number, label: response.nome }]
         })
-        .min(2, {
-            message: 'Username must be at least 2 characters.',
-        }),
-
-    password: z
-        .string({
-            required_error: 'Password is required.',
+    }else {
+        return await UsuariosRepository.getAll(10, 1, query).then(response => {
+            return response.data.map(item => ({ id: item.id as number, label: item.nome }))
         })
-        .min(8, {
-            message: 'Password must be at least 8 characters.',
-        }),
-})
-
-function onSubmit(values: Record<string, any>) {
-    toast({
-        title: 'You submitted the following values:',
-        description: h('pre', { class: 'mt-2 w-[340px] rounded-md bg-slate-950 p-4' }, h('code', { class: 'text-white' }, JSON.stringify(values, null, 2))),
-    })
+    }
 }
+
 </script>
 
 <template>
     <div class="mx-auto max-w-7xl">
-        <AutoForm class="space-y-4" :schema="schema" @submit="onSubmit" :fieldConfig="{
-            username: {
-                label: 'Seu nome completo',
-                inputProps: {
-                    placeholder: 'Seu nome completo',
-                }
-            }
-        }">
-            <template #username="slotProps">
-                <AutoFormField v-bind="slotProps" />
-            </template>
-            <Button type="submit">
-                Submit
-            </Button>
-        </AutoForm>
+        <SelectSearchAjax labelSearch="Selecione um usuário" v-model="selectedId" :ajax="fetchUsuarios" />
     </div>
 </template>
