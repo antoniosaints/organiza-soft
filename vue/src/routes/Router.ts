@@ -54,6 +54,19 @@ const routes: RouteRecordRaw[] = [
                 ]
             },
             {
+                path: "/vendas",
+                name: "vendas",
+                // meta: { breadcrumb: 'Administracao' },
+                children: [
+                    {
+                        path: "/vendas/pdv",
+                        name: "PontoDeVenda",
+                        meta: { breadcrumb: 'Ponto de vendas' },
+                        component: () => import("@/views/Vendas/Pdv/PontoDeVendasView.vue")
+                    }
+                ]
+            },
+            {
                 path: "/financeiro",
                 name: "Financeiro",
                 // meta: { breadcrumb: 'Administracao' },
