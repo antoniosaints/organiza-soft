@@ -5,13 +5,14 @@ import "dotenv/config";
 export const createCheckoutSession = async (req: Request, res: Response) => {
   try {
     const baseURL = process.env.BASE_URL_FRONT;
+    const priceIdENV = process.env.STRIPE_PRICE_ID;
     const { customerId, priceId } = req.body;
 
     const session = await stripe.checkout.sessions.create({
       customer: customerId, // substituir pelo ID da conta do usuário logado
       line_items: [
         {
-          price: priceId || "price_1Q1U3kAUZiS59tgnCLrglvkm",
+          price: priceId || priceIdENV,
           quantity: 1,
         },
       ],
