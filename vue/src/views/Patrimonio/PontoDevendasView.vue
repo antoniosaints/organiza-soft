@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue"
-import { Plus, Minus, ShoppingCart } from "lucide-vue-next"
+import { Plus, Minus, ShoppingCart, DollarSign, Shield, User, ShoppingBasket, Trash } from "lucide-vue-next"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -27,6 +27,7 @@ const products: Product[] = [
 
 const cart = ref<CartItem[]>([])
 const searchTerm = ref("")
+const discount = ref(5)
 
 // Função para adicionar um produto ao carrinho
 const addToCart = (product: Product) => {
@@ -54,10 +55,20 @@ const removeFromCart = (productId: number) => {
     }, [] as CartItem[])
 }
 
+
+const clearCart = () => {
+    cart.value = []
+}
+
 // Função para calcular o total do carrinho
 const calculateTotal = computed(() =>
-    cart.value.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)
+    cart.value.reduce((total, item) => total + item.price * item.quantity, 0)
 )
+
+const totalWithDiscount = computed(() => {
+    const total = calculateTotal.value
+    return total - (total * discount.value) / 100
+})
 
 // Filtra os produtos com base no termo de busca
 const filteredProducts = computed(() =>
@@ -69,23 +80,25 @@ const filteredProducts = computed(() =>
 
 <template>
     <div class="flex flex-col gap-4 lg:flex-row">
-        <!-- Lista de Produtos -->
         <div class="flex-1">
             <Card>
                 <CardHeader>
-                    <CardTitle>Produtos</CardTitle>
+                    <CardTitle class="flex items-center">
+                        <ShoppingBasket class="mr-2" />
+                        Produtos
+                    </CardTitle>
                     <Input type="search" placeholder="Buscar produtos..." v-model="searchTerm" class="mt-2" />
                 </CardHeader>
                 <CardContent>
-                    <ScrollArea class="h-[calc(100vh-330px)]">
+                    <ScrollArea class="h-[calc(100vh-320px)]">
                         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
                             <Card v-for="product in filteredProducts" :key="product.id"
-                                class="flex flex-col justify-between">
+                                class="flex flex-col bg-background justify-between">
                                 <CardHeader>
                                     <CardTitle class="text-sm">{{ product.name }}</CardTitle>
                                 </CardHeader>
                                 <CardFooter class="flex justify-between">
-                                    <span class="text-md font-bold">R$ {{ product.price.toFixed(2) }}</span>
+                                    <span class="text-md font-bold">{{ product.price.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) }}</span>
                                     <Button size="sm" @click="addToCart(product)">
                                         <Plus class="w-3 h-4" />
                                     </Button>
@@ -96,19 +109,23 @@ const filteredProducts = computed(() =>
                 </CardContent>
             </Card>
         </div>
-
-        <!-- Carrinho de Compras -->
         <div class="w-full lg:w-1/3">
             <Card>
                 <CardHeader>
-                    <CardTitle class="flex items-center">
-                        <ShoppingCart class="mr-2" />
-                        Carrinho
+                    <CardTitle class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <ShoppingCart class="mr-2" />
+                            Carrinho
+                        </div>
+                        <Button @click="clearCart" size="sm" variant="destructive">
+                            <Trash class="w-3 h-3 mr-2" />
+                            Limpar carrinho
+                        </Button>
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <ScrollArea class="h-[calc(100vh-400px)]">
-                        <div v-for="item in cart" :key="item.id" class="flex justify-between items-center mb-2">
+                    <ScrollArea class="h-[calc(100vh-436px)]">
+                        <div v-for="item in cart" :key="item.id" class="flex justify-between items-center mb-2 px-2">
                             <span>{{ item.name }}</span>
                             <div class="flex items-center">
                                 <Button size="sm" variant="outline" @click="removeFromCart(item.id)">
@@ -119,19 +136,37 @@ const filteredProducts = computed(() =>
                                     <Plus class="w-3 h-4 text-green-500" />
                                 </Button>
                                 <span class="ml-4 w-20 text-right">
-                                    R$ {{ (item.price * item.quantity).toFixed(2) }}
+                                    {{ (item.price * item.quantity).toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) }}
                                 </span>
                             </div>
                         </div>
                     </ScrollArea>
                 </CardContent>
-                <CardFooter class="flex flex-col items-stretch">
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="text-lg font-bold">Total:</span>
-                        <span class="text-lg font-bold">R$ {{ calculateTotal }}</span>
+                <CardFooter class="flex flex-col gap-2 items-stretch">
+                    <div class="flex flex-col mb-1">
+                        <div class="flex justify-between">
+                            <span class="text-lg font-bold">Total:</span>
+                            <span class="text-lg font-bold"> <s v-if="discount > 0 && cart.length > 0" class="text-red-500 text-sm font-thin">{{ calculateTotal.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) }}</s> {{ (totalWithDiscount).toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) }}</span>
+                        </div>
+                        <p v-if="discount > 0 && cart.length > 0" class="text-green-500 text-sm font-thin">Desconto: {{ discount }}%</p>
                     </div>
-                    <Button class="w-full" size="lg">
-                        Finalizar Venda
+                    <div class="flex items-center gap-2">
+                        <Button variant="outline" class="w-min flex-1" size="sm">
+                            <DollarSign class="w-3 h-3 mr-2" />
+                            Desconto
+                        </Button>
+                        <Button variant="outline" class="w-min flex-1" size="sm">
+                            <Shield class="w-3 h-3 mr-2" />
+                            Garantias
+                        </Button>
+                        <Button variant="outline" class="w-min flex-1" size="sm">
+                            <User class="w-3 h-3 mr-2" />
+                            Cliente
+                        </Button>
+                    </div>
+                    <Button variant="default" size="lg">
+                        <ShoppingCart class="w-4 h-4 mr-2" />
+                        Finalizar Compra
                     </Button>
                 </CardFooter>
             </Card>
