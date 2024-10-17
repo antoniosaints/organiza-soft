@@ -19,7 +19,9 @@
                 {{ data.sku }}
             </div>
         </TableCell>
-        <TableCell class="hidden md:table-cell"><span class="px-2 py-1 rounded-md">{{ data.cor }}</span>
+        <TableCell class="hidden md:table-cell"><span class="px-2 py-1 rounded-md bg-card text-secondary-foreground flex items-center w-min"><Layers class="w-3 h-3 mr-1" /> {{ data?.Categoria?.categoria }}</span>
+        </TableCell>
+        <TableCell class="hidden md:table-cell"><span class="px-0 py-1 rounded-md">{{ data.cor }}</span>
         </TableCell>
         <TableCell class="hidden md:table-cell"><span class="px-2 py-1 bg-secondary rounded-md">{{ formatDateToPtbr(data.dataCriado as string) }}</span></TableCell>
         <TableCell class="text-right">
@@ -37,7 +39,7 @@ import { useProdutoStore } from "@/stores/patrimonio/produtos/produtoStore";
 import { IPatrimonioProduto } from "@/types/patrimonio/IPatrimonioProduto";
 import { useProdutoFormularioStore } from "@/stores/patrimonio/produtos/produtoFormularioStore";
 import { ProdutosAction } from ".";
-import { ScanBarcode, Tag } from "lucide-vue-next";
+import { Layers, ScanBarcode, Tag } from "lucide-vue-next";
 const mainStore = useProdutoStore();
 const formularioStore = useProdutoFormularioStore();
 

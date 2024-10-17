@@ -10,6 +10,7 @@ import { Progress } from '@/components/ui/progress'
 import { createCustomerStripe } from '@/services/stripe/StripeService'
 import { Router } from '@/routes/Router'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
+import { Checkbox } from '@/components/ui/checkbox'
 
 useColorMode();
 // Definição do schema de validação
@@ -29,6 +30,9 @@ const userSchema = z.object({
         .regex(/[!@#$%^&*(),.?":{}|<>]/, 'A senha deve conter pelo menos um caractere especial (!@#$%^&*(),.?":{}|<>)')
         .trim(),
     telefone: z.string().optional(),
+    aceitarTermos: z.boolean().refine((value) => value, {
+        message: 'Para criar uma conta você precisa concordar com os termos e política de privacidade',
+    }),
 })
 
 const formSchema = z.object({
@@ -47,7 +51,7 @@ type ErrorType = {
 const step = ref(1)
 const formValues = ref<FormValues>({
     step1: { nomeEmpresa: '', emailAcesso: '', descricao: '' },
-    step2: { nomeCompleto: '', senhaAcesso: '', telefone: '' },
+    step2: { nomeCompleto: '', senhaAcesso: '', telefone: '', aceitarTermos: false },
 })
 
 const errors = ref<ErrorType>({})
@@ -93,6 +97,10 @@ const nextStep = async () => {
 const prevStep = () => {
     step.value = 1
 }
+
+const navigate = (path: string) => {
+    Router.push(path);
+};
 </script>
 
 <template>
@@ -146,6 +154,24 @@ const prevStep = () => {
                             <p class="text-red-500 text-sm" v-if="errors.step2?.telefone">{{ errors.step2.telefone[0] }}
                             </p>
                         </div>
+                        <div class="items-top flex gap-x-2">
+                            <Checkbox v-model:checked="formValues.step2.aceitarTermos" required id="terms1" />
+                            <div class="grid gap-1.5 leading-none">
+                                <label for="terms1"
+                                    class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                    Li e aceito os <a href="#" @click.prevent="navigate('/site/termos')"
+                                        class="underline">Termos de serviço</a> e a <a href="#"
+                                        @click.prevent="navigate('/site/politica')" class="underline">Politica de
+                                        Privacidade</a>
+                                </label>
+                                <p class="text-sm text-muted-foreground">
+                                    Você concorda com estes Termos de Serviço e Politica de Privacidade!
+                                </p>
+                                <p class="text-red-500 text-sm" v-if="errors.step2?.aceitarTermos">{{
+                                    errors.step2.aceitarTermos[0]
+                                    }} </p>
+                            </div>
+                        </div>
                     </template>
                 </form>
             </CardContent>
@@ -173,7 +199,9 @@ const prevStep = () => {
                 <AlertDialogHeader>
                     <AlertDialogTitle>Conta criada!</AlertDialogTitle>
                     <AlertDialogDescription>
-                        Sua conta foi criada com sucesso, você pode realizar o login usando o E-mail e Senha informados no cadastro.
+                        Sua conta foi criada com sucesso, você pode realizar o login usando o E-mail e Senha informados
+                        no
+                        cadastro.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

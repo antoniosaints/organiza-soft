@@ -18,6 +18,15 @@ export const getProdutos = async (req: Request, res: Response) => {
       prismaService.patrimonioProdutos.findMany({
         skip: offset || 0,
         take: Number(limit) || 10,
+        include: {
+          Categoria: {
+            select: {
+              categoria: true,
+              cor: true,
+              descricao: true
+            }
+          },
+        },
         where: {
           OR: [
             { produto: { contains: busca } },
