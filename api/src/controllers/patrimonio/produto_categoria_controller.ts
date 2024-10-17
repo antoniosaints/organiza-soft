@@ -10,12 +10,27 @@ import { createProdutoCategoriaSchema, updateProdutoCategoriaSchema } from "../.
 
 export const getCategorias = async (req: Request, res: Response) => {
   try {
-    const categorias = await prismaService.patrimonioProdutoCategoria.findMany({
-      where: {
-        contaSistemaId: req.body.contaSistemaId,
-      },
-    });
-    ResponseService.success(res, { data: categorias });
+    const { limit, page, search } = req.query;
+    const offset = (Number(page) - 1) * Number(limit);
+    const busca = search as string || "";
+
+    const [items, total] = await Promise.all([
+      prismaService.patrimonioProdutoCategoria.findMany({
+        skip: offset || 0,
+        take: Number(limit) || 10,
+        where: {
+          OR: [
+            { categoria: { contains: busca } },
+            { descricao: { contains: busca } }
+          ],
+          contaSistemaId: req.body.contaSistemaId
+        },
+      }),
+      prismaService.patrimonioProdutoCategoria.count({
+        where: {contaSistemaId: req.body.contaSistemaId},
+      }),
+    ])
+    ResponseService.success(res, { data: items, total });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
   }

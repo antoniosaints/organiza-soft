@@ -11,16 +11,7 @@
         </div>
         <div class="space-y-2">
             <Label for="categoria">Categoria</Label>
-            <Select v-model="formularioStore.data.categoriaId as string">
-                <SelectTrigger>
-                    <SelectValue placeholder="Selecione uma categoria" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem v-for="item in categorias" :key="item.id" :value="(item.id as string)">
-                        {{ item.categoria }}
-                    </SelectItem>
-                </SelectContent>
-            </Select>
+            <SelectSearchAjax labelSearch="Selecione uma categoria" v-model="formularioStore.data.categoriaId" :ajax="fetchUsuarios" />
         </div>
         <div class="grid md:grid-cols-2 gap-4">
             <div class="space-y-2">
@@ -55,14 +46,10 @@ import { useProdutoFormularioStore } from "@/stores/patrimonio/produtos/produtoF
 import { useProdutoStore } from "@/stores/patrimonio/produtos/produtoStore";
 import { ProdutoService } from "@/services/patrimonio/produtoService";
 import { Textarea } from "@/components/ui/textarea";
-import { onMounted, ref } from "vue";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { IPatrimonioCategoria } from "@/types/patrimonio/IPatrimonioCategoria";
-import { CategoriasRepository } from "@/repositories/crm/clientes/categoriasRepository";
+import { SelectSearchAjax} from "@/components/ui/select";
+import { CategoriasRepository } from "@/repositories/patrimonio/produtos/categoriasRepository";
 const formularioStore = useProdutoFormularioStore();
 const mainStore = useProdutoStore();
-
-const categorias = ref<IPatrimonioCategoria[]>([]);
 
 const handleSubmit = async (): Promise<void> => {
     let res = null;
@@ -73,7 +60,16 @@ const handleSubmit = async (): Promise<void> => {
         await mainStore.getProdutos();
     }
 };
-onMounted(async () => {
-    categorias.value = await CategoriasRepository.getAll();
-});
+
+const fetchUsuarios = async (query: string, id?: number) => {
+    if (id) {
+        return await CategoriasRepository.get(id).then(response => {
+            return [{ id: response.id as number, label: response.categoria }]
+        })
+    }else {
+        return await CategoriasRepository.getAll(10, 1, query).then(response => {
+            return response.data.map(item => ({ id: item.id as number, label: item.categoria }))
+        })
+    }
+}
 </script>

@@ -63,7 +63,7 @@
                     <TableRow class="bg-secondary">
                         <TableHead></TableHead>
                         <TableHead>Nome</TableHead>
-                        <TableHead class="hidden sm:table-cell">E-nail</TableHead>
+                        <TableHead class="hidden sm:table-cell">E-mail</TableHead>
                         <TableHead class="hidden md:table-cell">Telefone</TableHead>
                         <TableHead class="hidden md:table-cell">Status</TableHead>
                         <TableHead class="text-right">Ações</TableHead>

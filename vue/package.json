@@ -40,6 +40,7 @@
     "marked": "^14.1.2",
     "openai": "^4.60.0",
     "pinia": "^2.2.0",
+    "qz-tray": "^2.2.4",
     "radix-vue": "^1.9.4",
     "recharts": "^2.12.7",
     "tailwind-merge": "^2.5.2",

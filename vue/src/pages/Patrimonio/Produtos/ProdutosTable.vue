@@ -65,6 +65,7 @@
                         <TableHead>Produto</TableHead>
                         <TableHead>Preço</TableHead>
                         <TableHead class="hidden md:table-cell">SKU</TableHead>
+                        <TableHead class="hidden md:table-cell">Categoria</TableHead>
                         <TableHead class="hidden md:table-cell">Cor</TableHead>
                         <TableHead class="hidden md:table-cell">Criação</TableHead>
                         <TableHead class="text-right">Ações</TableHead>

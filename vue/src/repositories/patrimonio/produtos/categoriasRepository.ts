@@ -6,9 +6,9 @@ export class CategoriasRepository {
         const { data } = await axiosService.get(`patrimonio/categoria/${id}`);
         return data.data;
     }
-    static async getAll(): Promise<IPatrimonioCategoria[]> {
-        const { data } = await axiosService.get(`patrimonio/categoria`);
-        return data.data;
+    static async getAll(limit: number, page: number, search?: string | undefined): Promise<{ data: IPatrimonioCategoria[], total: number}> {
+        const { data } = await axiosService.get(`patrimonio/categoria?limit=${limit}&page=${page}&search=${search}`);
+        return data;
     }
     static async create(user: IPatrimonioCategoria): Promise<any> {
         const { data } = await axiosService.post(`patrimonio/categoria`, user);
