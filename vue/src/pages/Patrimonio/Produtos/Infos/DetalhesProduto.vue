@@ -1,6 +1,6 @@
 <template>
     <Sheet v-model:open="formularioStore.isModalDetalhesOpen">
-        <SheetContent class="w-full sm:w-[540px] sm:max-w-[calc(100vw-2rem)]" side="right">
+        <SheetContent class="w-full sm:w-[calc(100vw-40%)] sm:max-w-[calc(100vw)]" side="right">
             <SheetHeader>
                 <SheetTitle class="text-2xl font-bold">Produto </SheetTitle>
                 <SheetDescription>
@@ -9,45 +9,16 @@
             </SheetHeader>
             <div class="mt-6">
                 <Tabs v-model="activeTab" defaultValue="detalhes" class="w-full">
-                    <TabsList class="grid w-full grid-cols-3">
+                    <TabsList class="w-auto grid grid-cols-3">
                         <TabsTrigger value="detalhes">Detalhes</TabsTrigger>
                         <TabsTrigger value="pricing">Preços</TabsTrigger>
                         <TabsTrigger value="inventory">Inventário</TabsTrigger>
                     </TabsList>
                     <TabsContent value="detalhes">
                         <div class="space-y-4">
-                            <div class="grid grid-cols-3 gap-4">
-                                <div class="font-semibold">Produto:</div>
-                                <div class="col-span-2">Super Widget 3000</div>
-                                <div class="font-semibold">SKU:</div>
-                                <div class="col-span-2">SW3000-01</div>
-                                <div class="font-semibold">Categoria:</div>
-                                <div class="col-span-2">
-                                    <Badge variant="secondary">Electronics</Badge>
-                                </div>
-                                <div class="font-semibold">Status:</div>
-                                <div class="col-span-2">
-                                    <Badge variant="success">Active</Badge>
-                                </div>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold mb-2">Descrição:</h4>
-                                <p class="text-sm text-muted-foreground">
-                                    The Super Widget 3000 is our flagship product, designed for enterprise-level
-                                    performance. It features advanced AI capabilities, seamless integration with
-                                    existing systems, and unparalleled scalability.
-                                </p>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold mb-2">Key Features:</h4>
-                                <ul class="list-disc list-inside text-sm text-muted-foreground space-y-1">
-                                    <li>AI-powered analytics dashboard</li>
-                                    <li>Real-time data processing</li>
-                                    <li>Multi-tenant architecture</li>
-                                    <li>99.99% uptime SLA</li>
-                                    <li>24/7 premium support</li>
-                                </ul>
-                            </div>
+                            <ScrollArea class="w-full rounded-md h-[calc(100vh-16rem)]">
+                                <InformacoesProduto />
+                            </ScrollArea>
                         </div>
                     </TabsContent>
                     <TabsContent value="pricing">
@@ -82,26 +53,34 @@
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>Location</TableHead>
-                                    <TableHead>Stock</TableHead>
-                                    <TableHead>Last Updated</TableHead>
+                                    <TableHead>Local</TableHead>
+                                    <TableHead>Estoque</TableHead>
+                                    <TableHead>Mínimo</TableHead>
+                                    <TableHead>Vendas</TableHead>
+                                    <TableHead class="text-right">Ult. atualização</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 <TableRow>
-                                    <TableCell>US East</TableCell>
+                                    <TableCell>Loja</TableCell>
                                     <TableCell>500</TableCell>
-                                    <TableCell>2023-10-01</TableCell>
+                                    <TableCell>100</TableCell>
+                                    <TableCell>100</TableCell>
+                                    <TableCell class="text-right">20/09/2022</TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell>US West</TableCell>
+                                    <TableCell>Bacabal</TableCell>
                                     <TableCell>350</TableCell>
-                                    <TableCell>2023-10-02</TableCell>
+                                    <TableCell>200</TableCell>
+                                    <TableCell>200</TableCell>
+                                    <TableCell class="text-right">21/09/2022</TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell>Europe</TableCell>
+                                    <TableCell>Prédio</TableCell>
                                     <TableCell>250</TableCell>
-                                    <TableCell>2023-10-01</TableCell>
+                                    <TableCell>28</TableCell>
+                                    <TableCell>28</TableCell>
+                                    <TableCell class="text-right">22/09/2022</TableCell>
                                 </TableRow>
                             </TableBody>
                         </Table>
@@ -126,6 +105,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useProdutoFormularioStore } from "@/stores/patrimonio/produtos/produtoFormularioStore";
 import { ProdutosRepository } from '@/repositories/patrimonio/produtos/produtosRepository'
+import InformacoesProduto from './InformacoesProduto.vue'
+import { ScrollArea } from '@/components/ui/scroll-area'
 const formularioStore = useProdutoFormularioStore()
 
 const activeTab = ref('detalhes')
