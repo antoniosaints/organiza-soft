@@ -15,7 +15,7 @@
                     <Button variant="secondary" @click="create(valueSearch)" size="sm" class="w-full">Criar "{{
                         valueSearch }}"</Button>
                 </CommandEmpty>
-                <CommandEmpty v-else>
+                <CommandEmpty class="p-2 cursor-no-drop" v-else>
                     Nenhum registro encontrado.
                 </CommandEmpty>
 

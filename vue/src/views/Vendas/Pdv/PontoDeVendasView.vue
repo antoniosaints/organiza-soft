@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import ModalDescontoView from "./ModalDescontoView.vue"
 import { usePontoDeVendasStore } from "@/stores/vendas/pdv/pontoVendasStore"
+import ComprovanteView from "./ComprovanteView.vue"
 
 const storePDV = usePontoDeVendasStore();
 </script>
@@ -38,6 +39,7 @@ const storePDV = usePontoDeVendasStore();
                             </Card>
                         </div>
                     </ScrollArea>
+                    <!-- <ComprovanteView :itens="storePDV.carrinho" nomeEmpresa="OrganizaSoft" :taxaDeconto="storePDV.porcentagemDesconto" /> -->
                 </CardContent>
             </Card>
         </div>
@@ -56,7 +58,7 @@ const storePDV = usePontoDeVendasStore();
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <ScrollArea class="h-[calc(100vh-436px)]">
+                    <ScrollArea class="h-[calc(100vh-420px)]">
                         <div v-for="item in storePDV.carrinho" :key="item.id" class="flex justify-between items-center mb-2 px-2">
                             <span>{{ item.produto }}</span>
                             <div class="flex items-center">
