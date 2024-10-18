@@ -1,6 +1,6 @@
 import { Request } from "express";
 import { promises as fs } from "fs";
-import multer, { StorageEngine, FileFilterCallback } from "multer";
+import multer, { StorageEngine } from "multer";
 import path from "path";
 
 const ensureDirectoryExists = async (directory: string): Promise<void> => {

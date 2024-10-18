@@ -1,31 +1,38 @@
 import { Router } from "express";
 import auth_middleware from "../middlewares/auth_middleware";
-import authRouter from "./auth_router";
-import clienteRouter from "./cliente_router";
-import assinaturaRouter from "./assinatura_router";
-import transacaoRouter from "./transacao_router";
-import planoRouter from "./plano_router";
-import usuariosRouter from "./usuario_router";
-import bloqueioRouter from "./bloqueio_router";
-import categoriaRouter from "./categorias_router";
-import parcelamentoRouter from "./parcelamento_router";
-import contasRouter from "./contas_router";
-import gruposRouter from "./grupos_router";
-import permissoesRouter from "./permissoes_router";
+import accountMiddleware from "../middlewares/account_middleware";
+import { authRouter, clienteRouter, usuariosRouter } from "./administracao";
+import { assinaturaRouter, bloqueioRouter, planoRouter } from "./assinaturas";
+import { contasSistemaRouter } from "./contas-sistema";
+import { categoriaRouter, contasRouter, parcelamentoRouter, transacaoRouter } from "./financeiro";
+import { stripeRouter } from "./stripe";
+import produtosRouter from "./patrimonio/produtos_router";
+import produtoCategoriaRouter from "./patrimonio/produto_categoria_router";
+import fornecedoresRouter from "./patrimonio/fornecedores_router";
+import armazensRouter from "./patrimonio/armazens_router";
 
 const router = Router();
-
+// Rotas de assinatura
+router.use("/assinatura", auth_middleware, accountMiddleware, assinaturaRouter);
+router.use("/plano", auth_middleware, accountMiddleware, planoRouter);
+router.use("/bloqueio", auth_middleware, accountMiddleware, bloqueioRouter);
+// Rotas de administração
 router.use("/auth", authRouter);
-router.use("/cliente", auth_middleware, clienteRouter);
-router.use("/grupo", auth_middleware, gruposRouter);
-router.use("/permissoes", auth_middleware, permissoesRouter);
-router.use("/assinatura", auth_middleware, assinaturaRouter);
-router.use("/transacao", auth_middleware, transacaoRouter);
-router.use("/parcelamento", auth_middleware, parcelamentoRouter);
-router.use("/contas", auth_middleware, contasRouter);
-router.use("/plano", auth_middleware, planoRouter);
-router.use("/usuario", auth_middleware, usuariosRouter);
-router.use("/bloqueio", auth_middleware, bloqueioRouter);
-router.use("/categoria", auth_middleware, categoriaRouter);
+router.use("/usuario", auth_middleware, accountMiddleware, usuariosRouter);
+router.use("/cliente", auth_middleware, accountMiddleware, clienteRouter);
+// Rotas Financeiro
+router.use("/financeiro/transacao", auth_middleware, accountMiddleware, transacaoRouter);
+router.use("/financeiro/parcelamento", auth_middleware, accountMiddleware, parcelamentoRouter);
+router.use("/financeiro/contas", auth_middleware, accountMiddleware, contasRouter);
+router.use("/financeiro/categoria", auth_middleware, accountMiddleware, categoriaRouter);
+// Rotas Stripe
+router.use("/stripe", stripeRouter);
+// Rotas de contas do sistema
+router.use("/contas-sistema", auth_middleware, contasSistemaRouter);
+// Rotas de patrimonio
+router.use("/patrimonio/produto", auth_middleware, accountMiddleware, produtosRouter);
+router.use("/patrimonio/categoria", auth_middleware, accountMiddleware, produtoCategoriaRouter);
+router.use("/patrimonio/fornecedor", auth_middleware, accountMiddleware, fornecedoresRouter);
+router.use("/patrimonio/armazen", auth_middleware, accountMiddleware, armazensRouter);
 
 export default router;

@@ -1,155 +1,493 @@
 <template>
     <div class="flex min-h-screen w-full bg-background text-foreground">
         <aside :class="sidebarClasses">
-            <div class="flex h-16 items-center justify-between px-4">
-                <router-link to="/" class="flex items-center gap-2 font-bold dark:bg-gray-950 bg-white">
-                    <Wallet />
-                    <span class="text-lg">Organiza Soft</span>
-                </router-link>
+            <div class="flex h-16 border-white/30 border-b-2 items-center bg-sidebar justify-between text-white px-4">
+                <div to="/" class="flex items-center gap-2 font-bold">
+                    <img src="/OS.png" alt="logo" class="h-8 w-8 rounded-full">
+                    <span class="text-xl">Organiza Soft</span>
+                </div>
                 <button type="button" class="lg:hidden" @click="toggleSidebar">
-                    <Menu />
+                    <PanelLeftClose />
                 </button>
             </div>
-            <div class="flex-1 overflow-y-auto px-2 py-4">
+            <div class="flex-1 overflow-y-auto bg-sidebar text-white px-2 py-4">
                 <nav class="grid gap-2">
                     <router-link to="/dashboard"
-                        class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
+                        class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                         <House />
                         <span>Dashboard</span>
                     </router-link>
-                    <collapsible class="grid gap-2">
+                    <collapsible v-if="menuStore.permissions.admin" v-slot="{ open }" class="grid gap-2">
                         <collapsible-trigger
-                            class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
+                            class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <LockKeyhole />
                             <span>Administração</span>
-                            <ChevronRight class="ml-auto h-4 w-4 transition-transform" />
+                            <ChevronRight class="ml-auto h-4 w-4 transition-transform" :class="{ 'rotate-90': open }" />
                         </collapsible-trigger>
                         <collapsible-content>
                             <div class="grid gap-2 pl-6">
                                 <router-link to="/administracao/usuarios"
-                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                                     <Users />
                                     <span>Usuários</span>
                                 </router-link>
-                                <router-link to="/contact"
-                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
+                                <router-link to="/assinatura"
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                    <Crown />
+                                    <span>Assinatura</span>
+                                    <div class="ml-auto flex space-x-1 items-center">
+                                        <Badge :class="loginStore.isProAccount ? 'bg-orange-400 text-black' : 'bg-gray-500'"> {{
+                                            loginStore.isProAccount ? 'Pro' : 'Free' }} </Badge>
+                                    </div>
+                                </router-link>
+                                <router-link to="/administracao/logs"
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                                     <List />
-                                    <span>Contatos</span>
+                                    <span>Logs</span>
                                 </router-link>
                             </div>
                         </collapsible-content>
                     </collapsible>
-                    <router-link to="/products"
-                        class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
-                        <PackageOpen />
-                        <span>Patrimônio</span>
-                    </router-link>
+                    <collapsible v-if="menuStore.permissions.assistente" v-slot="{ open }" class="grid gap-2">
+                        <collapsible-trigger
+                            class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                            <Cpu />
+                            <span>Assistente de IA</span>
+                            <div class="ml-auto flex space-x-1 items-center">
+                                <Skeleton v-if="true" class="bg-blue-500 rounded-full h-3 w-3 shadow-none" />
+                                <ChevronRight class="ml-auto h-4 w-4 transition-transform"
+                                    :class="{ 'rotate-90': open }" />
+                            </div>
+                        </collapsible-trigger>
+                        <collapsible-content>
+                            <div class="grid gap-2 pl-6">
+                                <router-link to="/agentesia/playground"
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                    <MessageCircle />
+                                    <span>Chat Integrado ✨</span>
+                                </router-link>
+                            </div>
+                        </collapsible-content>
+                    </collapsible>
+                    <collapsible v-if="menuStore.permissions.crm" v-slot="{ open }" class="grid gap-2">
+                        <collapsible-trigger
+                            class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                            <Layers />
+                            <span>CRM</span>
+                            <div class="ml-auto flex space-x-1 items-center">
+                                <Badge v-if="true" variant="destructive"> {{ stateDevelopment }} </Badge>
+                                <ChevronRight class="ml-auto h-4 w-4 transition-transform"
+                                    :class="{ 'rotate-90': open }" />
+                            </div>
+                        </collapsible-trigger>
+                        <collapsible-content>
+                            <div class="grid gap-2 pl-6">
+                                <router-link to="/patrimonio/categorias"
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                    <FileChartPie />
+                                    <span>Resumo</span>
+                                </router-link>
+                                <router-link to="/crm/clientes"
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                    <User />
+                                    <span>Clientes</span>
+                                </router-link>
+                                <router-link to="/vendas/pdv"
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                    <ClipboardCheck />
+                                    <span>Relatórios</span>
+                                </router-link>
+                                <collapsible v-slot="{ open }" class="grid gap-2">
+                                    <collapsible-trigger
+                                        class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                        <Settings2 />
+                                        <span>Outros</span>
+                                        <ChevronRight class="ml-auto h-4 w-4 transition-transform"
+                                            :class="{ 'rotate-90': open }" />
+                                    </collapsible-trigger>
+                                    <collapsible-content>
+                                        <div class="grid gap-2 pl-6">
+                                            <router-link to="/patrimonio/categorias"
+                                                class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                                <Contact />
+                                                <span>Tipos</span>
+                                            </router-link>
+                                        </div>
+                                    </collapsible-content>
+                                </collapsible>
+                            </div>
+                        </collapsible-content>
+                    </collapsible>
+                    <collapsible v-if="menuStore.permissions.vendas" v-slot="{ open }" class="grid gap-2">
+                        <collapsible-trigger
+                            class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                            <Tags />
+                            <span>Vendas</span>
+                            <div class="ml-auto flex space-x-1 items-center">
+                                <Badge v-if="true" variant="destructive"> {{ stateDevelopment }} </Badge>
+                                <ChevronRight class="ml-auto h-4 w-4 transition-transform"
+                                    :class="{ 'rotate-90': open }" />
+                            </div>
+                        </collapsible-trigger>
+                        <collapsible-content>
+                            <div class="grid gap-2 pl-6">
+                                <router-link to="/patrimonio/categorias"
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                    <FileChartPie />
+                                    <span>Resumo</span>
+                                </router-link>
+                                <router-link to="/vendas/pdv"
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                    <Computer />
+                                    <span>PDV</span>
+                                </router-link>
+                                <router-link to="/vendas/pdv"
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                    <ClipboardCheck />
+                                    <span>Relatórios</span>
+                                </router-link>
+                            </div>
+                        </collapsible-content>
+                    </collapsible>
+                    <collapsible v-if="menuStore.permissions.financeiro" v-slot="{ open }" class="grid gap-2">
+                        <collapsible-trigger
+                            class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                            <Landmark />
+                            <span>Financeiro</span>
+                            <div class="ml-auto flex space-x-1 items-center">
+                                <Badge v-if="true" variant="destructive"> {{ stateDevelopment }} </Badge>
+                                <ChevronRight class="ml-auto h-4 w-4 transition-transform"
+                                    :class="{ 'rotate-90': open }" />
+                            </div>
+                        </collapsible-trigger>
+                        <collapsible-content>
+                            <div class="grid gap-2 pl-6">
+                                <router-link to="/patrimonio/categorias"
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                    <FileChartPie />
+                                    <span>Resumo</span>
+                                </router-link>
+                                <router-link to="/financeiro/lancamentos"
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                    <Wallet />
+                                    <span>Lançamentos</span>
+                                </router-link>
+                                <router-link to="/financeiro/dre"
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                    <FileText />
+                                    <span>DRE</span>
+                                </router-link>
+                                <collapsible v-slot="{ open }" class="grid gap-2">
+                                    <collapsible-trigger
+                                        class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                        <Settings2 />
+                                        <span>Outros</span>
+                                        <ChevronRight class="ml-auto h-4 w-4 transition-transform"
+                                            :class="{ 'rotate-90': open }" />
+                                    </collapsible-trigger>
+                                    <collapsible-content>
+                                        <div class="grid gap-2 pl-6">
+                                            <router-link to="/financeiro/dre"
+                                                class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                                <WalletMinimal />
+                                                <span>Contas</span>
+                                            </router-link>
+                                            <router-link to="/financeiro/dre"
+                                                class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                                <CircleDollarSign />
+                                                <span>Formas pg.</span>
+                                            </router-link>
+                                            <router-link to="/financeiro/dre"
+                                                class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                                <Group />
+                                                <span>Categorias</span>
+                                            </router-link>
+                                        </div>
+                                    </collapsible-content>
+                                </collapsible>
+                            </div>
+                        </collapsible-content>
+                    </collapsible>
+                    <collapsible v-if="menuStore.permissions.patrimonio" v-slot="{ open }" class="grid gap-2">
+                        <collapsible-trigger
+                            class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                            <Package />
+                            <span>Patrimônio</span>
+                            <div class="ml-auto flex space-x-1 items-center">
+                                <Badge v-if="true" variant="destructive"> {{ stateDevelopment }} </Badge>
+                                <ChevronRight class="ml-auto h-4 w-4 transition-transform"
+                                    :class="{ 'rotate-90': open }" />
+                            </div>
+                        </collapsible-trigger>
+                        <collapsible-content>
+                            <div class="grid gap-2 pl-6">
+                                <router-link to="/patrimonio/categorias"
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                    <FileChartPie />
+                                    <span>Resumo</span>
+                                </router-link>
+                                <router-link to="/patrimonio/produtos"
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                    <Archive />
+                                    <span>Produtos</span>
+                                </router-link>
+                                <router-link to="/patrimonio/estoques"
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                    <Boxes />
+                                    <span>Estoques</span>
+                                </router-link>
+                                <collapsible v-slot="{ open }" class="grid gap-2">
+                                    <collapsible-trigger
+                                        class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                        <Settings2 />
+                                        <span>Outros</span>
+                                        <ChevronRight class="ml-auto h-4 w-4 transition-transform"
+                                            :class="{ 'rotate-90': open }" />
+                                    </collapsible-trigger>
+                                    <collapsible-content>
+                                        <div class="grid gap-2 pl-6">
+                                            <router-link to="/patrimonio/categorias"
+                                                class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                                <Group />
+                                                <span>Categorias</span>
+                                            </router-link>
+                                            <router-link to="/patrimonio/fornecedores"
+                                                class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                                <Group />
+                                                <span>Fornecedores</span>
+                                            </router-link>
+                                        </div>
+                                    </collapsible-content>
+                                </collapsible>
+                            </div>
+                        </collapsible-content>
+                    </collapsible>
+                    <collapsible v-if="menuStore.permissions.servicos" v-slot="{ open }" class="grid gap-2">
+                        <collapsible-trigger
+                            class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                            <FileDigit />
+                            <span>Serviços</span>
+                            <div class="ml-auto flex space-x-1 items-center">
+                                <Badge v-if="true" variant="destructive"> {{ stateDevelopment }} </Badge>
+                                <ChevronRight class="ml-auto h-4 w-4 transition-transform"
+                                    :class="{ 'rotate-90': open }" />
+                            </div>
+                        </collapsible-trigger>
+                        <collapsible-content>
+                            <div class="grid gap-2 pl-6">
+                                <router-link to="/patrimonio/categorias"
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                    <FileChartPie />
+                                    <span>Resumo</span>
+                                </router-link>
+                                <router-link to="/patrimonio/servicos"
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                    <BookOpenCheck />
+                                    <span>Ordens de Serviço</span>
+                                </router-link>
+                                <router-link to="/patrimonio/servicos"
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                    <FileCheck />
+                                    <span>Serviços</span>
+                                </router-link>
+                                <collapsible v-slot="{ open }" class="grid gap-2">
+                                    <collapsible-trigger
+                                        class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                        <Settings2 />
+                                        <span>Outros</span>
+                                        <ChevronRight class="ml-auto h-4 w-4 transition-transform"
+                                            :class="{ 'rotate-90': open }" />
+                                    </collapsible-trigger>
+                                    <collapsible-content>
+                                        <div class="grid gap-2 pl-6">
+                                            <router-link to="/patrimonio/categorias"
+                                                class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                                <FileBadge2 />
+                                                <span>Garantias</span>
+                                            </router-link>
+                                            <router-link to="/patrimonio/categorias"
+                                                class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                                <FileStack />
+                                                <span>Tipos</span>
+                                            </router-link>
+                                        </div>
+                                    </collapsible-content>
+                                </collapsible>
+                            </div>
+                        </collapsible-content>
+                    </collapsible>
+                    <collapsible v-if="menuStore.permissions.assinantes" v-slot="{ open }" class="grid gap-2">
+                        <collapsible-trigger
+                            class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                            <PenTool />
+                            <span>Assinantes</span>
+                            <div class="ml-auto flex space-x-1 items-center">
+                                <Badge v-if="true" variant="destructive"> {{ stateDevelopment }} </Badge>
+                                <ChevronRight class="ml-auto h-4 w-4 transition-transform"
+                                    :class="{ 'rotate-90': open }" />
+                            </div>
+                        </collapsible-trigger>
+                        <collapsible-content>
+                            <div class="grid gap-2 pl-6">
+                                <router-link to="/patrimonio/categorias"
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                    <FileChartPie />
+                                    <span>Resumo</span>
+                                </router-link>
+                                <router-link to="/patrimonio/produtos"
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                    <Ticket />
+                                    <span>Assinaturas</span>
+                                </router-link>
+                                <router-link to="/patrimonio/produtos"
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                    <BadgeCheck />
+                                    <span>Planos</span>
+                                </router-link>
+                                <router-link to="/patrimonio/servicos"
+                                    class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
+                                    <CalendarX2 />
+                                    <span>Vencimentos</span>
+                                </router-link>
+                            </div>
+                        </collapsible-content>
+                    </collapsible>
                 </nav>
             </div>
-            <nav class="mb-4 mx-3">
-                <router-link to="/login"
-                    class="flex text-red-600 items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
+            <div class="mt-auto px-3 py-4 bg-sidebar">
+                <Card v-if="!loginStore.isProAccount && loginStore.isAdminUser">
+                    <CardHeader class="text-center">
+                        <CardTitle>OrganizaSoft PRO ✨</CardTitle>
+                        <CardDescription>
+                            Acesse tudo de forma ilimitada, assine agora!
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <RouterLink to="/assinatura">
+                            <Button size="sm" class="w-full">
+                                Assinar PRO 🎯
+                            </Button>
+                        </RouterLink>
+                    </CardContent>
+                </Card>
+            </div>
+            <div class="pb-4 px-3 bg-sidebar">
+                <div @click="LoginService.logout()"
+                    class="flex text-white cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm font-bold transition-colors hover:bg-sidebar-hover">
                     <LogOut />
                     <span>Logout</span>
-                </router-link>
-            </nav>
+                </div>
+            </div>
         </aside>
-        <div class="flex-1 lg:pl-64">
+        <div class="flex-1 w-[inherit]" :class="mainContentClass">
             <header
                 class="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-border bg-background px-4 shadow-sm lg:px-6">
                 <div class="flex items-center gap-4">
-                    <button type="button" class="lg:hidden" @click="toggleSidebar">
-                        <Menu />
+                    <button type="button" class="" @click="toggleSidebar">
+                        <PanelLeftOpen v-if="!isSidebarOpen" />
+                        <PanelLeftClose v-else />
                     </button>
-                    <breadcrumb>
-                        <breadcrumb-list>
-                            <breadcrumb-item>
-                                <router-link to="/">Home</router-link>
-                            </breadcrumb-item>
-                            <breadcrumb-separator />
-                            <breadcrumb-item>
-                                <span>Dashboard</span>
-                            </breadcrumb-item>
-                        </breadcrumb-list>
-                    </breadcrumb>
+                    <BreadCrumb />
                 </div>
                 <div class="flex items-center gap-4">
-                    <DropdownMenu>
-                        <DropdownMenuTrigger as-child>
-                            <Button variant="outline" class="dark:bg-gray-700">
-                                <Icon icon="radix-icons:moon"
-                                    class="h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:-rotate-0 dark:scale-100" />
-                                <Icon icon="radix-icons:sun"
-                                    class="absolute h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:rotate-90 dark:scale-0" />
-                                <span class="sr-only">Toggle theme</span>
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuItem @click="mode = 'light'">
-                                Claro
-                            </DropdownMenuItem>
-                            <DropdownMenuItem @click="mode = 'dark'">
-                                Escuro
-                            </DropdownMenuItem>
-                            <DropdownMenuItem @click="mode = 'auto'">
-                                Automático
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                    <dropdown-menu>
-                        <dropdown-menu-trigger>
-                            <avatar class="h-9 w-9">
-                                <AvatarImage src="/logo-login.png" />
-                                <AvatarFallback>JP</AvatarFallback>
-                            </avatar>
-                        </dropdown-menu-trigger>
-                        <dropdown-menu-content>
-                            <dropdown-menu-item><router-link to="/perfil">
-                                    <iconFA class="h-3 w-3 mr-2" icon="fa-user" /> Perfil
-                                </router-link></dropdown-menu-item>
-                            <dropdown-menu-item>
-                                <iconFA class="h-3 w-3 mr-2" icon="fa-cogs" /> Configs
-                            </dropdown-menu-item>
-                            <dropdown-menu-separator />
-                            <dropdown-menu-item>
-                                <iconFA class="h-3 w-3 mr-2" icon="fa-right-from-bracket" /> Sair
-                            </dropdown-menu-item>
-                        </dropdown-menu-content>
-                    </dropdown-menu>
+                    <ToogleMode />
+                    <ProfileHome />
                 </div>
             </header>
             <main class="p-4 lg:p-6">
-                <router-view />
+                <router-view v-if="showComponent" v-slot="{ Component }">
+                    <transition name="fade" @before-enter="beforeEnter" @after-leave="afterLeave">
+                        <component :is="Component" />
+                    </transition>
+                </router-view>
             </main>
         </div>
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from 'vue';
-import { House, LockKeyhole, Users, List, PackageOpen, Wallet, Menu, ChevronRight, LogOut, User } from 'lucide-vue-next'
-import { Icon } from "@iconify/vue";
-import { Button } from '@/components/ui/button';
+import { House, LockKeyhole, Users, List, Wallet, ChevronRight, LogOut, PanelLeftOpen, PanelLeftClose, Landmark, FileText, Package, Boxes, Group, Computer, Tags, BookOpenCheck, BadgeCheck, CalendarX2, FileChartPie, Settings2, PenTool, ClipboardCheck, Ticket, FileDigit, Archive, FileBadge2, FileStack, FileCheck, Layers, User, Contact, WalletMinimal, CircleDollarSign, Crown, Cpu, MessageCircle } from 'lucide-vue-next'
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible"
-import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "@/components/ui/breadcrumb"
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-import { useColorMode } from '@vueuse/core';
+import { BreadCrumb, ProfileHome, ToogleMode } from '.';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { LoginService } from '@/services/login/loginService';
+import { onMounted } from 'vue';
+import { onUnmounted } from 'vue';
+import { Badge } from '@/components/ui/badge';
+import { useLoginStore } from '@/stores/login/loginStore';
+import { useMenuStore } from '@/stores/menuStore';
+import { Skeleton } from '@/components/ui/skeleton';
 
-const mode = useColorMode();
+const widthWindow = ref(window.innerWidth);
+const stateDevelopment = ref('beta');
 
-const isSidebarOpen = ref(false);
+const loginStore = useLoginStore();
+const menuStore = useMenuStore();
+
+const handleResize = () => {
+    widthWindow.value = window.innerWidth;
+    isSidebarOpen.value = widthWindow.value > 1024;
+};
+onMounted(() => {
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Para verificar o estado inicial
+});
+onUnmounted(() => {
+    window.removeEventListener('resize', handleResize);
+});
+
+const showComponent = ref(true);
+const beforeEnter = () => {
+    showComponent.value = false;
+};
+const afterLeave = () => {
+    showComponent.value = true;
+};
+
+const isSidebarOpen = ref(window.innerWidth <= 768 ? false : true);
 
 const toggleSidebar = () => {
     isSidebarOpen.value = !isSidebarOpen.value;
 };
 
+const mainContentClass = computed(() => {
+    return `${isSidebarOpen.value ? 'lg:pl-64' : 'lg:pl-0'}`
+})
 const sidebarClasses = computed(() => {
     return `fixed inset-y-0 left-0 z-20 flex w-64 flex-col border-r border-border bg-background
-      transition-all duration-300 ${isSidebarOpen.value ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`;
+      transition-all duration-300 ${isSidebarOpen.value ? 'translate-x-0' : '-translate-x-full'}`;
 });
+
 </script>
+
+<style scoped>
+.breadcrumb {
+    display: flex;
+    list-style: none;
+    padding: 0;
+}
+
+.breadcrumb-item+.breadcrumb-item::before {
+    content: ">";
+    padding: 0 5px;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.1s ease, transform 0.1s ease;
+}
+
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
+    /* transform: translateX(-100%); */
+}
+
+.fade-leave,
+.fade-enter-to {
+    opacity: 1;
+    /* transform: translateX(0%); */
+}
+</style>

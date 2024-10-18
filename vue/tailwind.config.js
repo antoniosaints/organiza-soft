@@ -28,6 +28,10 @@ module.exports = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        sidebar: {
+          DEFAULT: "hsl(var(--sidebar-background-color))",
+          hover: "hsl(var(--hover-button-sidebar))",
+        },
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -89,5 +93,5 @@ module.exports = {
       },
     },
   },
-  plugins: [animate],
+  plugins: [animate, require("@tailwindcss/typography")],
 }

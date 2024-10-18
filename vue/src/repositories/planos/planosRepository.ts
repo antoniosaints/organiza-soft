@@ -1,5 +1,5 @@
 import axiosService from "@/services/http/axiosService";
-import IPlano from "@/types/planos/IPlano";
+import IPlano from "@/types/assinaturas/IPlano";
 
 export default class PlanosRepository {
     static async get(id: number): Promise<IPlano> {

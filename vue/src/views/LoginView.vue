@@ -18,13 +18,13 @@
       </div>
       <form class="w-full max-w-lg" @submit.prevent="loginUsuario">
         <div class="mb-5">
-          <Label for="email">E-mail</Label>
-          <Input class="border-2 border-gray-600" v-model="usuario.email" required type="email" label="E-mail"
+          <Label for="email" class="text-md">E-mail</Label>
+          <Input class="border h-12 text-md rounded-xl border-gray-600" v-model="usuario.email" required type="email" label="E-mail"
             placeholder="Seu e-mail" />
         </div>
         <div class="mb-5">
-          <Label for="password">Senha</Label>
-          <Input class="border-2 border-gray-600" v-model="usuario.password" required type="password" label="Senha"
+          <Label for="password" class="text-md">Senha</Label>
+          <Input class="border h-12 text-md rounded-xl border-gray-600" v-model="usuario.senha" required type="password" label="Senha"
             placeholder="•••••••••" />
         </div>
         <div class="flex items-start mb-5">
@@ -66,7 +66,7 @@
 
 <script setup lang="ts">
 import { reactive, ref } from "vue";
-import IUserLogin from "@/types/login/IUserLogin";
+import IUserLogin from "@/types/administracao/login/IUserLogin";
 import { LoginService } from "@/services/login/loginService";
 import StorageUtil from "@/utils/storageUtil";
 import Button from "@/components/ui/button/Button.vue";
@@ -85,7 +85,7 @@ const lembrarUsuario = ref<boolean>(
 
 const usuario = reactive(<IUserLogin>{
   email: StorageUtil.get("@gestao_inteligente:email") || "",
-  password: StorageUtil.get("@gestao_inteligente:password") || "",
+  senha: StorageUtil.get("@gestao_inteligente:password") || "",
 });
 
 const loginUsuario = async () => {
@@ -94,7 +94,7 @@ const loginUsuario = async () => {
     if (lembrarUsuario.value) {
       StorageUtil.set("@gestao_inteligente:lembrarSenha", true);
       StorageUtil.set("@gestao_inteligente:email", usuario.email);
-      StorageUtil.set("@gestao_inteligente:password", usuario.password);
+      StorageUtil.set("@gestao_inteligente:password", usuario.senha);
     } else {
       StorageUtil.remove("@gestao_inteligente:lembrarSenha");
       StorageUtil.remove("@gestao_inteligente:email");

@@ -22,8 +22,17 @@ const auth_middleware = (req: Request, res: Response, next: any) => {
     try {
         JwtService.verify(token);
     } catch (err) {
-        return ResponseService.unauthorized(res, "Token inválido");
+        return ResponseService.unauthorized(res, "Token invalido");
     }
+
+    const decodeToken = JwtService.decode(token);
+    const decodeRefreshToken = JwtService.decode(decodeToken.refreshToken);
+
+    if (!decodeRefreshToken.contaId) {
+        return ResponseService.unauthorized(res, "A Sessão não contem uma contaId");
+    }
+
+    req.body.userAccountId = decodeRefreshToken.contaId;
 
     next();
 };
