@@ -1,6 +1,6 @@
+import { ScToastUtil } from "@/utils/scToastUtil";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
-
 
 type IProdutoPDV = {
     id: number
@@ -8,22 +8,22 @@ type IProdutoPDV = {
     preco: number
 }
 
-// Tipo para representar um item no carrinho
 type ICarrinhoItem = IProdutoPDV & { quantidade: number }
 
 export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
     const carrinho = ref<ICarrinhoItem[]>([]);
     const produtos = ref<IProdutoPDV[]>([
-        { id: 1, produto: "Camisa", preco: 10.0 },
-        { id: 2, produto: "Calça", preco: 20.0 },
-        { id: 3, produto: "Bermuda", preco: 30.0 },
+        { id: 1, produto: "Camisa", preco: 50.0 },
+        { id: 2, produto: "Calça", preco: 70.0 },
+        { id: 3, produto: "Bermuda", preco: 50.0 },
+        { id: 4, produto: "Terno", preco: 130.0 },
     ]);
     const buscarItem = ref<string>("");
     const totalItens = ref<number>(0);
     const valorTotal = ref<number>(0);
     const valorComDesconto = ref<number>(0);
     const porcentagemDesconto = ref<number>(0);
-
+    const openComprovante = ref<boolean>(false);
 
     const adicionarAoCarrinho = (produto: IProdutoPDV) => {
         const existingItem = carrinho.value.find((item) => item.id === produto.id)
@@ -62,14 +62,17 @@ export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
         return total - (total * porcentagemDesconto.value)
     }) 
     
-    // Filtra os produtos com base no termo de busca
     const produtosFiltrados = computed(() =>
-        produtos.value.filter((produto) =>
-            produto.produto.toLowerCase().includes(buscarItem.value.toLowerCase())
-        )
+        produtos.value.filter((produto) => produto.produto.toLowerCase().includes(buscarItem.value.toLowerCase()))
     )
-    
 
+    const finalizarVenda = async () => {
+        if (!carrinho.value.length) {
+            return ScToastUtil.warning("Carrinho vazio!")
+        }
+        openComprovante.value = true   
+    }
+    
     return {
         carrinho,
         produtos,
@@ -83,6 +86,8 @@ export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
         limparCarrinho,
         produtosFiltrados,
         calcularTotal,
-        totalComDesconto
+        totalComDesconto,
+        openComprovante,
+        finalizarVenda
     };
 });

@@ -38,8 +38,8 @@ const storePDV = usePontoDeVendasStore();
                                 </CardFooter>
                             </Card>
                         </div>
+                        <ComprovanteView v-model:open="storePDV.openComprovante" class="mt-3" cliente="Luis cardoso" pagamento="Pix" :itens="storePDV.carrinho" nomeEmpresa="OrganizaSoft" :taxaDeconto="storePDV.porcentagemDesconto" />
                     </ScrollArea>
-                    <!-- <ComprovanteView :itens="storePDV.carrinho" nomeEmpresa="OrganizaSoft" :taxaDeconto="storePDV.porcentagemDesconto" /> -->
                 </CardContent>
             </Card>
         </div>
@@ -94,7 +94,7 @@ const storePDV = usePontoDeVendasStore();
                             Cliente
                         </Button>
                     </div>
-                    <Button variant="default" size="lg">
+                    <Button variant="default" size="lg" @click="storePDV.finalizarVenda">
                         <ShoppingCart class="w-4 h-4 mr-2" />
                         Finalizar Compra
                     </Button>
