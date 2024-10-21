@@ -10,6 +10,7 @@ import produtosRouter from "./patrimonio/produtos_router";
 import produtoCategoriaRouter from "./patrimonio/produto_categoria_router";
 import fornecedoresRouter from "./patrimonio/fornecedores_router";
 import armazensRouter from "./patrimonio/armazens_router";
+import mercadopagoRouter from "./financeiro/mercadopago/mercadopago_router";
 
 const router = Router();
 // Rotas de assinatura
@@ -25,6 +26,9 @@ router.use("/financeiro/transacao", auth_middleware, accountMiddleware, transaca
 router.use("/financeiro/parcelamento", auth_middleware, accountMiddleware, parcelamentoRouter);
 router.use("/financeiro/contas", auth_middleware, accountMiddleware, contasRouter);
 router.use("/financeiro/categoria", auth_middleware, accountMiddleware, categoriaRouter);
+router.use("/financeiro/categoria", auth_middleware, accountMiddleware, categoriaRouter);
+// Rotas Mercado pago
+router.use("/mercadopago", auth_middleware, accountMiddleware, mercadopagoRouter);
 // Rotas Stripe
 router.use("/stripe", stripeRouter);
 // Rotas de contas do sistema
