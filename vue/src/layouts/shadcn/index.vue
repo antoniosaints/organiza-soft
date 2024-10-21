@@ -2,7 +2,7 @@
     <div class="flex min-h-screen w-full bg-background text-foreground">
         <aside :class="sidebarClasses">
             <div class="flex h-16 border-white/30 border-b-2 items-center bg-sidebar justify-between text-white px-4">
-                <div to="/" class="flex items-center gap-2 font-bold">
+                <div to="/app" class="flex items-center gap-2 font-bold">
                     <img src="/OS.png" alt="logo" class="h-8 w-8 rounded-full">
                     <span class="text-xl">Organiza Soft</span>
                 </div>

@@ -17,7 +17,7 @@ const { t } = useI18n();
 <template>
     <div class="flex-1 overflow-y-auto bg-sidebar text-white px-2 py-4">
         <nav class="grid gap-2">
-            <router-link to="/dashboard"
+            <router-link to="/app/dashboard"
                 class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                 <House />
                 <span>{{ t("sidebar.home") }}</span>
@@ -31,12 +31,12 @@ const { t } = useI18n();
                 </collapsible-trigger>
                 <collapsible-content>
                     <div class="grid gap-2 pl-6">
-                        <router-link to="/administracao/usuarios"
+                        <router-link to="/app/administracao/usuarios"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <Users />
                             <span>{{ t("sidebar.users") }}</span>
                         </router-link>
-                        <router-link to="/assinatura"
+                        <router-link to="/app/assinatura"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <Crown />
                             <span>{{ t("sidebar.subscription") }}</span>
@@ -45,7 +45,7 @@ const { t } = useI18n();
                                     loginStore.isProAccount ? 'Pro' : 'Free' }} </Badge>
                             </div>
                         </router-link>
-                        <router-link to="/administracao/logs"
+                        <router-link to="/app/administracao/logs"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <List />
                             <span>{{ t("sidebar.logs") }}</span>
@@ -65,7 +65,7 @@ const { t } = useI18n();
                 </collapsible-trigger>
                 <collapsible-content>
                     <div class="grid gap-2 pl-6">
-                        <router-link to="/agentesia/playground"
+                        <router-link to="/app/agentesia/playground"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <MessageCircle />
                             <span>{{ t("sidebar.playground") }} ✨</span>
@@ -85,17 +85,17 @@ const { t } = useI18n();
                 </collapsible-trigger>
                 <collapsible-content>
                     <div class="grid gap-2 pl-6">
-                        <router-link to="/patrimonio/categorias"
+                        <router-link to="/app/patrimonio/categorias"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <FileChartPie />
                             <span>{{ t("sidebar.resumecrm") }}</span>
                         </router-link>
-                        <router-link to="/crm/clientes"
+                        <router-link to="/app/crm/clientes"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <User />
                             <span>{{ t("sidebar.clients") }}</span>
                         </router-link>
-                        <router-link to="/vendas/pdv"
+                        <router-link to="/app/vendas/pdv"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <ClipboardCheck />
                             <span>{{ t("sidebar.reportClients") }}</span>
@@ -110,7 +110,7 @@ const { t } = useI18n();
                             </collapsible-trigger>
                             <collapsible-content>
                                 <div class="grid gap-2 pl-6">
-                                    <router-link to="/patrimonio/categorias"
+                                    <router-link to="/app/patrimonio/categorias"
                                         class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                                         <Contact />
                                         <span>Tipos</span>
@@ -133,17 +133,17 @@ const { t } = useI18n();
                 </collapsible-trigger>
                 <collapsible-content>
                     <div class="grid gap-2 pl-6">
-                        <router-link to="/patrimonio/categorias"
+                        <router-link to="/app/patrimonio/categorias"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <FileChartPie />
                             <span>Resumo</span>
                         </router-link>
-                        <router-link to="/vendas/pdv"
+                        <router-link to="/app/vendas/pdv"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <Computer />
                             <span>PDV</span>
                         </router-link>
-                        <router-link to="/vendas/pdv"
+                        <router-link to="/app/vendas/pdv"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <ClipboardCheck />
                             <span>Relatórios</span>
@@ -163,17 +163,17 @@ const { t } = useI18n();
                 </collapsible-trigger>
                 <collapsible-content>
                     <div class="grid gap-2 pl-6">
-                        <router-link to="/patrimonio/categorias"
+                        <router-link to="/app/patrimonio/categorias"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <FileChartPie />
                             <span>Resumo</span>
                         </router-link>
-                        <router-link to="/financeiro/lancamentos"
+                        <router-link to="/app/financeiro/lancamentos"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <Wallet />
                             <span>Lançamentos</span>
                         </router-link>
-                        <router-link to="/financeiro/dre"
+                        <router-link to="/app/financeiro/dre"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <FileText />
                             <span>DRE</span>
@@ -188,17 +188,17 @@ const { t } = useI18n();
                             </collapsible-trigger>
                             <collapsible-content>
                                 <div class="grid gap-2 pl-6">
-                                    <router-link to="/financeiro/dre"
+                                    <router-link to="/app/financeiro/dre"
                                         class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                                         <WalletMinimal />
                                         <span>Contas</span>
                                     </router-link>
-                                    <router-link to="/financeiro/dre"
+                                    <router-link to="/app/financeiro/dre"
                                         class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                                         <CircleDollarSign />
                                         <span>Formas pg.</span>
                                     </router-link>
-                                    <router-link to="/financeiro/dre"
+                                    <router-link to="/app/financeiro/dre"
                                         class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                                         <Group />
                                         <span>Categorias</span>
@@ -221,17 +221,17 @@ const { t } = useI18n();
                 </collapsible-trigger>
                 <collapsible-content>
                     <div class="grid gap-2 pl-6">
-                        <router-link to="/patrimonio/categorias"
+                        <router-link to="/app/patrimonio/categorias"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <FileChartPie />
                             <span>Resumo</span>
                         </router-link>
-                        <router-link to="/patrimonio/produtos"
+                        <router-link to="/app/patrimonio/produtos"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <Archive />
                             <span>Produtos</span>
                         </router-link>
-                        <router-link to="/patrimonio/estoques"
+                        <router-link to="/app/patrimonio/estoques"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <Boxes />
                             <span>Estoques</span>
@@ -246,12 +246,12 @@ const { t } = useI18n();
                             </collapsible-trigger>
                             <collapsible-content>
                                 <div class="grid gap-2 pl-6">
-                                    <router-link to="/patrimonio/categorias"
+                                    <router-link to="/app/patrimonio/categorias"
                                         class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                                         <Group />
                                         <span>Categorias</span>
                                     </router-link>
-                                    <router-link to="/patrimonio/fornecedores"
+                                    <router-link to="/app/patrimonio/fornecedores"
                                         class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                                         <User />
                                         <span>Fornecedores</span>
@@ -274,17 +274,17 @@ const { t } = useI18n();
                 </collapsible-trigger>
                 <collapsible-content>
                     <div class="grid gap-2 pl-6">
-                        <router-link to="/patrimonio/categorias"
+                        <router-link to="/app/patrimonio/categorias"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <FileChartPie />
                             <span>Resumo</span>
                         </router-link>
-                        <router-link to="/patrimonio/servicos"
+                        <router-link to="/app/patrimonio/servicos"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <BookOpenCheck />
                             <span>Ordens de Serviço</span>
                         </router-link>
-                        <router-link to="/patrimonio/servicos"
+                        <router-link to="/app/patrimonio/servicos"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <FileCheck />
                             <span>Serviços</span>
@@ -299,12 +299,12 @@ const { t } = useI18n();
                             </collapsible-trigger>
                             <collapsible-content>
                                 <div class="grid gap-2 pl-6">
-                                    <router-link to="/patrimonio/categorias"
+                                    <router-link to="/app/patrimonio/categorias"
                                         class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                                         <FileBadge2 />
                                         <span>Garantias</span>
                                     </router-link>
-                                    <router-link to="/patrimonio/categorias"
+                                    <router-link to="/app/patrimonio/categorias"
                                         class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                                         <FileStack />
                                         <span>Tipos</span>
@@ -327,22 +327,22 @@ const { t } = useI18n();
                 </collapsible-trigger>
                 <collapsible-content>
                     <div class="grid gap-2 pl-6">
-                        <router-link to="/patrimonio/categorias"
+                        <router-link to="/app/patrimonio/categorias"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <FileChartPie />
                             <span>Resumo</span>
                         </router-link>
-                        <router-link to="/patrimonio/produtos"
+                        <router-link to="/app/patrimonio/produtos"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <Ticket />
                             <span>Assinaturas</span>
                         </router-link>
-                        <router-link to="/patrimonio/produtos"
+                        <router-link to="/app/patrimonio/produtos"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <BadgeCheck />
                             <span>Planos</span>
                         </router-link>
-                        <router-link to="/patrimonio/servicos"
+                        <router-link to="/app/patrimonio/servicos"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <CalendarX2 />
                             <span>Vencimentos</span>

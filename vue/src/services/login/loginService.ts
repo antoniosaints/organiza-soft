@@ -19,7 +19,7 @@ export class LoginService {
       await this.loadAllData();
       loginStore.isAutenticated = true;
 
-      await Router.push("/dashboard");
+      await Router.push("/app/dashboard");
       return true;
     } catch (error: any) {
       this.handleAuthError(error, loginStore);
