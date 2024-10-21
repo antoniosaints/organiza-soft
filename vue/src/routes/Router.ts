@@ -24,13 +24,20 @@ const routes: RouteRecordRaw[] = [
             {
                 path: "/administracao",
                 name: "Administracao",
-                // meta: { breadcrumb: 'Administracao' },
+                meta: { breadcrumb: 'Administracao' },
+                redirect: "/administracao/usuarios",
                 children: [
                     {
                         path: "/administracao/usuarios",
                         name: "Usuarios",
                         meta: { breadcrumb: 'Usuários' },
                         component: () => import("@/views/Administracao/Usuarios/UsuariosView.vue")
+                    },
+                    {
+                        path: "/administracao/configuracoes",
+                        name: "ConfiguracoesSistema",
+                        meta: { breadcrumb: 'Configurações' },
+                        component: () => import("@/views/Administracao/Configuracoes/ConfiguracoesView.vue")
                     },
                     {
                         path: "/administracao/logs",
@@ -56,7 +63,8 @@ const routes: RouteRecordRaw[] = [
             {
                 path: "/vendas",
                 name: "vendas",
-                // meta: { breadcrumb: 'Administracao' },
+                redirect: "/vendas/pdv",
+                meta: { breadcrumb: 'Vendas' },
                 children: [
                     {
                         path: "/vendas/pdv",
@@ -69,7 +77,7 @@ const routes: RouteRecordRaw[] = [
             {
                 path: "/financeiro",
                 name: "Financeiro",
-                // meta: { breadcrumb: 'Administracao' },
+                // meta: { breadcrumb: 'Financeiro' },
                 children: [
                     {
                         path: "/financeiro/lancamentos",
@@ -83,6 +91,7 @@ const routes: RouteRecordRaw[] = [
                 path: "/patrimonio",
                 name: "Patrimonio",
                 meta: { breadcrumb: 'Patrimônio' },
+                redirect: "/patrimonio/produtos",
                 children: [
                     {
                         path: "/patrimonio/produtos",

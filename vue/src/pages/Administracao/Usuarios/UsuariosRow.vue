@@ -5,6 +5,7 @@
                 <HoverCardTrigger asChild>
                     <Button variant="ghost"
                         class="px-2 py-1 h-auto font-bold text-gray-600 dark:text-gray-300 hover:bg-transparent hover:text-primary/60 dark:hover:text-primary-foreground/50">
+                        <CircleUserRound class="w-3 h-3 mr-1" />
                         {{ usuario.nome }}
                         <span v-if="usuario.id == 1" title="Administrador geral do sistema"
                             class="px-1 py-1 text-[10px] ml-1 text-blue-700 dark:text-blue-400 rounded-md flex items-center">
@@ -42,7 +43,7 @@ import UsuarioDetails from "@/pages/Administracao/Usuarios/UsuarioDetails.vue";
 import UsuarioBadge from "@/pages/Administracao/Usuarios/UsuarioBadge.vue";
 import UsuarioActions from "@/pages/Administracao/Usuarios/UsuarioActions.vue";
 import IUsuario from "@/types/administracao/usuarios/IUsuario";
-import { Crown, ShieldMinus } from "lucide-vue-next";
+import { CircleUserRound, Crown, ShieldMinus } from "lucide-vue-next";
 
 const colorBadgePermissao = (regra: string) => {
     const colors: Record<string, string> = {

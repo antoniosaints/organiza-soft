@@ -17,12 +17,14 @@
         </dropdown-menu-trigger>
         <dropdown-menu-content class="w-40 mr-3 space-y-1">
             <dropdown-menu-item as-child>
-                <router-link to="/perfil">
+                <router-link class="flex" to="/perfil">
                     <User class="h-4 mr-1" /> Perfil
                 </router-link>
             </dropdown-menu-item>
-            <dropdown-menu-item>
-                <Settings class="h-4 mr-1" /> Configurações
+            <dropdown-menu-item as-child>
+                <router-link class="flex" to="/administracao/configuracoes">
+                    <Settings class="h-4 mr-1" /> Configurações
+                </router-link>
             </dropdown-menu-item>
             <dropdown-menu-separator />
             <dropdown-menu-item>

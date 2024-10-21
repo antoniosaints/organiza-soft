@@ -6,10 +6,12 @@ import { useLoginStore } from '@/stores/login/loginStore';
 import { useMenuStore } from '@/stores/menuStore';
 import { ref } from 'vue';
 import { Archive, BadgeCheck, BookOpenCheck, Boxes, CalendarX2, ChevronRight, CircleDollarSign, ClipboardCheck, Computer, Contact, Cpu, Crown, FileBadge2, FileChartPie, FileCheck, FileDigit, FileStack, FileText, Group, House, Landmark, Layers, List, LockKeyhole, MessageCircle, Package, PenTool, Settings2, Tags, Ticket, User, Users, Wallet, WalletMinimal } from 'lucide-vue-next';
+import { useI18n } from 'vue-i18n';
 
 const menuStore = useMenuStore()
 const loginStore = useLoginStore()
 const stateDevelopment = ref('beta');
+const { t } = useI18n();
 </script>
 
 <template>
@@ -18,13 +20,13 @@ const stateDevelopment = ref('beta');
             <router-link to="/dashboard"
                 class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                 <House />
-                <span>Dashboard</span>
+                <span>{{ t("sidebar.home") }}</span>
             </router-link>
             <collapsible v-if="menuStore.permissions.admin" v-slot="{ open }" class="grid gap-2">
                 <collapsible-trigger
                     class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                     <LockKeyhole />
-                    <span>Administração</span>
+                    <span>{{ t("sidebar.admin") }}</span>
                     <ChevronRight class="ml-auto h-4 w-4 transition-transform" :class="{ 'rotate-90': open }" />
                 </collapsible-trigger>
                 <collapsible-content>
@@ -32,12 +34,12 @@ const stateDevelopment = ref('beta');
                         <router-link to="/administracao/usuarios"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <Users />
-                            <span>Usuários</span>
+                            <span>{{ t("sidebar.users") }}</span>
                         </router-link>
                         <router-link to="/assinatura"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <Crown />
-                            <span>Assinatura</span>
+                            <span>{{ t("sidebar.subscription") }}</span>
                             <div class="ml-auto flex space-x-1 items-center">
                                 <Badge :class="loginStore.isProAccount ? 'bg-orange-400 text-black' : 'bg-gray-500'"> {{
                                     loginStore.isProAccount ? 'Pro' : 'Free' }} </Badge>
@@ -46,7 +48,7 @@ const stateDevelopment = ref('beta');
                         <router-link to="/administracao/logs"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <List />
-                            <span>Logs</span>
+                            <span>{{ t("sidebar.logs") }}</span>
                         </router-link>
                     </div>
                 </collapsible-content>
@@ -55,7 +57,7 @@ const stateDevelopment = ref('beta');
                 <collapsible-trigger
                     class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                     <Cpu />
-                    <span>Assistente de IA</span>
+                    <span>{{ t("sidebar.assistant") }}</span>
                     <div class="ml-auto flex space-x-1 items-center">
                         <Skeleton v-if="true" class="bg-blue-500 rounded-full h-3 w-3 shadow-none" />
                         <ChevronRight class="ml-auto h-4 w-4 transition-transform" :class="{ 'rotate-90': open }" />
@@ -66,7 +68,7 @@ const stateDevelopment = ref('beta');
                         <router-link to="/agentesia/playground"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <MessageCircle />
-                            <span>Chat Integrado ✨</span>
+                            <span>{{ t("sidebar.playground") }} ✨</span>
                         </router-link>
                     </div>
                 </collapsible-content>
@@ -75,7 +77,7 @@ const stateDevelopment = ref('beta');
                 <collapsible-trigger
                     class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                     <Layers />
-                    <span>CRM</span>
+                    <span>{{ t("sidebar.crm") }}</span>
                     <div class="ml-auto flex space-x-1 items-center">
                         <Badge v-if="true" variant="destructive"> {{ stateDevelopment }} </Badge>
                         <ChevronRight class="ml-auto h-4 w-4 transition-transform" :class="{ 'rotate-90': open }" />
@@ -86,23 +88,23 @@ const stateDevelopment = ref('beta');
                         <router-link to="/patrimonio/categorias"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <FileChartPie />
-                            <span>Resumo</span>
+                            <span>{{ t("sidebar.resumecrm") }}</span>
                         </router-link>
                         <router-link to="/crm/clientes"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <User />
-                            <span>Clientes</span>
+                            <span>{{ t("sidebar.clients") }}</span>
                         </router-link>
                         <router-link to="/vendas/pdv"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <ClipboardCheck />
-                            <span>Relatórios</span>
+                            <span>{{ t("sidebar.reportClients") }}</span>
                         </router-link>
                         <collapsible v-slot="{ open }" class="grid gap-2">
                             <collapsible-trigger
                                 class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                                 <Settings2 />
-                                <span>Outros</span>
+                                <span>{{ t("sidebar.others") }}</span>
                                 <ChevronRight class="ml-auto h-4 w-4 transition-transform"
                                     :class="{ 'rotate-90': open }" />
                             </collapsible-trigger>
@@ -180,7 +182,7 @@ const stateDevelopment = ref('beta');
                             <collapsible-trigger
                                 class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                                 <Settings2 />
-                                <span>Outros</span>
+                                <span>{{ t("sidebar.others") }}</span>
                                 <ChevronRight class="ml-auto h-4 w-4 transition-transform"
                                     :class="{ 'rotate-90': open }" />
                             </collapsible-trigger>
@@ -238,7 +240,7 @@ const stateDevelopment = ref('beta');
                             <collapsible-trigger
                                 class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                                 <Settings2 />
-                                <span>Outros</span>
+                                <span>{{ t("sidebar.others") }}</span>
                                 <ChevronRight class="ml-auto h-4 w-4 transition-transform"
                                     :class="{ 'rotate-90': open }" />
                             </collapsible-trigger>
@@ -291,7 +293,7 @@ const stateDevelopment = ref('beta');
                             <collapsible-trigger
                                 class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                                 <Settings2 />
-                                <span>Outros</span>
+                                <span>{{ t("sidebar.others") }}</span>
                                 <ChevronRight class="ml-auto h-4 w-4 transition-transform"
                                     :class="{ 'rotate-90': open }" />
                             </collapsible-trigger>

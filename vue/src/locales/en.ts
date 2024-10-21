@@ -3,8 +3,18 @@ import { ITranslation } from "./ITranslation";
 const pt: ITranslation = {
   sidebar: {
     home: "Dashboard",
-    admin: "Admin",
+    admin: "Administration",
+    users: "Users",
+    subscription: "Subscription",
+    logs: "Logs",
+    assistant: "AI Assistant",
+    playground: "Chat AI",
+    crm: "CRM",
+    resumecrm: "Dashboard",
+    clients: "Customers",
+    reportClients: "Report",
     stock: "Stock",
+    others: "Others",
     all: "General",
   },
   profile: {
