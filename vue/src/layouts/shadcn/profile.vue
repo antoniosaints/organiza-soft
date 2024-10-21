@@ -1,10 +1,19 @@
 <template>
     <dropdown-menu>
         <dropdown-menu-trigger>
-            <avatar class="h-9 w-9">
-                <AvatarImage src="/OS.png" />
-                <AvatarFallback>{{ infos?.nome.slice(0, 1).toUpperCase() }}</AvatarFallback>
-            </avatar>
+            <TooltipProvider>
+                <Tooltip :delay-duration="200" :disable-closing-trigger="true">
+                    <TooltipTrigger as-child>
+                        <avatar class="h-10 w-10 border-4" :class="layoutStore.isOnline ? 'border-success' : 'border-error'">
+                            <AvatarImage src="/OS.png" />
+                            <AvatarFallback>{{ infos?.nome.slice(0, 1).toUpperCase() }}</AvatarFallback>
+                        </avatar>
+                    </TooltipTrigger>
+                    <TooltipContent :class="layoutStore.isOnline ? 'bg-success' : 'bg-error'" >
+                        <p>{{ layoutStore.isOnline ? 'Online' : 'Offline' }}</p>
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
         </dropdown-menu-trigger>
         <dropdown-menu-content class="w-40 mr-3 space-y-1">
             <dropdown-menu-item as-child>
@@ -28,7 +37,10 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuIte
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { LogOut, Settings, User } from "lucide-vue-next";
 import { useLoginStore } from "@/stores/login/loginStore";
+import { useLayoutStore } from "./stateLayout";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const loginStore = useLoginStore();
+const layoutStore = useLayoutStore();
 const infos = loginStore.dataUserInfosLogged;
 </script>
