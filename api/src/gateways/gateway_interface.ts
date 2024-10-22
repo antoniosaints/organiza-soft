@@ -8,7 +8,7 @@ interface IOrderBase {
     webhookUrl: string;
 }
 export interface IOrderPayment extends IOrderBase {}
-export interface IOrderPreference extends IOrderBase {quantity: number;}
+export interface IOrderPreference extends IOrderBase {quantity: number; maxInstallments?: number;}
 export interface IGatewayPayment {
     createPayment(order: IOrderPayment): Promise<any>;
     createPreference(order: IOrderPreference): Promise<any>;

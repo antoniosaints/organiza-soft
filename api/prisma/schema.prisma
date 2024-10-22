@@ -20,6 +20,7 @@ model Usuario {
   status         StatusUsuario      @default(ativo)
   dataCriacao    DateTime           @default(now())
   Contas         FinanceiroContas[]
+  Vendas         Vendas[]
 
   @@unique([email, contaSistemaId, senha])
 }
@@ -37,6 +38,7 @@ model Cliente {
   dataBloqueio   DateTime?
   Assinatura     Assinatura[]
   Transacao      FinanceiroTransacao[]
+  Vendas         Vendas[]
 }
 
 model Assinatura {
@@ -216,6 +218,9 @@ model ContasSistema {
   PatrimonioProdutosMovimentos  PatrimonioProdutosMovimentos[]
   PatrimonioFornecedores        PatrimonioFornecedores[]
   PatrimonioComprasFornecedores PatrimonioComprasFornecedores[]
+  Vendas                        Vendas[]
+  VendasRelatorios              VendasRelatorios[]
+  VendasPagamentos              VendasPagamentos[]
 }
 
 model PatrimonioProdutos {
@@ -328,10 +333,63 @@ model PatrimonioComprasFornecedores {
   @@index([produtoId, fornecedorId], map: "produto_fornecedor_id")
 }
 
+model Vendas {
+  id               Int                @id @default(autoincrement())
+  uniqueId         String
+  contaSistemaId   Int
+  ContaSistema     ContasSistema      @relation(fields: [contaSistemaId], references: [id])
+  clienteId        Int
+  Cliente          Cliente            @relation(fields: [clienteId], references: [id])
+  vendedorId       Int
+  Vendedor         Usuario            @relation(fields: [vendedorId], references: [id])
+  valor            Float              @db.Double
+  status           StatusVendas
+  metodoPagamento  String             @db.VarChar(50)
+  dataCriacao      DateTime           @default(now())
+  dataAtualizada   DateTime           @updatedAt
+  VendasPagamentos VendasPagamentos[]
+  VendasRelatorios VendasRelatorios[]
+}
+
+model VendasRelatorios {
+  id             Int           @id @default(autoincrement())
+  contaSistemaId Int
+  ContaSistema   ContasSistema @relation(fields: [contaSistemaId], references: [id])
+  vendaId        Int
+  Venda          Vendas        @relation(fields: [vendaId], references: [id])
+  produtoId      Int
+  produto        String
+  valor          String
+  preco          Float         @db.Double
+  total          Float         @db.Double
+}
+
+model VendasPagamentos {
+  id              Int           @id @default(autoincrement())
+  contaSistemaId  Int
+  ContaSistema    ContasSistema @relation(fields: [contaSistemaId], references: [id])
+  vendaId         Int
+  Venda           Vendas        @relation(fields: [vendaId], references: [id])
+  valor           Float         @db.Double
+  metodoPagamento String        @db.VarChar(50)
+  statusPagamento StatusVendas
+  gatewayId       String
+  dataCriacao     DateTime      @default(now())
+  dataAtualizado  DateTime      @updatedAt
+}
+
 enum PatrimonioTipoMovimento {
   entrada
   saida
   ajuste
+}
+
+enum StatusVendas {
+  pendente
+  cancelado
+  pago
+  estornado
+  processando
 }
 
 enum ContasSistemaStatus {

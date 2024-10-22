@@ -135,6 +135,16 @@ const routes: RouteRecordRaw[] = [
         component: () => import("@/views/LoginView.vue")
     },
     {
+        path: "/:pathMatch(.*)*",
+        name: "NotFound",
+        component: () => import("@/views/Errors/PageNotFound.vue")
+    },
+    {
+        path: "/pagamentos/mercadopago/status",
+        name: "StatusPagamentos",
+        component: () => import("@/views/Financeiro/Mercadopago/StatusPagamento.vue")
+    },
+    {
         path: "/",
         name: "LandingPage",
         component: () => import("@/views/LandingPage/LayoutView.vue"),

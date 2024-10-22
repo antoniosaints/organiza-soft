@@ -11,7 +11,9 @@ export async function MPCreatePreferenceLink(req: Request, res: Response) {
     order.idempotencyKey = getRandomString();
     const Gateway = new MercadoPagoGateway();
     const payment = await Gateway.createPreference(order);
-    return res.json(payment);
+    return res.json({
+      link: payment.init_point
+    });
   } catch (error) {
     console.error("Erro ao criar o pagamento:", error);
     throw error;

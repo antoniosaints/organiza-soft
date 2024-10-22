@@ -9,6 +9,7 @@ import {
   IOrderPayment,
   IOrderPreference,
 } from "../gateway_interface";
+import "dotenv/config";
 
 export class MercadoPagoGateway implements IGatewayPayment {
   async createPayment(order: IOrderPayment): Promise<PaymentResponse> {
@@ -37,6 +38,7 @@ export class MercadoPagoGateway implements IGatewayPayment {
   }
 
   async createPreference(order: IOrderPreference): Promise<PreferenceResponse> {
+    const baseUrlFront = process.env.BASE_URL_FRONT || "";
     const payment = await mercadoPagoPreference.create({
       body: {
         items: [
@@ -49,13 +51,13 @@ export class MercadoPagoGateway implements IGatewayPayment {
         ],
         payment_methods: {
           excluded_payment_methods: [{ id: "ticket" }],
-          installments: 4,
+          installments: order.maxInstallments || 1,
         },
         auto_return: "approved",
         back_urls: {
-          success: "https://google.com",
-          failure: "http://localhost:3000",
-          pending: "http://localhost:3000",
+          success: `${baseUrlFront}/pagamentos/mercadopago/status`,
+          failure: `${baseUrlFront}/pagamentos/mercadopago/status`,
+          pending: `${baseUrlFront}/pagamentos/mercadopago/status`,
         },
         notification_url: order.webhookUrl,
         external_reference: order.id,

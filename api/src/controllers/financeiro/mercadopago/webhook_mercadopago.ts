@@ -16,7 +16,12 @@ export const MPWebhookPagamentos = async (req: Request, res: Response) => {
         const Gateway = new MercadoPagoGateway();
         if (data.type === 'payment' && data.action === 'payment.updated' && data.data.id) {
             const { external_reference, status, payment_method_id, id: paymentId } = await Gateway.getPayment(data.data.id);
-            console.log(padronizarStatusGateway("mercadoPago", status!), external_reference, payment_method_id, paymentId);
+            console.log({
+                id: external_reference,
+                status: padronizarStatusGateway("mercadoPago", status!),
+                tipo_pagamento: payment_method_id,
+                pagamento: paymentId
+            });
         }
         return res.sendStatus(200);
     }catch (error: any) {

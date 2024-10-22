@@ -30,7 +30,7 @@ const features = [
                     </p>
                 </div>
                 <div class="space-x-4">
-                    <RouterLink to="/site/cadastro">
+                    <RouterLink to="/cadastro">
                         <Button size="lg" class="transition-transform duration-300 hover:scale-105">Comece Grátis 🎯</Button>
                     </RouterLink>
                 </div>
