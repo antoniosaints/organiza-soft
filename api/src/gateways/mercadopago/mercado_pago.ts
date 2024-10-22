@@ -4,7 +4,11 @@ import {
   mercadoPagoPreference,
 } from "../../services/mercado_pago_service";
 import { PreferenceResponse } from "mercadopago/dist/clients/preference/commonTypes";
-import { IGatewayPayment, IOrderPayment, IOrderPreference } from "../gateway_interface";
+import {
+  IGatewayPayment,
+  IOrderPayment,
+  IOrderPreference,
+} from "../gateway_interface";
 
 export class MercadoPagoGateway implements IGatewayPayment {
   async createPayment(order: IOrderPayment): Promise<PaymentResponse> {
@@ -47,12 +51,12 @@ export class MercadoPagoGateway implements IGatewayPayment {
           excluded_payment_methods: [{ id: "ticket" }],
           installments: 4,
         },
+        auto_return: "approved",
         back_urls: {
-          success: "http://localhost:3000",
+          success: "https://google.com",
           failure: "http://localhost:3000",
           pending: "http://localhost:3000",
         },
-        auto_return: "approved",
         notification_url: order.webhookUrl,
         external_reference: order.id,
         payer: {
