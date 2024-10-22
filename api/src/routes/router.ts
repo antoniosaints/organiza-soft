@@ -28,7 +28,7 @@ router.use("/financeiro/contas", auth_middleware, accountMiddleware, contasRoute
 router.use("/financeiro/categoria", auth_middleware, accountMiddleware, categoriaRouter);
 router.use("/financeiro/categoria", auth_middleware, accountMiddleware, categoriaRouter);
 // Rotas Mercado pago
-router.use("/mercadopago", auth_middleware, accountMiddleware, mercadopagoRouter);
+router.use("/mercadopago", mercadopagoRouter);
 // Rotas Stripe
 router.use("/stripe", stripeRouter);
 // Rotas de contas do sistema
