@@ -1,15 +1,11 @@
+import { VendasService } from "@/services/vendas/vendasService";
+import { ICarrinhoItem, IProdutoPDV } from "@/types/vendas/ICarrinhoPdv";
+import { ICreateVenda } from "@/types/vendas/ICreateVenda";
+import { IMetodoPagamento } from "@/types/vendas/IVenda";
 import { ScToastUtil } from "@/utils/scToastUtil";
 import StorageUtil from "@/utils/storageUtil";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
-
-type IProdutoPDV = {
-  id: number;
-  produto: string;
-  preco: number;
-};
-
-type ICarrinhoItem = IProdutoPDV & { quantidade: number };
 
 export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
   const carrinho = ref<ICarrinhoItem[]>(
@@ -17,6 +13,7 @@ export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
       ? JSON.parse(StorageUtil.get("@organizasoft:carrinhopdv")!)
       : []
   );
+  const carrinhoComprovante = ref<ICarrinhoItem[]>([]);
   const produtos = ref<IProdutoPDV[]>([
     { id: 1, produto: "Camisa", preco: 50.0 },
     { id: 2, produto: "Calça", preco: 70.0 },
@@ -26,6 +23,7 @@ export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
   const buscarItem = ref<string>("");
   const totalItens = ref<number>(0);
   const valorTotal = ref<number>(0);
+  const formaPagamento = ref<IMetodoPagamento>('pix');
   const valorComDesconto = ref<number>(0);
   const porcentagemDesconto = ref<number>(0);
   const openComprovante = ref<boolean>(false);
@@ -82,7 +80,20 @@ export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
     if (!carrinho.value.length) {
       return ScToastUtil.warning("Carrinho vazio!");
     }
-    openComprovante.value = true;
+    const venda: ICreateVenda = {
+      itens: carrinho.value,
+      cliente: 1,
+      descricao: "Venda - PDV",
+      formaPagamento: formaPagamento.value,
+      vendedor: 1,
+    }
+    const data = await VendasService.create(venda);
+    if (data) {
+      carrinhoComprovante.value = carrinho.value;
+      carrinho.value = [];
+      StorageUtil.remove("@organizasoft:carrinhopdv");
+      openComprovante.value = true;
+    }
   };
 
   window.addEventListener("beforeunload", (event: BeforeUnloadEvent) => {
@@ -97,10 +108,12 @@ export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
 
   return {
     carrinho,
+    carrinhoComprovante,
     produtos,
     buscarItem,
     totalItens,
     valorTotal,
+    formaPagamento,
     valorComDesconto,
     porcentagemDesconto,
     adicionarAoCarrinho,

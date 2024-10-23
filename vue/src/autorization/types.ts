@@ -1,5 +1,6 @@
-export type IAbility = "criar" | "visualizar" | "atualizar" | "deletar" | "detalhar" | "exportar" | "importar" | "transferir";
+export type IAbility = "all" | "criar" | "visualizar" | "atualizar" | "deletar" | "detalhar" | "exportar" | "importar" | "transferir" | "criar_pix" | "criar_checkout";
 export type IEntity = 
     "usuarios" |
     "clientes" | 
-    "produtos" 
+    "produtos" | 
+    "vendas"

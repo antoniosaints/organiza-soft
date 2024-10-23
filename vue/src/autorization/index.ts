@@ -4,6 +4,7 @@ import { ClientesPermissoesACL } from './crm/clientes_permissao';
 import { IAbility, IEntity } from './types';
 import { ScToastUtil } from '@/utils/scToastUtil';
 import { ProdutosPermissoesACL } from './patrimonio/produtos_permissao';
+import { VendasPermissoesACL } from './vendas/vendas_permissao';
 
 export class Autorize {
     static can(ability: IAbility, entity: IEntity): boolean | void {
@@ -17,6 +18,8 @@ export class Autorize {
                 return ClientesPermissoesACL.can(userData, ability, entity);
             case 'produtos':
                 return ProdutosPermissoesACL.can(userData, ability, entity);
+            case 'vendas':
+                return VendasPermissoesACL.can(userData, ability, entity);
             default:
                 return false;
         }

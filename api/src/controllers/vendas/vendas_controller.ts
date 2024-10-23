@@ -8,6 +8,7 @@ import {
 import { VendaBodySchema } from "../../schemas/vendas/vendas_body_schema";
 import { generateUniqueIdWithPrefix } from "../../utils/tools/UniqueId";
 import { MercadoPagoGateway } from "../../gateways/mercadopago/mercado_pago";
+import "dotenv/config";
 
 export const createVenda = async (req: Request, res: Response) => {
   try {
@@ -84,7 +85,7 @@ export const createCheckoutMercadopagoVenda = async (
         idempotencyKey: generateUniqueIdWithPrefix("key"),
         maxInstallments: 6,
         product: "Venda de produtos - Organizasoft",
-        webhookUrl: `https://0737-2804-2424-4000-3-6449-f406-c9a2-1de.ngrok-free.app/mercadopago/webhook`,
+        webhookUrl: `${process.env.BASE_URL}/mercadopago/webhook`,
         id: venda?.uniqueId!,
         itens: (venda?.VendasRelatorios ?? []).map((item) => ({
           id: `produto-${item.id}`,
@@ -141,7 +142,7 @@ export const createPixMercadopagoVenda = async (
         description: venda?.descricao!,
         idempotencyKey: generateUniqueIdWithPrefix("key"),
         product: "Venda de produtos - Organizasoft",
-        webhookUrl: `https://0737-2804-2424-4000-3-6449-f406-c9a2-1de.ngrok-free.app/mercadopago/webhook`,
+        webhookUrl: `${process.env.BASE_URL}/mercadopago/webhook`,
         id: venda?.uniqueId!,
         amount: (venda?.VendasRelatorios ?? []).reduce((total, item) => {
           return total + item.quantidade * item.preco;
