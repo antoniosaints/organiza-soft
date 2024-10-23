@@ -1,13 +1,13 @@
-type StatusMap = "aprovado" | "pendente" | "cancelado" | "estornado";
+type StatusMap = "pago" | "pendente" | "cancelado" | "estornado" | "processando";
 type Gateways = "mercadoPago";
 
 const statusMap: Record<Gateways, Record<string, StatusMap>> = {
   mercadoPago: {
-    pending: "aprovado",
-    approved: "aprovado",
+    pending: "pendente",
+    approved: "pago",
     authorized: "pendente",
-    in_process: "pendente",
-    in_mediation: "pendente",
+    in_process: "processando",
+    in_mediation: "processando",
     rejected: "cancelado",
     cancelled: "cancelado",
     refunded: "estornado",

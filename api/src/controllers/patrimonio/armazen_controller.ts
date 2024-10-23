@@ -5,13 +5,16 @@ import {
   ResponseService,
   validateSchema,
 } from "../../services";
-import { createArmazenSchema, updateArmazenSchema } from "../../schemas/patrimonio/armazens_schema";
+import {
+  createArmazenSchema,
+  updateArmazenSchema,
+} from "../../schemas/patrimonio/armazens_schema";
 
 export const getArmazens = async (req: Request, res: Response) => {
   try {
     const { limit, page, search } = req.query;
     const offset = (Number(page) - 1) * Number(limit);
-    const busca = search as string || "";
+    const busca = (search as string) || "";
 
     const [items, total] = await Promise.all([
       prismaService.patrimonioArmazenamentos.findMany({
@@ -20,18 +23,20 @@ export const getArmazens = async (req: Request, res: Response) => {
         where: {
           OR: [
             { armazen: { contains: busca } },
-            { local: { contains: busca } }
+            { local: { contains: busca } },
           ],
-          contaSistemaId: req.body.contaSistemaId
+          contaSistemaId: req.body.contaSistemaId,
         },
       }),
       prismaService.patrimonioArmazenamentos.count({
-        where: {contaSistemaId: req.body.contaSistemaId},
+        where: { contaSistemaId: req.body.contaSistemaId },
       }),
-    ])
+    ]);
     ResponseService.success(res, { data: items, total });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -47,6 +52,8 @@ export const getArmazen = async (req: Request, res: Response) => {
     ResponseService.success(res, { data });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -59,6 +66,8 @@ export const createArmazen = async (req: Request, res: Response) => {
     ResponseService.created(res, { data });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -76,6 +85,8 @@ export const updateArmazen = async (req: Request, res: Response) => {
     ResponseService.success(res, { data });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -91,5 +102,7 @@ export const deleteArmazen = async (req: Request, res: Response) => {
     ResponseService.success(res, { data });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };

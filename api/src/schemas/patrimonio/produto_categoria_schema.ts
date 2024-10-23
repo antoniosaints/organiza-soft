@@ -30,10 +30,6 @@ const updateProdutoCategoriaSchema = zodUtil.object({
     .string({
       invalid_type_error: "A cor deve ser uma string",
     }).optional(),
-  contaSistemaId: zodUtil
-    .number({
-      invalid_type_error: "O contaSistemaId deve ser um number",
-    }).optional(),
   descricao: zodUtil
     .string({
       invalid_type_error: "A descrição deve ser uma string",

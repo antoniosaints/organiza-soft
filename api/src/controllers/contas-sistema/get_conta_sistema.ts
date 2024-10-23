@@ -10,5 +10,7 @@ export const getContaSistema = async (req: Request, res: Response) => {
     res.json(account);
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };

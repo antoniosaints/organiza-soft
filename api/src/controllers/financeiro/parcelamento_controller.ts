@@ -1,7 +1,15 @@
-import {Request, Response} from 'express';
+import { Request, Response } from "express";
 import { ValidationError } from "../../utils/http/lancar_erro";
-import { createParcelamento as createParcelamentoSchema, updateParcelamento as updateParcelamentoSchema } from '../../schemas/financeiro/parcelamento_schema';
-import { HttpErrorService, prismaService, ResponseService, validateSchema } from '../../services';
+import {
+  createParcelamento as createParcelamentoSchema,
+  updateParcelamento as updateParcelamentoSchema,
+} from "../../schemas/financeiro/parcelamento_schema";
+import {
+  HttpErrorService,
+  prismaService,
+  ResponseService,
+  validateSchema,
+} from "../../services";
 export const createParcelamento = async (req: Request, res: Response) => {
   try {
     const validated = validateSchema(createParcelamentoSchema, req.body);
@@ -14,6 +22,8 @@ export const createParcelamento = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -25,6 +35,8 @@ export const getParcelamentos = async (req: Request, res: Response) => {
     ResponseService.success(res, { data: parcelamentos });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -37,6 +49,8 @@ export const getParcelamento = async (req: Request, res: Response) => {
     ResponseService.success(res, { data: parcelamento });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -55,17 +69,23 @@ export const updateParcelamento = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
 export const deleteParcelamento = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    await prismaService.financeiroParcelamento.delete({ where: { id: Number(id), contaSistemaId: req.body.contaSistemaId } });
+    await prismaService.financeiroParcelamento.delete({
+      where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
+    });
     ResponseService.success(res, {
       message: "parcelamento excluida com sucesso",
     });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };

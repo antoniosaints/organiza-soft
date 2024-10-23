@@ -2,7 +2,10 @@ import { Request, Response } from "express";
 import HttpErrorService from "../../services/http_error_service";
 import prismaService from "../../services/prisma_service";
 import ResponseService from "../../services/response_service";
-import { createAssinatura as createAssinaturaSchema, updateAssinatura as updateAssinaturaSchema } from "../../schemas/assinaturas/assinatura_schema"; 
+import {
+  createAssinatura as createAssinaturaSchema,
+  updateAssinatura as updateAssinaturaSchema,
+} from "../../schemas/assinaturas/assinatura_schema";
 import validateSchema from "../../services/validade_schema";
 
 export const createAssinatura = async (req: Request, res: Response) => {
@@ -17,11 +20,12 @@ export const createAssinatura = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
 export const updateAssinatura = async (req: Request, res: Response) => {
-  
   try {
     const { id } = req.params;
     const validated = validateSchema(updateAssinaturaSchema, req.body);
@@ -35,6 +39,8 @@ export const updateAssinatura = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -46,6 +52,8 @@ export const getAssinaturas = async (req: Request, res: Response) => {
     ResponseService.success(res, { data: assinaturas });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -62,17 +70,23 @@ export const getAssinatura = async (req: Request, res: Response) => {
     }
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
 export const deleteAssinatura = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    await prismaService.assinatura.delete({ where: { id: Number(id), contaSistemaId: req.body.contaSistemaId } });
+    await prismaService.assinatura.delete({
+      where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
+    });
     ResponseService.success(res, {
       message: "Assinatura excluída com sucesso",
     });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };

@@ -1,5 +1,4 @@
 interface IOrderBase {
-    amount: number;
     customerEmail: string;
     customerName: string;
     product: string;
@@ -7,10 +6,16 @@ interface IOrderBase {
     id: string;
     webhookUrl: string;
 }
-export interface IOrderPayment extends IOrderBase {}
-export interface IOrderPreference extends IOrderBase {quantity: number; maxInstallments?: number;}
+interface IItens {
+    id: string,
+    title: string,
+    unit_price: number,
+    quantity: number,
+}
+export interface IOrderPayment extends IOrderBase {amount: number}
+export interface IOrderPreference extends IOrderBase {maxInstallments?: number; description: string; itens: IItens[]}
 export interface IGatewayPayment {
     createPayment(order: IOrderPayment): Promise<any>;
-    createPreference(order: IOrderPreference): Promise<any>;
+    createPreference(order: IOrderPreference, itens: IItens[]): Promise<any>;
     getPayment(id: string): Promise<any>;
 }

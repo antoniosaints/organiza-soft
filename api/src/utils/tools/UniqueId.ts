@@ -4,5 +4,5 @@ export function generateUniqueId(prefix: string) {
 
 export function generateUniqueIdWithPrefix(prefix: string) {
     const datePart = new Date().toISOString().replace(/[-:.T]/g, '').slice(0, 14); 
-    return `${prefix}-${datePart}`;
+    return `${prefix}_${datePart}`;
 }

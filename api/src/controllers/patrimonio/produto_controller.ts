@@ -5,14 +5,17 @@ import {
   ResponseService,
   validateSchema,
 } from "../../services";
-import { createProdutoSchema, updateProdutoSchema } from "../../schemas/patrimonio/produto_schema";
+import {
+  createProdutoSchema,
+  updateProdutoSchema,
+} from "../../schemas/patrimonio/produto_schema";
 import { generateUniqueId } from "../../utils/tools/UniqueId";
 
 export const getProdutos = async (req: Request, res: Response) => {
   try {
     const { limit, page, search } = req.query;
     const offset = (Number(page) - 1) * Number(limit);
-    const busca = search as string || "";
+    const busca = (search as string) || "";
 
     const [items, total] = await Promise.all([
       prismaService.patrimonioProdutos.findMany({
@@ -23,8 +26,8 @@ export const getProdutos = async (req: Request, res: Response) => {
             select: {
               categoria: true,
               cor: true,
-              descricao: true
-            }
+              descricao: true,
+            },
           },
         },
         where: {
@@ -34,16 +37,18 @@ export const getProdutos = async (req: Request, res: Response) => {
             { sku: { contains: busca } },
             { descricao: { contains: busca } },
           ],
-          contaSistemaId: req.body.contaSistemaId
+          contaSistemaId: req.body.contaSistemaId,
         },
       }),
       prismaService.patrimonioProdutos.count({
-        where: {contaSistemaId: req.body.contaSistemaId},
+        where: { contaSistemaId: req.body.contaSistemaId },
       }),
-    ])
+    ]);
     ResponseService.success(res, { data: items, total });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -59,6 +64,8 @@ export const getProduto = async (req: Request, res: Response) => {
     ResponseService.success(res, { data: produto });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -72,6 +79,8 @@ export const createProduto = async (req: Request, res: Response) => {
     ResponseService.created(res, { data: produtos });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -89,6 +98,8 @@ export const updateProduto = async (req: Request, res: Response) => {
     ResponseService.success(res, { data: produtos });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -104,5 +115,7 @@ export const deleteProduto = async (req: Request, res: Response) => {
     ResponseService.success(res, { data: produtos });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };

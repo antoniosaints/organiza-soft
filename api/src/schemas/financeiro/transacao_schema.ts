@@ -139,12 +139,7 @@ const updateTransacao = zodUtil.object({
     .number({
       invalid_type_error: "O valorFinal deve ser um number",
     })
-    .optional(),
-  contaSistemaId: zodUtil
-    .number({
-      invalid_type_error: "O contaSistemaId deve ser um number",
-    })
-    .optional(),
+    .optional()
 });
 
 export { createTransacao, updateTransacao };

@@ -131,7 +131,7 @@ const routes: RouteRecordRaw[] = [
     },
     {
         path: "/login",
-        name: "LoginPage",
+        name: "Login",
         component: () => import("@/views/LoginView.vue")
     },
     {
@@ -141,7 +141,7 @@ const routes: RouteRecordRaw[] = [
     },
     {
         path: "/pagamentos/mercadopago/status",
-        name: "StatusPagamentos",
+        name: "pagamentos.status",
         component: () => import("@/views/Financeiro/Mercadopago/StatusPagamento.vue")
     },
     {

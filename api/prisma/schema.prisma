@@ -335,7 +335,7 @@ model PatrimonioComprasFornecedores {
 
 model Vendas {
   id               Int                @id @default(autoincrement())
-  uniqueId         String
+  uniqueId         String             @unique
   contaSistemaId   Int
   ContaSistema     ContasSistema      @relation(fields: [contaSistemaId], references: [id])
   clienteId        Int
@@ -344,6 +344,7 @@ model Vendas {
   Vendedor         Usuario            @relation(fields: [vendedorId], references: [id])
   valor            Float              @db.Double
   status           StatusVendas
+  descricao        String?             @db.Text
   metodoPagamento  String             @db.VarChar(50)
   dataCriacao      DateTime           @default(now())
   dataAtualizada   DateTime           @updatedAt
@@ -359,7 +360,7 @@ model VendasRelatorios {
   Venda          Vendas        @relation(fields: [vendaId], references: [id])
   produtoId      Int
   produto        String
-  valor          String
+  quantidade     Float
   preco          Float         @db.Double
   total          Float         @db.Double
 }

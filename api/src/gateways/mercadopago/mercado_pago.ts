@@ -41,14 +41,8 @@ export class MercadoPagoGateway implements IGatewayPayment {
     const baseUrlFront = process.env.BASE_URL_FRONT || "";
     const payment = await mercadoPagoPreference.create({
       body: {
-        items: [
-          {
-            id: "1",
-            title: order.product,
-            unit_price: order.amount,
-            quantity: order.quantity,
-          },
-        ],
+        items: order.itens,
+        additional_info: order.description,
         payment_methods: {
           excluded_payment_methods: [{ id: "ticket" }],
           installments: order.maxInstallments || 1,

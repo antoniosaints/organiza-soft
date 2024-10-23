@@ -36,6 +36,8 @@ class AuthController {
       );
     } catch (error) {
       HttpErrorService.hadle(error, res);
+    } finally {
+      await prismaService.$disconnect();
     }
   }
 

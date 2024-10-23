@@ -61,11 +61,6 @@ const updateCliente = zodUtil.object({
     })
     .optional(),
   status: zodUtil.enum(["ativo", "inativo"]).optional(),
-  contaSistemaId: zodUtil
-    .number({
-      invalid_type_error: "O contaSistemaId deve ser um number",
-    })
-    .optional(),
 });
 
 export { createCliente, updateCliente };
