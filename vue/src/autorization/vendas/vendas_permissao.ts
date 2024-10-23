@@ -1,8 +1,8 @@
-import { ScToastUtil } from '@/utils/scToastUtil';
 import { IAbility, IEntity } from '../types';
 import IUsuario from '@/types/administracao/usuarios/IUsuario';
 import { ACLgerente, ACLmanager } from '../default';
 import { IRegra } from '@/types/administracao/usuarios/IRegra';
+import { Autorize } from '..';
 
 export class VendasPermissoesACL {
     static rolePermissions: Record<IRegra, IAbility[]> = {
@@ -16,10 +16,6 @@ export class VendasPermissoesACL {
     };
 
     static can(subject: IUsuario, ability: IAbility, entity: IEntity): boolean {
-        const allowedAbilities = this.rolePermissions[subject.regra] || [];
-        if (allowedAbilities.includes("all")) return true
-        const res = allowedAbilities.includes(ability);
-        if (!res) ScToastUtil.warning(`Você não tem permissão para ${ability} ${entity}.`);
-        return res;
+        return Autorize.permission(subject, ability, entity, this.rolePermissions);
     }
 }

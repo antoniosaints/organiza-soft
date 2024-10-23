@@ -5,6 +5,8 @@ import { IAbility, IEntity } from './types';
 import { ScToastUtil } from '@/utils/scToastUtil';
 import { ProdutosPermissoesACL } from './patrimonio/produtos_permissao';
 import { VendasPermissoesACL } from './vendas/vendas_permissao';
+import IUsuario from '@/types/administracao/usuarios/IUsuario';
+import { IRegra } from '@/types/administracao/usuarios/IRegra';
 
 export class Autorize {
     static can(ability: IAbility, entity: IEntity): boolean | void {
@@ -23,5 +25,13 @@ export class Autorize {
             default:
                 return false;
         }
+    }
+
+    static permission(subject: IUsuario, ability: IAbility, entity: IEntity, roles: Record<IRegra, IAbility[]>): boolean {
+        const allowedAbilities = roles[subject.regra] || [];
+        if (allowedAbilities.includes("all")) return true
+        const res = allowedAbilities.includes(ability);
+        if (!res) ScToastUtil.warning(`Você não tem permissão para ${ability} ${entity}.`);
+        return res;
     }
 }
