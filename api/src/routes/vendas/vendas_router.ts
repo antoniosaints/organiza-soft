@@ -3,6 +3,6 @@ import { createCheckoutMercadopagoVenda, createVenda } from "../../controllers/v
 const vendasRouter = Router();
 
 vendasRouter.post("/", createVenda);
-vendasRouter.post("/checkout/:id", createCheckoutMercadopagoVenda);
+vendasRouter.get("/checkout/:id", createCheckoutMercadopagoVenda);
 
 export default vendasRouter;

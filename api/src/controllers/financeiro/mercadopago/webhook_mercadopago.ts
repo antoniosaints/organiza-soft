@@ -20,7 +20,7 @@ export const MPWebhookPagamentos = async (req: Request, res: Response) => {
       data.action === "payment.updated" &&
       data.data.id
     ) {
-      const { external_reference, status } = await Gateway.getPayment(
+      const { external_reference, status, payment_method_id } = await Gateway.getPayment(
         data.data.id
       );
       const venda = await prismaService.$transaction(async (prisma) => {
@@ -32,6 +32,16 @@ export const MPWebhookPagamentos = async (req: Request, res: Response) => {
             status: padronizarStatusGateway("mercadoPago", status!),
           },
         });
+        await prisma.vendasPagamentos.create({
+          data: {
+            gatewayId: data.data.id,
+            metodoPagamento: `mercadoPago-${payment_method_id}`,
+            statusPagamento: padronizarStatusGateway("mercadoPago", status!),
+            valor: Number(venda?.valor),
+            contaSistemaId: venda?.contaSistemaId,
+            vendaId: venda?.id,
+          },
+        })
         return venda;
       });
       console.log("A venda foi atualizada", venda);

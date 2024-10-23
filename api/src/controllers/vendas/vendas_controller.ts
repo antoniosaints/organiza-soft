@@ -88,7 +88,7 @@ export const createCheckoutMercadopagoVenda = async (req: Request, res: Response
                 })),
             })
 
-            return checkout;
+            return checkout.init_point;
         })
         ResponseService.success(res, { data: checkout }, "Checkout criado com sucesso");
     }catch (error: any) {
