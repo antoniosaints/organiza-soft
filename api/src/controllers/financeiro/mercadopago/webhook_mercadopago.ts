@@ -13,17 +13,12 @@ interface IMercadoPagoBody {
 }
 export const MPWebhookPagamentos = async (req: Request, res: Response) => {
   try {
-    const data: IMercadoPagoBody = req.body;
+    const { type, action, data }: IMercadoPagoBody = req.body;
     const Gateway = new MercadoPagoGateway();
-    if (
-      data.type === "payment" &&
-      data.action === "payment.updated" &&
-      data.data.id
-    ) {
-      const { external_reference, status, payment_method_id } = await Gateway.getPayment(
-        data.data.id
-      );
-      const venda = await prismaService.$transaction(async (prisma) => {
+    if (type === "payment" && action === "payment.updated" && data.id) {
+      const { external_reference, status, payment_method_id } =
+        await Gateway.getPayment(data.id);
+      await prismaService.$transaction(async (prisma) => {
         const venda = await prisma.vendas.update({
           where: {
             uniqueId: external_reference!,
@@ -34,17 +29,16 @@ export const MPWebhookPagamentos = async (req: Request, res: Response) => {
         });
         await prisma.vendasPagamentos.create({
           data: {
-            gatewayId: data.data.id,
+            gatewayId: data.id,
             metodoPagamento: `mercadoPago-${payment_method_id}`,
             statusPagamento: padronizarStatusGateway("mercadoPago", status!),
             valor: Number(venda?.valor),
             contaSistemaId: venda?.contaSistemaId,
             vendaId: venda?.id,
           },
-        })
+        });
         return venda;
       });
-      console.log("A venda foi atualizada", venda);
     }
     return res.sendStatus(200);
   } catch (error: any) {

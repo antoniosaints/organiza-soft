@@ -3,6 +3,7 @@ interface IOrderBase {
     customerName: string;
     product: string;
     idempotencyKey: string;
+    description: string;
     id: string;
     webhookUrl: string;
 }
@@ -13,7 +14,7 @@ interface IItens {
     quantity: number,
 }
 export interface IOrderPayment extends IOrderBase {amount: number}
-export interface IOrderPreference extends IOrderBase {maxInstallments?: number; description: string; itens: IItens[]}
+export interface IOrderPreference extends IOrderBase {maxInstallments?: number; itens: IItens[]}
 export interface IGatewayPayment {
     createPayment(order: IOrderPayment): Promise<any>;
     createPreference(order: IOrderPreference, itens: IItens[]): Promise<any>;

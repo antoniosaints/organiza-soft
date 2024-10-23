@@ -49,51 +49,115 @@ export const createVenda = async (req: Request, res: Response) => {
   }
 };
 
-export const createCheckoutMercadopagoVenda = async (req: Request, res: Response) => {
-    try {
-        const { id } = req.params;
-        const MercadoPago = new MercadoPagoGateway();
-        const checkout = await prismaService.$transaction(async (prisma) => {
-            await prisma.vendas.update({
-                where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
-                data: {
-                    status: "pendente"
-                }
-            })
-            const venda = await prisma.vendas.findUnique({
-                where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
-                include: {
-                    VendasRelatorios: true
-                }
-            })
+export const createCheckoutMercadopagoVenda = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { id } = req.params;
+    const MercadoPago = new MercadoPagoGateway();
+    const checkout = await prismaService.$transaction(async (prisma) => {
+      await prisma.vendas.update({
+        where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
+        data: {
+          status: "pendente",
+        },
+      });
+      const venda = await prisma.vendas.findUnique({
+        where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
+        include: {
+          VendasRelatorios: true,
+        },
+      });
 
-            const cliente = await prisma.cliente.findUnique({
-                where: { id: Number(venda?.clienteId), contaSistemaId: req.body.contaSistemaId },
-            })
+      const cliente = await prisma.cliente.findUnique({
+        where: {
+          id: Number(venda?.clienteId),
+          contaSistemaId: req.body.contaSistemaId,
+        },
+      });
 
-            const checkout = await MercadoPago.createPreference({
-                customerEmail: cliente?.email!,
-                customerName: cliente?.nome!,
-                description: venda?.descricao!,
-                idempotencyKey: generateUniqueIdWithPrefix("key"),
-                maxInstallments: 6,
-                product: "Venda de produtos - Organizasoft",
-                webhookUrl: `https://0737-2804-2424-4000-3-6449-f406-c9a2-1de.ngrok-free.app/mercadopago/webhook`,
-                id: venda?.uniqueId!,
-                itens: (venda?.VendasRelatorios ?? []).map((item) => ({
-                    id: `produto-${item.id}`,
-                    title: item.produto,
-                    quantity: item.quantidade,
-                    unit_price: item.preco,
-                })),
-            })
+      const checkout = await MercadoPago.createPreference({
+        customerEmail: cliente?.email!,
+        customerName: cliente?.nome!,
+        description: venda?.descricao!,
+        idempotencyKey: generateUniqueIdWithPrefix("key"),
+        maxInstallments: 6,
+        product: "Venda de produtos - Organizasoft",
+        webhookUrl: `https://0737-2804-2424-4000-3-6449-f406-c9a2-1de.ngrok-free.app/mercadopago/webhook`,
+        id: venda?.uniqueId!,
+        itens: (venda?.VendasRelatorios ?? []).map((item) => ({
+          id: `produto-${item.id}`,
+          title: item.produto,
+          quantity: item.quantidade,
+          unit_price: item.preco,
+        })),
+      });
 
-            return checkout.init_point;
-        })
-        ResponseService.success(res, { data: checkout }, "Checkout criado com sucesso");
-    }catch (error: any) {
-        HttpErrorService.hadle(error, res);
-    } finally {
-        await prismaService.$disconnect();
-    }
-}
+      return checkout.init_point;
+    });
+    ResponseService.success(
+      res,
+      { data: checkout },
+      "Checkout criado com sucesso"
+    );
+  } catch (error: any) {
+    HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
+  }
+};
+export const createPixMercadopagoVenda = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { id } = req.params;
+    const MercadoPago = new MercadoPagoGateway();
+    const checkout = await prismaService.$transaction(async (prisma) => {
+      await prisma.vendas.update({
+        where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
+        data: {
+          status: "pendente",
+        },
+      });
+      const venda = await prisma.vendas.findUnique({
+        where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
+        include: {
+          VendasRelatorios: true,
+        },
+      });
+
+      const cliente = await prisma.cliente.findUnique({
+        where: {
+          id: Number(venda?.clienteId),
+          contaSistemaId: req.body.contaSistemaId,
+        },
+      });
+
+      const checkout = await MercadoPago.createPayment({
+        customerEmail: cliente?.email!,
+        customerName: cliente?.nome!,
+        description: venda?.descricao!,
+        idempotencyKey: generateUniqueIdWithPrefix("key"),
+        product: "Venda de produtos - Organizasoft",
+        webhookUrl: `https://0737-2804-2424-4000-3-6449-f406-c9a2-1de.ngrok-free.app/mercadopago/webhook`,
+        id: venda?.uniqueId!,
+        amount: (venda?.VendasRelatorios ?? []).reduce((total, item) => {
+          return total + item.quantidade * item.preco;
+        }, 0),
+      });
+
+      return checkout.point_of_interaction?.transaction_data?.ticket_url;
+    });
+    ResponseService.success(
+      res,
+      { data: checkout },
+      "Checkout criado com sucesso"
+    );
+  } catch (error: any) {
+    HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
+  }
+};

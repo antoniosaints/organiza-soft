@@ -16,7 +16,7 @@ export class MercadoPagoGateway implements IGatewayPayment {
     const payment = await mercadoPagoPayment.create({
       body: {
         transaction_amount: order.amount,
-        description: order.customerName,
+        description: order.description,
         payment_method_id: "pix",
         notification_url: order.webhookUrl,
         external_reference: order.id,
