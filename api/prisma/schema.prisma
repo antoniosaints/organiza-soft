@@ -357,7 +357,7 @@ model VendasRelatorios {
   contaSistemaId Int
   ContaSistema   ContasSistema @relation(fields: [contaSistemaId], references: [id])
   vendaId        Int
-  Venda          Vendas        @relation(fields: [vendaId], references: [id])
+  Venda          Vendas        @relation(fields: [vendaId], references: [id], onDelete: Cascade)
   produtoId      Int
   produto        String
   quantidade     Float
@@ -370,7 +370,7 @@ model VendasPagamentos {
   contaSistemaId  Int
   ContaSistema    ContasSistema @relation(fields: [contaSistemaId], references: [id])
   vendaId         Int
-  Venda           Vendas        @relation(fields: [vendaId], references: [id])
+  Venda           Vendas        @relation(fields: [vendaId], references: [id], onDelete: Cascade)
   valor           Float         @db.Double
   metodoPagamento String        @db.VarChar(50)
   statusPagamento StatusVendas
