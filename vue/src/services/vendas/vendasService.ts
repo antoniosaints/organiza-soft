@@ -15,4 +15,14 @@ export class VendasService {
       return false;
     }
   }
+
+  static async generatePix(id: number): Promise<string | undefined> {
+    if (!Autorize.can("criar_pix", "vendas")) return;
+    try {
+      return await VendasRepository.getPix(id);
+    } catch (error: any) {
+      ScToastUtil.warning("Erro ao gerar pix: " + error.response.data.message || "erro interno");
+      return "";
+    }
+  }
 }

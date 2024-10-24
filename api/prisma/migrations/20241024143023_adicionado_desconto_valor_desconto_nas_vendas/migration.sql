@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `Vendas` ADD COLUMN `desconto` FLOAT NOT NULL DEFAULT 0,
+    ADD COLUMN `valorDesconto` DOUBLE NOT NULL DEFAULT 0;

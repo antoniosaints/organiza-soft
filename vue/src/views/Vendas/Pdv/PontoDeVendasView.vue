@@ -8,8 +8,11 @@ import ModalDescontoView from "./ModalDescontoView.vue"
 import { usePontoDeVendasStore } from "@/stores/vendas/pdv/pontoVendasStore"
 import ComprovanteView from "./ComprovanteView.vue"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { formatRealValue } from "@/utils/formatterUtil"
+import { onMounted } from "vue"
 
 const storePDV = usePontoDeVendasStore();
+onMounted(() => storePDV.getProdutos())
 </script>
 
 <template>
@@ -26,16 +29,14 @@ const storePDV = usePontoDeVendasStore();
                 <CardContent>
                     <ScrollArea class="h-[calc(100vh-320px)]">
                         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                            <Card v-for="produto in storePDV.produtosFiltrados" :key="produto.id"
+                            <Card v-for="produto in storePDV.produtos" :key="produto.id"
                                 class="flex flex-col bg-background justify-between">
-                                <CardHeader>
+                                <CardHeader class="px-6 pt-6 pb-2">
                                     <CardTitle class="text-sm">{{ produto.produto }}</CardTitle>
+                                    <p class="text-xs text-muted-foreground">{{ produto.categoria }}</p>
                                 </CardHeader>
                                 <CardFooter class="flex justify-between">
-                                    <span class="text-md font-bold">{{ produto.preco.toLocaleString("pt-BR", {
-                                        style:
-                                            "currency", currency: "BRL"
-                                    }) }}</span>
+                                    <span class="text-md font-bold">{{ formatRealValue(produto.preco) }}</span>
                                     <Button size="sm" @click="storePDV.adicionarAoCarrinho(produto)">
                                         <Plus class="w-3 h-4" />
                                     </Button>

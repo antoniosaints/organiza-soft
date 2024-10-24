@@ -21,6 +21,21 @@ const createVendasPdv = zodUtil.object({
     invalid_type_error: "O valor deve ser um número",
     required_error: "O valor é obrigatorio",
   }),
+  desconto: zodUtil
+    .number({
+      invalid_type_error: "O desconto deve ser um número",
+    })
+    .min(0)
+    .max(1)
+    .default(0)
+    .optional(),
+  valorDesconto: zodUtil
+    .number({
+      invalid_type_error: "O valorDesconto deve ser um número",
+    })
+    .min(0)
+    .default(0)
+    .optional(),
   descricao: zodUtil
     .string({
       invalid_type_error: "A descricao deve ser uma string",
@@ -64,6 +79,21 @@ const updateVendasPdv = zodUtil.object({
     .string({
       invalid_type_error: "A descricao deve ser uma string",
     })
+    .optional(),
+  desconto: zodUtil
+    .number({
+      invalid_type_error: "O desconto deve ser um número",
+    })
+    .min(0)
+    .max(1)
+    .default(0)
+    .optional(),
+  valorDesconto: zodUtil
+    .number({
+      invalid_type_error: "O valorDesconto deve ser um número",
+    })
+    .min(0)
+    .default(0)
     .optional(),
   status: zodUtil
     .enum(["pendente", "pago", "cancelado", "processando", "estornado"], {

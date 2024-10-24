@@ -8,9 +8,9 @@
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" class="w-28">
-                <DropdownMenuItem @click="onEditar(data.id as number)">
-                    <Pencil class="mr-2 h-3 w-3" />
-                    Editar
+                <DropdownMenuItem @click="storePdv.gerarLinkPagamentoPìx(data.id as number)">
+                    <QrCode class="mr-2 h-3 w-3" />
+                    Gerar Pix
                 </DropdownMenuItem>
                 <DropdownMenuItem class="text-red-600" @click="openDialogDelete = true">
                     <Trash2 class="mr-2 h-3 w-3" />
@@ -50,14 +50,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import VendasRepository from '@/repositories/vendas/vendasRepository';
-import { useVendasFormularioStore } from '@/stores/vendas/relatorios/vendasFormularioStore';
+import { usePontoDeVendasStore } from '@/stores/vendas/pdv/pontoVendasStore';
 import { useVendasRelatorioStore } from '@/stores/vendas/relatorios/vendasRelatorioStore';
 import { IVenda } from '@/types/vendas/IVenda';
 import { ScToastUtil } from '@/utils/scToastUtil';
-import { Ellipsis, Pencil, Trash2 } from "lucide-vue-next";
+import { Ellipsis, QrCode, Trash2 } from "lucide-vue-next";
 import { ref } from "vue";
-const FormularioState = useVendasFormularioStore();
 const MainState = useVendasRelatorioStore();
+const storePdv = usePontoDeVendasStore();
 
 const openDialogDelete = ref(false);
 
@@ -76,12 +76,5 @@ const onDeletar = async (venda: IVenda) => {
     } catch (e: any) {
         ScToastUtil.warning(e.response.data.message);
     }
-}
-
-const onEditar = async (id: number) => {
-    if (!Autorize.can("atualizar", "vendas")) return;
-    FormularioState.refId = id;
-    FormularioState.data = await VendasRepository.get(id);
-    FormularioState.isModalOpen = true;
 }
 </script>

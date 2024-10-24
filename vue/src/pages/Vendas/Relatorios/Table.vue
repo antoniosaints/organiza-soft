@@ -17,7 +17,6 @@
                         <TooltipContent>Filtrar registros</TooltipContent>
                     </Tooltip>
                 </TooltipProvider>
-                <VendasModal />
             </div>
         </div>
         <div class="flex space-x-1 w-full md:w-1/2 gap-4 mb-4">
@@ -58,6 +57,7 @@
             </AlertDialog>
         </div>
         <div class="rounded-lg border shadow-sm overflow-auto">
+            <CompartilharLink />
             <Table v-if="dataExists">
                 <TableHeader>
                     <TableRow class="bg-secondary">
@@ -75,7 +75,6 @@
                     <VendasRow v-for="data in mainStore.vendas" :key="data.id" :data="data" />
                 </TableBody>
             </Table>
-
             <div v-else class="w-full text-blue-100 flex flex-col justify-center items-center">
                 <img class="w-64" src="/not_found.svg" />
                 <p class="mb-6 font-sans text-xl text-black dark:text-white flex items-center">Nenhum registro
@@ -182,7 +181,7 @@ import { VendasRow } from ".";
 import DetalhesProduto from "./Infos/DetalhesProduto.vue";
 import { useVendasRelatorioStore } from "@/stores/vendas/relatorios/vendasRelatorioStore";
 import { useVendasFormularioStore } from "@/stores/vendas/relatorios/vendasFormularioStore";
-import { VendasModal } from "./Formulario";
+import CompartilharLink from "@/views/Vendas/Pdv/CompartilharLink.vue";
 
 const mainStore = useVendasRelatorioStore();
 const formularioStore = useVendasFormularioStore();

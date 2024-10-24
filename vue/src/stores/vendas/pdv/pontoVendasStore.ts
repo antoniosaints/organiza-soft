@@ -1,3 +1,5 @@
+import { Autorize } from "@/autorization";
+import { ProdutosRepository } from "@/repositories/patrimonio/produtos/produtosRepository";
 import { VendasService } from "@/services/vendas/vendasService";
 import { ICarrinhoItem, IProdutoPDV } from "@/types/vendas/ICarrinhoPdv";
 import { ICreateVenda } from "@/types/vendas/ICreateVenda";
@@ -5,7 +7,8 @@ import { IMetodoPagamento } from "@/types/vendas/IVenda";
 import { ScToastUtil } from "@/utils/scToastUtil";
 import StorageUtil from "@/utils/storageUtil";
 import { defineStore } from "pinia";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
+import { useVendasRelatorioStore } from "../relatorios/vendasRelatorioStore";
 
 export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
   const carrinho = ref<ICarrinhoItem[]>(
@@ -14,12 +17,7 @@ export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
       : []
   );
   const carrinhoComprovante = ref<ICarrinhoItem[]>([]);
-  const produtos = ref<IProdutoPDV[]>([
-    { id: 1, produto: "Camisa", preco: 50.0 },
-    { id: 2, produto: "Calça", preco: 70.0 },
-    { id: 3, produto: "Bermuda", preco: 50.0 },
-    { id: 4, produto: "Terno", preco: 130.0 },
-  ]);
+  const produtos = ref<IProdutoPDV[]>([]);
   const buscarItem = ref<string>("");
   const totalItens = ref<number>(0);
   const valorTotal = ref<number>(0);
@@ -27,6 +25,28 @@ export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
   const valorComDesconto = ref<number>(0);
   const porcentagemDesconto = ref<number>(0);
   const openComprovante = ref<boolean>(false);
+  const openCompartilharLink = ref<boolean>(false);
+  const linkPagamento = ref<string>('');
+
+  const getProdutos = async () => {
+    const prod = await ProdutosRepository.getAll(10, 1, "");
+    produtos.value = prod.data.map((produto) => ({ 
+      id: produto.id!,
+      produto: produto.produto,
+      preco: produto.preco,
+      categoria: produto.Categoria?.categoria!,
+    }));
+  }
+
+  watch(buscarItem, async () => {
+    const prod = await ProdutosRepository.getAll(10, 1, buscarItem.value);
+    produtos.value = prod.data.map((produto) => ({ 
+      id: produto.id!,
+      produto: produto.produto,
+      preco: produto.preco,
+      categoria: produto.Categoria?.categoria!,
+    }));
+  })
 
   const adicionarAoCarrinho = (produto: IProdutoPDV) => {
     const existingItem = carrinho.value.find((item) => item.id === produto.id);
@@ -41,6 +61,13 @@ export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
     }
   };
 
+  const gerarLinkPagamentoPìx = async (id: number) => {
+    const vendasRelatorioStore = useVendasRelatorioStore();
+    const pix = await VendasService.generatePix(id);
+    linkPagamento.value = pix!;
+    openCompartilharLink.value = true;
+    vendasRelatorioStore.getVendas();
+  }
   const removerDoCarrinho = (produtoId: number) => {
     carrinho.value = carrinho.value.reduce((acc, item) => {
       if (item.id === produtoId) {
@@ -70,13 +97,11 @@ export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
     return total - total * porcentagemDesconto.value;
   });
 
-  const produtosFiltrados = computed(() =>
-    produtos.value.filter((produto) =>
-      produto.produto.toLowerCase().includes(buscarItem.value.toLowerCase())
-    )
-  );
-
   const finalizarVenda = async () => {
+    if (!Autorize.can("criar_venda_pdv", "vendas")) {
+      ScToastUtil.warning("Você não pode realizar uma venda via PDV!");
+      return;
+    }
     if (!carrinho.value.length) {
       return ScToastUtil.warning("Carrinho vazio!");
     }
@@ -86,7 +111,9 @@ export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
       descricao: "Venda - PDV",
       formaPagamento: formaPagamento.value,
       vendedor: 1,
+      desconto: porcentagemDesconto.value
     }
+
     const data = await VendasService.create(venda);
     if (data) {
       carrinhoComprovante.value = carrinho.value;
@@ -107,6 +134,8 @@ export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
   });
 
   return {
+    gerarLinkPagamentoPìx,
+    getProdutos,
     carrinho,
     carrinhoComprovante,
     produtos,
@@ -119,10 +148,11 @@ export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
     adicionarAoCarrinho,
     removerDoCarrinho,
     limparCarrinho,
-    produtosFiltrados,
     calcularTotal,
     totalComDesconto,
     openComprovante,
     finalizarVenda,
+    openCompartilharLink,
+    linkPagamento
   };
 });

@@ -1,6 +1,6 @@
 <template>
-    <Dialog v-model:open="isModalOpen" class="z-50">
-        <DialogContent class="sm:max-w-min p-0 bg-card">
+    <Dialog v-model:open="isModalOpen" class="z-50" id="comprovante">
+        <DialogContent class="max-w-min p-0 bg-card">
             <div class="font-mono text-sm w-[300px] mx-auto p-4 bg-background border border-foreground/40 rounded-md">
                 <div class="text-center mb-4">
                     <h1 class="font-bold text-lg">{{ nomeEmpresa }}</h1>

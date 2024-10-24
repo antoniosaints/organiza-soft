@@ -36,6 +36,7 @@ export const getProdutos = async (req: Request, res: Response) => {
             { sku: { contains: busca } },
             { sku: { contains: busca } },
             { descricao: { contains: busca } },
+            { Categoria: { categoria: { contains: busca } } },
           ],
           contaSistemaId: req.body.contaSistemaId,
         },

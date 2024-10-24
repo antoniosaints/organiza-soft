@@ -19,6 +19,8 @@ export interface IVenda {
   vendedorId?: number;
   valor: number;
   status: IStatusVendas;
+  desconto?: number;
+  valorDesconto?: number;
   descricao?: string;
   metodoPagamento?: IMetodoPagamento;
   dataCriacao?: Date | string;

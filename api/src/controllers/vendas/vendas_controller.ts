@@ -28,6 +28,7 @@ export const getVendas = async (req: Request, res: Response) => {
             { uniqueId: { contains: busca } },
             { Cliente: { nome: { contains: busca } } },
             { VendasRelatorios: { some: { produto: { contains: busca } } } },
+            { metodoPagamento: { contains: busca } },
           ],
           contaSistemaId: req.body.contaSistemaId,
         },
@@ -64,6 +65,12 @@ export const createVenda = async (req: Request, res: Response) => {
     const validated = validateSchema(VendaBodySchema, req.body);
 
     const data = await prismaService.$transaction(async (prisma) => {
+      const valorTotal = validated.itens.reduce((total, item) => {
+        return total + item.quantidade * item.preco;
+      }, 0);
+
+      const valorDesconto = valorTotal * (validated.desconto ?? 0);
+
       const venda = await prisma.vendas.create({
         data: {
           contaSistemaId: validated.contaSistemaId,
@@ -71,9 +78,9 @@ export const createVenda = async (req: Request, res: Response) => {
           status: "pago",
           descricao: validated.descricao,
           uniqueId: generateUniqueIdWithPrefix("vnd"),
-          valor: validated.itens.reduce((total, item) => {
-            return total + item.quantidade * item.preco;
-          }, 0),
+          valor: valorTotal,
+          desconto: validated.desconto,
+          valorDesconto: valorDesconto,
           clienteId: validated.cliente,
           vendedorId: validated.vendedor,
         },
@@ -169,6 +176,7 @@ export const createPixMercadopagoVenda = async (
         where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
         data: {
           status: "pendente",
+          metodoPagamento: "pix",
         },
       });
       const venda = await prisma.vendas.findUnique({
@@ -185,6 +193,13 @@ export const createPixMercadopagoVenda = async (
         },
       });
 
+      const valorTotal =
+        (venda?.VendasRelatorios ?? []).reduce(
+          (total, item) => total + item.quantidade * item.preco,
+          0
+        ) *
+        (1 - (venda?.desconto ?? 0));
+
       const checkout = await MercadoPago.createPayment({
         customerEmail: cliente?.email!,
         customerName: cliente?.nome!,
@@ -193,9 +208,7 @@ export const createPixMercadopagoVenda = async (
         product: "Venda de produtos - Organizasoft",
         webhookUrl: `${process.env.BASE_URL}/mercadopago/webhook`,
         id: venda?.uniqueId!,
-        amount: (venda?.VendasRelatorios ?? []).reduce((total, item) => {
-          return total + item.quantidade * item.preco;
-        }, 0),
+        amount: Number(valorTotal.toFixed(2)),
       });
 
       return checkout.point_of_interaction?.transaction_data?.ticket_url;

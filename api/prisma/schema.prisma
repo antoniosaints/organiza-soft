@@ -343,8 +343,10 @@ model Vendas {
   vendedorId       Int
   Vendedor         Usuario            @relation(fields: [vendedorId], references: [id])
   valor            Float              @db.Double
+  desconto         Float              @default(0) @db.Float
+  valorDesconto    Float              @default(0) @db.Double
   status           StatusVendas
-  descricao        String?             @db.Text
+  descricao        String?            @db.Text
   metodoPagamento  String             @db.VarChar(50)
   dataCriacao      DateTime           @default(now())
   dataAtualizada   DateTime           @updatedAt

@@ -6,5 +6,6 @@ export interface ICreateVenda {
     formaPagamento: IMetodoPagamento;
     cliente: number,
     vendedor: number,
-    descricao: string
+    descricao: string,
+    desconto?: number
 }
