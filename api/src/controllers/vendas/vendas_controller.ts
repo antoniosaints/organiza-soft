@@ -9,7 +9,56 @@ import { VendaBodySchema } from "../../schemas/vendas/vendas_body_schema";
 import { generateUniqueIdWithPrefix } from "../../utils/tools/UniqueId";
 import { MercadoPagoGateway } from "../../gateways/mercadopago/mercado_pago";
 import "dotenv/config";
+export const getVendas = async (req: Request, res: Response) => {
+  try {
+    const { limit, page, search } = req.query;
+    const offset = (Number(page) - 1) * Number(limit);
+    const busca = (search as string) || "";
 
+    const [items, total] = await Promise.all([
+      prismaService.vendas.findMany({
+        skip: offset || 0,
+        take: Number(limit) || 10,
+        include: {
+          Cliente: true,
+        },
+        where: {
+          OR: [
+            { descricao: { contains: busca } },
+            { uniqueId: { contains: busca } },
+            { Cliente: { nome: { contains: busca } } },
+            { VendasRelatorios: { some: { produto: { contains: busca } } } },
+          ],
+          contaSistemaId: req.body.contaSistemaId,
+        },
+      }),
+      prismaService.vendas.count({
+        where: { contaSistemaId: req.body.contaSistemaId },
+      }),
+    ]);
+    ResponseService.success(res, { data: items, total });
+  } catch (error: any) {
+    HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
+  }
+};
+export const getVenda = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const produto = await prismaService.vendas.findUnique({
+      where: {
+        id: Number(id),
+        contaSistemaId: req.body.contaSistemaId,
+      },
+    });
+    ResponseService.success(res, { data: produto });
+  } catch (error: any) {
+    HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
+  }
+};
 export const createVenda = async (req: Request, res: Response) => {
   try {
     const validated = validateSchema(VendaBodySchema, req.body);
@@ -156,6 +205,23 @@ export const createPixMercadopagoVenda = async (
       { data: checkout },
       "Checkout criado com sucesso"
     );
+  } catch (error: any) {
+    HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
+  }
+};
+
+export const deleteVenda = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const produtos = await prismaService.vendas.delete({
+      where: {
+        id: Number(id),
+        contaSistemaId: req.body.contaSistemaId,
+      },
+    });
+    ResponseService.success(res, { data: produtos });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
   } finally {

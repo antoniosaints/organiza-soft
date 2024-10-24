@@ -7,6 +7,7 @@ export const useProdutoFormularioStore = defineStore("patrimonioProdutoFormulari
     const defaultData = ref<IPatrimonioProduto>({
         produto: "",
         cor: "",
+        categoriaId: 0,
         preco: 0.0,
         sku: "",
         descricao: "",

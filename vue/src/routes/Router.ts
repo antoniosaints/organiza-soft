@@ -71,6 +71,12 @@ const routes: RouteRecordRaw[] = [
                         name: "PontoDeVenda",
                         meta: { breadcrumb: 'Ponto de vendas' },
                         component: () => import("@/views/Vendas/Pdv/PontoDeVendasView.vue")
+                    },
+                    {
+                        path: "/app/vendas/relatorio",
+                        name: "RelatoriosVendas",
+                        meta: { breadcrumb: 'Relatorios de vendas' },
+                        component: () => import("@/views/Vendas/Relatorios/VendasRelatoriosView.vue")
                     }
                 ]
             },

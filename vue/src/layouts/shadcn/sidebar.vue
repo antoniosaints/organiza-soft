@@ -143,7 +143,7 @@ const { t } = useI18n();
                             <Computer />
                             <span>PDV</span>
                         </router-link>
-                        <router-link to="/app/vendas/pdv"
+                        <router-link to="/app/vendas/relatorio"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                             <ClipboardCheck />
                             <span>Relatórios</span>

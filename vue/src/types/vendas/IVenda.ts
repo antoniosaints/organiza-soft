@@ -13,12 +13,16 @@ export type IMetodoPagamento =
   | "cheque";
 export interface IVenda {
   id?: number | string;
-  uniqueId: string;
-  contaSistemaId: number;
-  clienteId: number;
+  uniqueId?: string;
+  contaSistemaId?: number;
+  clienteId?: number;
   vendedorId?: number;
   valor: number;
   status: IStatusVendas;
   descricao?: string;
-  metodoPagamento: IMetodoPagamento;
+  metodoPagamento?: IMetodoPagamento;
+  dataCriacao?: Date | string;
+  Cliente?: {
+    nome: string;
+  }
 }
