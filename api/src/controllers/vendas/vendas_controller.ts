@@ -11,9 +11,9 @@ import { MercadoPagoGateway } from "../../gateways/mercadopago/mercado_pago";
 import "dotenv/config";
 export const getVendas = async (req: Request, res: Response) => {
   try {
-    const { limit, page, search } = req.query;
+    const { limit, page, search, startDate, endDate } = req.query;
     const offset = (Number(page) - 1) * Number(limit);
-    const busca = (search as string) || "";
+    const busca = (search as string);
 
     const [items, total] = await Promise.all([
       prismaService.vendas.findMany({
@@ -23,16 +23,37 @@ export const getVendas = async (req: Request, res: Response) => {
           Cliente: true,
         },
         where: {
-          OR: [
-            { descricao: { contains: busca } },
-            { uniqueId: { contains: busca } },
-            { Cliente: { nome: { contains: busca } } },
-            { VendasRelatorios: { some: { produto: { contains: busca } } } },
-            { metodoPagamento: { contains: busca } },
+          AND: [
+            busca
+              ? {
+                  OR: [
+                    { descricao: { contains: busca } },
+                    { uniqueId: { contains: busca } },
+                    { Cliente: { nome: { contains: busca } } },
+                    {
+                      VendasRelatorios: {
+                        some: { produto: { contains: busca } },
+                      },
+                    },
+                    { metodoPagamento: { contains: busca } },
+                  ],
+                }
+              : {},
+            startDate && endDate
+              ? {
+                  dataCriacao: {
+                    ...(startDate
+                      ? { gte: new Date(startDate as string).toISOString() }
+                      : {}),
+                    ...(endDate ? { lte: new Date(endDate as string).toISOString() } : {}),
+                  },
+                }
+              : {},
+            { contaSistemaId: req.body.contaSistemaId },
           ],
-          contaSistemaId: req.body.contaSistemaId,
         },
       }),
+
       prismaService.vendas.count({
         where: { contaSistemaId: req.body.contaSistemaId },
       }),
@@ -105,7 +126,6 @@ export const createVenda = async (req: Request, res: Response) => {
     await prismaService.$disconnect();
   }
 };
-
 export const createCheckoutMercadopagoVenda = async (
   req: Request,
   res: Response
@@ -224,7 +244,6 @@ export const createPixMercadopagoVenda = async (
     await prismaService.$disconnect();
   }
 };
-
 export const deleteVenda = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;

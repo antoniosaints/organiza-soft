@@ -6,40 +6,46 @@
                 <p class="text-sm font-normal text-foreground hidden md:flex">Listagem de todas as vendas do sistema
                 </p>
             </div>
-            <div class="flex space-x-2">
-                <TooltipProvider>
-                    <Tooltip>
-                        <TooltipTrigger>
-                            <Button size="sm" variant="outline">
-                                <Filter class="w-4 h-4" />
-                            </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>Filtrar registros</TooltipContent>
-                    </Tooltip>
-                </TooltipProvider>
-            </div>
+
         </div>
-        <div class="flex space-x-1 w-full md:w-1/2 gap-4 mb-4">
-            <Input type="search" @input="(event: any) => { if (event.target.value == '') reloadTable() }"
-                @keyup.enter="reloadTable" id="rows-per-page" v-model="mainStore.search"
-                placeholder="Pesquisar produto..." />
-            <Button variant="default" class="w-max" @click="reloadTable">
-                <Search class="w-4 h-4 mr-2" />Buscar
-            </Button>
-            <DropdownMenu v-if="mainStore.selectedItens.length > 0">
-                <DropdownMenuTrigger asChild>
-                    <Button variant="outline">
-                        <CircleChevronDown class="w-4 h-4 mr-2" /> Ações
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                    <DropdownMenuItem class="hover:bg-destructive cursor-pointer"
-                        @click="openDialogMultilineDelete = true">
-                        <Trash2 class="w-4 h-4 mr-2" /> Deletar registros
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-                <DropdownMenuSeparator />
-            </DropdownMenu>
+        <div class="flex space-x-1 w-full flex-col md:flex-row justify-between gap-4 mb-4">
+            <div class="flex space-x-2 md:w-1/2 w-full">
+                <Input type="search" @input="(event: any) => { if (event.target.value == '') reloadTable() }"
+                    @keyup.enter="reloadTable" id="rows-per-page" v-model="mainStore.search"
+                    placeholder="Pesquisar produto..." />
+                <Button variant="default" class="w-max" @click="reloadTable">
+                    <Search class="w-4 h-4 mr-2" />Buscar
+                </Button>
+                <DropdownMenu v-if="mainStore.selectedItens.length > 0">
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="outline">
+                            <CircleChevronDown class="w-4 h-4 mr-2" /> Ações
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        <DropdownMenuItem class="hover:bg-destructive cursor-pointer"
+                            @click="openDialogMultilineDelete = true">
+                            <Trash2 class="w-4 h-4 mr-2" /> Deletar registros
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                    <DropdownMenuSeparator />
+                </DropdownMenu>
+            </div>
+            <div class="flex space-x-2">
+                <div class="flex space-x-2">
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <Button @click="clearFilterDate" v-if="showClearFilter" size="sm" variant="destructive">
+                                    <FilterX class="w-4 h-4" />
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>Limpar filtros</TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                </div>
+                <DateRangePicker v-model="dateFilter" :startDate="mainStore.startDate" :endDate="mainStore.endDate" />
+            </div>
             <AlertDialog v-model:open="openDialogMultilineDelete">
                 <AlertDialogContent>
                     <AlertDialogHeader>
@@ -169,7 +175,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, CircleChevronDown, Filter, Search, Trash2, UserPlus2 } from "lucide-vue-next";
+import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, CircleChevronDown, FilterX, Search, Trash2, UserPlus2 } from "lucide-vue-next";
 import { Label } from "@/components/ui/label";
 import { onMounted, watch } from "vue";
 import { computed } from "vue";
@@ -182,6 +188,7 @@ import DetalhesProduto from "./Infos/DetalhesProduto.vue";
 import { useVendasRelatorioStore } from "@/stores/vendas/relatorios/vendasRelatorioStore";
 import { useVendasFormularioStore } from "@/stores/vendas/relatorios/vendasFormularioStore";
 import CompartilharLink from "@/views/Vendas/Pdv/CompartilharLink.vue";
+import DateRangePicker from "@/components/customs/DateRangePicker.vue";
 
 const mainStore = useVendasRelatorioStore();
 const formularioStore = useVendasFormularioStore();
@@ -193,6 +200,38 @@ const dataExists = computed(() => mainStore.vendas.length > 0);
 watch(perPage, () => {
     loadDataChange(1);
 });
+
+
+interface DatePickerReturn {
+    start: string,
+    end: string
+}
+const dateFilter = ref<DatePickerReturn>()
+
+watch(() => [dateFilter.value?.start, dateFilter.value?.end], () => {
+    if (dateFilter.value?.start && dateFilter.value?.end) {
+        mainStore.startDate = dateFilter.value?.start
+        const endDate = new Date(dateFilter.value?.end)
+        endDate.setHours(23, 50, 0, 0);
+        mainStore.endDate = endDate.toISOString()
+        mainStore.getVendas()
+    }
+})
+
+const showClearFilter = computed(() => {
+    if (dateFilter.value?.start && dateFilter.value?.end) {
+        return true
+    } else {
+        return false
+    }
+})
+
+const clearFilterDate = () => {
+    dateFilter.value = undefined
+    mainStore.startDate = ""
+    mainStore.endDate = ""
+    mainStore.getVendas()
+}
 
 const openDialogMultilineDelete = ref(false);
 

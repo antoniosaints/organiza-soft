@@ -7,8 +7,8 @@ export default class VendasRepository {
         const { data } = await axiosService.get(`vendas/${id}`);
         return data.data;
     }
-    static async getAll(limit: number, page: number, search?: string | undefined): Promise<{ data: IVenda[], total: number}> {
-        const { data } = await axiosService.get(`vendas?limit=${limit}&page=${page}&search=${search}`);
+    static async getAll(limit: number, page: number, search: string = "", startDate: string = "", endDate: string = ""): Promise<{ data: IVenda[], total: number}> {
+        const { data } = await axiosService.get(`vendas?limit=${limit}&page=${page}&search=${search}&startDate=${startDate}&endDate=${endDate}`);
         return data;
     }
     static async getPix(id: number): Promise<string> {

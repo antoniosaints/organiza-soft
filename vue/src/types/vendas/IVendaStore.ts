@@ -3,6 +3,8 @@ import { IVenda } from "./IVenda";
 
 export interface IVendaStore {
     getVendas(): Promise<void>;
+    startDate: Ref<string>;
+    endDate: Ref<string>;
     vendas: Ref<IVenda[]>;
     limit: Ref<string>;
     page: Ref<number>;
