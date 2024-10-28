@@ -64,7 +64,8 @@ export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
   const gerarLinkPagamentoPìx = async (id: number) => {
     const vendasRelatorioStore = useVendasRelatorioStore();
     const pix = await VendasService.generatePix(id);
-    linkPagamento.value = pix!;
+    if (!pix) return;
+    linkPagamento.value = pix;
     openCompartilharLink.value = true;
     vendasRelatorioStore.getVendas();
   }

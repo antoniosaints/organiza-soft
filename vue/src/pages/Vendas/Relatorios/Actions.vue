@@ -2,17 +2,22 @@
     <div>
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" class="h-7 w-9 p-0">
+                <Button variant="outline" size="sm" class="h-7 w-9 p-0">
                     <span class="sr-only">Abrir menu</span>
                     <Ellipsis class="h-6 w-6" />
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" class="w-28">
-                <DropdownMenuItem @click="storePdv.gerarLinkPagamentoPìx(data.id as number)">
-                    <QrCode class="mr-2 h-3 w-3" />
+            <DropdownMenuContent align="end" class="w-auto">
+                <!-- <DropdownMenuItem class="hover:bg-primary cursor-pointer" @click="storePdv.gerarLinkPagamentoPìx(data.id as number)">
+                    <img class="mr-2 h-3 w-3" src="/mercadopago.png" />
+                    Gerar Checkout
+                </DropdownMenuItem> -->
+                <DropdownMenuItem class="hover:bg-primary cursor-pointer" @click="storePdv.gerarLinkPagamentoPìx(data.id as number)">
+                    <img class="mr-2 h-3 w-3" src="/mercadopago.png" />
                     Gerar Pix
                 </DropdownMenuItem>
-                <DropdownMenuItem class="text-red-600" @click="openDialogDelete = true">
+                <DropdownMenuSeparator />
+                <DropdownMenuItem class="text-red-600 cursor-pointer" @click="openDialogDelete = true">
                     <Trash2 class="mr-2 h-3 w-3" />
                     Excluir
                 </DropdownMenuItem>
@@ -28,7 +33,8 @@
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                    <AlertDialogAction class="bg-destructive hover:bg-destructive/90 text-destructive-foreground" @click="onDeletar(data)">Deletar</AlertDialogAction>
+                    <AlertDialogAction class="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
+                        @click="onDeletar(data)">Deletar</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
@@ -38,23 +44,23 @@
 <script setup lang="ts">
 import { Autorize } from '@/autorization';
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import VendasRepository from '@/repositories/vendas/vendasRepository';
 import { usePontoDeVendasStore } from '@/stores/vendas/pdv/pontoVendasStore';
 import { useVendasRelatorioStore } from '@/stores/vendas/relatorios/vendasRelatorioStore';
 import { IVenda } from '@/types/vendas/IVenda';
 import { ScToastUtil } from '@/utils/scToastUtil';
-import { Ellipsis, QrCode, Trash2 } from "lucide-vue-next";
+import { Ellipsis, Trash2 } from "lucide-vue-next";
 import { ref } from "vue";
 const MainState = useVendasRelatorioStore();
 const storePdv = usePontoDeVendasStore();

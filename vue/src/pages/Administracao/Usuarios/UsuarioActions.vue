@@ -2,7 +2,7 @@
     <div>
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" class="h-7 w-9 p-0">
+                <Button variant="outline" size="sm" class="h-7 w-9 p-0">
                     <span class="sr-only">Abrir menu</span>
                     <Ellipsis class="h-6 w-6" />
                 </Button>
@@ -12,6 +12,7 @@
                     <Pencil class="mr-2 h-3 w-3" />
                     Editar
                 </DropdownMenuItem>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem class="text-red-600" @click="openDialogDelete = true">
                     <Trash2 class="mr-2 h-3 w-3" />
                     Excluir
@@ -48,7 +49,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { UsuariosRepository } from "@/repositories/administracao/usuarios/usuariosRepository";
 import { useUsuarioFormularioStore } from "@/stores/administracao/usuarios/usuarioFormularioStore";
 import { useUsuarioStore } from "@/stores/administracao/usuarios/usuarioStore";

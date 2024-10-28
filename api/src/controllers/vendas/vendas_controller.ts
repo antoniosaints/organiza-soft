@@ -98,7 +98,7 @@ export const createVenda = async (req: Request, res: Response) => {
           metodoPagamento: validated.formaPagamento,
           status: "pago",
           descricao: validated.descricao,
-          uniqueId: generateUniqueIdWithPrefix("vnd"),
+          uniqueId: generateUniqueIdWithPrefix("VND"),
           valor: valorTotal,
           desconto: validated.desconto,
           valorDesconto: valorDesconto,
