@@ -240,6 +240,7 @@ model PatrimonioProdutos {
   PatrimonioProdutosEstoques    PatrimonioProdutosEstoques[]
   PatrimonioProdutosMovimentos  PatrimonioProdutosMovimentos[]
   PatrimonioComprasFornecedores PatrimonioComprasFornecedores[]
+  VendasRelatorios              VendasRelatorios[]
 
   @@index([categoriaId], map: "categoria_produto_key")
 }
@@ -339,9 +340,9 @@ model Vendas {
   contaSistemaId   Int
   ContaSistema     ContasSistema      @relation(fields: [contaSistemaId], references: [id])
   clienteId        Int
-  Cliente          Cliente            @relation(fields: [clienteId], references: [id])
+  Cliente          Cliente            @relation(fields: [clienteId], references: [id], onDelete: Restrict)
   vendedorId       Int
-  Vendedor         Usuario            @relation(fields: [vendedorId], references: [id])
+  Vendedor         Usuario            @relation(fields: [vendedorId], references: [id], onDelete: Restrict)
   valor            Float              @db.Double
   desconto         Float              @default(0) @db.Float
   valorDesconto    Float              @default(0) @db.Double
@@ -355,16 +356,17 @@ model Vendas {
 }
 
 model VendasRelatorios {
-  id             Int           @id @default(autoincrement())
+  id             Int                @id @default(autoincrement())
   contaSistemaId Int
-  ContaSistema   ContasSistema @relation(fields: [contaSistemaId], references: [id])
+  ContaSistema   ContasSistema      @relation(fields: [contaSistemaId], references: [id])
   vendaId        Int
-  Venda          Vendas        @relation(fields: [vendaId], references: [id], onDelete: Cascade)
+  Venda          Vendas             @relation(fields: [vendaId], references: [id], onDelete: Cascade)
   produtoId      Int
+  Produtos       PatrimonioProdutos @relation(fields: [produtoId], references: [id], onDelete: Restrict)
   produto        String
   quantidade     Float
-  preco          Float         @db.Double
-  total          Float         @db.Double
+  preco          Float              @db.Double
+  total          Float              @db.Double
 }
 
 model VendasPagamentos {

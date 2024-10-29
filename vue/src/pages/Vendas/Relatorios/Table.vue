@@ -85,6 +85,16 @@
                 <img class="w-64" src="/not_found.svg" />
                 <p class="mb-6 font-sans text-xl text-black dark:text-white flex items-center">Nenhum registro
                     encontrado {{ mainStore.search == '' ? '' : ' com: ' + mainStore.search }}</p>
+
+                <div class="flex items-center justify-center space-x-2 text-foreground/80 mb-6">
+                    <CadastrarVendaView />
+                    <p>Ou</p>
+                    <RouterLink to="/app/vendas/pdv" class="rounded-md">
+                        <Button>
+                            <ShoppingCart class="mr-1 h-4 w-4" /> Vender no PDV
+                        </Button>
+                    </RouterLink>
+                </div>
             </div>
         </div>
         <DetalhesProduto />
@@ -172,19 +182,18 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, CircleChevronDown, FilterX, Search, Trash2 } from "lucide-vue-next";
+import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, CircleChevronDown, FilterX, Search, ShoppingCart, Trash2 } from "lucide-vue-next";
 import { Label } from "@/components/ui/label";
-import { onMounted, watch } from "vue";
-import { computed } from "vue";
+import { onMounted, watch, computed, ref } from "vue";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { ref } from "vue";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { VendasRow } from ".";
 import DetalhesProduto from "./Infos/DetalhesProduto.vue";
 import { useVendasRelatorioStore } from "@/stores/vendas/relatorios/vendasRelatorioStore";
 import CompartilharLink from "@/views/Vendas/Pdv/CompartilharLink.vue";
 import DateRangePicker from "@/components/customs/DateRangePicker.vue";
+import CadastrarVendaView from "@/views/Vendas/Relatorios/CadastrarVendaView.vue";
 
 const mainStore = useVendasRelatorioStore();
 const perPage = computed(() => mainStore.limit);

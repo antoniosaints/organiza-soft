@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Plus, Minus, ShoppingCart, User, ShoppingBasket, Trash, CreditCard } from "lucide-vue-next"
+import { Plus, Minus, ShoppingCart, User, ShoppingBasket, Trash, CreditCard, Package } from "lucide-vue-next"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -27,7 +27,7 @@ onMounted(() => storePDV.getProdutos())
                     <Input type="search" placeholder="Buscar produtos..." v-model="storePDV.buscarItem" class="mt-2" />
                 </CardHeader>
                 <CardContent>
-                    <ScrollArea class="h-[calc(100vh-320px)]">
+                    <ScrollArea v-if="storePDV.produtos.length" class="h-[calc(100vh-320px)]">
                         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
                             <Card v-for="produto in storePDV.produtos" :key="produto.id"
                                 class="flex flex-col bg-background justify-between">
@@ -47,6 +47,16 @@ onMounted(() => storePDV.getProdutos())
                             pagamento="Pix" :itens="storePDV.carrinhoComprovante" nomeEmpresa="OrganizaSoft"
                             :taxaDeconto="storePDV.porcentagemDesconto" />
                     </ScrollArea>
+                    <div v-else class="w-full text-blue-100 flex flex-col justify-center items-center">
+                        <img class="w-64" src="/not_found.svg" />
+                        <p class="mb-6 font-sans text-xl text-black dark:text-white flex items-center">Nenhum ítem
+                            encontrado</p>
+                        <RouterLink to="/app/patrimonio/produtos">
+                            <Button class="bg-primary mb-6 hover:bg-primary/90">
+                                <Package class="mr-1 h-4 w-4" /> Novo produto
+                            </Button>
+                        </RouterLink>
+                    </div>
                 </CardContent>
             </Card>
         </div>

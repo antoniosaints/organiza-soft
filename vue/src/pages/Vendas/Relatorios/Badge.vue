@@ -11,7 +11,10 @@ import { CircleCheckBig } from "lucide-vue-next";
 import { computed } from "vue";
 
 const props = defineProps({
-    status: String
+    status: {
+        required: true,
+        type: String
+    }
 });
 
 const statusClasses = computed(() => {
