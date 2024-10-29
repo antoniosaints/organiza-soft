@@ -85,9 +85,6 @@
                 <img class="w-64" src="/not_found.svg" />
                 <p class="mb-6 font-sans text-xl text-black dark:text-white flex items-center">Nenhum registro
                     encontrado {{ mainStore.search == '' ? '' : ' com: ' + mainStore.search }}</p>
-                <Button @click="openFormularioNovoRegistro" class="bg-primary mb-6 hover:bg-primary/90">
-                    <UserPlus2 class="mr-1 h-4 w-4" /> Novo produto
-                </Button>
             </div>
         </div>
         <DetalhesProduto />
@@ -175,7 +172,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, CircleChevronDown, FilterX, Search, Trash2, UserPlus2 } from "lucide-vue-next";
+import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, CircleChevronDown, FilterX, Search, Trash2 } from "lucide-vue-next";
 import { Label } from "@/components/ui/label";
 import { onMounted, watch } from "vue";
 import { computed } from "vue";
@@ -186,12 +183,10 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { VendasRow } from ".";
 import DetalhesProduto from "./Infos/DetalhesProduto.vue";
 import { useVendasRelatorioStore } from "@/stores/vendas/relatorios/vendasRelatorioStore";
-import { useVendasFormularioStore } from "@/stores/vendas/relatorios/vendasFormularioStore";
 import CompartilharLink from "@/views/Vendas/Pdv/CompartilharLink.vue";
 import DateRangePicker from "@/components/customs/DateRangePicker.vue";
 
 const mainStore = useVendasRelatorioStore();
-const formularioStore = useVendasFormularioStore();
 const perPage = computed(() => mainStore.limit);
 const rangeStart = computed(() => (mainStore.page - 1) * Number(mainStore.limit) + 1);
 const rangeEnd = computed(() => (mainStore.page - 1) * Number(mainStore.limit) + mainStore.vendas.length);
@@ -238,12 +233,6 @@ const openDialogMultilineDelete = ref(false);
 const deleteMultilineSelects = async () => {
     await mainStore.deleteSelectedItens()
     openDialogMultilineDelete.value = false
-}
-
-const openFormularioNovoRegistro = () => {
-    formularioStore.isModalOpen = true
-    formularioStore.refId = null
-    formularioStore.resetData();
 }
 
 const loadDataChange = async (paginate: number) => {
