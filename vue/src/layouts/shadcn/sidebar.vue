@@ -5,7 +5,7 @@ import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/component
 import { useLoginStore } from '@/stores/login/loginStore';
 import { useMenuStore } from '@/stores/menuStore';
 import { ref } from 'vue';
-import { Archive, BadgeCheck, BookOpenCheck, Boxes, CalendarX2, ChevronRight, CircleDollarSign, ClipboardCheck, Computer, Contact, Cpu, Crown, FileBadge2, FileChartPie, FileCheck, FileDigit, FileStack, FileText, Group, House, Landmark, Layers, List, LockKeyhole, MessageCircle, Package, PenTool, Settings2, Tags, Ticket, User, Users, Wallet, WalletMinimal } from 'lucide-vue-next';
+import { Archive, BadgeCheck, BookOpenCheck, Boxes, CalendarX2, ChevronRight, CircleDollarSign, ClipboardCheck, Computer, Contact, Cpu, FileBadge2, FileChartPie, FileCheck, FileDigit, FileStack, FileText, Group, House, KeyRound, Landmark, Layers, List, LockKeyhole, MessageCircle, Package, PenTool, Settings2, Tags, Ticket, User, Users, Wallet, WalletMinimal } from 'lucide-vue-next';
 import { useI18n } from 'vue-i18n';
 
 const menuStore = useMenuStore()
@@ -38,7 +38,7 @@ const { t } = useI18n();
                         </router-link>
                         <router-link to="/app/assinatura"
                             class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
-                            <Crown />
+                            <KeyRound />
                             <span>{{ t("sidebar.subscription") }}</span>
                             <div class="ml-auto flex space-x-1 items-center">
                                 <Badge :class="loginStore.isProAccount ? 'bg-orange-400 text-black' : 'bg-gray-500'"> {{
