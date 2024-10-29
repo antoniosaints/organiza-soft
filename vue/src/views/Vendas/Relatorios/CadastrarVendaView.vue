@@ -47,7 +47,7 @@
                             <NumberField :step="0.01" :format-options="{style: 'percent'}" id="age" :default-value="1" v-model.number="desconto" :min="0" :max="1">
                                 <NumberFieldContent>
                                 <NumberFieldDecrement />
-                                <NumberFieldInput />
+                                <NumberFieldInput class="bg-secondary"/>
                                 <NumberFieldIncrement />
                                 </NumberFieldContent>
                             </NumberField>
@@ -56,19 +56,11 @@
                             <div class="space-y-2">
                                 <Label>Adicionar Produtos</Label>
                                 <div class="flex space-x-2">
-                                    <Select v-model="produtoSelecionado">
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Selecione o produto" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem v-for="p in produtos" :key="p.id" :value="p.id">{{ p.nome }}
-                                            </SelectItem>
-                                        </SelectContent>
-                                    </Select>
+                                    <SelectSearchAjax labelSearch="Selecione uma categoria" v-model="produtoSelecionado" :ajax="fetchUsuarios" />
                                     <NumberField id="age" :default-value="1" v-model.number="quantidade" :min="0">
                                         <NumberFieldContent>
                                         <NumberFieldDecrement />
-                                        <NumberFieldInput />
+                                        <NumberFieldInput class="bg-secondary"/>
                                         <NumberFieldIncrement />
                                         </NumberFieldContent>
                                     </NumberField>
@@ -83,21 +75,21 @@
                             <div v-if="carrinho.length > 0" class="space-y-2">
                                 <Label>Itens da venda</Label>
                                 <ul class="space-y-2">
-                                    <li v-for="item in carrinho" :key="item.produto.id"
+                                    <li v-for="item in carrinho" :key="item.id"
                                         class="flex items-center justify-between">
-                                        <span>{{ item.produto.nome }} - R$ {{ item.produto.preco.toFixed(2) }}</span>
+                                        <span>{{ item.nome }} - R$ {{ item.preco.toFixed(2) }}</span>
                                         <div class="flex items-center space-x-2">
                                             <Button size="icon" variant="outline"
-                                                @click="atualizarQuantidade(item.produto.id, item.quantidade - 1)">
+                                                @click="atualizarQuantidade(item.id, item.quantidade - 1)">
                                                 <MinusCircle class="h-4 w-4" />
                                             </Button>
                                             <span>{{ item.quantidade }}</span>
                                             <Button size="icon" variant="outline"
-                                                @click="atualizarQuantidade(item.produto.id, item.quantidade + 1)">
+                                                @click="atualizarQuantidade(item.id, item.quantidade + 1)">
                                                 <PlusCircle class="h-4 w-4" />
                                             </Button>
                                             <Button size="icon" variant="destructive"
-                                                @click="removerDoCarrinho(item.produto.id)">
+                                                @click="removerDoCarrinho(item.id)">
                                                 <Trash2 class="h-4 w-4" />
                                             </Button>
                                         </div>
@@ -130,7 +122,7 @@ import { CalendarIcon, MinusCircle, Plus, PlusCircle, Trash2 } from 'lucide-vue-
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectSearchAjax, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { Textarea } from '@/components/ui/textarea';
@@ -142,6 +134,7 @@ import {
   getLocalTimeZone,
 } from '@internationalized/date'
 import { NumberField, NumberFieldContent, NumberFieldDecrement, NumberFieldIncrement, NumberFieldInput } from '@/components/ui/number-field';
+import { ProdutosRepository } from '@/repositories/patrimonio/produtos/produtosRepository';
 
 const df = new DateFormatter('pt-BR', {
   dateStyle: 'long',
@@ -159,11 +152,9 @@ const produtos = [
 ]
 
 interface IItemCarrinho {
-    produto: {
-        id: string
-        nome: string
-        preco: number
-    }
+    id: string
+    nome: string
+    preco: number
     quantidade: number
 }
 // Dados e Funções Reativas
@@ -173,36 +164,47 @@ const dataVenda = ref<DateValue>()
 const desconto = ref(0)
 const descricao = ref('')
 const carrinho = reactive<IItemCarrinho[]>([])
-const produtoSelecionado = ref('')
+const produtoSelecionado = ref()
 const quantidade = ref(1)
 
+const fetchUsuarios = async (query: string, id?: number) => {
+    if (id) {
+        return await ProdutosRepository.get(id).then(response => {
+            return [{ id: response.id as number, label: response.produto }]
+        })
+    }else {
+        return await ProdutosRepository.getAll(10, 1, query).then(response => {
+            return response.data.map(item => ({ id: item.id as number, label: item.produto }))
+        })
+    }
+}
 // Métodos
 const adicionarAoCarrinho = () => {
     const produto = produtos.find(p => p.id === produtoSelecionado.value)
     if (produto) {
-        const itemExistente = carrinho.find(item => item.produto.id === produto.id)
+        const itemExistente = carrinho.find(item => item.id === produto.id)
         if (itemExistente) {
             itemExistente.quantidade += quantidade.value
         } else {
-            carrinho.push({ produto, quantidade: quantidade.value })
+            carrinho.push({ id: produto.id, nome: produto.nome, preco: produto.preco, quantidade: quantidade.value })
         }
-        produtoSelecionado.value = ''
+        produtoSelecionado.value = 0
         quantidade.value = 1
     }
 }
 
 const removerDoCarrinho = (id: string) => {
-    const index = carrinho.findIndex(item => item.produto.id === id)
+    const index = carrinho.findIndex(item => item.id === id)
     if (index !== -1) carrinho.splice(index, 1)
 }
 
 const atualizarQuantidade = (id: string, novaQuantidade: number) => {
-    const item = carrinho.find(item => item.produto.id === id)
+    const item = carrinho.find(item => item.id === id)
     if (item) item.quantidade = Math.max(1, novaQuantidade)
 }
 
 const calcularTotal = () => {
-    const subtotal = carrinho.reduce((total, item) => total + item.produto.preco * item.quantidade, 0)
+    const subtotal = carrinho.reduce((total, item) => total + item.preco * item.quantidade, 0)
     return subtotal - (subtotal * desconto.value)
 }
 
