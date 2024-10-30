@@ -26,5 +26,6 @@ export interface IVenda {
   dataCriacao?: Date | string;
   Cliente?: {
     nome: string;
+    email: string;
   }
 }
