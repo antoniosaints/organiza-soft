@@ -42,7 +42,7 @@
                 </CardHeader>
                 <CardContent>
                     <div class="text-2xl font-bold text-blue-500">
-                        +12,234
+                        {{ vendas.reduce((total, item) => total + (item.valor - item.valorDesconto!), 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
                     </div>
                     <p class="text-xs text-muted-foreground">
                         +19% desde o mês passado
@@ -284,7 +284,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { Activity, ArrowUpRight, CreditCard, DollarSign, Users } from "lucide-vue-next"
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -292,28 +292,29 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { BarChart } from '@/components/ui/chart-bar'
-import { useVendasRelatorioStore } from "@/stores/vendas/relatorios/vendasRelatorioStore";
+import VendasRepository from "@/repositories/vendas/vendasRepository";
+import { IVenda } from "@/types/vendas/IVenda";
 
-onMounted(() => {
-    vendasStore.getVendas()
+const vendas = ref<IVenda[]>([])
+
+onMounted(async () => {
+    const resultado = await VendasRepository.getAll(1000, 1, '');
+    vendas.value = resultado.data
 })
-
-const vendasStore = useVendasRelatorioStore();
 
 const formateTicketValue = (value: any) => {
     return typeof value === 'number'
         ? `R$ ${new Intl.NumberFormat('us').format(value).toString()}`
         : ''
 }
-const vendasRecents = vendasStore.vendas.sort((a: any, b: any) => b.id - a.id).slice(0, 5)
+const vendasRecents = vendas.value.sort((a: any, b: any) => b.id - a.id).slice(0, 5)
 interface IDataOutput {
     metodoPagamento: string;
     total: number;
 }
 function calcularTotalPorMetodoPagamento(): IDataOutput[] {
-    const vendas = vendasStore.vendas;
     const totaisPorMetodo: Record<string, number> = {};
-    vendas.forEach(venda => {
+    vendas.value.forEach(venda => {
         const metodoPagamento = venda.metodoPagamento || 'Indefinido';
         if (totaisPorMetodo[metodoPagamento]) {
             totaisPorMetodo[metodoPagamento] += (venda.valor - venda.valorDesconto!);
