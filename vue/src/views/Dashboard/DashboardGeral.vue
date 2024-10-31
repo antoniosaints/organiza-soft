@@ -33,22 +33,24 @@
                     </p>
                 </CardContent>
             </Card>
-            <Card>
-                <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle class="text-sm font-medium">
-                        Vendas
-                    </CardTitle>
-                    <CreditCard class="h-4 w-4 text-blue-500" />
-                </CardHeader>
-                <CardContent>
-                    <div class="text-2xl font-bold text-blue-500">
-                        {{ vendas.reduce((total, item) => total + (item.valor - item.valorDesconto!), 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
-                    </div>
-                    <p class="text-xs text-muted-foreground">
-                        +19% desde o mês passado
-                    </p>
-                </CardContent>
-            </Card>
+            <RouterLink to="/app/vendas/relatorio">
+                <Card>
+                    <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle class="text-sm font-medium">
+                            Vendas
+                        </CardTitle>
+                        <CreditCard class="h-4 w-4 text-blue-500" />
+                    </CardHeader>
+                    <CardContent>
+                        <div class="text-2xl font-bold text-blue-500">
+                            {{ vendas.reduce((total, item) => total + (item.valor - item.valorDesconto!), 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
+                        </div>
+                        <p class="text-xs text-muted-foreground">
+                            +19% desde o mês passado
+                        </p>
+                    </CardContent>
+                </Card>
+            </RouterLink>
             <Card>
                 <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle class="text-sm font-medium">
@@ -73,8 +75,8 @@
                     <CardDescription>Resumo de vendas por mês</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <BarChart class="h-48 py-4" :rounded-corners="4" :data="calcularTotalPorMetodoPagamento()" index="metodoPagamento"
-                        :categories="['total']" :y-formatter="formateTicketValue" />
+                    <BarChart class="h-48 py-4" :rounded-corners="4" :data="calcularTotalPorMetodoPagamento()" index="index"
+                        :categories="['total']" :y-formatter="formateTicketValue" :custom-tooltip="CustomTooltipChart" />
                 </CardContent>
             </Card>
             <Card class="col-span-1">
@@ -294,12 +296,16 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { BarChart } from '@/components/ui/chart-bar'
 import VendasRepository from "@/repositories/vendas/vendasRepository";
 import { IVenda } from "@/types/vendas/IVenda";
+import CustomTooltipChart from "@/components/customs/CustomTooltipChart.vue";
+import { RouterLink } from "vue-router";
 
 const vendas = ref<IVenda[]>([])
+const vendasRecents = ref<IVenda[]>([])
 
 onMounted(async () => {
     const resultado = await VendasRepository.getAll(1000, 1, '');
     vendas.value = resultado.data
+    vendasRecents.value = vendas.value.sort((a: any, b: any) => b.id - a.id).slice(0, 5)
 })
 
 const formateTicketValue = (value: any) => {
@@ -307,9 +313,8 @@ const formateTicketValue = (value: any) => {
         ? `R$ ${new Intl.NumberFormat('us').format(value).toString()}`
         : ''
 }
-const vendasRecents = vendas.value.sort((a: any, b: any) => b.id - a.id).slice(0, 5)
 interface IDataOutput {
-    metodoPagamento: string;
+    index: string;
     total: number;
 }
 function calcularTotalPorMetodoPagamento(): IDataOutput[] {
@@ -323,10 +328,32 @@ function calcularTotalPorMetodoPagamento(): IDataOutput[] {
         }
     });
     return Object.keys(totaisPorMetodo).map(metodo => ({
-        metodoPagamento: metodo,
+        index: metodo,
         total: totaisPorMetodo[metodo],
     }));
 }
+
+function calcularTotalPorMes(): IDataOutput[] {
+    const totaisPorMes: Record<string, number> = {};
+
+    vendas.value.forEach(venda => {
+        // Extrair o mês e ano do campo dataCriacao
+        const dataCriacao = new Date(venda.dataCriacao!);
+        const mesAno = `${dataCriacao.getMonth() + 1}/${dataCriacao.getFullYear()}`; // Formato "MM-AAAA"
+
+        if (totaisPorMes[mesAno]) {
+            totaisPorMes[mesAno] += (venda.valor - venda.valorDesconto!);
+        } else {
+            totaisPorMes[mesAno] = (venda.valor - venda.valorDesconto!);
+        }
+    });
+
+    return Object.keys(totaisPorMes).map(mes => ({
+        index: mes,
+        total: totaisPorMes[mes],
+    }));
+}
+
 
 const data = [
     { name: 'Jan', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },

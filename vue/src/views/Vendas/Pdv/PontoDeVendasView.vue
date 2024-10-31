@@ -75,7 +75,7 @@ onMounted(() => storePDV.getProdutos())
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <ScrollArea class="h-[calc(100vh-420px)]">
+                    <ScrollArea v-if="storePDV.carrinho.length" class="h-[calc(100vh-420px)]">
                         <div v-for="item in storePDV.carrinho" :key="item.id"
                             class="flex justify-between items-center mb-2 px-2">
                             <span>{{ item.produto }}</span>
@@ -96,6 +96,10 @@ onMounted(() => storePDV.getProdutos())
                             </div>
                         </div>
                     </ScrollArea>
+                    <div v-else class="w-full text-blue-100 flex flex-col justify-center items-center h-[calc(100vh-420px)]">
+                        <img class="w-64" src="/addtocart.png" />
+                        <p class="mb-6 font-sans text-xl text-black dark:text-white text-center flex items-center">Adicione ítens no carrinho para <br> realizar uma venda!</p>
+                    </div>
                 </CardContent>
                 <CardFooter class="flex flex-col gap-2 items-stretch">
                     <div class="flex flex-col mb-1">
