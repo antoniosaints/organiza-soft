@@ -237,7 +237,7 @@ model PatrimonioProdutos {
   cest                          String?                         @db.VarChar(10)
   cfop                          Int?
   cst                           String?                         @db.VarChar(5)
-  origem                        Int                             @default(0)
+  origem                        String                          @default("0")
   ContaSistema                  ContasSistema                   @relation(fields: [contaSistemaId], references: [id], onDelete: Restrict)
   categoriaId                   Int
   Categoria                     PatrimonioProdutoCategoria      @relation(fields: [categoriaId], references: [id], onDelete: Restrict)

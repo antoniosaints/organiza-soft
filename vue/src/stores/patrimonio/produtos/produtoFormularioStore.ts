@@ -5,6 +5,10 @@ import { ref } from "vue";
 
 export const useProdutoFormularioStore = defineStore("patrimonioProdutoFormularioStore", (): IProdutoFormularioStore => {
     const defaultData = ref<IPatrimonioProduto>({
+        controlado: "nao",
+        origem: "0",
+        produzido: "nao",
+        unidade: "UN",
         produto: "",
         cor: "",
         categoriaId: 0,
