@@ -128,12 +128,6 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
         show: menuStore.permissions.financeiro,
         items: [
             {
-                icon: FileChartPie,
-                title: 'Resumo',
-                show: menuStore.permissions.financeiro,
-                url: "/app/patrimonio/categorias"
-            },
-            {
                 icon: Wallet,
                 title: 'Lançamentos',
                 show: menuStore.permissions.financeiro,
@@ -160,6 +154,19 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
             }
 
         ]
+    },
+    {
+        title: "Patrimônio",
+        icon: Package,
+        show: menuStore.permissions.patrimonio,
+        items: [
+            {
+                icon: Package,
+                title: 'Produtos',
+                show: menuStore.permissions.patrimonio,
+                url: "/app/patrimonio/produtos"
+            }
+        ]
     }
 ]
 
@@ -169,7 +176,7 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
     <div class="flex-1 overflow-y-auto bg-sidebar text-white px-2 py-4">
         <nav class="grid gap-2">
             <collapsible v-for="(item, index) in MenuOptionsSidebar" :key="index" v-show="item.show"
-                :title="t(item.title)" v-slot="{ open }" class="grid gap-2">
+                :title="item.title" v-slot="{ open }" class="grid gap-2">
                 <router-link v-if="!item?.items?.length" :to="item.url!"
                     class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                     <component :is="item.icon" />
