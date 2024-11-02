@@ -13,8 +13,12 @@
                     Gerar Checkout
                 </DropdownMenuItem> -->
                 <DropdownMenuItem class="hover:bg-primary cursor-pointer" @click="storePdv.gerarLinkPagamentoPìx(data.id as number)">
-                    <img class="mr-2 h-3 w-3" src="/mercadopago.png" />
+                    <QrCode  class="mr-2 h-3 w-3" />
                     Gerar Pix
+                </DropdownMenuItem>
+                <DropdownMenuItem class="hover:bg-primary cursor-pointer" @click="storePdv.gerarCkheckoutPagamentoPìx(data.id as number)">
+                    <Link class="mr-2 h-3 w-3" />
+                    Gerar Link
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem class="text-red-600 cursor-pointer" @click="openDialogDelete = true">
@@ -60,7 +64,7 @@ import { usePontoDeVendasStore } from '@/stores/vendas/pdv/pontoVendasStore';
 import { useVendasRelatorioStore } from '@/stores/vendas/relatorios/vendasRelatorioStore';
 import { IVenda } from '@/types/vendas/IVenda';
 import { ScToastUtil } from '@/utils/scToastUtil';
-import { Ellipsis, Trash2 } from "lucide-vue-next";
+import { Ellipsis, Link, QrCode, Trash2 } from "lucide-vue-next";
 import { ref } from "vue";
 const MainState = useVendasRelatorioStore();
 const storePdv = usePontoDeVendasStore();

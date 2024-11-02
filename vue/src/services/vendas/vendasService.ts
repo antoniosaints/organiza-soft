@@ -25,4 +25,14 @@ export class VendasService {
       return "";
     }
   }
+
+  static async generateCheckout(id: number): Promise<string | undefined> {
+    if (!Autorize.can("criar_checkout", "vendas")) return;
+    try {
+      return await VendasRepository.getCheckout(id);
+    } catch (error: any) {
+      ScToastUtil.warning("Erro ao gerar checkout: " + error.response.data.message || "erro interno");
+      return "";
+    }
+  }
 }

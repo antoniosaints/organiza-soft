@@ -69,6 +69,15 @@ export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
     openCompartilharLink.value = true;
     vendasRelatorioStore.getVendas();
   }
+
+  const gerarCkheckoutPagamentoPìx = async (id: number) => {
+    const vendasRelatorioStore = useVendasRelatorioStore();
+    const checkout = await VendasService.generateCheckout(id);
+    if (!checkout) return;
+    linkPagamento.value = checkout;
+    openCompartilharLink.value = true;
+    vendasRelatorioStore.getVendas();
+  }
   const removerDoCarrinho = (produtoId: number) => {
     carrinho.value = carrinho.value.reduce((acc, item) => {
       if (item.id === produtoId) {
@@ -136,6 +145,7 @@ export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
 
   return {
     gerarLinkPagamentoPìx,
+    gerarCkheckoutPagamentoPìx,
     getProdutos,
     carrinho,
     carrinhoComprovante,

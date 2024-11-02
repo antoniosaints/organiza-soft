@@ -7,13 +7,26 @@
         <div class="grid md:grid-cols-2 gap-4">
             <div class="space-y-2">
                 <Label for="preco">Preço</Label>
-                <Input id="preco" step="0.01" min="0" placeholder="R$ 0,00" type="number"
-                    v-model="formularioStore.data.preco" required />
+                <NumberField id="balance" required v-model:modelValue="formularioStore.data.preco" :min="0" :step="0.01" :format-options="{
+                    style: 'currency',
+                    currency: 'BRL',
+                    maximumFractionDigits: 2,
+                    compactDisplay: 'short',
+                    notation: 'standard',
+                    currencyDisplay: 'narrowSymbol',
+                    currencySign: 'standard',
+                }">
+                    <NumberFieldContent>
+                        <NumberFieldDecrement />
+                        <NumberFieldInput class="bg-secondary" />
+                        <NumberFieldIncrement />
+                    </NumberFieldContent>
+                </NumberField>
             </div>
             <div class="space-y-2">
                 <Label for="categoria">Categoria</Label>
-                <SelectSearchAjax id="categoria" labelSearch="Selecione uma categoria" v-model="formularioStore.data.categoriaId"
-                    :ajax="fetchUsuarios" />
+                <SelectSearchAjax id="categoria" labelSearch="Selecione uma categoria"
+                    v-model="formularioStore.data.categoriaId" :ajax="fetchUsuarios" />
             </div>
         </div>
         <div class="grid md:grid-cols-2 gap-4">
@@ -30,7 +43,8 @@
             <div class="space-y-2">
                 <Label for="codigoBarra">Código de barra </Label>
                 <div class="flex w-full max-w-sm items-center gap-1.5">
-                    <Input id="codigoBarra" type="text" placeholder="Código de barra" v-model="formularioStore.data.codigoBarra" />
+                    <Input id="codigoBarra" type="text" placeholder="Código de barra"
+                        v-model="formularioStore.data.codigoBarra" />
                     <Button type="button" variant="default" @click="generateCodigoBarra" class="w-min flex-1">
                         <Sparkles class="w-4 h-4" />
                     </Button>
@@ -62,8 +76,8 @@
                         <SelectItem value="sim">
                             Sim
                         </SelectItem>
-                        <SelectItem value="nao">    
-                            Não 
+                        <SelectItem value="nao">
+                            Não
                         </SelectItem>
                     </SelectContent>
                 </Select>
@@ -78,8 +92,8 @@
                         <SelectItem value="sim">
                             Sim
                         </SelectItem>
-                        <SelectItem value="nao">    
-                            Não 
+                        <SelectItem value="nao">
+                            Não
                         </SelectItem>
                     </SelectContent>
                 </Select>
@@ -91,7 +105,8 @@
                         <SelectValue placeholder="Selecione a origem" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem v-for="origem in infosProdutos.origemProduto" :key="origem.chave" :value="origem.chave">
+                        <SelectItem v-for="origem in infosProdutos.origemProduto" :key="origem.chave"
+                            :value="origem.chave">
                             {{ origem.valor }}
                         </SelectItem>
                     </SelectContent>
@@ -124,6 +139,7 @@ import { Select, SelectContent, SelectItem, SelectSearchAjax, SelectTrigger, Sel
 import { CategoriasRepository } from "@/repositories/patrimonio/produtos/categoriasRepository";
 import { useInfosProdutoStore } from "@/stores/patrimonio/produtos/infosProdutosStore";
 import { gerarCodigoEAN13 } from "@/utils/geradorCodigoBarra";
+import { NumberField, NumberFieldContent, NumberFieldDecrement, NumberFieldIncrement, NumberFieldInput } from "@/components/ui/number-field";
 const formularioStore = useProdutoFormularioStore();
 const mainStore = useProdutoStore();
 const infosProdutos = useInfosProdutoStore();

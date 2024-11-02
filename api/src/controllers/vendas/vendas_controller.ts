@@ -154,21 +154,25 @@ export const createCheckoutMercadopagoVenda = async (
         },
       });
 
+      if (!venda) throw new Error("Venda não encontrada");
+
+      if (!cliente) throw new Error("Cliente não encontrado");
+
       const checkout = await MercadoPago.createPreference({
-        customerEmail: cliente?.email!,
-        customerName: cliente?.nome!,
+        customerEmail: cliente?.email,
+        customerName: cliente?.nome,
         description: venda?.descricao!,
         idempotencyKey: generateUniqueIdWithPrefix("key"),
         maxInstallments: 6,
-        product: "Venda de produtos - Organizasoft",
+        product: `Venda PDV cliente: ${cliente?.nome}`,
         webhookUrl: `${process.env.BASE_URL}/mercadopago/webhook`,
         id: venda?.uniqueId!,
-        itens: (venda?.VendasRelatorios ?? []).map((item) => ({
-          id: `produto-${item.id}`,
-          title: item.produto,
-          quantity: item.quantidade,
-          unit_price: item.preco,
-        })),
+        itens: [{
+          id: `produto-${venda?.uniqueId}-${venda?.id}`,
+          title: venda?.descricao || `Venda PDV cliente: ${cliente?.nome}`,
+          quantity: 1,
+          unit_price: Number((venda?.valor - venda?.valorDesconto)),
+        }],
       });
 
       return checkout.init_point;
