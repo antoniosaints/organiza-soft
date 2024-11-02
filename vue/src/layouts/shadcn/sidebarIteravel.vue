@@ -1,14 +1,11 @@
 <script setup lang="ts">
 import { Skeleton } from '@/components/ui/skeleton';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible"
-import { useLoginStore } from '@/stores/login/loginStore';
 import { useMenuStore } from '@/stores/menuStore';
-import { ref } from 'vue';
-import { Archive, BadgeCheck, BookOpenCheck, Boxes, CalendarX2, ChevronRight, CircleDollarSign, ClipboardCheck, Computer, Contact, Cpu, FileBadge2, FileChartPie, FileCheck, FileDigit, FileStack, FileText, Group, House, KeyRound, Landmark, Layers, List, LockKeyhole, MessageCircle, Package, PenTool, Settings2, Tags, Ticket, User, Users, Wallet, WalletMinimal } from 'lucide-vue-next';
+import { ChevronRight, ClipboardCheck, Computer, Contact, Cpu, FileBox, FileChartPie, FileText, House, KeyRound, Landmark, Layers, List, LockKeyhole, MessageCircle, Package, Settings2, Tags, User, Wallet } from 'lucide-vue-next';
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 const menuStore = useMenuStore()
-const loginStore = useLoginStore()
 
 interface IMenuOptionsSidebar {
     title: string;
@@ -161,7 +158,7 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
         show: menuStore.permissions.patrimonio,
         items: [
             {
-                icon: Package,
+                icon: FileBox,
                 title: 'Produtos',
                 show: menuStore.permissions.patrimonio,
                 url: "/app/patrimonio/produtos"
