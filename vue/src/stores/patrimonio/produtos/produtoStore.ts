@@ -49,6 +49,7 @@ export const useProdutoStore = defineStore(
             await ProdutosRepository.delete(id);
           })
         );
+        page.value = 1;
         await getProdutos();
         selectedItens.value = [];
         ScToastUtil.success("Itens deletados com sucesso.");

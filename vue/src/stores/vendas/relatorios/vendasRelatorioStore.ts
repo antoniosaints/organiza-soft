@@ -54,6 +54,7 @@ export const useVendasRelatorioStore = defineStore(
             await VendasRepository.delete(id);
           })
         );
+        page.value = 1;
         await getVendas();
         selectedItens.value = [];
         ScToastUtil.success("Itens deletados com sucesso.");
