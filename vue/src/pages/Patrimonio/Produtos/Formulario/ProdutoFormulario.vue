@@ -7,12 +7,12 @@
         <div class="grid md:grid-cols-2 gap-4">
             <div class="space-y-2">
                 <Label for="preco">Preço</Label>
-                <NumberField id="balance" required v-model:modelValue="formularioStore.data.preco" :min="0" :step="0.01" :format-options="{
+                <NumberField id="preco" required v-model:modelValue="formularioStore.data.preco" :min="0" :step="0.01" :format-options="{
                     style: 'currency',
                     currency: 'BRL',
                     maximumFractionDigits: 2,
                     compactDisplay: 'short',
-                    notation: 'standard',
+                    notation: 'compact',
                     currencyDisplay: 'narrowSymbol',
                     currencySign: 'standard',
                 }">

@@ -79,6 +79,7 @@ const onDeletar = async (venda: IVenda) => {
     if (!Autorize.can("deletar", "vendas")) return;
     try {
         await VendasRepository.delete(venda.id as number);
+        MainState.page = 1;
         MainState.getVendas();
         MainState.selectedItens = [];
         openDialogDelete.value = false;

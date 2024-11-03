@@ -13,7 +13,40 @@ export const getVendas = async (req: Request, res: Response) => {
   try {
     const { limit, page, search, startDate, endDate } = req.query;
     const offset = (Number(page) - 1) * Number(limit);
-    const busca = (search as string);
+    const busca = search as string;
+
+    const whereFilter = {
+      AND: [
+        busca
+          ? {
+              OR: [
+                { descricao: { contains: busca } },
+                { uniqueId: { contains: busca } },
+                { Cliente: { nome: { contains: busca } } },
+                {
+                  VendasRelatorios: {
+                    some: { produto: { contains: busca } },
+                  },
+                },
+                { metodoPagamento: { contains: busca } },
+              ],
+            }
+          : {},
+        startDate && endDate
+          ? {
+              dataCriacao: {
+                ...(startDate
+                  ? { gte: new Date(startDate as string).toISOString() }
+                  : {}),
+                ...(endDate
+                  ? { lte: new Date(endDate as string).toISOString() }
+                  : {}),
+              },
+            }
+          : {},
+        { contaSistemaId: req.body.contaSistemaId },
+      ],
+    }
 
     const [items, total] = await Promise.all([
       prismaService.vendas.findMany({
@@ -22,40 +55,11 @@ export const getVendas = async (req: Request, res: Response) => {
         include: {
           Cliente: true,
         },
-        where: {
-          AND: [
-            busca
-              ? {
-                  OR: [
-                    { descricao: { contains: busca } },
-                    { uniqueId: { contains: busca } },
-                    { Cliente: { nome: { contains: busca } } },
-                    {
-                      VendasRelatorios: {
-                        some: { produto: { contains: busca } },
-                      },
-                    },
-                    { metodoPagamento: { contains: busca } },
-                  ],
-                }
-              : {},
-            startDate && endDate
-              ? {
-                  dataCriacao: {
-                    ...(startDate
-                      ? { gte: new Date(startDate as string).toISOString() }
-                      : {}),
-                    ...(endDate ? { lte: new Date(endDate as string).toISOString() } : {}),
-                  },
-                }
-              : {},
-            { contaSistemaId: req.body.contaSistemaId },
-          ],
-        },
+        where: whereFilter,
       }),
 
       prismaService.vendas.count({
-        where: { contaSistemaId: req.body.contaSistemaId },
+        where: whereFilter,
       }),
     ]);
     ResponseService.success(res, { data: items, total });
@@ -167,12 +171,14 @@ export const createCheckoutMercadopagoVenda = async (
         product: `Venda PDV cliente: ${cliente?.nome}`,
         webhookUrl: `${process.env.BASE_URL}/mercadopago/webhook`,
         id: venda?.uniqueId!,
-        itens: [{
-          id: `produto-${venda?.uniqueId}-${venda?.id}`,
-          title: venda?.descricao || `Venda PDV cliente: ${cliente?.nome}`,
-          quantity: 1,
-          unit_price: Number((venda?.valor - venda?.valorDesconto)),
-        }],
+        itens: [
+          {
+            id: `produto-${venda?.uniqueId}-${venda?.id}`,
+            title: venda?.descricao || `Venda PDV cliente: ${cliente?.nome}`,
+            quantity: 1,
+            unit_price: Number(venda?.valor - venda?.valorDesconto),
+          },
+        ],
       });
 
       return checkout.init_point;

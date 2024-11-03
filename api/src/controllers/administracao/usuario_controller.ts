@@ -34,28 +34,30 @@ export const getUsuarios = async (req: Request, res: Response) => {
     const offset = (Number(page) - 1) * Number(limit);
     const busca = search as string;
 
+    const whereFilter = {
+      AND: [
+        busca
+          ? {
+              OR: [
+                { nome: { contains: busca } },
+                { email: { contains: busca } },
+              ],
+            }
+          : {},
+        {
+          contaSistemaId: req.body.contaSistemaId,
+        },
+      ],
+    }
+
     const [items, total] = await Promise.all([
       prismaService.usuario.findMany({
         skip: offset || 0,
         take: Number(limit) || 10,
-        where: {
-          AND: [
-            busca
-              ? {
-                  OR: [
-                    { nome: { contains: busca } },
-                    { email: { contains: busca } },
-                  ],
-                }
-              : {},
-            {
-              contaSistemaId: req.body.contaSistemaId,
-            },
-          ],
-        },
+        where: whereFilter,
       }),
       prismaService.usuario.count({
-        where: { contaSistemaId: req.body.contaSistemaId },
+        where: whereFilter,
       }),
     ]);
 

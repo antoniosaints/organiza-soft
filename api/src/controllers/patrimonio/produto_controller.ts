@@ -15,7 +15,25 @@ export const getProdutos = async (req: Request, res: Response) => {
   try {
     const { limit, page, search } = req.query;
     const offset = (Number(page) - 1) * Number(limit);
-    const busca = (search as string);
+    const busca = search as string;
+
+    const whereFilter = {
+      AND: [
+        busca
+          ? {
+              OR: [
+                { produto: { contains: busca } },
+                { sku: { contains: busca } },
+                { descricao: { contains: busca } },
+                { Categoria: { categoria: { contains: busca } } },
+              ],
+            }
+          : {},
+        {
+          contaSistemaId: req.body.contaSistemaId,
+        },
+      ],
+    };
 
     const [items, total] = await Promise.all([
       prismaService.patrimonioProdutos.findMany({
@@ -30,24 +48,10 @@ export const getProdutos = async (req: Request, res: Response) => {
             },
           },
         },
-        where: {
-          AND: [
-            busca ? {
-              OR: [
-                { produto: { contains: busca } },
-                { sku: { contains: busca } },
-                { descricao: { contains: busca } },
-                { Categoria: { categoria: { contains: busca } } },
-              ],
-            } : {},
-            {
-              contaSistemaId: req.body.contaSistemaId,
-            },
-          ],
-        },
+        where: whereFilter,
       }),
       prismaService.patrimonioProdutos.count({
-        where: { contaSistemaId: req.body.contaSistemaId },
+        where: whereFilter,
       }),
     ]);
     ResponseService.success(res, { data: items, total });

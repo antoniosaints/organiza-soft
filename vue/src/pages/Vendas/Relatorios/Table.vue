@@ -218,6 +218,7 @@ watch(() => [dateFilter.value?.start, dateFilter.value?.end], () => {
         const endDate = new Date(dateFilter.value?.end)
         endDate.setHours(23, 50, 0, 0);
         mainStore.endDate = endDate.toISOString()
+        mainStore.page = 1
         mainStore.getVendas()
     }
 })
@@ -250,6 +251,7 @@ const loadDataChange = async (paginate: number) => {
 };
 
 const reloadTable = async () => {
+    mainStore.page = 1;
     await mainStore.getVendas();
 };
 
