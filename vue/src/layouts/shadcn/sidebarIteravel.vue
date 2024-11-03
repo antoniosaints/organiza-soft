@@ -2,7 +2,7 @@
 import { Skeleton } from '@/components/ui/skeleton';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible"
 import { useMenuStore } from '@/stores/menuStore';
-import { ChevronRight, ClipboardCheck, Computer, Contact, Cpu, FileBox, FileChartPie, FileText, House, KeyRound, Landmark, Layers, List, LockKeyhole, MessageCircle, Package, Settings2, Tags, User, Wallet } from 'lucide-vue-next';
+import { ChevronRight, ClipboardCheck, Computer, Contact, Cpu, FileBox, FileChartPie, FileText, Handshake, History, House, KeyRound, Landmark, Layers, List, LockKeyhole, MessageCircle, Package, Settings2, Tags, User, UserRoundCog, Wallet } from 'lucide-vue-next';
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 const menuStore = useMenuStore()
@@ -45,6 +45,25 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
                 title: t("sidebar.logs"),
                 url: "/app/administracao/logs",
                 show: menuStore.permissions.admin
+            }
+        ]
+    },
+    {
+        icon: Handshake,
+        title: "RH",
+        show: menuStore.permissions.admin,
+        items: [
+            {
+                icon: UserRoundCog,
+                title: "Funcionários",
+                show: menuStore.permissions.admin,
+                url: "/app/rh/funcionarios"
+            },
+            {
+                icon: History,
+                title: "Horas extras",
+                show: menuStore.permissions.admin,
+                url: "/app/rh/horasextras"
             }
         ]
     },
