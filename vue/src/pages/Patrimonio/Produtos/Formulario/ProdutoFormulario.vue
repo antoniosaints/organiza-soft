@@ -7,15 +7,16 @@
         <div class="grid md:grid-cols-2 gap-4">
             <div class="space-y-2">
                 <Label for="preco">Preço</Label>
-                <NumberField id="preco" required v-model:modelValue="formularioStore.data.preco" :min="0" :step="0.01" :format-options="{
-                    style: 'currency',
-                    currency: 'BRL',
-                    maximumFractionDigits: 2,
-                    compactDisplay: 'short',
-                    notation: 'compact',
-                    currencyDisplay: 'narrowSymbol',
-                    currencySign: 'standard',
-                }">
+                <NumberField id="preco" required v-model:modelValue="formularioStore.data.preco" :min="0" :step="0.01"
+                    :format-options="{
+                        style: 'currency',
+                        currency: 'BRL',
+                        maximumFractionDigits: 2,
+                        compactDisplay: 'short',
+                        notation: 'compact',
+                        currencyDisplay: 'narrowSymbol',
+                        currencySign: 'standard',
+                    }">
                     <NumberFieldContent>
                         <NumberFieldDecrement />
                         <NumberFieldInput class="bg-secondary" />
@@ -42,12 +43,22 @@
         <div class="grid md:grid-cols-2 gap-4">
             <div class="space-y-2">
                 <Label for="codigoBarra">Código de barra </Label>
-                <div class="flex w-full max-w-sm items-center gap-1.5">
-                    <Input id="codigoBarra" type="text" placeholder="Código de barra"
+                <div class="flex w-full max-w-sm items-center">
+                    <Input class="rounded-none rounded-l-md" id="codigoBarra" type="text" placeholder="Código de barra"
                         v-model="formularioStore.data.codigoBarra" />
-                    <Button type="button" variant="default" @click="generateCodigoBarra" class="w-min flex-1">
-                        <Sparkles class="w-4 h-4" />
-                    </Button>
+                    <TooltipProvider>
+                        <Tooltip :delayDuration="200">
+                            <TooltipTrigger as-child>
+                                <Button type="button" variant="outline" @click="generateCodigoBarra"
+                                    class="w-min flex-1 rounded-none rounded-r-md">
+                                    <Sparkles class="w-4 h-4" />
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>Gerar Código de Barra</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
                 </div>
             </div>
             <div class="space-y-2">
@@ -140,6 +151,7 @@ import { CategoriasRepository } from "@/repositories/patrimonio/produtos/categor
 import { useInfosProdutoStore } from "@/stores/patrimonio/produtos/infosProdutosStore";
 import { gerarCodigoEAN13 } from "@/utils/geradorCodigoBarra";
 import { NumberField, NumberFieldContent, NumberFieldDecrement, NumberFieldIncrement, NumberFieldInput } from "@/components/ui/number-field";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 const formularioStore = useProdutoFormularioStore();
 const mainStore = useProdutoStore();
 const infosProdutos = useInfosProdutoStore();
