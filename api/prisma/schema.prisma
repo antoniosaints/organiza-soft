@@ -8,36 +8,36 @@ datasource db {
 }
 
 model Usuario {
-  id             Int                @id @default(autoincrement())
-  contaSistemaId Int
-  ContaSistema   ContasSistema      @relation(fields: [contaSistemaId], references: [id])
-  nome           String             @db.VarChar(100)
-  email          String             @db.VarChar(100)
-  senha          String             @db.VarChar(255)
-  regra          Permissao
-  anotacoes      String?            @db.Text
-  telefone       String?            @db.VarChar(20)
-  status         StatusUsuario      @default(ativo)
-  dataCriacao    DateTime           @default(now())
-  Contas         FinanceiroContas[]
-  Vendas         Vendas[]
+  id                  Int                   @id @default(autoincrement())
+  contaSistemaId      Int
+  ContaSistema        ContasSistema         @relation(fields: [contaSistemaId], references: [id])
+  nome                String                @db.VarChar(100)
+  email               String                @db.VarChar(100)
+  senha               String                @db.VarChar(255)
+  regra               Permissao
+  anotacoes           String?               @db.Text
+  telefone            String?               @db.VarChar(20)
+  status              StatusUsuario         @default(ativo)
+  dataCriacao         DateTime              @default(now())
+  Contas              FinanceiroContas[]
+  Vendas              Vendas[]
+  FinanceiroTransacao FinanceiroTransacao[]
 
   @@unique([email, contaSistemaId, senha])
 }
 
 model Cliente {
-  id             Int                   @id @default(autoincrement())
+  id             Int           @id @default(autoincrement())
   contaSistemaId Int
-  ContaSistema   ContasSistema         @relation(fields: [contaSistemaId], references: [id])
-  nome           String                @db.VarChar(100)
-  email          String                @db.VarChar(100)
-  telefone       String?               @db.VarChar(20)
-  endereco       String?               @db.Text
-  dataCriacao    DateTime              @default(now())
-  status         StatusUsuario         @default(ativo)
+  ContaSistema   ContasSistema @relation(fields: [contaSistemaId], references: [id])
+  nome           String        @db.VarChar(100)
+  email          String        @db.VarChar(100)
+  telefone       String?       @db.VarChar(20)
+  endereco       String?       @db.Text
+  dataCriacao    DateTime      @default(now())
+  status         StatusUsuario @default(ativo)
   dataBloqueio   DateTime?
   Assinatura     Assinatura[]
-  Transacao      FinanceiroTransacao[]
   Vendas         Vendas[]
 }
 
@@ -100,14 +100,25 @@ model FinanceiroTransacao {
   id                     Int                      @id @default(autoincrement())
   contaSistemaId         Int
   ContaSistema           ContasSistema            @relation(fields: [contaSistemaId], references: [id])
-  clienteId              Int
+  codigoLancamento       String
   valor                  Float                    @default(0)
   descricao              String?                  @db.Text
   categoriasId           Int
   contaId                Int
   dataEfetivado          DateTime?
+  usuarioEfetivou        Int?
+  dataVencimento         DateTime
   dataLancamento         DateTime                 @default(now())
+  usuarioLancamento      Int
+  codigoNfe              String?
+  codigo_servico         String?
+  taxaJuros              Float?                   @default(0)
+  juros                  Float?                   @default(0)
+  taxaDesconto           Float?                   @default(0)
   desconto               Float?                   @default(0)
+  moeda                  String?                  @default("BRL")
+  taxaCambio             Float?                   @default(0)
+  referenciaExterna      String?
   formaPagamentoId       Int
   natureza               NaturezaTransacao
   operacao               TipoOperacao
@@ -115,15 +126,17 @@ model FinanceiroTransacao {
   status                 StatusTransacao          @default(pendente)
   valorFinal             Float                    @default(0)
   Categoria              FinanceiroCategorias     @relation(fields: [categoriasId], references: [id], onDelete: Restrict)
-  Cliente                Cliente                  @relation(fields: [clienteId], references: [id], onDelete: Restrict)
   Conta                  FinanceiroContas         @relation(fields: [contaId], references: [id], onDelete: Restrict)
   FormaPagamento         FianceiroFormasPagamento @relation(fields: [formaPagamentoId], references: [id], onDelete: Restrict)
+  UsuarioLancamento      Usuario                  @relation(fields: [usuarioLancamento], references: [id], onDelete: Restrict)
   FinanceiroParcelamento FinanceiroParcelamento[]
 
+  @@unique([codigoLancamento, contaSistemaId])
   @@index([categoriasId], map: "Transacao_categoriasId_fkey")
-  @@index([clienteId], map: "Transacao_clienteId_fkey")
   @@index([contaId], map: "Transacao_contaId_fkey")
   @@index([formaPagamentoId], map: "Transacao_formaPagamentoId_fkey")
+  @@index([dataLancamento, dataEfetivado, dataVencimento], map: "Transacao_datasIndex_fkey")
+  @@index([status], map: "Transacao_Status_fkey")
 }
 
 model FinanceiroParcelas {
