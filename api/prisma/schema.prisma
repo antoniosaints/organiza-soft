@@ -130,6 +130,7 @@ model FinanceiroTransacao {
   FormaPagamento         FianceiroFormasPagamento @relation(fields: [formaPagamentoId], references: [id], onDelete: Restrict)
   UsuarioLancamento      Usuario                  @relation(fields: [usuarioLancamento], references: [id], onDelete: Restrict)
   FinanceiroParcelamento FinanceiroParcelamento[]
+  VendasOnLancamentos    VendasOnLancamentos[]
 
   @@unique([codigoLancamento, contaSistemaId])
   @@index([categoriasId], map: "Transacao_categoriasId_fkey")
@@ -358,24 +359,33 @@ model PatrimonioComprasFornecedores {
 }
 
 model Vendas {
-  id               Int                @id @default(autoincrement())
-  uniqueId         String             @unique
-  contaSistemaId   Int
-  ContaSistema     ContasSistema      @relation(fields: [contaSistemaId], references: [id])
-  clienteId        Int
-  Cliente          Cliente            @relation(fields: [clienteId], references: [id], onDelete: Restrict)
-  vendedorId       Int
-  Vendedor         Usuario            @relation(fields: [vendedorId], references: [id], onDelete: Restrict)
-  valor            Float              @db.Double
-  desconto         Float              @default(0) @db.Float
-  valorDesconto    Float              @default(0) @db.Double
-  status           StatusVendas
-  descricao        String?            @db.Text
-  metodoPagamento  String             @db.VarChar(50)
-  dataCriacao      DateTime           @default(now())
-  dataAtualizada   DateTime           @updatedAt
-  VendasPagamentos VendasPagamentos[]
-  VendasRelatorios VendasRelatorios[]
+  id                  Int                   @id @default(autoincrement())
+  uniqueId            String                @unique
+  contaSistemaId      Int
+  ContaSistema        ContasSistema         @relation(fields: [contaSistemaId], references: [id])
+  clienteId           Int
+  Cliente             Cliente               @relation(fields: [clienteId], references: [id], onDelete: Restrict)
+  vendedorId          Int
+  Vendedor            Usuario               @relation(fields: [vendedorId], references: [id], onDelete: Restrict)
+  valor               Float                 @db.Double
+  desconto            Float                 @default(0) @db.Float
+  valorDesconto       Float                 @default(0) @db.Double
+  status              StatusVendas
+  descricao           String?               @db.Text
+  metodoPagamento     String                @db.VarChar(50)
+  dataCriacao         DateTime              @default(now())
+  dataAtualizada      DateTime              @updatedAt
+  VendasPagamentos    VendasPagamentos[]
+  VendasRelatorios    VendasRelatorios[]
+  VendasOnLancamentos VendasOnLancamentos[]
+}
+
+model VendasOnLancamentos {
+  id           Int                 @id @default(autoincrement())
+  vendaId      Int
+  Venda        Vendas              @relation(references: [id], fields: [vendaId], onDelete: Restrict)
+  lancamentoId Int
+  Lancamento   FinanceiroTransacao @relation(references: [id], fields: [lancamentoId], onDelete: Restrict)
 }
 
 model VendasRelatorios {
