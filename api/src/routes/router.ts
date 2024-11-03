@@ -12,6 +12,7 @@ import fornecedoresRouter from "./patrimonio/fornecedores_router";
 import armazensRouter from "./patrimonio/armazens_router";
 import mercadopagoRouter from "./financeiro/mercadopago/mercadopago_router";
 import vendasRouter from "./vendas/vendas_router";
+import codigoBarraRouter from "./patrimonio/codigo_barra_router";
 
 const router = Router();
 // Rotas de assinatura
@@ -39,6 +40,7 @@ router.use("/patrimonio/produto", auth_middleware, accountMiddleware, produtosRo
 router.use("/patrimonio/categoria", auth_middleware, accountMiddleware, produtoCategoriaRouter);
 router.use("/patrimonio/fornecedor", auth_middleware, accountMiddleware, fornecedoresRouter);
 router.use("/patrimonio/armazen", auth_middleware, accountMiddleware, armazensRouter);
+router.use("/patrimonio/gerarCodigoBarra", auth_middleware, accountMiddleware, codigoBarraRouter);
 // Rotas de vendas
 router.use("/vendas", auth_middleware, accountMiddleware, vendasRouter);
 

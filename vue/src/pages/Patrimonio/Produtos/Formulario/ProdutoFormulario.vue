@@ -2,7 +2,7 @@
     <form @submit.prevent="handleSubmit" class="space-y-4">
         <div class="space-y-2">
             <Label for="produto">Produto</Label>
-            <Input id="produto" placeholder="Nome do produto" v-model="formularioStore.data.produto" required />
+            <Input id="produto" placeholder="Nome do produto" minlength="2" v-model="formularioStore.data.produto" required />
         </div>
         <div class="grid md:grid-cols-2 gap-4">
             <div class="space-y-2">
@@ -42,9 +42,9 @@
         </div>
         <div class="grid md:grid-cols-2 gap-4">
             <div class="space-y-2">
-                <Label for="codigoBarra">Código de barra </Label>
+                <Label for="codigoBarra">Código de barra (EAN-13)</Label>
                 <div class="flex w-full max-w-sm items-center">
-                    <Input class="rounded-none rounded-l-md" id="codigoBarra" type="text" placeholder="Código de barra"
+                    <Input class="rounded-none rounded-l-md" id="codigoBarra" type="number" minlength="12" maxlength="13" placeholder="Código de barra"
                         v-model="formularioStore.data.codigoBarra" />
                     <TooltipProvider>
                         <Tooltip :delayDuration="200">
