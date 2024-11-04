@@ -53,63 +53,63 @@
                             </NumberField>
                         </div>
                     </div>
-                            <div class="space-y-2">
-                                <Label>Adicionar Produtos</Label>
-                                <div class="flex space-x-2">
-                                    <SelectSearchAjax labelSearch="Selecione uma categoria" v-model="produtoSelecionado" :ajax="fetchUsuarios" />
-                                    <NumberField id="age" :default-value="1" v-model.number="quantidade" :min="0">
-                                        <NumberFieldContent>
-                                        <NumberFieldDecrement />
-                                        <NumberFieldInput class="bg-secondary"/>
-                                        <NumberFieldIncrement />
-                                        </NumberFieldContent>
-                                    </NumberField>
-                                    <Button @click="adicionarAoCarrinho" :disabled="!produtoSelecionado">
-                                        <PlusCircle class="mr-2 h-4 w-4" />
-                                        Adicionar
+                    <div class="space-y-2">
+                        <Label>Adicionar Produtos</Label>
+                        <div class="flex space-x-2">
+                            <SelectSearchAjax labelSearch="Selecione uma categoria" v-model="produtoSelecionado" :ajax="fetchUsuarios" />
+                            <NumberField id="age" :default-value="1" v-model.number="quantidade" :min="0">
+                                <NumberFieldContent>
+                                <NumberFieldDecrement />
+                                <NumberFieldInput class="bg-secondary"/>
+                                <NumberFieldIncrement />
+                                </NumberFieldContent>
+                            </NumberField>
+                            <Button @click="adicionarAoCarrinho" :disabled="!produtoSelecionado">
+                                <PlusCircle class="mr-2 h-4 w-4" />
+                                Adicionar
+                            </Button>
+                        </div>
+                    </div>
+
+                    <!-- Carrinho -->
+                    <div v-if="carrinho.length > 0" class="space-y-2">
+                        <Label>Itens da venda</Label>
+                        <ul class="space-y-2">
+                            <li v-for="item in carrinho" :key="item.id"
+                                class="flex items-center justify-between">
+                                <span>{{ item.nome }} - R$ {{ item.preco.toFixed(2) }}</span>
+                                <div class="flex items-center space-x-2">
+                                    <Button size="icon" variant="outline"
+                                        @click="atualizarQuantidade(item.id, item.quantidade - 1)">
+                                        <MinusCircle class="h-4 w-4" />
+                                    </Button>
+                                    <span>{{ item.quantidade }}</span>
+                                    <Button size="icon" variant="outline"
+                                        @click="atualizarQuantidade(item.id, item.quantidade + 1)">
+                                        <PlusCircle class="h-4 w-4" />
+                                    </Button>
+                                    <Button size="icon" variant="destructive"
+                                        @click="removerDoCarrinho(item.id)">
+                                        <Trash2 class="h-4 w-4" />
                                     </Button>
                                 </div>
-                            </div>
+                            </li>
+                        </ul>
+                    </div>
 
-                            <!-- Carrinho -->
-                            <div v-if="carrinho.length > 0" class="space-y-2">
-                                <Label>Itens da venda</Label>
-                                <ul class="space-y-2">
-                                    <li v-for="item in carrinho" :key="item.id"
-                                        class="flex items-center justify-between">
-                                        <span>{{ item.nome }} - R$ {{ item.preco.toFixed(2) }}</span>
-                                        <div class="flex items-center space-x-2">
-                                            <Button size="icon" variant="outline"
-                                                @click="atualizarQuantidade(item.id, item.quantidade - 1)">
-                                                <MinusCircle class="h-4 w-4" />
-                                            </Button>
-                                            <span>{{ item.quantidade }}</span>
-                                            <Button size="icon" variant="outline"
-                                                @click="atualizarQuantidade(item.id, item.quantidade + 1)">
-                                                <PlusCircle class="h-4 w-4" />
-                                            </Button>
-                                            <Button size="icon" variant="destructive"
-                                                @click="removerDoCarrinho(item.id)">
-                                                <Trash2 class="h-4 w-4" />
-                                            </Button>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
+                    <!-- Descrição -->
+                    <div class="space-y-2">
+                        <Label for="descricao">Descrição</Label>
+                        <Textarea rows="4" id="descricao" v-model="descricao"
+                            placeholder="Adicione uma descrição para a venda" />
+                    </div>
 
-                            <!-- Descrição -->
-                            <div class="space-y-2">
-                                <Label for="descricao">Descrição</Label>
-                                <Textarea rows="4" id="descricao" v-model="descricao"
-                                    placeholder="Adicione uma descrição para a venda" />
-                            </div>
-
-                            <div>
-                                <div class="text-2xl font-bold">
-                                Total: R$ {{calcularTotal().toFixed(2)}}
-                                </div>
-                                <Button @click=(handleSheetOpenChange(false))>Finalizar Venda</Button>
-                            </div>
+                    <div>
+                        <div class="text-2xl font-bold">
+                        Total: R$ {{calcularTotal().toFixed(2)}}
+                        </div>
+                        <Button @click=(handleSheetOpenChange(false))>Finalizar Venda</Button>
+                    </div>
                 </div>
             </SheetContent>
         </Sheet>

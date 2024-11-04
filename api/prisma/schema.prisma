@@ -27,18 +27,56 @@ model Usuario {
 }
 
 model Cliente {
-  id             Int           @id @default(autoincrement())
-  contaSistemaId Int
-  ContaSistema   ContasSistema @relation(fields: [contaSistemaId], references: [id])
-  nome           String        @db.VarChar(100)
-  email          String        @db.VarChar(100)
-  telefone       String?       @db.VarChar(20)
-  endereco       String?       @db.Text
-  dataCriacao    DateTime      @default(now())
-  status         StatusUsuario @default(ativo)
-  dataBloqueio   DateTime?
-  Assinatura     Assinatura[]
-  Vendas         Vendas[]
+  id                    Int                   @id @default(autoincrement())
+  contaSistemaId        Int
+  ContaSistema          ContasSistema         @relation(fields: [contaSistemaId], references: [id])
+  nome                  String                @db.VarChar(100)
+  email                 String                @db.VarChar(100)
+  telefone              String?               @db.VarChar(20)
+  telefoneAlternativo   String?
+  endereco              String?               @db.Text
+  status                StatusUsuario         @default(ativo)
+  cpfCnpj               String?
+  tipoCliente           TiposClientes         @default(fisica)
+  instagram             String?
+  site                  String?
+  canalPreferidoContato CanalPreferidoContato @default(telefone)
+  cep                   String?
+  estado                String?               @db.Char(2)
+  cidade                String?               @db.VarChar(100)
+  pais                  String?               @db.VarChar(40)
+  saldoDevedor          Float?                @default(0)
+  limiteCredito         Float?                @default(0)
+  segmento              String?
+  scoreFinanceiro       Int?
+  dataBloqueio          DateTime?
+  dataUltimaCompra      DateTime?
+  dataCriacao           DateTime              @default(now())
+  Assinatura            Assinatura[]
+  Vendas                Vendas[]
+
+  @@unique([contaSistemaId, cpfCnpj], map: "uniqueContaIdECpfCnpj")
+}
+
+enum TiposClientes {
+  fisica
+  juridica
+}
+
+enum CanalPreferidoContato {
+  email
+  telefone
+  whatsapp
+  instagram
+  facebook
+  twitter
+  telegram
+  sms
+  chat
+  linkedin
+  skype
+  correio
+  outro
 }
 
 model Assinatura {
