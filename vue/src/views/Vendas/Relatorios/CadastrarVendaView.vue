@@ -2,8 +2,8 @@
     <div>
         <Sheet v-model:open="isOpen" @open-change="handleSheetOpenChange">
             <SheetTrigger asChild>
-                <Button>
-                    <Plus class="mr-2 h-4 w-4" />
+                <Button size="sm">
+                    <Tag class="w-3 h-3 mr-2" />
                     Nova Venda
                 </Button>
             </SheetTrigger>
@@ -118,7 +118,7 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
-import { CalendarIcon, MinusCircle, Plus, PlusCircle, Trash2 } from 'lucide-vue-next';
+import { CalendarIcon, MinusCircle, PlusCircle, Tag, Trash2 } from 'lucide-vue-next';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';

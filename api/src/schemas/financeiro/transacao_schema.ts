@@ -23,24 +23,22 @@ const createTransacao = zodUtil.object({
     invalid_type_error: "O contaId deve ser um number",
   }),
   dataEfetivado: zodUtil
-    .date({
-      invalid_type_error: "A dataEfetivado deve ser uma date",
+    .string({
+      invalid_type_error: "A dataEfetivado deve ser uma data",
     })
+    .transform((val) => new Date(val))
     .optional(),
   dataVencimento: zodUtil
-    .date({
-      invalid_type_error: "A dataVencimento deve ser uma date",
+    .string({
+      invalid_type_error: "A dataVencimento deve ser uma data",
       required_error: "A dataVencimento é obrigatória",
-    }),
+    })
+    .transform((val) => new Date(val)),
   usuarioEfetivou: zodUtil
     .number({
       invalid_type_error: "O usuarioEfetivou deve ser um number",
     })
     .optional(),
-  dataLancamento: zodUtil.date({
-    required_error: "A dataLancamento é obrigatória",
-    invalid_type_error: "A dataLancamento deve ser uma date",
-  }),
   usuarioLancamento: zodUtil.number({
     invalid_type_error: "O usuarioLancamento deve ser um number",
     required_error: "O usuarioLancamento é obrigatório",
@@ -155,23 +153,20 @@ const updateTransacao = zodUtil.object({
     })
     .optional(),
   dataEfetivado: zodUtil
-    .date({
-      invalid_type_error: "A dataEfetivado deve ser uma date",
+    .string({
+      invalid_type_error: "A dataEfetivado deve ser uma data",
     })
+    .transform((val) => new Date(val))
     .optional(),
   dataVencimento: zodUtil
-    .date({
-      invalid_type_error: "A dataVencimento deve ser uma date",
+    .string({
+      invalid_type_error: "A dataVencimento deve ser uma data",
     })
+    .transform((val) => new Date(val))
     .optional(),
   usuarioEfetivou: zodUtil
     .number({
       invalid_type_error: "O usuarioEfetivou deve ser um number",
-    })
-    .optional(),
-  dataLancamento: zodUtil
-    .date({
-      invalid_type_error: "A dataLancamento deve ser uma date",
     })
     .optional(),
   formaPagamentoId: zodUtil

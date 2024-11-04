@@ -52,6 +52,7 @@ export const getVendas = async (req: Request, res: Response) => {
       prismaService.vendas.findMany({
         skip: offset || 0,
         take: Number(limit) || 10,
+        orderBy: { dataCriacao: "desc" },
         include: {
           Cliente: true,
         },
@@ -270,3 +271,17 @@ export const deleteVenda = async (req: Request, res: Response) => {
     await prismaService.$disconnect();
   }
 };
+export const getResumoVendas = async (req: Request, res: Response) => {
+  try {
+    const vendas = await prismaService.vendas.findMany({
+      where: {
+        contaSistemaId: req.body.contaSistemaId,
+      },
+    });
+    ResponseService.success(res, { data: vendas });
+  } catch (error: any) {
+    HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
+  }
+}

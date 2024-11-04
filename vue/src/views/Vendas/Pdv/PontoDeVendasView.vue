@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Plus, Minus, ShoppingCart, User, ShoppingBasket, Trash, CreditCard, Package } from "lucide-vue-next"
+import { Plus, Minus, ShoppingCart, User, ShoppingBasket, Trash, CreditCard, Package, ExternalLink } from "lucide-vue-next"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -20,9 +20,12 @@ onMounted(() => storePDV.getProdutos())
         <div class="flex-1">
             <Card>
                 <CardHeader>
-                    <CardTitle class="flex items-center">
-                        <ShoppingBasket class="mr-2" />
-                        Produtos
+                    <CardTitle class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <ShoppingBasket class="mr-2" />
+                            Produtos
+                        </div>
+                        <RouterLink to="/app/vendas/relatorio" class="text-sm bg-transparent text-blue-400 hover:text-blue-600 cursor-pointer transition-all duration-300 flex items-center gap-2"><ExternalLink class="w-4 h-4" /> Vendas</RouterLink>
                     </CardTitle>
                     <Input type="search" placeholder="Buscar produtos..." v-model="storePDV.buscarItem" class="mt-2" />
                 </CardHeader>

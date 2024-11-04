@@ -6,7 +6,22 @@
                 <p class="text-sm font-normal text-foreground hidden md:flex">Listagem de todas as vendas do sistema
                 </p>
             </div>
-
+            <div class="flex space-x-2">
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger>
+                            <RouterLink to="/app/vendas/pdv">
+                                <Button size="sm" variant="outline" class="flex gap-2">
+                                    <ExternalLink class="w-4 h-4" />
+                                    PDV
+                                </Button>
+                            </RouterLink>
+                        </TooltipTrigger>
+                        <TooltipContent>Filtrar registros</TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
+                <CadastrarVendaView />
+            </div>
         </div>
         <div class="flex space-x-1 w-full flex-col md:flex-row justify-between gap-4 mb-4">
             <div class="flex space-x-2 md:w-1/2 w-full">
@@ -182,7 +197,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, CircleChevronDown, FilterX, Search, ShoppingCart, Trash2 } from "lucide-vue-next";
+import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, CircleChevronDown, ExternalLink, FilterX, Search, ShoppingCart, Trash2 } from "lucide-vue-next";
 import { Label } from "@/components/ui/label";
 import { onMounted, watch, computed, ref } from "vue";
 import { Input } from "@/components/ui/input";
