@@ -54,7 +54,8 @@ export const getTransacoes = async (req: Request, res: Response) => {
           select: {
             categoria: true
           }
-        }
+        },
+        FinanceiroParcelamento: true
       }
     });
     ResponseService.success(res, { data: transacoes });

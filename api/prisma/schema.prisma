@@ -188,20 +188,28 @@ model FinanceiroParcelas {
 }
 
 model FinanceiroParcelamento {
-  id              Int                 @id @default(autoincrement())
+  id              Int                   @id @default(autoincrement())
   contaSistemaId  Int
-  ContaSistema    ContasSistema       @relation(fields: [contaSistemaId], references: [id])
+  ContaSistema    ContasSistema         @relation(fields: [contaSistemaId], references: [id])
+  tipo            FinanceiroTipoParcela @default(parcela)
   transacaoId     Int
   parcela         Int
-  status          StatusTransacao     @default(pendente)
+  status          StatusTransacao       @default(pendente)
   valor           Float
   desconto        Float?
   valorRecebido   Float?
   dataRecebimento DateTime?
-  dataCadastro    DateTime            @default(now())
-  Transacao       FinanceiroTransacao @relation(fields: [transacaoId], references: [id], onDelete: Cascade)
+  dataVencimento  DateTime
+  dataCadastro    DateTime              @default(now())
+  Transacao       FinanceiroTransacao   @relation(fields: [transacaoId], references: [id], onDelete: Cascade)
 
   @@index([transacaoId], map: "Parcelamento_transacaoId_fkey")
+}
+
+enum FinanceiroTipoParcela {
+  entrada
+  parcela
+  ajuste
 }
 
 model FianceiroFormasPagamento {
