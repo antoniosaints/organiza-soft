@@ -25,6 +25,6 @@ const statusClasses = computed(() => {
         processando: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200 hover:bg-orange-300 dark:hover:bg-orange-700",
         estornado: "bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200 hover:bg-cyan-300 dark:hover:bg-cyan-700",
     };
-    return `${colors[props.status]} px-2 py-1 text-xs rounded-md`;
+    return `${colors[props.status]} px-2 py-1 rounded-md`;
 });
 </script>

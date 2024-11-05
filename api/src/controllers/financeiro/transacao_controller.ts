@@ -44,6 +44,13 @@ export const getTransacoes = async (req: Request, res: Response) => {
       where: {
         contaSistemaId: req.body.contaSistemaId,
       },
+      include: {
+        FormaPagamento: {
+          select: {
+            forma: true,
+          }
+        }
+      }
     });
     ResponseService.success(res, { data: transacoes });
   } catch (error: any) {

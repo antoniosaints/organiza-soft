@@ -68,17 +68,17 @@
                 <TableHeader>
                     <TableRow class="bg-secondary">
                         <TableHead></TableHead>
-                        <TableHead>Venda</TableHead>
+                        <TableHead>Tipo</TableHead>
+                        <TableHead>Lançamento</TableHead>
                         <TableHead>Valor</TableHead>
                         <TableHead class="hidden md:table-cell">Status</TableHead>
-                        <TableHead class="hidden md:table-cell">Cliente</TableHead>
                         <TableHead class="hidden md:table-cell">Pagamento</TableHead>
-                        <TableHead class="hidden md:table-cell">Criação</TableHead>
+                        <TableHead class="hidden md:table-cell">Vencimento</TableHead>
                         <TableHead class="text-right">Ações</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    <LancamentosRow v-for="data in mainStore.vendas" :key="data.id" :data="data" />
+                    <LancamentosRow v-for="data in mainStore.lancamentos" :key="data.id" :data="data" />
                 </TableBody>
             </Table>
             <div v-else class="w-full text-blue-100 flex flex-col justify-center items-center">
@@ -188,20 +188,19 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { LancamentosRow } from ".";
 import DetalhesProduto from "./Infos/DetalhesProduto.vue";
-import { useVendasRelatorioStore } from "@/stores/vendas/relatorios/vendasRelatorioStore";
 import CompartilharLink from "@/views/Vendas/Pdv/CompartilharLink.vue";
 import DateRangePicker from "@/components/customs/DateRangePicker.vue";
+import { useLancamentosStore } from "@/stores/financeiro/lancamentos/lancamentoStore";
 
-const mainStore = useVendasRelatorioStore();
+const mainStore = useLancamentosStore();
 const perPage = computed(() => mainStore.limit);
 const rangeStart = computed(() => (mainStore.page - 1) * Number(mainStore.limit) + 1);
-const rangeEnd = computed(() => (mainStore.page - 1) * Number(mainStore.limit) + mainStore.vendas.length);
-const dataExists = computed(() => mainStore.vendas.length > 0);
+const rangeEnd = computed(() => (mainStore.page - 1) * Number(mainStore.limit) + mainStore.lancamentos.length);
+const dataExists = computed(() => mainStore.lancamentos.length > 0);
 
 watch(perPage, () => {
     loadDataChange(1);
 });
-
 
 interface DatePickerReturn {
     start: string,
@@ -216,7 +215,7 @@ watch(() => [dateFilter.value?.start, dateFilter.value?.end], () => {
         endDate.setHours(23, 50, 0, 0);
         mainStore.endDate = endDate.toISOString()
         mainStore.page = 1
-        mainStore.getVendas()
+        mainStore.getLancamentos()
     }
 })
 
@@ -232,7 +231,7 @@ const clearFilterDate = () => {
     dateFilter.value = undefined
     mainStore.startDate = ""
     mainStore.endDate = ""
-    mainStore.getVendas()
+    mainStore.getLancamentos()
 }
 
 const openDialogMultilineDelete = ref(false);
@@ -244,12 +243,12 @@ const deleteMultilineSelects = async () => {
 
 const loadDataChange = async (paginate: number) => {
     mainStore.page = paginate || 1;
-    await mainStore.getVendas();
+    await mainStore.getLancamentos();
 };
 
 const reloadTable = async () => {
     mainStore.page = 1;
-    await mainStore.getVendas();
+    await mainStore.getLancamentos();
 };
 
 onMounted(() => {

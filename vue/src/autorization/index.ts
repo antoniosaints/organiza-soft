@@ -7,6 +7,7 @@ import { ProdutosPermissoesACL } from './patrimonio/produtos_permissao';
 import { VendasPermissoesACL } from './vendas/vendas_permissao';
 import IUsuario from '@/types/administracao/usuarios/IUsuario';
 import { IRegra } from '@/types/administracao/usuarios/IRegra';
+import { LancamentosPermissoesACL } from './financeiro/lancamento_permissao';
 
 export class Autorize {
     static can(ability: IAbility, entity: IEntity): boolean | void {
@@ -22,6 +23,8 @@ export class Autorize {
                 return ProdutosPermissoesACL.can(userData, ability, entity);
             case 'vendas':
                 return VendasPermissoesACL.can(userData, ability, entity);
+            case 'lancamentos':
+                return LancamentosPermissoesACL.can(userData, ability, entity);
             default:
                 return false;
         }
