@@ -49,6 +49,11 @@ export const getTransacoes = async (req: Request, res: Response) => {
           select: {
             forma: true,
           }
+        },
+        Categoria: {
+          select: {
+            categoria: true
+          }
         }
       }
     });

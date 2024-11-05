@@ -6,7 +6,9 @@
         <TableCell><span
                 class="px-2 py-1 rounded-md text-secondary-foreground flex items-center w-min bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 hover:bg-green-300 dark:hover:bg-green-700"
                 :class="{ 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200 hover:bg-red-300 dark:hover:bg-red-700': data.natureza === 'despesa' }">
-                <ArrowUpDown class="w-3 h-3 mr-1" /> {{ data.natureza.charAt(0).toUpperCase() + data.natureza.slice(1) }}
+                <CircleArrowOutDownLeft v-if="data.natureza === 'receita'" class="w-3 h-3 mr-1" />
+                <CircleArrowOutUpRight v-else class="w-3 h-3 mr-1" /> 
+                {{ data.natureza.charAt(0).toUpperCase() + data.natureza.slice(1) }}
             </span>
         </TableCell>
         <TableCell>
@@ -26,6 +28,11 @@
             </TooltipProvider>
         </TableCell>
         <TableCell class="font-bold">{{ formatRealValue(data.valor - data.desconto!) }}</TableCell>
+        <TableCell class="font-bold hidden md:table-cell">
+            <div class="flex items-center bg-secondary px-2 py-1 w-min text-primary-foreground rounded-md">
+                <ChartPie class="w-3 h-3 mr-1" /> {{ data.Categoria?.categoria }}
+            </div>
+        </TableCell>
         <TableCell class="hidden md:table-cell">
             <LancamentosBadge :status="data.status" />
         </TableCell>
@@ -48,7 +55,7 @@ import { Button } from "@/components/ui/button";
 import { computed } from "vue";
 import { Checkbox } from "@/components/ui/checkbox";
 import { LancamentosAction, LancamentosBadge } from ".";
-import { ArrowUpDown, CreditCard, Receipt, Tag } from "lucide-vue-next";
+import { ChartPie, CircleArrowOutDownLeft, CircleArrowOutUpRight, CreditCard, Receipt } from "lucide-vue-next";
 import { useVendasFormularioStore } from "@/stores/vendas/relatorios/vendasFormularioStore";
 import { formatDateToPtbr, formatRealValue } from "@/utils/formatterUtil";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";

@@ -71,6 +71,7 @@
                         <TableHead>Tipo</TableHead>
                         <TableHead>Lançamento</TableHead>
                         <TableHead>Valor</TableHead>
+                        <TableHead class="hidden md:table-cell">Categoria</TableHead>
                         <TableHead class="hidden md:table-cell">Status</TableHead>
                         <TableHead class="hidden md:table-cell">Pagamento</TableHead>
                         <TableHead class="hidden md:table-cell">Vencimento</TableHead>
