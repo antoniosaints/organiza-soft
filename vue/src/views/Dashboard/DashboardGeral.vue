@@ -353,7 +353,7 @@ function calcularTotalPorMes(): IDataOutput[] {
         total: totaisPorMes[mes],
     }));
 }
-
+calcularTotalPorMes()
 
 const data = [
     { name: 'Jan', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },

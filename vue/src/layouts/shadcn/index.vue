@@ -10,7 +10,6 @@
                     <PanelLeftClose />
                 </button>
             </div>
-            <!-- <Sidebar /> -->
              <SidebarIteravel />
             <div class="mt-auto px-3 py-4 bg-sidebar">
                 <Card v-if="!loginStore.isProAccount && loginStore.isAdminUser">
@@ -74,8 +73,6 @@ import { LoginService } from '@/services/login/loginService';
 import { onMounted } from 'vue';
 import { onUnmounted } from 'vue';
 import { useLoginStore } from '@/stores/login/loginStore';
-
-import Sidebar from './sidebar.vue';
 import GlobalAlert from './globalAlert.vue';
 import SidebarIteravel from './sidebarIteravel.vue';
 
