@@ -48,9 +48,6 @@ const updateConta = zodUtil.object({
   }).optional(),
   descricao: zodUtil.string({
     invalid_type_error: "A descricao deve ser uma string",
-  }).optional(),
-  contaSistemaId: zodUtil.number({
-    invalid_type_error: "O contaSistemaId deve ser um number",
   }).optional()
 })
 

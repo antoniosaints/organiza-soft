@@ -21,9 +21,6 @@ const updateCategoria = zodUtil.object({
   }).optional(),
   cor: zodUtil.string({
     invalid_type_error: "A cor deve ser uma string",
-  }).optional(),
-  contaSistemaId: zodUtil.number({
-    invalid_type_error: "O contaSistemaId deve ser um number",
   }).optional()
 })
 

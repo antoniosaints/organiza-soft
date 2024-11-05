@@ -4,7 +4,7 @@ import { Response } from "express";
 
 const errosPrisma: Record<string, string> = {
     P2025: "Registro não encontrado",
-    P2003: "Você não pode modificar esse registro pois o mesmo está sendo usado por outros registros",
+    P2003: "Verifique as informações, o registro não pode ser alterado/criado/excluído devido a integridade dos dados",
     P2002: "Já existe um registro salvo com esses valores",
     P1000: "Erro de autenticação entre o banco de dados e o servidor",
     P1001: "Não é possível acessar o servidor de banco de dados",

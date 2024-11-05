@@ -10,9 +10,7 @@
                 {{ data.produto }}
             </Button>
         </TableCell>
-        <TableCell class="font-bold">{{ data.preco.toLocaleString('pt-BR', {
-            style: 'currency',
-            currency: 'BRL' }) }}</TableCell>
+        <TableCell class="font-bold">{{ formatRealValue(data.preco) }}</TableCell>
         <TableCell class="hidden md:table-cell">
             <div class="px-2 py-1 bg-primary text-primary-foreground rounded-md flex items-center w-min">
                 <ScanBarcode class="w-3 h-3 mr-1" />
@@ -40,6 +38,7 @@ import { IPatrimonioProduto } from "@/types/patrimonio/IPatrimonioProduto";
 import { useProdutoFormularioStore } from "@/stores/patrimonio/produtos/produtoFormularioStore";
 import { ProdutosAction } from ".";
 import { Layers, ScanBarcode, Tag } from "lucide-vue-next";
+import { formatDateToPtbr, formatRealValue } from "@/utils/formatterUtil";
 const mainStore = useProdutoStore();
 const formularioStore = useProdutoFormularioStore();
 
@@ -51,22 +50,6 @@ const openDetailsProduct = (id: number) => {
     formularioStore.isModalDetalhesOpen = true
 };
 
-const formatDateToPtbr = (date: string) => {
-    const formated = new Date(date);
-
-    const formattedDate = formated.toLocaleDateString('pt-BR', {
-        timeZone: 'America/Sao_Paulo',
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false // Formato 24h
-    });
-
-    return formattedDate
-}
 const props = defineProps<{
     data: IPatrimonioProduto
 }>();

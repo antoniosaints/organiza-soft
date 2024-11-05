@@ -4,22 +4,32 @@ const pt: ITranslation = {
   sidebar: {
     home: "Dashboard",
     admin: "Administração",
+    users: "Usuários",
+    subscription: "Assinatura",
+    logs: "Logs",
+    assistant: "Assistente IA",
+    playground: "Chat IA",
+    crm: "CRM",
+    resumecrm: "Resumo",
+    clients: "Clientes",
+    reportClients: "Relatório",
     stock: "Patrimônio",
+    others: "Outros",
     all: "Geral",
   },
   profile: {
     privacy: {
       default: {
         title: "Privacidade",
-        description: "Configure suas configurações de privacidade.",
+        description: "Defina como vão funcionar as suas privacidades.",
       },
       reset_password: {
         title: "Redefinir senha",
-        description: "Configure suas configurações de redefinir senha.",
+        description: "Permitir que os usuários escolham uma nova senha.",
       },
       retroactive_entries: {
         title: "Lançamentos retroativos",
-        description: "Configure suas configurações de lançamentos retroativos.",
+        description: "Defina se os usuários podem adicionar lançamentos retroativos.",
       },
     },
     notify: {
@@ -29,12 +39,12 @@ const pt: ITranslation = {
       },
       notify_email: {
         title: "Enviar notificação por email",
-        description: "Configurações de notificação por email.",
+        description: "Permite que as notificações sejam enviadas por email.",
       },
       notify_telegram: {
         title: "Enviar notificação por telegram",
         description:
-          "Configurações de notificação por telegram.",
+          "Permite que as notificações sejam enviadas por telegram.",
       },
     },
     stock: {
@@ -44,7 +54,7 @@ const pt: ITranslation = {
       },
       monitor_stock: {
         title: "Monitorar estoque",
-        description: "Configure o monitorar estoque.",
+        description: "Defina se os estoques serão monitorados.",
       },
     },
     general: {

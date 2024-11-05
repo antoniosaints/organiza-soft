@@ -1,7 +1,15 @@
 import { Request, Response } from "express";
-import { createUser, updateUser } from "../../schemas/administracao/usuarios_schema";
+import {
+  createUser,
+  updateUser,
+} from "../../schemas/administracao/usuarios_schema";
 import { ValidationError } from "../../utils/http/lancar_erro";
-import { HttpErrorService, prismaService, ResponseService, validateSchema } from "../../services";
+import {
+  HttpErrorService,
+  prismaService,
+  ResponseService,
+  validateSchema,
+} from "../../services";
 
 export const createUsuario = async (req: Request, res: Response) => {
   try {
@@ -15,6 +23,8 @@ export const createUsuario = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -22,28 +32,40 @@ export const getUsuarios = async (req: Request, res: Response) => {
   try {
     const { limit, page, search } = req.query;
     const offset = (Number(page) - 1) * Number(limit);
-    const busca = search as string || "";
+    const busca = search as string;
+
+    const whereFilter = {
+      AND: [
+        busca
+          ? {
+              OR: [
+                { nome: { contains: busca } },
+                { email: { contains: busca } },
+              ],
+            }
+          : {},
+        {
+          contaSistemaId: req.body.contaSistemaId,
+        },
+      ],
+    }
 
     const [items, total] = await Promise.all([
       prismaService.usuario.findMany({
         skip: offset || 0,
         take: Number(limit) || 10,
-        where: {
-          OR: [
-            { nome: { contains: busca } },
-            { email: { contains: busca } }
-          ],
-          contaSistemaId: req.body.contaSistemaId
-        },
+        where: whereFilter,
       }),
       prismaService.usuario.count({
-        where: {contaSistemaId: req.body.contaSistemaId},
+        where: whereFilter,
       }),
-    ])
+    ]);
 
     ResponseService.success(res, { data: items, total });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -56,6 +78,8 @@ export const getUsuario = async (req: Request, res: Response) => {
     ResponseService.success(res, { data: usuario });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -63,7 +87,9 @@ export const updateUsuario = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     if (!id) throw new ValidationError("ID obrigatorio");
-    const usuarioToUpdate = await prismaService.usuario.findUnique({ where: { id: Number(id), contaSistemaId: req.body.contaSistemaId } });
+    const usuarioToUpdate = await prismaService.usuario.findUnique({
+      where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
+    });
     if (!usuarioToUpdate) throw new ValidationError("Usuário não encontrado!");
     const validated = validateSchema(updateUser, req.body);
     if (["socio", "proprietario"].includes(usuarioToUpdate.regra)) {
@@ -80,6 +106,8 @@ export const updateUsuario = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -87,12 +115,23 @@ export const deleteUsuario = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     if (!id) throw new ValidationError("ID obrigatorio");
-    const usuarioDelete = await prismaService.usuario.findUnique({ where: { id: Number(id), contaSistemaId: req.body.contaSistemaId } });
-    const canDelete = ["socio", "proprietario"].includes(usuarioDelete?.regra as string);
-    if (canDelete) throw new ValidationError("Esse usuário não pode ser excluído pois ele é um proprietário ou socio!");
-    await prismaService.usuario.delete({ where: { id: Number(id), contaSistemaId: req.body.contaSistemaId } });
+    const usuarioDelete = await prismaService.usuario.findUnique({
+      where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
+    });
+    const canDelete = ["socio", "proprietario"].includes(
+      usuarioDelete?.regra as string
+    );
+    if (canDelete)
+      throw new ValidationError(
+        "Esse usuário não pode ser excluído pois ele é um proprietário ou socio!"
+      );
+    await prismaService.usuario.delete({
+      where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
+    });
     ResponseService.success(res, { message: "Usuario excluido com sucesso" });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };

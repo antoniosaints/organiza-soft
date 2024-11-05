@@ -1,4 +1,4 @@
-import ITransacao from "./ITransacao"
+import ITransacao from "./ILancamentos"
 
 export default interface ICategoria {
     id?: number

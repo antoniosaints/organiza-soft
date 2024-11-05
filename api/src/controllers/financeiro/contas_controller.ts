@@ -1,8 +1,15 @@
-import { Request, Response } from 'express';
-import { createConta as createContaSchema, updateConta as updateContaSchema } from '../../schemas/financeiro/conta_schema';
-import { HttpErrorService, prismaService, ResponseService, validateSchema } from '../../services';
+import { Request, Response } from "express";
+import {
+  createConta as createContaSchema,
+  updateConta as updateContaSchema,
+} from "../../schemas/financeiro/conta_schema";
+import {
+  HttpErrorService,
+  prismaService,
+  ResponseService,
+  validateSchema,
+} from "../../services";
 export const createConta = async (req: Request, res: Response) => {
-  
   try {
     const validated = validateSchema(createContaSchema, req.body);
     const data = await prismaService.financeiroContas.create({
@@ -14,6 +21,8 @@ export const createConta = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -25,6 +34,8 @@ export const getContas = async (req: Request, res: Response) => {
     ResponseService.success(res, { data: contas });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -38,6 +49,8 @@ export const getConta = async (req: Request, res: Response) => {
     ResponseService.success(res, { data: conta });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -55,6 +68,8 @@ export const updateConta = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -70,5 +85,7 @@ export const deleteConta = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };

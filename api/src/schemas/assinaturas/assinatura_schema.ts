@@ -89,12 +89,7 @@ const updateAssinatura = zodUtil.object({
       message: "Data de bloqueio invalida",
     })
     .transform((val) => new Date(val))
-    .optional(),
-  contaSistemaId: zodUtil
-    .number({
-      invalid_type_error: "O contaSistemaId deve ser um number",
-    })
-    .optional(),
+    .optional()
 });
 
 export { createAssinatura, updateAssinatura };

@@ -20,7 +20,7 @@ const navigate = (path: string) => {
         <header class="dark:bg-gray-900 bg-white sticky top-0 left-0 shadow-none">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex max-w-7xl mx-auto h-16 items-center justify-between">
-                    <a href="#" @click.prevent="navigate('/site')" class="text-sm w-full md:w-1/3 font-medium text-foreground">
+                    <a href="#" @click.prevent="navigate('/')" class="text-sm w-full md:w-1/3 font-medium text-foreground">
                         <div class="flex items-center">
                             <Avatar class="h-8 w-8">
                                 <img src="/OS.png" alt="logo" />
@@ -38,7 +38,7 @@ const navigate = (path: string) => {
                         <a href="#about" class="text-sm font-medium text-foreground hover:text-blue-400">
                             Sobre
                         </a>
-                        <a href="#" @click.prevent="navigate('/site/cadastro')"
+                        <a href="#" @click.prevent="navigate('/cadastro')"
                             class="text-sm font-medium text-foreground hover:text-blue-400">
                             Criar conta
                         </a>
@@ -80,7 +80,7 @@ const navigate = (path: string) => {
                         class="block text-md text-center py-2 font-medium text-muted-foreground hover:text-primary">
                         Sobre
                     </a>
-                    <a href="#" @click.prevent="navigate('/site/cadastro'); isMenuOpen = false"
+                    <a href="#" @click.prevent="navigate('/cadastro'); isMenuOpen = false"
                         class="block text-md text-center py-2 font-medium text-muted-foreground hover:text-primary">
                         Criar conta
                     </a>
@@ -100,12 +100,12 @@ const navigate = (path: string) => {
             <nav class="sm:ml-auto flex gap-4 sm:gap-6">
                 <RouterLink
                     class="text-sm bg-transparent text-blue-400 hover:text-blue-600 cursor-pointer transition-all duration-300 hover:underline underline-offset-4"
-                    to="/site/termos">
+                    to="/termos">
                     Termos de Serviço
                 </RouterLink>
                 <RouterLink
                     class="text-sm bg-transparent text-blue-400 hover:text-blue-600 cursor-pointer transition-all duration-300 hover:underline underline-offset-4"
-                    to="/site/politica">
+                    to="/politica">
                     Privacidade
                 </RouterLink>
             </nav>

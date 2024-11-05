@@ -33,22 +33,24 @@
                     </p>
                 </CardContent>
             </Card>
-            <Card>
-                <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle class="text-sm font-medium">
-                        Vendas
-                    </CardTitle>
-                    <CreditCard class="h-4 w-4 text-blue-500" />
-                </CardHeader>
-                <CardContent>
-                    <div class="text-2xl font-bold text-blue-500">
-                        +12,234
-                    </div>
-                    <p class="text-xs text-muted-foreground">
-                        +19% desde o mês passado
-                    </p>
-                </CardContent>
-            </Card>
+            <RouterLink to="/app/vendas/relatorio">
+                <Card>
+                    <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle class="text-sm font-medium">
+                            Vendas
+                        </CardTitle>
+                        <CreditCard class="h-4 w-4 text-blue-500" />
+                    </CardHeader>
+                    <CardContent>
+                        <div class="text-2xl font-bold text-blue-500">
+                            {{ vendas.reduce((total, item) => total + (item.valor - item.valorDesconto!), 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
+                        </div>
+                        <p class="text-xs text-muted-foreground">
+                            +19% desde o mês passado
+                        </p>
+                    </CardContent>
+                </Card>
+            </RouterLink>
             <Card>
                 <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle class="text-sm font-medium">
@@ -73,8 +75,8 @@
                     <CardDescription>Resumo de vendas por mês</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <BarChart class="h-48 py-4" :rounded-corners="4" :data="data" index="name" :categories="['total', 'meta']"
-                        :y-formatter="formateTicketValue" />
+                    <BarChart class="h-48 py-4" :rounded-corners="4" :data="calcularTotalPorMetodoPagamento()" index="index"
+                        :categories="['total']" :y-formatter="formateTicketValue" :custom-tooltip="CustomTooltipChart" />
                 </CardContent>
             </Card>
             <Card class="col-span-1">
@@ -83,8 +85,8 @@
                     <CardDescription>Resumo de assinaturas por mês</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <BarChart class="h-48 py-4" :rounded-corners="4" :data="data" index="name" :categories="['total', 'meta']"
-                        :y-formatter="formateTicketValue" />
+                    <BarChart class="h-48 py-4" :rounded-corners="4" :data="data" index="name"
+                        :categories="['total', 'meta']" :y-formatter="formateTicketValue" />
                 </CardContent>
             </Card>
             <Card class="col-span-1">
@@ -93,8 +95,8 @@
                     <CardDescription>Resumo de lançamentos por mês</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <BarChart class="h-48 py-4" :rounded-corners="4" :data="data" index="name" :categories="['total', 'meta']"
-                        :y-formatter="formateTicketValue" />
+                    <BarChart class="h-48 py-4" :rounded-corners="4" :data="data" index="name"
+                        :categories="['total', 'meta']" :y-formatter="formateTicketValue" />
                 </CardContent>
             </Card>
             <Card class="xl:col-span-2">
@@ -261,21 +263,21 @@
                     <CardTitle>Vendas recentes</CardTitle>
                 </CardHeader>
                 <CardContent class="grid gap-8">
-                    <div v-for="sale in recentSales" :key="sale.email" class="flex items-center gap-4">
+                    <div v-for="sale in vendasRecents" :key="sale.id" class="flex items-center gap-4">
                         <Avatar class="hidden h-9 w-9 sm:flex">
                             <AvatarImage src="/avatars/01.png" alt="Avatar" />
-                            <AvatarFallback>OM</AvatarFallback>
+                            <AvatarFallback>{{ sale.Cliente?.nome.slice(0, 2).toUpperCase() }}</AvatarFallback>
                         </Avatar>
                         <div class="grid gap-1">
                             <p class="text-sm font-medium leading-none">
-                                {{ sale.name }}
+                                {{ sale.Cliente?.nome }}
                             </p>
                             <p class="text-sm text-muted-foreground">
-                                {{ sale.email }}
+                                {{ sale.Cliente?.email }}
                             </p>
                         </div>
                         <div class="ml-auto font-medium">
-                            {{ sale.amount.toFixed(2) }}
+                            {{ (sale.valor - sale.valorDesconto!).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
                         </div>
                     </div>
                 </CardContent>
@@ -284,7 +286,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { reactive } from "vue";
+import { onMounted, ref } from "vue";
 import { Activity, ArrowUpRight, CreditCard, DollarSign, Users } from "lucide-vue-next"
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -292,54 +294,75 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { BarChart } from '@/components/ui/chart-bar'
+import VendasRepository from "@/repositories/vendas/vendasRepository";
+import { IVenda } from "@/types/vendas/IVenda";
+import CustomTooltipChart from "@/components/customs/CustomTooltipChart.vue";
+import { RouterLink } from "vue-router";
 
-interface RecentSales {
-  image: string
-  name: string
-  email: string
-  amount: number
-}
+const vendas = ref<IVenda[]>([])
+const vendasRecents = ref<IVenda[]>([])
+
+onMounted(async () => {
+    const resultado = await VendasRepository.getAll(1000, 1, '');
+    vendas.value = resultado.data
+    vendasRecents.value = vendas.value.sort((a: any, b: any) => b.id - a.id).slice(0, 5)
+})
 
 const formateTicketValue = (value: any) => {
-  return typeof value === 'number'
-    ? `R$ ${new Intl.NumberFormat('us').format(value).toString()}`
-    : ''
+    return typeof value === 'number'
+        ? `R$ ${new Intl.NumberFormat('us').format(value).toString()}`
+        : ''
+}
+interface IDataOutput {
+    index: string;
+    total: number;
+}
+function calcularTotalPorMetodoPagamento(): IDataOutput[] {
+    const totaisPorMetodo: Record<string, number> = {};
+    vendas.value.forEach(venda => {
+        const metodoPagamento = venda.metodoPagamento || 'Indefinido';
+        if (totaisPorMetodo[metodoPagamento]) {
+            totaisPorMetodo[metodoPagamento] += (venda.valor - venda.valorDesconto!);
+        } else {
+            totaisPorMetodo[metodoPagamento] = (venda.valor - venda.valorDesconto!);
+        }
+    });
+    return Object.keys(totaisPorMetodo).map(metodo => ({
+        index: metodo,
+        total: totaisPorMetodo[metodo],
+    }));
 }
 
+function calcularTotalPorMes(): IDataOutput[] {
+    const totaisPorMes: Record<string, number> = {};
+
+    vendas.value.forEach(venda => {
+        // Extrair o mês e ano do campo dataCriacao
+        const dataCriacao = new Date(venda.dataCriacao!);
+        const mesAno = `${dataCriacao.getMonth() + 1}/${dataCriacao.getFullYear()}`; // Formato "MM-AAAA"
+
+        if (totaisPorMes[mesAno]) {
+            totaisPorMes[mesAno] += (venda.valor - venda.valorDesconto!);
+        } else {
+            totaisPorMes[mesAno] = (venda.valor - venda.valorDesconto!);
+        }
+    });
+
+    return Object.keys(totaisPorMes).map(mes => ({
+        index: mes,
+        total: totaisPorMes[mes],
+    }));
+}
+calcularTotalPorMes()
+
 const data = [
-  { name: 'Jan', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
-  { name: 'Fev', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
-  { name: 'Mar', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
-  { name: 'Abr', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
-  { name: 'Mar', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
-  { name: 'Jun', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
-  { name: 'Jul', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
+    { name: 'Jan', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
+    { name: 'Fev', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
+    { name: 'Mar', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
+    { name: 'Abr', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
+    { name: 'Mar', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
+    { name: 'Jun', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
+    { name: 'Jul', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
 ]
 
-const recentSales = reactive<RecentSales[]>([
-  {
-    image: '/avatars/01.png',
-    name: 'Olivia Martin',
-    email: 'olivia.martin@email.com',
-    amount: 3999.9
-  },
-  {
-    image: '/avatars/01.png',
-    name: 'Antonio Costa',
-    email: 'antonio.santos@gmail.com',
-    amount: 299.9
-  },
-  {
-    image: '/avatars/01.png',
-    name: 'Liam Johnson',
-    email: 'liam.johnson@email.com',
-    amount: 199.9
-  },
-  {
-    image: '/avatars/01.png',
-    name: 'Emma Brown',
-    email: 'emma.brown@email.com',
-    amount: 99.9
-  }
-])
 </script>

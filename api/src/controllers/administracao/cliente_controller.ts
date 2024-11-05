@@ -1,8 +1,15 @@
-import { Request, Response } from 'express';
-import { createCliente as createClienteSchema, updateCliente as updateClienteSchema } from '../../schemas/administracao/cliente_schema';
-import { HttpErrorService, prismaService, ResponseService, validateSchema } from '../../services';
+import { Request, Response } from "express";
+import {
+  createCliente as createClienteSchema,
+  updateCliente as updateClienteSchema,
+} from "../../schemas/administracao/cliente_schema";
+import {
+  HttpErrorService,
+  prismaService,
+  ResponseService,
+  validateSchema,
+} from "../../services";
 export const createCliente = async (req: Request, res: Response) => {
-  
   try {
     const validated = validateSchema(createClienteSchema, req.body);
     const cliente = await prismaService.cliente.create({
@@ -14,6 +21,8 @@ export const createCliente = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -21,27 +30,35 @@ export const getClientes = async (req: Request, res: Response) => {
   try {
     const { limit, page, search } = req.query;
     const offset = (Number(page) - 1) * Number(limit);
-    const busca = search as string || "";
+    const busca = (search as string);
 
     const [items, total] = await Promise.all([
       prismaService.cliente.findMany({
         skip: offset || 0,
         take: Number(limit) || 10,
         where: {
-          OR: [
-            { nome: { contains: busca } },
-            { email: { contains: busca } }
+          AND: [
+            busca
+              ? {
+                  OR: [
+                    { nome: { contains: busca } },
+                    { email: { contains: busca } },
+                  ],
+                }
+              : {},
+            { contaSistemaId: req.body.contaSistemaId },
           ],
-          contaSistemaId: req.body.contaSistemaId
         },
       }),
       prismaService.cliente.count({
-        where: {contaSistemaId: req.body.contaSistemaId},
+        where: { contaSistemaId: req.body.contaSistemaId },
       }),
-    ])
+    ]);
     ResponseService.success(res, { data: items, total });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -55,12 +72,14 @@ export const getCliente = async (req: Request, res: Response) => {
     ResponseService.success(res, { data: cliente });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
 export const updateCliente = async (req: Request, res: Response) => {
   const { id } = req.params;
-  
+
   try {
     const validated = validateSchema(updateClienteSchema, req.body);
     const cliente = await prismaService.cliente.update({
@@ -73,6 +92,8 @@ export const updateCliente = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -88,5 +109,7 @@ export const deleteCliente = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };

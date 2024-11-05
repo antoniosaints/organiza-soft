@@ -26,10 +26,6 @@ const createParcelamento = zodUtil.object({
   dataRecebimento: zodUtil.string({
     invalid_type_error: "A dataRecebimento deve ser uma string",
   }).optional(), // Também é opcional
-  dataCadastro: zodUtil.string({
-    required_error: "A dataCadastro é obrigatória",
-    invalid_type_error: "A dataCadastro deve ser uma string",
-  }).optional(), // Geralmente preenchido automaticamente com `now()`
   contaSistemaId: zodUtil.number({
     required_error: "O contaSistemaId é obrigatorio",
     invalid_type_error: "O contaSistemaId deve ser um número",
@@ -57,12 +53,6 @@ const updateParcelamento = zodUtil.object({
   }).optional(),
   dataRecebimento: zodUtil.string({
     invalid_type_error: "A dataRecebimento deve ser uma string",
-  }).optional(),
-  dataCadastro: zodUtil.string({
-    invalid_type_error: "A dataCadastro deve ser uma string",
-  }).optional(),
-  contaSistemaId: zodUtil.number({
-    invalid_type_error: "O contaSistemaId deve ser um number",
   }).optional()
 });
 

@@ -44,11 +44,6 @@ const updateFornecedorSchema = zodUtil.object({
       invalid_type_error: "O campo contato deve ser uma string",
     })
     .optional(),
-  contaSistemaId: zodUtil
-    .number({
-      invalid_type_error: "O contaSistemaId deve ser um number",
-    })
-    .optional(),
   email: zodUtil
     .string({
       invalid_type_error: "O campo email deve ser uma string",

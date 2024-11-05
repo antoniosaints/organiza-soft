@@ -5,35 +5,42 @@ import {
   ResponseService,
   validateSchema,
 } from "../../services";
-import { createFornecedorSchema, updateFornecedorSchema } from "../../schemas/patrimonio/fornecedores_schema";
+import {
+  createFornecedorSchema,
+  updateFornecedorSchema,
+} from "../../schemas/patrimonio/fornecedores_schema";
 
 export const getFornecedores = async (req: Request, res: Response) => {
   try {
     const { limit, page, search } = req.query;
     const offset = (Number(page) - 1) * Number(limit);
-    const busca = search as string || "";
+    const busca = (search as string) || "";
+
+    const whereFilter = {
+      OR: [
+        { nome: { contains: busca } },
+        { cpf_cnpj: { contains: busca } },
+        { email: { contains: busca } },
+        { contato: { contains: busca } },
+      ],
+      contaSistemaId: req.body.contaSistemaId,
+    }
 
     const [items, total] = await Promise.all([
       prismaService.patrimonioFornecedores.findMany({
         skip: offset || 0,
         take: Number(limit) || 10,
-        where: {
-          OR: [
-            { nome: { contains: busca } },
-            { cpf_cnpj: { contains: busca } },
-            { email: { contains: busca } },
-            { contato: { contains: busca } },
-          ],
-          contaSistemaId: req.body.contaSistemaId
-        },
+        where: whereFilter,
       }),
       prismaService.patrimonioFornecedores.count({
-        where: {contaSistemaId: req.body.contaSistemaId},
+        where: whereFilter,
       }),
-    ])
+    ]);
     ResponseService.success(res, { data: items, total });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -49,6 +56,8 @@ export const getFornecedor = async (req: Request, res: Response) => {
     ResponseService.success(res, { data });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -61,6 +70,8 @@ export const createFornecedor = async (req: Request, res: Response) => {
     ResponseService.created(res, { data });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -78,6 +89,8 @@ export const updateFornecedor = async (req: Request, res: Response) => {
     ResponseService.success(res, { data });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -93,5 +106,7 @@ export const deleteFornecedor = async (req: Request, res: Response) => {
     ResponseService.success(res, { data });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };

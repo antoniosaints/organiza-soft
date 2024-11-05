@@ -81,7 +81,7 @@
                 <p class="mb-6 font-sans text-xl text-black dark:text-white flex items-center">Nenhum registro
                     encontrado {{ mainStore.search == '' ? '' : ' com: ' + mainStore.search }}</p>
                 <Button @click="openFormularioNovoRegistro" class="bg-primary mb-6 hover:bg-primary/90">
-                    <UserPlus2 class="mr-1 h-4 w-4" /> Novo produto
+                    <Package class="mr-1 h-4 w-4" /> Novo produto
                 </Button>
             </div>
         </div>
@@ -170,13 +170,11 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, CircleChevronDown, Filter, Search, Trash2, UserPlus2 } from "lucide-vue-next";
+import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, CircleChevronDown, Filter, Package, Search, Trash2 } from "lucide-vue-next";
 import { Label } from "@/components/ui/label";
-import { onMounted, watch } from "vue";
-import { computed } from "vue";
+import { onMounted, watch, computed, ref } from "vue";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { ref } from "vue";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useProdutoStore } from "@/stores/patrimonio/produtos/produtoStore";
 import { useProdutoFormularioStore } from "@/stores/patrimonio/produtos/produtoFormularioStore";

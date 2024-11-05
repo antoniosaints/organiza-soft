@@ -10,6 +10,12 @@
   
     --card:0 0% 98%;
     --card-foreground: 240 10% 3.9%;
+
+    --success: 142.1 70.6% 45.3%;
+    --success-foreground: 138.5 76.5% 96.7%;
+  
+    --error: 0 84.2% 60.2%;
+    --error-foreground: 0 85.7% 97.3%;
   
     --popover: 0 0% 100%;
     --popover-foreground: 224 71.4% 4.1%;
@@ -65,6 +71,12 @@
   
     --primary:218 100% 30.8%;
     --primary-foreground:217 20% 100%;
+
+    --success: 142.8 64.2% 24.1%;
+    --success-foreground: 151.8 81% 95.9%;
+  
+    --error: 0 62.8% 30.6%;
+    --error-foreground: 0 85.7% 97.3%;
   
     --secondary:215 27.9% 16.9%;
     --secondary-foreground:210 20% 98%;

@@ -76,7 +76,7 @@ const onSubmit = async () => {
     const isValid = await validateStep(2)
     if (isValid) {
         const merged = { ...formValues.value.step1, ...formValues.value.step2 }
-        const conta = await createCustomerStripe(merged.nomeCompleto, merged.emailAcesso, merged.senhaAcesso, merged.telefone, merged.descricao);
+        const conta = await createCustomerStripe(merged.nomeCompleto, merged.emailAcesso, merged.senhaAcesso, merged.descricao, merged.telefone);
         if (conta) {
             isSuccess.value = true
         }

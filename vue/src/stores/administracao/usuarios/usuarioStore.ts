@@ -42,6 +42,7 @@ export const useUsuarioStore = defineStore("usuarioStore", (): IUsuarioStore => 
               await UsuariosRepository.delete(id);
             })
           );
+          page.value = 1;
           await getUsuarios();
           selectedItens.value = [];
           ScToastUtil.success("Itens deletados com sucesso.");

@@ -1,7 +1,15 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 import { ValidationError } from "../../utils/http/lancar_erro";
-import { createCategoria as createCategoriaSchema, updateCategoria as updateCategoriaSchema } from '../../schemas/financeiro/categoria_schema';
-import { HttpErrorService, prismaService, ResponseService, validateSchema } from '../../services';
+import {
+  createCategoria as createCategoriaSchema,
+  updateCategoria as updateCategoriaSchema,
+} from "../../schemas/financeiro/categoria_schema";
+import {
+  HttpErrorService,
+  prismaService,
+  ResponseService,
+  validateSchema,
+} from "../../services";
 export const createcategoria = async (req: Request, res: Response) => {
   try {
     const validated = validateSchema(createCategoriaSchema, req.body);
@@ -14,6 +22,8 @@ export const createcategoria = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -25,6 +35,8 @@ export const getcategorias = async (req: Request, res: Response) => {
     ResponseService.success(res, { data: categorias });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -37,6 +49,8 @@ export const getcategoria = async (req: Request, res: Response) => {
     ResponseService.success(res, { data: categoria });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
@@ -55,15 +69,21 @@ export const updatecategoria = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
 
 export const deletecategoria = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    await prismaService.financeiroCategorias.delete({ where: { id: Number(id), contaSistemaId: req.body.contaSistemaId } });
+    await prismaService.financeiroCategorias.delete({
+      where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
+    });
     ResponseService.success(res, { message: "Categoria excluida com sucesso" });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
   }
 };
