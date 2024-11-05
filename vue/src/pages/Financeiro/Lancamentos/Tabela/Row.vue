@@ -29,7 +29,7 @@
         </TableCell>
         <TableCell class="font-bold">{{ formatRealValue(data.valor - data.desconto!) }}</TableCell>
         <TableCell class="font-bold hidden md:table-cell">
-            <div class="flex items-center bg-secondary px-2 py-1 w-min text-primary-foreground rounded-md">
+            <div class="flex items-center bg-secondary px-2 py-1 text-primary-foreground rounded-md relative">
                 <ChartPie class="w-3 h-3 mr-1" /> {{ data.Categoria?.categoria }}
             </div>
         </TableCell>
