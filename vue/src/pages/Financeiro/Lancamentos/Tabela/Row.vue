@@ -36,10 +36,8 @@
         <TableCell class="hidden md:table-cell">
             <LancamentosBadge :status="data.status" />
         </TableCell>
-        <TableCell class="hidden md:table-cell"><span
-                class="px-2 py-1 rounded-md bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200 hover:bg-indigo-300 dark:hover:bg-indigo-700 flex items-center w-min">
-                <CreditCard class="w-3 h-3 mr-1" /> {{ data.FormaPagamento?.forma }}
-            </span>
+        <TableCell class="hidden md:table-cell">
+            <BadgeMetodo :data="data" />
         </TableCell>
         <TableCell class="hidden md:table-cell"><span class="px-2 py-1 bg-secondary rounded-md">{{
             formatDateToPtbr(data.dataLancamento as string) }}</span></TableCell>
@@ -55,12 +53,13 @@ import { Button } from "@/components/ui/button";
 import { computed } from "vue";
 import { Checkbox } from "@/components/ui/checkbox";
 import { LancamentosAction, LancamentosBadge } from ".";
-import { ChartPie, CircleArrowOutDownLeft, CircleArrowOutUpRight, CreditCard, Receipt } from "lucide-vue-next";
+import { ChartPie, CircleArrowOutDownLeft, CircleArrowOutUpRight, Receipt } from "lucide-vue-next";
 import { useVendasFormularioStore } from "@/stores/vendas/relatorios/vendasFormularioStore";
 import { formatDateToPtbr, formatRealValue } from "@/utils/formatterUtil";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import ITransacao from "@/types/financeiro/ILancamentos";
 import { useLancamentosStore } from "@/stores/financeiro/lancamentos/lancamentoStore";
+import BadgeMetodo from "./BadgeMetodo.vue";
 const mainStore = useLancamentosStore();
 const formularioStore = useVendasFormularioStore();
 

@@ -43,7 +43,7 @@ export default interface ITransacao {
   parcelado?: "sim" | "nao";
   status: IStatusTransacao;
   valorFinal?: number;
-  FinanceiroParcelamento?: IParcelamento;
+  FinanceiroParcelamento?: IParcelamento[];
   Categoria?: ICategoria;
   Conta?: IContasLancamentos;
   FormaPagamento?: IFormaPagamento;
