@@ -14,10 +14,15 @@ const createTransacao = zodUtil.object({
       invalid_type_error: "A descrição deve ser uma string",
     })
     .optional(),
-  categoriasId: zodUtil.number({
-    required_error: "As categoriasId é obrigatória",
+  categoriaId: zodUtil.number({
+    required_error: "As categoriaId é obrigatória",
     invalid_type_error: "As categoriasId deve ser um number",
   }),
+  fornecedorId: zodUtil
+    .number({
+      invalid_type_error: "O fornecedorId deve ser um number",
+    })
+    .optional(),
   contaId: zodUtil.number({
     required_error: "O contaId é obrigatório",
     invalid_type_error: "O contaId deve ser um number",
@@ -43,10 +48,14 @@ const createTransacao = zodUtil.object({
     invalid_type_error: "O usuarioLancamento deve ser um number",
     required_error: "O usuarioLancamento é obrigatório",
   }),
-  formaPagamentoId: zodUtil.number({
-    required_error: "A formaPagamentoId é obrigatória",
-    invalid_type_error: "A formaPagamentoId deve ser um number",
-  }),
+  metodoPagamento: zodUtil
+    .enum(["pix", "dinheiro", "cartao", "transferencia", "boleto", "cheque"], {
+      required_error: "O metodoPagamento é obrigatorio",
+      invalid_type_error:
+        "O metodoPagamento deve ser uma das seguintes opções: (pix, dinheiro, cartao, transferencia, boleto ou cheque)",
+    })
+    .default("dinheiro")
+    .optional(),
   natureza: zodUtil.enum(["receita", "despesa"], {
     invalid_type_error: "A natureza deve ser receita ou despesa",
     required_error: "A natureza é obrigatória",
@@ -142,9 +151,14 @@ const updateTransacao = zodUtil.object({
       invalid_type_error: "A descrição deve ser uma string",
     })
     .optional(),
-  categoriasId: zodUtil
+  categoriaId: zodUtil
     .number({
-      invalid_type_error: "As categoriasId deve ser um number",
+      invalid_type_error: "As categoriaId deve ser um number",
+    })
+    .optional(),
+  fornecedorId: zodUtil
+    .number({
+      invalid_type_error: "O fornecedorId deve ser um number",
     })
     .optional(),
   contaId: zodUtil
@@ -169,9 +183,11 @@ const updateTransacao = zodUtil.object({
       invalid_type_error: "O usuarioEfetivou deve ser um number",
     })
     .optional(),
-  formaPagamentoId: zodUtil
-    .number({
-      invalid_type_error: "A formaPagamentoId deve ser um number",
+  metodoPagamento: zodUtil
+    .enum(["pix", "dinheiro", "cartao", "transferencia", "boleto", "cheque"], {
+      required_error: "O metodoPagamento é obrigatorio",
+      invalid_type_error:
+        "O metodoPagamento deve ser uma das seguintes opções: (pix, dinheiro, cartao, transferencia, boleto ou cheque)",
     })
     .optional(),
   natureza: zodUtil

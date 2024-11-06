@@ -17,7 +17,7 @@
                                 </Button>
                             </RouterLink>
                         </TooltipTrigger>
-                        <TooltipContent>Filtrar registros</TooltipContent>
+                        <TooltipContent>Vender no PDV</TooltipContent>
                     </Tooltip>
                 </TooltipProvider>
                 <CadastrarVendaView />

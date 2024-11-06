@@ -23,6 +23,7 @@ export default interface ITransacao {
   descricao?: string;
   categoriasId: number;
   contaId: number;
+  fornecedorId?: number;
   dataEfetivado?: string | Date;
   usuarioEfetivou?: number;
   dataVencimento?: string | Date;
@@ -37,7 +38,7 @@ export default interface ITransacao {
   moeda?: string;
   taxaCambio?: number;
   referenciaExterna?: string;
-  formaPagamentoId: number;
+  metodoPagamento: "pix" | "dinheiro" | "cartao" | "transferencia" | "boleto" | "cheque";
   natureza: "receita" | "despesa";
   operacao: "entrada" | "saida" | "transferencia" | "ajuste";
   parcelado?: "sim" | "nao";

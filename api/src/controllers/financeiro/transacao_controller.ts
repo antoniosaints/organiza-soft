@@ -40,25 +40,57 @@ export const createTransacao = async (req: Request, res: Response) => {
 // Obter todas as transações
 export const getTransacoes = async (req: Request, res: Response) => {
   try {
-    const transacoes = await prismaService.financeiroTransacao.findMany({
-      where: {
-        contaSistemaId: req.body.contaSistemaId,
-      },
-      include: {
-        FormaPagamento: {
-          select: {
-            forma: true,
-          }
+    const { limit, page, search, startDate, endDate } = req.query;
+    const offset = (Number(page) - 1) * Number(limit);
+    const busca = search as string;
+
+    const whereFilter = {
+      AND: [
+        busca
+          ? {
+              OR: [
+                { descricao: { contains: busca } },
+                { codigoLancamento: { contains: busca } },
+                { codigoNfe: { contains: busca } },
+                { codigo_servico: { contains: busca } },
+                { moeda: { contains: busca } },
+                { referenciaExterna: { contains: busca } },
+                { metodoPagamento: { contains: busca } }
+              ],
+            }
+          : {},
+        startDate && endDate
+          ? {
+              dataVencimento: {
+                ...(startDate
+                  ? { gte: new Date(startDate as string).toISOString() }
+                  : {}),
+                ...(endDate
+                  ? { lte: new Date(endDate as string).toISOString() }
+                  : {}),
+              },
+            }
+          : {},
+        { contaSistemaId: req.body.contaSistemaId },
+      ],
+    }
+    const [items, total] = await Promise.all([
+      prismaService.financeiroTransacao.findMany({
+        skip: offset || 0,
+        take: Number(limit) || 10,
+        orderBy: { dataLancamento: "desc" },
+        include: {
+          FinanceiroParcelamento: true,
+          Categoria: {select: {categoria: true}},
         },
-        Categoria: {
-          select: {
-            categoria: true
-          }
-        },
-        FinanceiroParcelamento: true
-      }
-    });
-    ResponseService.success(res, { data: transacoes });
+        where: whereFilter,
+      }),
+
+      prismaService.financeiroTransacao.count({
+        where: whereFilter,
+      }),
+    ]);
+    ResponseService.success(res, { data: items, total });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
   } finally {

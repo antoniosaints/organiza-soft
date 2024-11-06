@@ -2,7 +2,6 @@
     <Badge :class="statusClasses">
         <CircleCheckBig class="mr-2 h-3 w-3" />
         {{ status.substring(0, 1).toUpperCase() + status.substring(1) }}
-        <div class="absolute inset-0 px-0 py-1 bg-green-500/50 rounded-md w-[0%]"></div>
     </Badge>
 </template>
 

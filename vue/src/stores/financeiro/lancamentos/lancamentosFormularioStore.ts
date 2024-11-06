@@ -12,7 +12,7 @@ export const useLancamentosFormularioStore = defineStore(
       categoriasId: 0,
       contaId: 0,
       dataVencimento: new Date(),
-      formaPagamentoId: 0,
+      metodoPagamento: "dinheiro",
       natureza: "receita",
       operacao: "entrada"
     });
@@ -20,7 +20,7 @@ export const useLancamentosFormularioStore = defineStore(
     const data = ref<ITransacao>({ ...defaultData.value });
     const refId = ref<number | null>(null);
     const isModalOpen = ref(false);
-    const isModalDetalhesOpen = ref(false);
+    const isModalDetalhesOpen = ref(true);
 
     const resetData = () => {
       data.value = { ...defaultData.value };
