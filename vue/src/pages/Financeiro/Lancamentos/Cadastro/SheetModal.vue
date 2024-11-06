@@ -8,7 +8,7 @@
                 </SheetDescription>
             </SheetHeader>
             <div class="mt-6">
-                <slot />
+                <Formulario />
             </div>
             <div class="mt-6">
                 <Button variant="outline" @click="formularioStore.isModalDetalhesOpen = false">
@@ -26,5 +26,6 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useLancamentosFormularioStore } from '@/stores/financeiro/lancamentos/lancamentosFormularioStore'
+import Formulario from './Formulario.vue'
 const formularioStore = useLancamentosFormularioStore()
 </script>

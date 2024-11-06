@@ -10,7 +10,7 @@
                 <TooltipProvider>
                     <Tooltip>
                         <TooltipTrigger>
-                            <Button size="sm" variant="default" class="flex gap-2">
+                            <Button @click="formularioStore.isModalDetalhesOpen = true" size="sm" variant="default" class="flex gap-2">
                                 <CircleFadingPlus class="w-4 h-4" />
                                 Novo lançamento
                             </Button>
@@ -206,8 +206,10 @@ import CompartilharLink from "@/views/Vendas/Pdv/CompartilharLink.vue";
 import DateRangePicker from "@/components/customs/DateRangePicker.vue";
 import { useLancamentosStore } from "@/stores/financeiro/lancamentos/lancamentoStore";
 import SheetModal from "../Cadastro/SheetModal.vue";
+import { useLancamentosFormularioStore } from "@/stores/financeiro/lancamentos/lancamentosFormularioStore";
 
 const mainStore = useLancamentosStore();
+const formularioStore = useLancamentosFormularioStore();
 const perPage = computed(() => mainStore.limit);
 const rangeStart = computed(() => (mainStore.page - 1) * Number(mainStore.limit) + 1);
 const rangeEnd = computed(() => (mainStore.page - 1) * Number(mainStore.limit) + mainStore.lancamentos.length);
