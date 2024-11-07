@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { createTransacao, deleteComprovante, deleteTransacao, getTransacao, getTransacoes, renameComprovante, updateTransacao, uploadComprovante } from "../../controllers/financeiro/transacao_controller";
+import { createTransacao, deleteComprovante, deleteTransacao, efetivarTransacao, getTransacao, getTransacoes, renameComprovante, updateTransacao, uploadComprovante } from "../../controllers/financeiro/transacao_controller";
 const transacaoRouter = Router();
 
 transacaoRouter.get("/:id", getTransacao);
+transacaoRouter.get("/efetivar/:id", efetivarTransacao);
 transacaoRouter.get("/", getTransacoes);
 transacaoRouter.post("/", createTransacao);
 transacaoRouter.put("/:id", updateTransacao);

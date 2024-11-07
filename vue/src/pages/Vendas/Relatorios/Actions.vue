@@ -8,15 +8,11 @@
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" class="w-auto">
-                <!-- <DropdownMenuItem class="hover:bg-primary cursor-pointer" @click="storePdv.gerarLinkPagamentoPìx(data.id as number)">
-                    <img class="mr-2 h-3 w-3" src="/mercadopago.png" />
-                    Gerar Checkout
-                </DropdownMenuItem> -->
-                <DropdownMenuItem class="hover:bg-primary cursor-pointer" @click="storePdv.gerarLinkPagamentoPìx(data.id as number)">
+                <DropdownMenuItem class="cursor-pointer" @click="storePdv.gerarLinkPagamentoPìx(data.id as number)">
                     <QrCode  class="mr-2 h-3 w-3" />
                     Gerar Pix
                 </DropdownMenuItem>
-                <DropdownMenuItem class="hover:bg-primary cursor-pointer" @click="storePdv.gerarCkheckoutPagamentoPìx(data.id as number)">
+                <DropdownMenuItem class="cursor-pointer" @click="storePdv.gerarCkheckoutPagamentoPìx(data.id as number)">
                     <Link class="mr-2 h-3 w-3" />
                     Gerar Link
                 </DropdownMenuItem>

@@ -6,6 +6,10 @@ export default class LancamentosRepository {
         const { data } = await axiosService.get(`financeiro/transacao/${id}`);
         return data;
     }
+    static async efetivar(id: number): Promise<ITransacao> {
+        const { data } = await axiosService.get(`financeiro/transacao/efetivar/${id}`);
+        return data;
+    }
     static async getAll(limit: number, page: number, search?: string | undefined): Promise<{ data: ITransacao[], total: number}> {
         const { data } = await axiosService.get(`financeiro/transacao?limit=${limit}&page=${page}&search=${search}`);
         return data;

@@ -1,6 +1,5 @@
 import { Autorize } from "@/autorization";
 import LancamentosRepository from "@/repositories/financeiro/lancamentosRepository";
-import VendasRepository from "@/repositories/vendas/vendasRepository";
 import ITransacao from "@/types/financeiro/ILancamentos";
 import { ILancamentosStore } from "@/types/financeiro/ILancamentoStore";
 import { ScToastUtil } from "@/utils/scToastUtil";
@@ -22,11 +21,12 @@ export const useLancamentosStore = defineStore(
     const getLancamentos = async (): Promise<void> => {
       try {
         if (!Autorize.can("visualizar", "lancamentos")) return;
-        const { data, total: totalClientes } = await LancamentosRepository.getAll(
-          Number(limit.value),
-          page.value,
-          search.value
-        );
+        const { data, total: totalClientes } =
+          await LancamentosRepository.getAll(
+            Number(limit.value),
+            page.value,
+            search.value
+          );
         lancamentos.value = data;
         total.value = totalClientes;
       } catch (error: any) {
@@ -49,7 +49,7 @@ export const useLancamentosStore = defineStore(
         if (!Autorize.can("deletar", "lancamentos")) return;
         await Promise.all(
           selectedItens.value.map(async (id) => {
-            await VendasRepository.delete(id);
+            await LancamentosRepository.delete(id);
           })
         );
         page.value = 1;
@@ -74,7 +74,7 @@ export const useLancamentosStore = defineStore(
       selectedItens,
       handleSelectItens,
       deleteSelectedItens,
-      getLancamentos
+      getLancamentos,
     };
   }
 );

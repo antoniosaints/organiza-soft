@@ -37,6 +37,31 @@ export const createTransacao = async (req: Request, res: Response) => {
   }
 };
 
+export const efetivarTransacao = async (req: Request, res: Response) => {
+  try {
+    const transacao = await prismaService.financeiroTransacao.update({
+      data: { status: "recebido" },
+      where: {
+        id: Number(req.params.id),
+        contaSistemaId: req.body.contaSistemaId,
+      },
+    });
+
+    ResponseService.created(
+      res,
+      {
+        message: "Transação efetivada com sucesso",
+        data: transacao,
+      },
+      "Transação efetivada com sucesso"
+    );
+  } catch (error: any) {
+    HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
+  }
+};
+
 // Obter todas as transações
 export const getTransacoes = async (req: Request, res: Response) => {
   try {

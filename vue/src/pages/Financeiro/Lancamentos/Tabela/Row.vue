@@ -54,14 +54,14 @@ import { computed } from "vue";
 import { Checkbox } from "@/components/ui/checkbox";
 import { LancamentosAction, LancamentosBadge } from ".";
 import { ChartPie, CircleArrowOutDownLeft, CircleArrowOutUpRight, Receipt } from "lucide-vue-next";
-import { useVendasFormularioStore } from "@/stores/vendas/relatorios/vendasFormularioStore";
 import { formatDateToPtbr, formatRealValue } from "@/utils/formatterUtil";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import ITransacao from "@/types/financeiro/ILancamentos";
 import { useLancamentosStore } from "@/stores/financeiro/lancamentos/lancamentoStore";
 import BadgeMetodo from "./BadgeMetodo.vue";
+import { useLancamentosFormularioStore } from "@/stores/financeiro/lancamentos/lancamentosFormularioStore";
 const mainStore = useLancamentosStore();
-const formularioStore = useVendasFormularioStore();
+const formularioStore = useLancamentosFormularioStore();
 
 const hasSelected = computed(() => {
     return mainStore.selectedItens.includes(props.data.id as number);
