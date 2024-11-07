@@ -17,16 +17,18 @@ import {
   getLocalTimeZone,
 } from '@internationalized/date'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { useLancamentosFormularioStore } from '@/stores/financeiro/lancamentos/lancamentosFormularioStore'
 
 const df = new DateFormatter('pt-BR', {
   dateStyle: 'long',
 })
 
+const formulario = useLancamentosFormularioStore()
+
 const isParcelado = ref(false)
 const isEfetivado = ref(false)
 const dataPagamento = ref<DateValue>()
 const dataPrimeiroVencimento = ref<DateValue>()
-const transactionType = ref('receita')
 
 </script>
 
@@ -47,12 +49,12 @@ const transactionType = ref('receita')
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                             <div class="space-y-2 p-2">
                                 <Label for="tipo_lancamento">Tipo de lançamento</Label>
-                                <RadioGroup @update:modelValue="transactionType = $event" class="grid grid-cols-2 gap-4">
+                                <RadioGroup @update:modelValue="formulario.data.natureza = $event as 'despesa' | 'receita'" class="grid grid-cols-2 gap-4">
                                     <div>
                                         <RadioGroupItem value="receita" id="receita" class="peer sr-only" />
                                         <Label :for="'receita'"
                                             class="flex items-center cursor-pointer justify-between rounded-md border-2 border-muted bg-popover p-2 hover:bg-green-200 hover:dark:bg-green-700 hover:text-accent-foreground peer-checked:border-muted"
-                                            :class="{ 'bg-green-100 dark:bg-green-700': transactionType === 'receita' }">
+                                            :class="{ 'bg-green-100 dark:bg-green-700': formulario.data.natureza === 'receita' }">
                                             <ArrowUpCircle class="h-5 w-5 text-emerald-600 dark:text-green-400" />
                                             <span class="font-semibold">Receita</span>
                                         </Label>
@@ -61,7 +63,7 @@ const transactionType = ref('receita')
                                         <RadioGroupItem value="despesa" id="despesa" class="peer sr-only" />
                                         <Label :for="'despesa'"
                                             class="flex items-center cursor-pointer justify-between rounded-md border-2 border-muted bg-popover p-2 hover:bg-red-200 hover:dark:bg-red-700 hover:text-accent-foreground peer-checked:border-muted"
-                                            :class="{ 'bg-red-100 dark:bg-red-700': transactionType === 'despesa' }">
+                                            :class="{ 'bg-red-100 dark:bg-red-700': formulario.data.natureza === 'despesa' }">
                                             <ArrowDownCircle class="h-5 w-5 text-red-600 dark:text-red-400" />
                                             <span class="font-semibold">Despesa</span>
                                         </Label>
@@ -70,7 +72,7 @@ const transactionType = ref('receita')
                             </div>
                             <div class="space-y-2 p-2">
                                 <Label for="valor">Valor</Label>
-                                <Input required id="valor" type="number" placeholder="0,00" step="0.01" />
+                                <Input required id="valor" v-model="formulario.data.valor" type="number" placeholder="0,00" step="0.01" />
                             </div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
@@ -118,7 +120,7 @@ const transactionType = ref('receita')
                         </div>
                         <div class="space-y-2 p-2">
                             <Label for="descricao">Descrição do lançamento</Label>
-                            <Textarea id="descricao" rows="4" placeholder="Adicione uma descrição." />
+                            <Textarea required id="descricao" rows="4" placeholder="Adicione uma descrição." />
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2 p-2">
                             <div class="flex items-center space-x-4 rounded-md border p-4">
@@ -146,10 +148,23 @@ const transactionType = ref('receita')
                                 <Switch id="efetivado" :checked="isEfetivado" @update:checked="isEfetivado = $event" />
                             </div>
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2" v-if="isParcelado">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2" v-if="isParcelado">
                             <div class="space-y-2 p-2">
                                 <Label for="quantidadeParcelas">Quantidade de Parcelas</Label>
-                                <Input id="quantidadeParcelas" type="number" min="1" placeholder="Número de parcelas" />
+                                <Input id="quantidadeParcelas" :required="isParcelado" type="number" min="1" placeholder="Número de parcelas" />
+                            </div>
+                            <div class="space-y-2 p-2">
+                                <Label for="quantidadeParcelas">Período de cobrança</Label>
+                                <Select defaultValue="mensal" :required="isParcelado">
+                                    <SelectTrigger id="tipoPagamento">
+                                        <SelectValue placeholder="Selecione o período" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="mensal">Mensal</SelectItem>
+                                        <SelectItem value="semanal">Semanal</SelectItem>
+                                        <SelectItem value="anual">Anual</SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </div>
                             <div class="space-y-2 p-2">
                                 <Label for="primeiroVencimento">Data Primeira Parcela</Label>
@@ -164,7 +179,7 @@ const transactionType = ref('receita')
                                         </Button>
                                     </PopoverTrigger>
                                     <PopoverContent class="w-auto p-0">
-                                        <Calendar mode="single" v-model="dataPrimeiroVencimento" initialFocus />
+                                        <Calendar locale="pt-BR" mode="single" v-model="dataPrimeiroVencimento" initialFocus />
                                     </PopoverContent>
                                 </Popover>
                             </div>
@@ -183,13 +198,13 @@ const transactionType = ref('receita')
                                         </Button>
                                     </PopoverTrigger>
                                     <PopoverContent class="w-auto p-0">
-                                        <Calendar mode="single" v-model="dataPagamento" initialFocus />
+                                        <Calendar locale="pt-BR" mode="single" v-model="dataPagamento" initialFocus />
                                     </PopoverContent>
                                 </Popover>
                             </div>
                             <div class="space-y-2 p-2">
                                 <Label for="tipoPagamento">Tipo de Pagamento</Label>
-                                <Select>
+                                <Select :required="isEfetivado">
                                     <SelectTrigger id="tipoPagamento">
                                         <SelectValue placeholder="Selecione o tipo de pagamento" />
                                     </SelectTrigger>

@@ -3,6 +3,9 @@ import Tabs from '@/components/ui/tabs/Tabs.vue';
 import TabsContent from '@/components/ui/tabs/TabsContent.vue';
 import TabsList from '@/components/ui/tabs/TabsList.vue';
 import TabsTrigger from '@/components/ui/tabs/TabsTrigger.vue';
+import { useLoginStore } from '@/stores/login/loginStore';
+
+const loginStore = useLoginStore()
 </script>
 <template>
     <Tabs default-value="general">
@@ -12,11 +15,11 @@ import TabsTrigger from '@/components/ui/tabs/TabsTrigger.vue';
                 <TabsTrigger value="general">
                     Geral
                 </TabsTrigger>
-                <TabsTrigger value="estoque">
-                    Estoque
+                <TabsTrigger :disabled="!loginStore.isProAccount" value="estoque">
+                    Estoque {{ !loginStore.isProAccount ? '(Pro)' : '' }}
                 </TabsTrigger>
-                <TabsTrigger value="vendas">
-                    Vendas
+                <TabsTrigger :disabled="!loginStore.isProAccount" value="vendas">
+                    Vendas {{ !loginStore.isProAccount ? '(Pro)' : '' }}
                 </TabsTrigger>
             </TabsList>
         </div>

@@ -10,7 +10,8 @@
                 <TooltipProvider>
                     <Tooltip>
                         <TooltipTrigger>
-                            <Button @click="formularioStore.isModalDetalhesOpen = true" size="sm" variant="default" class="flex gap-2">
+                            <Button @click="formularioStore.isModalDetalhesOpen = true" size="sm" variant="default"
+                                class="flex gap-2">
                                 <CircleFadingPlus class="w-4 h-4" />
                                 Novo lançamento
                             </Button>
@@ -101,11 +102,10 @@
                     encontrado {{ mainStore.search == '' ? '' : ' com: ' + mainStore.search }}</p>
 
                 <div class="flex items-center justify-center space-x-2 text-foreground/80 mb-6">
-                    <RouterLink to="/app/vendas/pdv" class="rounded-md">
-                        <Button>
-                            <ShoppingCart class="mr-1 h-4 w-4" /> Novo lançamento
-                        </Button>
-                    </RouterLink>
+                    <Button size="sm" variant="default" @click="formularioStore.isModalDetalhesOpen = true">
+                        <CircleFadingPlus class="mr-1 h-4 w-4" />
+                        Novo lançamento
+                    </Button>
                 </div>
             </div>
         </div>
@@ -194,7 +194,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, CircleChevronDown, CircleFadingPlus, FilterX, Search, ShoppingCart, Trash2 } from "lucide-vue-next";
+import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, CircleChevronDown, CircleFadingPlus, FilterX, Search, Trash2 } from "lucide-vue-next";
 import { Label } from "@/components/ui/label";
 import { onMounted, watch, computed, ref } from "vue";
 import { Input } from "@/components/ui/input";
