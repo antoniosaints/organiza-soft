@@ -23,10 +23,11 @@ const LancamentoBodySchema = zodUtil.object({
     invalid_type_error: "A categoria deve ser um number",
     required_error: "A categoria é obrigatoria",
   }),
-  fornecedor: zodUtil.number({
-    invalid_type_error: "O fornecedor deve ser um number",
-    required_error: "O fornecedor é obrigatorio",
-  }),
+  fornecedor: zodUtil
+    .number({
+      invalid_type_error: "O fornecedor deve ser um number",
+    })
+    .optional(),
   conta: zodUtil.number({
     invalid_type_error: "A conta deve ser um number",
     required_error: "A conta é obrigatoria",
@@ -35,8 +36,7 @@ const LancamentoBodySchema = zodUtil.object({
     .enum(["sim", "nao"], {
       invalid_type_error: "O parcelado deve ser sim ou nao",
     })
-    .default("nao")
-    .optional(),
+    .default("nao"),
   quantidadeParcelas: zodUtil
     .number({
       invalid_type_error: "A quantidade de parcelas deve ser um number",
@@ -44,7 +44,7 @@ const LancamentoBodySchema = zodUtil.object({
     .refine((val) => val >= 0, {
       message: "Quantidade de parcelas deve ser maior que 0",
     })
-    .optional()
+    .optional(),
 });
 
 export { LancamentoBodySchema };

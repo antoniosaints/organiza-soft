@@ -12,21 +12,22 @@ import {
   uploadService,
   validateSchema,
 } from "../../services";
+import { LancamentoBodySchema } from "../../schemas/financeiro/lancamento_body_schema";
 
 // Criação de transação
 export const createTransacao = async (req: Request, res: Response) => {
   try {
-    const validated = validateSchema(createTransacaoSchema, req.body);
+    const validated = validateSchema(LancamentoBodySchema, req.body);
 
-    const transacao = await prismaService.financeiroTransacao.create({
-      data: validated,
-    });
+    // const transacao = await prismaService.financeiroTransacao.create({
+    //   data: validated,
+    // });
 
     ResponseService.created(
       res,
       {
         message: "Transação criada com sucesso",
-        data: transacao,
+        data: validated,
       },
       "Transação criada com sucesso"
     );

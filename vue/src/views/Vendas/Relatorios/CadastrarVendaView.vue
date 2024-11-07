@@ -30,7 +30,7 @@
                             <Popover>
                                 <PopoverTrigger as-child>
                                     <Button variant="outline" :class="cn(
-                                        'w-full bg-secondary justify-start text-left font-normal',
+                                        'w-full justify-start text-left font-normal',
                                         !dataVenda && 'text-muted-foreground',
                                     )">
                                         <CalendarIcon class="mr-2 h-4 w-4" />
@@ -47,7 +47,7 @@
                             <NumberField :step="0.01" :format-options="{style: 'percent'}" id="age" :default-value="1" v-model.number="desconto" :min="0" :max="1">
                                 <NumberFieldContent>
                                 <NumberFieldDecrement />
-                                <NumberFieldInput class="bg-secondary"/>
+                                <NumberFieldInput/>
                                 <NumberFieldIncrement />
                                 </NumberFieldContent>
                             </NumberField>
@@ -60,7 +60,7 @@
                             <NumberField id="age" :default-value="1" v-model.number="quantidade" :min="0">
                                 <NumberFieldContent>
                                 <NumberFieldDecrement />
-                                <NumberFieldInput class="bg-secondary"/>
+                                <NumberFieldInput/>
                                 <NumberFieldIncrement />
                                 </NumberFieldContent>
                             </NumberField>

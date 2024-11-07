@@ -16,7 +16,7 @@
                     <RefreshCw class="mr-2 h-3 w-3" />
                     Converter
                 </DropdownMenuItem>
-                <DropdownMenuItem @click="efetivarLancamento(data.id as number)" v-if="data.status === 'pendente'" class="cursor-pointer">
+                <DropdownMenuItem @click="efetivarLancamento(data.id as number)" v-if="(data.status === 'pendente' && !data.FinanceiroParcelamento?.length )" class="cursor-pointer">
                     <FileCheck class="mr-2 h-3 w-3" />
                     Efetivar
                 </DropdownMenuItem>

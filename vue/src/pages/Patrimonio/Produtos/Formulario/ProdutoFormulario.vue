@@ -19,7 +19,7 @@
                     }">
                     <NumberFieldContent>
                         <NumberFieldDecrement />
-                        <NumberFieldInput class="bg-secondary" />
+                        <NumberFieldInput />
                         <NumberFieldIncrement />
                     </NumberFieldContent>
                 </NumberField>

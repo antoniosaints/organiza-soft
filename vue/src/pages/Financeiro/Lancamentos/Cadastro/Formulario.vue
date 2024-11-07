@@ -12,16 +12,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Textarea } from '@/components/ui/textarea'
 import {
-  DateFormatter,
-  type DateValue,
-  getLocalTimeZone,
+    DateFormatter,
+    type DateValue,
+    getLocalTimeZone,
 } from '@internationalized/date'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useLancamentosFormularioStore } from '@/stores/financeiro/lancamentos/lancamentosFormularioStore'
 import ContasLancamentosRepository from '@/repositories/financeiro/contasLancamentosRepository'
+import { NumberField, NumberFieldContent, NumberFieldDecrement, NumberFieldIncrement, NumberFieldInput } from '@/components/ui/number-field'
 
 const df = new DateFormatter('pt-BR', {
-  dateStyle: 'long',
+    dateStyle: 'long',
 })
 
 const formulario = useLancamentosFormularioStore()
@@ -34,11 +35,11 @@ const dataPrimeiroVencimento = ref<DateValue>()
 const fetchContasLancamentos = async (query: string, id?: number) => {
     if (id) {
         return await ContasLancamentosRepository.get(id).then(response => {
-            return [{ id: response.id as number, label: response.descricao! }]
+            return [{ id: response.id as number, label: response.conta }]
         })
     } else {
         return await ContasLancamentosRepository.getAll(10, 1, query).then(response => {
-            return response.data.map(item => ({ id: item.id as number, label: item.descricao! }))
+            return response.data.map(item => ({ id: item.id as number, label: item.conta! }))
         })
     }
 }
@@ -62,7 +63,9 @@ const fetchContasLancamentos = async (query: string, id?: number) => {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                             <div class="space-y-2 p-2">
                                 <Label for="tipo_lancamento">Tipo de lançamento</Label>
-                                <RadioGroup @update:modelValue="formulario.data.natureza = $event as 'despesa' | 'receita'" class="grid grid-cols-2 gap-4">
+                                <RadioGroup
+                                    @update:modelValue="formulario.data.natureza = $event as 'despesa' | 'receita'"
+                                    class="grid grid-cols-2 gap-4">
                                     <div>
                                         <RadioGroupItem value="receita" id="receita" class="peer sr-only" />
                                         <Label :for="'receita'"
@@ -84,15 +87,29 @@ const fetchContasLancamentos = async (query: string, id?: number) => {
                                 </RadioGroup>
                             </div>
                             <div class="space-y-2 p-2">
-                                <Label for="valor">Valor</Label>
-                                <Input required id="valor" v-model="formulario.data.valor" type="number" placeholder="0,00" step="0.01" />
+                                <Label for="valorTransacao">Valor</Label>
+                                <NumberField id="valorTransacao" :format-options="{
+                                    style: 'currency',
+                                    currency: 'BRL',
+                                    maximumFractionDigits: 2,
+                                    compactDisplay: 'short',
+                                    notation: 'compact',
+                                    currencyDisplay: 'narrowSymbol',
+                                    currencySign: 'standard',
+                                }" :step="0.01" :default-value="0.01" v-model="formulario.data.valor" :min="0.01">
+                                    <NumberFieldContent>
+                                        <NumberFieldDecrement />
+                                        <NumberFieldInput />
+                                        <NumberFieldIncrement />
+                                    </NumberFieldContent>
+                                </NumberField>
                             </div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
                             <div class="space-y-2 p-2">
                                 <Label for="conta">Conta</Label>
                                 <SelectSearchAjax id="categoria" labelSearch="Selecione uma conta"
-                                v-model="(formulario.data.contaId as number)" :ajax="fetchContasLancamentos" />
+                                    v-model="(formulario.data.contaId as number)" :ajax="fetchContasLancamentos" />
                             </div>
                             <div class="space-y-2 p-2">
                                 <Label for="categoria">Categoria</Label>
@@ -157,7 +174,14 @@ const fetchContasLancamentos = async (query: string, id?: number) => {
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-2" v-if="isParcelado">
                             <div class="space-y-2 p-2">
                                 <Label for="quantidadeParcelas">Quantidade de Parcelas</Label>
-                                <Input id="quantidadeParcelas" :required="isParcelado" type="number" min="1" placeholder="Número de parcelas" />
+                                <NumberField id="quantidadeParcelas" :step="1" :default-value="1"
+                                    :required="isParcelado" v-model="formulario.data.valor" :min="1">
+                                    <NumberFieldContent>
+                                        <NumberFieldDecrement />
+                                        <NumberFieldInput />
+                                        <NumberFieldIncrement />
+                                    </NumberFieldContent>
+                                </NumberField>
                             </div>
                             <div class="space-y-2 p-2">
                                 <Label for="quantidadeParcelas">Período de cobrança</Label>
@@ -177,15 +201,18 @@ const fetchContasLancamentos = async (query: string, id?: number) => {
                                 <Popover>
                                     <PopoverTrigger as="div">
                                         <Button type="button" variant="outline"
-                                            class="w-full justify-start text-left font-normal bg-secondary"
+                                            class="w-full justify-start text-left font-normal"
                                             :class="{ 'text-muted-foreground': !dataPrimeiroVencimento }">
                                             <CalendarIcon class="mr-2 h-4 w-4" />
-                                            <span>{{ dataPrimeiroVencimento ? df.format(dataPrimeiroVencimento.toDate(getLocalTimeZone())) : 'Selecione uma data'
+                                            <span>{{ dataPrimeiroVencimento ?
+                                                df.format(dataPrimeiroVencimento.toDate(getLocalTimeZone())) :
+                                                'Selecione uma data'
                                                 }}</span>
                                         </Button>
                                     </PopoverTrigger>
                                     <PopoverContent class="w-auto p-0">
-                                        <Calendar locale="pt-BR" mode="single" v-model="dataPrimeiroVencimento" initialFocus />
+                                        <Calendar locale="pt-BR" mode="single" v-model="dataPrimeiroVencimento"
+                                            initialFocus />
                                     </PopoverContent>
                                 </Popover>
                             </div>
@@ -196,10 +223,11 @@ const fetchContasLancamentos = async (query: string, id?: number) => {
                                 <Popover>
                                     <PopoverTrigger as="div">
                                         <Button type="button" variant="outline"
-                                            class="w-full justify-start text-left font-normal bg-secondary"
+                                            class="w-full justify-start text-left font-normal"
                                             :class="{ 'text-muted-foreground': !dataPagamento }">
                                             <CalendarIcon class="mr-2 h-4 w-4" />
-                                            <span>{{ dataPagamento ? df.format(dataPagamento.toDate(getLocalTimeZone())) : 'Selecione uma data'
+                                            <span>{{ dataPagamento ? df.format(dataPagamento.toDate(getLocalTimeZone()))
+                                                : 'Selecione uma data'
                                                 }}</span>
                                         </Button>
                                     </PopoverTrigger>
@@ -232,34 +260,40 @@ const fetchContasLancamentos = async (query: string, id?: number) => {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                             <div class="space-y-2 p-2">
                                 <Label for="codigoNfe">Nota Fiscal</Label>
-                                <Input id="codigoNfe" v-model="formulario.data.codigoNfe" type="text" placeholder="Nota fiscal" />
+                                <Input id="codigoNfe" v-model="formulario.data.codigoNfe" type="text"
+                                    placeholder="Nota fiscal" />
                             </div>
-    
+
                             <div class="space-y-2 p-2">
                                 <Label for="referenciaExterna">Referência externa</Label>
-                                <Input id="referenciaExterna" v-model="formulario.data.referenciaExterna" type="text" placeholder="Referência externa" />
+                                <Input id="referenciaExterna" v-model="formulario.data.referenciaExterna" type="text"
+                                    placeholder="Referência externa" />
                             </div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                             <div class="space-y-2 p-2">
                                 <Label for="codigoServico">Código do serviço</Label>
-                                <Input id="codigoServico" v-model="formulario.data.codigoServico" type="text" placeholder="Código do serviço" />
+                                <Input id="codigoServico" v-model="formulario.data.codigoServico" type="text"
+                                    placeholder="Código do serviço" />
                             </div>
-    
+
                             <div class="space-y-2 p-2">
                                 <Label for="taxaJuros">Taxa de juros</Label>
-                                <Input id="taxaJuros" v-model="formulario.data.taxaJuros" type="number" placeholder="%" />
+                                <Input id="taxaJuros" v-model="formulario.data.taxaJuros" type="number"
+                                    placeholder="%" />
                             </div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                             <div class="space-y-2 p-2">
                                 <Label for="taxaCambio">Taxa de cambio</Label>
-                                <Input id="taxaCambio" v-model="formulario.data.taxaCambio" type="text" placeholder="%" />
+                                <Input id="taxaCambio" v-model="formulario.data.taxaCambio" type="text"
+                                    placeholder="%" />
                             </div>
-    
+
                             <div class="space-y-2 p-2">
                                 <Label for="taxaDesconto">Taxa de desconto</Label>
-                                <Input id="taxaDesconto" v-model="formulario.data.taxaDesconto" type="number" placeholder="%" />
+                                <Input id="taxaDesconto" v-model="formulario.data.taxaDesconto" type="number"
+                                    placeholder="%" />
                             </div>
                         </div>
                     </ScrollArea>

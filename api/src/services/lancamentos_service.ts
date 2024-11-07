@@ -10,8 +10,15 @@ export class LancamentoService {
     this.transacao.valorFinal = this.transacao.valor - this.transacao.desconto!; // calcula o valor final
     this.transacao.codigoLancamento = generateUniqueIdWithPrefix("LCM"); // gera o codigo do lancamento
     if (this.transacao.parcelado === "sim") this.transacao.status = "pendente"; // se for parcelado, o status é pendente
+    if (this.transacao.taxaJuros)
+      this.transacao.juros =
+        this.transacao.taxaJuros * this.transacao.valorFinal;
+    if (this.transacao.taxaDesconto)
+      this.transacao.desconto =
+        this.transacao.taxaDesconto * this.transacao.valorFinal;
   }
-  async adicionarDesconto(taxa: number) { // adiciona desconto
+  async adicionarDesconto(taxa: number) {
+    // adiciona desconto
     this.transacao.taxaDesconto = taxa; // adiciona a taxa de desconto
     this.transacao.desconto =
       this.transacao.taxaDesconto * this.transacao.valorFinal; // calcula o desconto
