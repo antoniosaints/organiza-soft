@@ -8,19 +8,18 @@
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" class="w-auto">
-                <!-- <DropdownMenuItem class="hover:bg-primary cursor-pointer" @click="storePdv.gerarLinkPagamentoPìx(data.id as number)">
-                    <img class="mr-2 h-3 w-3" src="/mercadopago.png" />
-                    Gerar Checkout
-                </DropdownMenuItem> -->
-                <DropdownMenuItem class="hover:bg-primary cursor-pointer" @click="storePdv.gerarLinkPagamentoPìx(data.id as number)">
-                    <QrCode  class="mr-2 h-3 w-3" />
-                    Gerar Pix
-                </DropdownMenuItem>
-                <DropdownMenuItem class="hover:bg-primary cursor-pointer" @click="storePdv.gerarCkheckoutPagamentoPìx(data.id as number)">
+                <DropdownMenuItem class="cursor-pointer">
                     <Link class="mr-2 h-3 w-3" />
-                    Gerar Link
+                    Link de Pagamento
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
+                <DropdownMenuItem class="cursor-pointer">
+                    <RefreshCw class="mr-2 h-3 w-3" />
+                    Converter
+                </DropdownMenuItem>
+                <DropdownMenuItem @click="efetivarLancamento(data.id as number)" v-if="data.status === 'pendente'" class="cursor-pointer">
+                    <FileCheck class="mr-2 h-3 w-3" />
+                    Efetivar
+                </DropdownMenuItem>
                 <DropdownMenuItem class="text-red-600 cursor-pointer" @click="openDialogDelete = true">
                     <Trash2 class="mr-2 h-3 w-3" />
                     Excluir
@@ -58,32 +57,40 @@ import {
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import VendasRepository from '@/repositories/vendas/vendasRepository';
-import { usePontoDeVendasStore } from '@/stores/vendas/pdv/pontoVendasStore';
-import { useVendasRelatorioStore } from '@/stores/vendas/relatorios/vendasRelatorioStore';
-import { IVenda } from '@/types/vendas/IVenda';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import LancamentosRepository from '@/repositories/financeiro/lancamentosRepository';
+import { useLancamentosStore } from '@/stores/financeiro/lancamentos/lancamentoStore';
+import ITransacao from '@/types/financeiro/ILancamentos';
 import { ScToastUtil } from '@/utils/scToastUtil';
-import { Ellipsis, Link, QrCode, Trash2 } from "lucide-vue-next";
+import { Ellipsis, FileCheck, Link, RefreshCw, Trash2 } from "lucide-vue-next";
 import { ref } from "vue";
-const MainState = useVendasRelatorioStore();
-const storePdv = usePontoDeVendasStore();
+const MainState = useLancamentosStore();
 
 const openDialogDelete = ref(false);
 
 defineProps<{
-    data: IVenda
+    data: ITransacao
 }>()
 
-const onDeletar = async (venda: IVenda) => {
-    if (!Autorize.can("deletar", "vendas")) return;
+const onDeletar = async (lancamento: ITransacao) => {
+    if (!Autorize.can("deletar", "lancamentos")) return;
     try {
-        await VendasRepository.delete(venda.id as number);
+        await LancamentosRepository.delete(lancamento.id as number);
         MainState.page = 1;
-        MainState.getVendas();
+        MainState.getLancamentos();
         MainState.selectedItens = [];
         openDialogDelete.value = false;
-        ScToastUtil.success("Venda deletada com sucesso!");
+        ScToastUtil.success("Lançamento deletado com sucesso!");
+    } catch (e: any) {
+        ScToastUtil.warning(e.response.data.message);
+    }
+}
+
+const efetivarLancamento = async (id: number) => {
+    try {
+        await LancamentosRepository.efetivar(id);
+        MainState.getLancamentos();
+        ScToastUtil.success("Lançamento efetivado com sucesso!");
     } catch (e: any) {
         ScToastUtil.warning(e.response.data.message);
     }

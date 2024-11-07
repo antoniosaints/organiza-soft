@@ -37,15 +37,85 @@ export const createTransacao = async (req: Request, res: Response) => {
   }
 };
 
-// Obter todas as transações
-export const getTransacoes = async (req: Request, res: Response) => {
+export const efetivarTransacao = async (req: Request, res: Response) => {
   try {
-    const transacoes = await prismaService.financeiroTransacao.findMany({
+    const transacao = await prismaService.financeiroTransacao.update({
+      data: { status: "recebido" },
       where: {
+        id: Number(req.params.id),
         contaSistemaId: req.body.contaSistemaId,
       },
     });
-    ResponseService.success(res, { data: transacoes });
+
+    ResponseService.created(
+      res,
+      {
+        message: "Transação efetivada com sucesso",
+        data: transacao,
+      },
+      "Transação efetivada com sucesso"
+    );
+  } catch (error: any) {
+    HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
+  }
+};
+
+// Obter todas as transações
+export const getTransacoes = async (req: Request, res: Response) => {
+  try {
+    const { limit, page, search, startDate, endDate } = req.query;
+    const offset = (Number(page) - 1) * Number(limit);
+    const busca = search as string;
+
+    const whereFilter = {
+      AND: [
+        busca
+          ? {
+              OR: [
+                { descricao: { contains: busca } },
+                { codigoLancamento: { contains: busca } },
+                { codigoNfe: { contains: busca } },
+                { codigo_servico: { contains: busca } },
+                { moeda: { contains: busca } },
+                { referenciaExterna: { contains: busca } },
+                { metodoPagamento: { contains: busca } }
+              ],
+            }
+          : {},
+        startDate && endDate
+          ? {
+              dataVencimento: {
+                ...(startDate
+                  ? { gte: new Date(startDate as string).toISOString() }
+                  : {}),
+                ...(endDate
+                  ? { lte: new Date(endDate as string).toISOString() }
+                  : {}),
+              },
+            }
+          : {},
+        { contaSistemaId: req.body.contaSistemaId },
+      ],
+    }
+    const [items, total] = await Promise.all([
+      prismaService.financeiroTransacao.findMany({
+        skip: offset || 0,
+        take: Number(limit) || 10,
+        orderBy: { dataLancamento: "desc" },
+        include: {
+          FinanceiroParcelamento: true,
+          Categoria: {select: {categoria: true}},
+        },
+        where: whereFilter,
+      }),
+
+      prismaService.financeiroTransacao.count({
+        where: whereFilter,
+      }),
+    ]);
+    ResponseService.success(res, { data: items, total });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
   } finally {

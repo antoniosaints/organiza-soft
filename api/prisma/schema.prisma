@@ -141,7 +141,8 @@ model FinanceiroTransacao {
   codigoLancamento       String
   valor                  Float                    @default(0)
   descricao              String?                  @db.Text
-  categoriasId           Int
+  categoriaId            Int
+  fornecedorId           Int?
   contaId                Int
   dataEfetivado          DateTime?
   usuarioEfetivou        Int?
@@ -157,60 +158,48 @@ model FinanceiroTransacao {
   moeda                  String?                  @default("BRL")
   taxaCambio             Float?                   @default(0)
   referenciaExterna      String?
-  formaPagamentoId       Int
+  metodoPagamento        String?                  @db.VarChar(50)
   natureza               NaturezaTransacao
   operacao               TipoOperacao
   parcelado              Parcelado                @default(nao)
   status                 StatusTransacao          @default(pendente)
   valorFinal             Float                    @default(0)
-  Categoria              FinanceiroCategorias     @relation(fields: [categoriasId], references: [id], onDelete: Restrict)
+  Categoria              FinanceiroCategorias     @relation(fields: [categoriaId], references: [id], onDelete: Restrict)
   Conta                  FinanceiroContas         @relation(fields: [contaId], references: [id], onDelete: Restrict)
-  FormaPagamento         FianceiroFormasPagamento @relation(fields: [formaPagamentoId], references: [id], onDelete: Restrict)
   UsuarioLancamento      Usuario                  @relation(fields: [usuarioLancamento], references: [id], onDelete: Restrict)
   FinanceiroParcelamento FinanceiroParcelamento[]
   VendasOnLancamentos    VendasOnLancamentos[]
 
   @@unique([codigoLancamento, contaSistemaId])
-  @@index([categoriasId], map: "Transacao_categoriasId_fkey")
+  @@index([categoriaId], map: "Transacao_categoriasId_fkey")
   @@index([contaId], map: "Transacao_contaId_fkey")
-  @@index([formaPagamentoId], map: "Transacao_formaPagamentoId_fkey")
   @@index([dataLancamento, dataEfetivado, dataVencimento], map: "Transacao_datasIndex_fkey")
   @@index([status], map: "Transacao_Status_fkey")
 }
 
-model FinanceiroParcelas {
-  id             Int             @id @default(autoincrement())
-  contaSistemaId Int
-  ContaSistema   ContasSistema   @relation(fields: [contaSistemaId], references: [id])
-  nome           String
-  quantidade     Int             @default(1)
-  periodo        PeriodoParcelas
-}
-
 model FinanceiroParcelamento {
-  id              Int                 @id @default(autoincrement())
+  id              Int                   @id @default(autoincrement())
   contaSistemaId  Int
-  ContaSistema    ContasSistema       @relation(fields: [contaSistemaId], references: [id])
+  ContaSistema    ContasSistema         @relation(fields: [contaSistemaId], references: [id])
+  tipo            FinanceiroTipoParcela @default(parcela)
   transacaoId     Int
   parcela         Int
-  status          StatusTransacao     @default(pendente)
+  status          StatusTransacao       @default(pendente)
   valor           Float
   desconto        Float?
   valorRecebido   Float?
   dataRecebimento DateTime?
-  dataCadastro    DateTime            @default(now())
-  Transacao       FinanceiroTransacao @relation(fields: [transacaoId], references: [id], onDelete: Cascade)
+  dataVencimento  DateTime
+  dataCadastro    DateTime              @default(now())
+  Transacao       FinanceiroTransacao   @relation(fields: [transacaoId], references: [id], onDelete: Cascade)
 
   @@index([transacaoId], map: "Parcelamento_transacaoId_fkey")
 }
 
-model FianceiroFormasPagamento {
-  id                  Int                   @id @default(autoincrement())
-  contaSistemaId      Int
-  ContaSistema        ContasSistema         @relation(fields: [contaSistemaId], references: [id])
-  forma               String
-  cor                 String?
-  FinanceiroTransacao FinanceiroTransacao[]
+enum FinanceiroTipoParcela {
+  entrada
+  parcela
+  ajuste
 }
 
 model FinanceiroCategorias {
@@ -257,9 +246,7 @@ model ContasSistema {
   Assinatura                    Assinatura[]
   Configuracoes                 Configuracoes[]
   FinanceiroTransacao           FinanceiroTransacao[]
-  FinanceiroParcelas            FinanceiroParcelas[]
   FinanceiroParcelamento        FinanceiroParcelamento[]
-  FianceiroFormasPagamento      FianceiroFormasPagamento[]
   FinanceiroCategorias          FinanceiroCategorias[]
   FinanceiroContas              FinanceiroContas[]
   Bloqueio                      AssinaturaBloqueio[]

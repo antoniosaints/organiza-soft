@@ -17,7 +17,7 @@
                                 </Button>
                             </RouterLink>
                         </TooltipTrigger>
-                        <TooltipContent>Filtrar registros</TooltipContent>
+                        <TooltipContent>Vender no PDV</TooltipContent>
                     </Tooltip>
                 </TooltipProvider>
                 <CadastrarVendaView />
@@ -105,7 +105,7 @@
                     <CadastrarVendaView />
                     <p>Ou</p>
                     <RouterLink to="/app/vendas/pdv" class="rounded-md">
-                        <Button>
+                        <Button size="sm" variant="default">
                             <ShoppingCart class="mr-1 h-4 w-4" /> Vender no PDV
                         </Button>
                     </RouterLink>

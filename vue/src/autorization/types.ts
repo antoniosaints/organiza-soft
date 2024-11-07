@@ -11,4 +11,9 @@ export type IAbility =
   | "criar_pix"
   | "criar_venda_pdv"
   | "criar_checkout";
-export type IEntity = "usuarios" | "clientes" | "produtos" | "vendas";
+export type IEntity =
+  | "usuarios"
+  | "clientes"
+  | "produtos"
+  | "vendas"
+  | "lancamentos";

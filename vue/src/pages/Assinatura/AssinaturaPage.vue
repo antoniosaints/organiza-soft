@@ -99,11 +99,11 @@ const sinatatureSubscription = async () => {
                     </div>
                     <div class="flex items-center">
                         <Check class="mr-2 h-4 w-4 text-green-500" />
-                        <span>Até {{ parametros.quota.free.sales }} vendas</span>
+                        <span>Até {{ parametros.quota.free.signatures }} assinaturas</span>
                     </div>
                     <div class="flex items-center">
                         <Check class="mr-2 h-4 w-4 text-green-500" />
-                        <span>Até {{ parametros.quota.free.signatures }} assinaturas</span>
+                        <span>Até {{ parametros.quota.free.sales }} vendas</span>
                     </div>
                     <div class="flex items-center">
                         <Check class="mr-2 h-4 w-4 text-green-500" />
@@ -139,28 +139,23 @@ const sinatatureSubscription = async () => {
                 <CardContent class="space-y-2">
                     <div class="flex items-center">
                         <Check class="mr-2 h-4 w-4 text-green-500" />
-                        <span>Até {{ parametros.quota.pro.users == 0 ? '♾️' : parametros.quota.pro.users }}
-                            usuários</span>
+                        <span>Até {{ parametros.quota.pro.users == 0 ? '♾️' : parametros.quota.pro.users }} usuários</span>
                     </div>
                     <div class="flex items-center">
                         <Check class="mr-2 h-4 w-4 text-green-500" />
-                        <span>Até {{ parametros.quota.pro.services == 0 ? '♾️' : parametros.quota.pro.services }}
-                            serviços</span>
+                        <span>Até {{ parametros.quota.pro.services == 0 ? '♾️' : parametros.quota.pro.services }} serviços</span>
                     </div>
                     <div class="flex items-center">
                         <Check class="mr-2 h-4 w-4 text-green-500" />
-                        <span>Até {{ parametros.quota.pro.products == 0 ? '♾️' : parametros.quota.pro.products }}
-                            produtos</span>
+                        <span>Até {{ parametros.quota.pro.products == 0 ? '♾️' : parametros.quota.pro.products }} produtos</span>
                     </div>
                     <div class="flex items-center">
                         <Check class="mr-2 h-4 w-4 text-green-500" />
-                        <span>Até {{ parametros.quota.pro.sales == 0 ? '♾️' : parametros.quota.pro.sales }}
-                            vendas</span>
+                        <span>Até {{ parametros.quota.pro.signatures == 0 ? '♾️' : parametros.quota.pro.signatures }} assinaturas</span>
                     </div>
                     <div class="flex items-center">
                         <Check class="mr-2 h-4 w-4 text-green-500" />
-                        <span>Até {{ parametros.quota.pro.signatures == 0 ? '♾️' : parametros.quota.pro.signatures }}
-                            assinaturas</span>
+                        <span>Até {{ parametros.quota.pro.sales == 0 ? '♾️' : parametros.quota.pro.sales }} vendas</span>
                     </div>
                     <div class="flex items-center">
                         <Check class="mr-2 h-4 w-4 text-green-500" />

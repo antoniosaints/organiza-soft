@@ -176,7 +176,7 @@ const navigate = (path: string) => {
                 </form>
             </CardContent>
             <CardFooter class="flex justify-between">
-                <RouterLink to="/site" class="mr-auto bg-transparent">
+                <RouterLink to="/" class="mr-auto bg-transparent">
                     <Button variant="outline" class="mr-auto text-secondary-foreground">
                         Voltar ao site
                     </Button>
