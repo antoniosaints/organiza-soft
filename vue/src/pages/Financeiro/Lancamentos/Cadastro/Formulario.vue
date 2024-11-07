@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Button } from '@/components/ui/button'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectSearchAjax, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { ArrowDownCircle, ArrowUpCircle, CalendarIcon, CheckCheck, PiggyBank } from 'lucide-vue-next'
 import { Calendar } from '@/components/ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
@@ -18,6 +18,7 @@ import {
 } from '@internationalized/date'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useLancamentosFormularioStore } from '@/stores/financeiro/lancamentos/lancamentosFormularioStore'
+import ContasLancamentosRepository from '@/repositories/financeiro/contasLancamentosRepository'
 
 const df = new DateFormatter('pt-BR', {
   dateStyle: 'long',
@@ -29,6 +30,18 @@ const isParcelado = ref(false)
 const isEfetivado = ref(false)
 const dataPagamento = ref<DateValue>()
 const dataPrimeiroVencimento = ref<DateValue>()
+
+const fetchContasLancamentos = async (query: string, id?: number) => {
+    if (id) {
+        return await ContasLancamentosRepository.get(id).then(response => {
+            return [{ id: response.id as number, label: response.descricao! }]
+        })
+    } else {
+        return await ContasLancamentosRepository.getAll(10, 1, query).then(response => {
+            return response.data.map(item => ({ id: item.id as number, label: item.descricao! }))
+        })
+    }
+}
 
 </script>
 
@@ -78,15 +91,8 @@ const dataPrimeiroVencimento = ref<DateValue>()
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
                             <div class="space-y-2 p-2">
                                 <Label for="conta">Conta</Label>
-                                <Select required>
-                                    <SelectTrigger id="conta">
-                                        <SelectValue placeholder="Selecione uma conta" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="1">Nubank</SelectItem>
-                                        <SelectItem value="2">Caixa da empresa</SelectItem>
-                                    </SelectContent>
-                                </Select>
+                                <SelectSearchAjax id="categoria" labelSearch="Selecione uma conta"
+                                v-model="(formulario.data.contaId as number)" :ajax="fetchContasLancamentos" />
                             </div>
                             <div class="space-y-2 p-2">
                                 <Label for="categoria">Categoria</Label>
@@ -226,34 +232,34 @@ const dataPrimeiroVencimento = ref<DateValue>()
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                             <div class="space-y-2 p-2">
                                 <Label for="codigoNfe">Nota Fiscal</Label>
-                                <Input id="codigoNfe" type="text" placeholder="Nota fiscal" />
+                                <Input id="codigoNfe" v-model="formulario.data.codigoNfe" type="text" placeholder="Nota fiscal" />
                             </div>
     
                             <div class="space-y-2 p-2">
                                 <Label for="referenciaExterna">Referência externa</Label>
-                                <Input id="referenciaExterna" type="text" placeholder="Referência externa" />
+                                <Input id="referenciaExterna" v-model="formulario.data.referenciaExterna" type="text" placeholder="Referência externa" />
                             </div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                             <div class="space-y-2 p-2">
                                 <Label for="codigoServico">Código do serviço</Label>
-                                <Input id="codigoServico" type="text" placeholder="Código do serviço" />
+                                <Input id="codigoServico" v-model="formulario.data.codigoServico" type="text" placeholder="Código do serviço" />
                             </div>
     
                             <div class="space-y-2 p-2">
                                 <Label for="taxaJuros">Taxa de juros</Label>
-                                <Input id="taxaJuros" type="number" placeholder="%" />
+                                <Input id="taxaJuros" v-model="formulario.data.taxaJuros" type="number" placeholder="%" />
                             </div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                             <div class="space-y-2 p-2">
                                 <Label for="taxaCambio">Taxa de cambio</Label>
-                                <Input id="taxaCambio" type="text" placeholder="%" />
+                                <Input id="taxaCambio" v-model="formulario.data.taxaCambio" type="text" placeholder="%" />
                             </div>
     
                             <div class="space-y-2 p-2">
                                 <Label for="taxaDesconto">Taxa de desconto</Label>
-                                <Input id="taxaDesconto" type="number" placeholder="%" />
+                                <Input id="taxaDesconto" v-model="formulario.data.taxaDesconto" type="number" placeholder="%" />
                             </div>
                         </div>
                     </ScrollArea>

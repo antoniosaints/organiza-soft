@@ -47,6 +47,7 @@
                     <BreadCrumb />
                 </div>
                 <div class="flex items-center gap-4">
+                    <ComandoBusca />
                     <ToogleMode />
                     <ProfileHome />
                 </div>
@@ -75,6 +76,7 @@ import { onUnmounted } from 'vue';
 import { useLoginStore } from '@/stores/login/loginStore';
 import GlobalAlert from './globalAlert.vue';
 import SidebarIteravel from './sidebarIteravel.vue';
+import ComandoBusca from '@/pages/ComandoBusca/ComandoBusca.vue';
 
 const widthWindow = ref(window.innerWidth);
 const loginStore = useLoginStore();

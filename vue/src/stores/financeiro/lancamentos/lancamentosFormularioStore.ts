@@ -9,12 +9,19 @@ export const useLancamentosFormularioStore = defineStore(
     const defaultData = ref<ITransacao>({
       status: "pendente",
       valor: 0,
-      categoriasId: 0,
-      contaId: 0,
+      categoriaId: 0,
+      contaId: 1,
       dataVencimento: new Date(),
       metodoPagamento: "dinheiro",
       natureza: "receita",
-      operacao: "entrada"
+      operacao: "entrada",
+      taxaCambio: 0,
+      parcelado: "nao",
+      codigoNfe: "",
+      fornecedorId: 0,
+      taxaDesconto: 0,
+      taxaJuros: 0,
+      referenciaExterna: "",
     });
 
     const data = ref<ITransacao>({ ...defaultData.value });

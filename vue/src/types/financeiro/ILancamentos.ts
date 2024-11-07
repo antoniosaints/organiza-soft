@@ -21,9 +21,9 @@ export default interface ITransacao {
   codigoLancamento?: string;
   valor: number;
   descricao?: string;
-  categoriasId: number;
-  contaId: number;
-  fornecedorId?: number;
+  categoriaId: number | string;
+  contaId: number | string;
+  fornecedorId?: number | string;
   dataEfetivado?: string | Date;
   usuarioEfetivou?: number;
   dataVencimento?: string | Date;
