@@ -1,11 +1,10 @@
 <template>
     <div class="gap-4 grid">
         <div class="grid gap-4 md:grid-cols-2 md:gap-4 lg:grid-cols-4">
-            <RouterLink to="/app/financeiro/lancamentos">
                 <Card>
                     <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle class="text-sm font-medium">
-                            Lançamentos
+                            Resumo geral
                         </CardTitle>
                         <DollarSign class="h-4 w-4" />
                     </CardHeader>
@@ -13,7 +12,7 @@
                         <div class="text-2xl font-bold text-blue-500">
                             {{ resumoFinanceiro.total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
                         </div>
-                        <div class="flex gap-1 text-xs">
+                        <div class="flex gap-1 text-xs items-center">
                             <ArrowBigDown class="h-4 w-4 text-green-500" />
                             {{ totalReceita.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
                             }}
@@ -23,64 +22,81 @@
                         </div>
                     </CardContent>
                 </Card>
-            </RouterLink>
             <Card>
                 <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle class="text-sm font-medium">
-                        Assinaturas
+                        Balanço
                     </CardTitle>
-                    <Users class="h-4 w-4" />
+                    <ChartCandlestick class="h-4 w-4" />
                 </CardHeader>
                 <CardContent>
-                    <div class="text-2xl font-bold text-cyan-500">
-                        +2350
+                    <div class="text-2xl font-bold" :class="totalReceita - totalDespesa > 0 ? 'text-green-500' : 'text-red-500'">
+                        {{ (totalReceita - totalDespesa).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
                     </div>
-                    <p class="text-xs text-muted-foreground">
-                        +180.1% desde o mês passado
+                    <p class="flex gap-1 text-xs items-center">
+                        <CircleArrowOutDownLeft class="h-3 w-3 text-green-500" />
+                        {{ 
+                        (totalReceita + totalDespesa) > 0 
+                            ? ((totalReceita / (totalReceita + totalDespesa)) * 100).toFixed(2) 
+                            : 0 
+                        }}% receita
+                        <CircleArrowOutUpRight class="h-3 w-3 text-red-500" />
+                        {{ 
+                        (totalReceita + totalDespesa) > 0 
+                            ? ((totalDespesa / (totalReceita + totalDespesa)) * 100).toFixed(2) 
+                            : 0 
+                        }}% despesa
                     </p>
                 </CardContent>
             </Card>
-            <RouterLink to="/app/vendas/relatorio">
                 <Card>
                     <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle class="text-sm font-medium">
-                            Vendas
+                            Pendentes
                         </CardTitle>
-                        <CreditCard class="h-4 w-4" />
+                        <ClockArrowDown class="h-4 w-4" />
                     </CardHeader>
                     <CardContent>
-                        <div class="text-2xl font-bold text-blue-500">
-                            {{ vendas.reduce((total, item) => total + (item.valor - item.valorDesconto!),
-                                0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
+                        <div class="text-2xl font-bold text-yellow-500">
+                            {{ (totalReceitaPendente + totalDespesaPendente).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
                         </div>
-                        <p class="text-xs text-muted-foreground">
-                            Resumo das vendas
-                        </p>
+                        <div class="flex gap-1 text-xs items-center">
+                            <ClockArrowDown class="h-3 w-3 text-green-500" />
+                            {{ totalReceitaPendente.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                            }}
+                            <ClockArrowDown class="h-3 w-3 text-red-500" />
+                            {{ totalDespesaPendente.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                            }}
+                        </div>
                     </CardContent>
                 </Card>
-            </RouterLink>
             <Card>
                 <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle class="text-sm font-medium">
-                        Clientes
+                        Consolidado
                     </CardTitle>
-                    <Activity class="h-4 w-4" />
+                    <CircleCheckBig class="h-4 w-4" />
                 </CardHeader>
                 <CardContent>
                     <div class="text-2xl font-bold text-blue-500">
-                        +573
+                        {{ (totalEfetivoDespesa + totalEfetivoReceita).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
                     </div>
-                    <p class="text-xs text-muted-foreground">
-                        +201 desde o mês passado
-                    </p>
+                    <div class="flex gap-1 text-xs items-center">
+                        <CircleCheckBig class="h-3 w-3 text-green-500" />
+                        {{ totalEfetivoReceita.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                        }}
+                        <CircleCheckBig class="h-3 w-3 text-red-500" />
+                        {{ totalEfetivoDespesa.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                        }}
+                    </div>
                 </CardContent>
             </Card>
         </div>
         <div class="grid gap-4 md:gap-4 lg:grid-cols-2 xl:grid-cols-3">
             <Card class="col-span-1">
                 <CardHeader>
-                    <CardTitle>Resumo de vendas</CardTitle>
-                    <CardDescription>Resumo de vendas por mês</CardDescription>
+                    <CardTitle>Resumo - Forma de pagamento</CardTitle>
+                    <CardDescription>Resumo mensal por forma de pagamento</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <BarChart class="h-48 py-4" :rounded-corners="4" :data="calcularTotalPorMetodoPagamento()"
@@ -90,8 +106,8 @@
             </Card>
             <Card class="col-span-1">
                 <CardHeader>
-                    <CardTitle>Resumo de assinaturas</CardTitle>
-                    <CardDescription>Resumo de assinaturas por mês</CardDescription>
+                    <CardTitle>Resumo - Natureza</CardTitle>
+                    <CardDescription>Resumo mensal por natureza</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <BarChart class="h-48 py-4" :rounded-corners="4" :data="data" index="name"
@@ -100,8 +116,8 @@
             </Card>
             <Card class="col-span-1">
                 <CardHeader>
-                    <CardTitle>Resumo de lançamentos</CardTitle>
-                    <CardDescription>Resumo de lançamentos por mês</CardDescription>
+                    <CardTitle>Resumo - Categoria</CardTitle>
+                    <CardDescription>Resumo mensal por categoria</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <BarChart class="h-48 py-4" :rounded-corners="4" :data="data" index="name"
@@ -167,102 +183,6 @@
                                     $250.00
                                 </TableCell>
                             </TableRow>
-                            <TableRow>
-                                <TableCell>
-                                    <div class="font-medium">
-                                        Olivia Smith
-                                    </div>
-                                    <div class="hidden text-sm text-muted-foreground md:inline">
-                                        olivia@example.com
-                                    </div>
-                                </TableCell>
-                                <TableCell class="hidden xl:table-cell">
-                                    Refund
-                                </TableCell>
-                                <TableCell class="hidden xl:table-cell">
-                                    <Badge class="text-xs" variant="outline">
-                                        Declined
-                                    </Badge>
-                                </TableCell>
-                                <TableCell class="hidden md:table-cell lg:hidden xl:table-cell">
-                                    2023-06-24
-                                </TableCell>
-                                <TableCell class="text-right">
-                                    $150.00
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell>
-                                    <div class="font-medium">
-                                        Noah Williams
-                                    </div>
-                                    <div class="hidden text-sm text-muted-foreground md:inline">
-                                        noah@example.com
-                                    </div>
-                                </TableCell>
-                                <TableCell class="hidden xl:table-cell">
-                                    Subscription
-                                </TableCell>
-                                <TableCell class="hidden xl:table-cell">
-                                    <Badge class="text-xs" variant="outline">
-                                        Approved
-                                    </Badge>
-                                </TableCell>
-                                <TableCell class="hidden md:table-cell lg:hidden xl:table-cell">
-                                    2023-06-25
-                                </TableCell>
-                                <TableCell class="text-right">
-                                    $350.00
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell>
-                                    <div class="font-medium">
-                                        Emma Brown
-                                    </div>
-                                    <div class="hidden text-sm text-muted-foreground md:inline">
-                                        emma@example.com
-                                    </div>
-                                </TableCell>
-                                <TableCell class="hidden xl:table-cell">
-                                    Sale
-                                </TableCell>
-                                <TableCell class="hidden xl:table-cell">
-                                    <Badge class="text-xs" variant="outline">
-                                        Approved
-                                    </Badge>
-                                </TableCell>
-                                <TableCell class="hidden md:table-cell lg:hidden xl:table-cell">
-                                    2023-06-26
-                                </TableCell>
-                                <TableCell class="text-right">
-                                    $450.00
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell>
-                                    <div class="font-medium">
-                                        Liam Johnson
-                                    </div>
-                                    <div class="hidden text-sm text-muted-foreground md:inline">
-                                        liam@example.com
-                                    </div>
-                                </TableCell>
-                                <TableCell class="hidden xl:table-cell">
-                                    Sale
-                                </TableCell>
-                                <TableCell class="hidden xl:table-cell">
-                                    <Badge class="text-xs" variant="outline">
-                                        Approved
-                                    </Badge>
-                                </TableCell>
-                                <TableCell class="hidden md:table-cell lg:hidden xl:table-cell">
-                                    2023-06-27
-                                </TableCell>
-                                <TableCell class="text-right">
-                                    $550.00
-                                </TableCell>
-                            </TableRow>
                         </TableBody>
                     </Table>
                 </CardContent>
@@ -297,8 +217,8 @@
     </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { Activity, ArrowBigDown, ArrowBigUp, ArrowUpRight, CreditCard, DollarSign, Users } from "lucide-vue-next"
+import { computed, onMounted, ref } from "vue";
+import { ArrowBigDown, ArrowBigUp, ArrowUpRight, ChartCandlestick, CircleArrowOutDownLeft, CircleArrowOutUpRight, CircleCheckBig, ClockArrowDown, DollarSign } from "lucide-vue-next"
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -308,10 +228,8 @@ import { BarChart } from '@/components/ui/chart-bar'
 import VendasRepository from "@/repositories/vendas/vendasRepository";
 import { IVenda } from "@/types/vendas/IVenda";
 import CustomTooltipChart from "@/components/customs/CustomTooltipChart.vue";
-import { RouterLink } from "vue-router";
 import { IResumoFinanceiro } from "@/types/financeiro/IResumoFinanceiro";
 import LancamentosRepository from "@/repositories/financeiro/lancamentosRepository";
-import { computed } from "vue";
 
 const vendas = ref<IVenda[]>([])
 const vendasRecents = ref<IVenda[]>([])
@@ -333,6 +251,22 @@ const totalReceita = computed(() => {
 
 const totalDespesa = computed(() => {
     return resumoFinanceiro.value.efetivadoDespesaAVista + resumoFinanceiro.value.efetivadoDespesasAPrazo + resumoFinanceiro.value.pendenteDespesaAVista + resumoFinanceiro.value.pendentesDespesasAPrazo
+})
+
+const totalReceitaPendente = computed(() => {
+    return resumoFinanceiro.value.pendenteReceitaAVista + resumoFinanceiro.value.pendentesReceitasAPrazo
+})
+
+const totalDespesaPendente = computed(() => {
+    return resumoFinanceiro.value.pendenteDespesaAVista + resumoFinanceiro.value.pendentesDespesasAPrazo
+})
+
+const totalEfetivoReceita = computed(() => {
+    return resumoFinanceiro.value.efetivadoReceitaAVista + resumoFinanceiro.value.efetivadoReceitasAPrazo
+})
+
+const totalEfetivoDespesa = computed(() => {
+    return resumoFinanceiro.value.efetivadoDespesaAVista + resumoFinanceiro.value.efetivadoDespesasAPrazo
 })
 
 const getVendasResumo = async () => {

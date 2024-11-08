@@ -1,15 +1,23 @@
 export const getResumoTransacoes = (data: any[]) => {
     const total = data.reduce((acc, item) => acc + item.valorFinal!, 0);
-    const pendenteAvista = data.reduce((acc, item) => {
-      return acc + ((item.status == "pendente" && item.parcelado == "nao") ? item.valorFinal! : 0);
-    }, 0);
-    const efetivadaAVista = data.reduce((acc, item) => {
-      return acc + ((item.status == "recebido" && item.parcelado == "nao") ? item.valorFinal! : 0);
-    }, 0);
-    
-    const parcelados = data.filter((item) => item.parcelado == "sim");
 
-    const pendenteParcelado = parcelados.reduce(
+    const pendenteReceitaAVista = data.reduce((acc, item) => {
+      return acc + ((item.status == "pendente" && item.parcelado == "nao" && item.natureza == "receita") ? item.valorFinal! : 0);
+    }, 0);
+    const efetivadoReceitaAVista = data.reduce((acc, item) => {
+      return acc + ((item.status == "recebido" && item.parcelado == "nao" && item.natureza == "receita") ? item.valorFinal! : 0);
+    }, 0);
+    const pendenteDespesaAVista = data.reduce((acc, item) => {
+      return acc + ((item.status == "pendente" && item.parcelado == "nao" && item.natureza == "despesa") ? item.valorFinal! : 0);
+    }, 0);
+    const efetivadoDespesaAVista = data.reduce((acc, item) => {
+      return acc + ((item.status == "recebido" && item.parcelado == "nao" && item.natureza == "despesa") ? item.valorFinal! : 0);
+    }, 0);
+
+    const receitasParceladas = data.filter((item) => (item.parcelado == "sim" && item.natureza == "despesa"));
+    const despesasParceladas = data.filter((item) => (item.parcelado == "sim" && item.natureza == "receita"));
+
+    const pendentesReceitasAPrazo = receitasParceladas.reduce(
       (acc, item) =>
         acc +
         item.FinanceiroParcelamento!.reduce(
@@ -18,7 +26,25 @@ export const getResumoTransacoes = (data: any[]) => {
         ),
       0
     );
-    const efetivadoParcelado = parcelados.reduce(
+    const efetivadoReceitasAPrazo = receitasParceladas.reduce(
+      (acc, item) =>
+        acc +
+        item.FinanceiroParcelamento!.reduce(
+          (acc: number, val: any) => acc + (val?.status == "recebido" ? val?.valor : 0),
+          0
+        ),
+      0
+    );
+    const pendentesDespesasAPrazo = despesasParceladas.reduce(
+      (acc, item) =>
+        acc +
+        item.FinanceiroParcelamento!.reduce(
+          (acc: number, val: any) => acc + (val?.status == "pendente" ? val?.valor : 0),
+          0
+        ),
+      0
+    );
+    const efetivadoDespesasAPrazo = despesasParceladas.reduce(
       (acc, item) =>
         acc +
         item.FinanceiroParcelamento!.reduce(
@@ -30,9 +56,13 @@ export const getResumoTransacoes = (data: any[]) => {
 
     return {
       total,
-      pendenteAvista,
-      efetivadaAVista,
-      pendenteParcelado,
-      efetivadoParcelado,
+      pendenteReceitaAVista,
+      efetivadoReceitaAVista,
+      pendenteDespesaAVista,
+      efetivadoDespesaAVista,
+      pendentesReceitasAPrazo,
+      pendentesDespesasAPrazo,
+      efetivadoReceitasAPrazo,
+      efetivadoDespesasAPrazo
     };
 };

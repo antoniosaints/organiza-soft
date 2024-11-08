@@ -13,6 +13,7 @@ import ContasLancamentosRepository from '@/repositories/financeiro/contasLancame
 import { NumberField, NumberFieldContent, NumberFieldDecrement, NumberFieldIncrement, NumberFieldInput } from '@/components/ui/number-field'
 import { useLancamentoSchemaStore } from '@/stores/financeiro/lancamentos/lancamentoSchemaStore'
 import { LancamentoService } from '@/services/financeiro/LancamentoService'
+import { watch } from 'vue'
 
 const { schema } = useLancamentoSchemaStore()
 
@@ -27,6 +28,13 @@ const fetchContasLancamentos = async (query: string, id?: number) => {
         })
     }
 }
+
+const managerState = () => {
+    if (schema.isParcelado) schema.isEfetivado = false
+    if (schema.isEfetivado) schema.isParcelado = false
+}
+
+watch(() => [schema.isParcelado, schema.isEfetivado], managerState)
 
 const submitLancamento = async () => {
     await LancamentoService.create(schema)

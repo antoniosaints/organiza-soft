@@ -1,6 +1,7 @@
 import ITransacao from "@/types/financeiro/ILancamentos";
 import axiosService from "../../services/http/axiosService";
 import { ISchemaLancamento } from "@/stores/financeiro/lancamentos/lancamentoSchemaStore";
+import { IResumoFinanceiro } from "@/types/financeiro/IResumoFinanceiro";
 
 export default class LancamentosRepository {
     static async get(id: number): Promise<ITransacao> {
@@ -9,6 +10,10 @@ export default class LancamentosRepository {
     }
     static async efetivar(id: number): Promise<ITransacao> {
         const { data } = await axiosService.get(`financeiro/transacao/efetivar/${id}`);
+        return data;
+    }
+    static async getResume(): Promise<IResumoFinanceiro> {
+        const { data } = await axiosService.get(`/financeiro/transacao/resumo/totais`);
         return data;
     }
     static async getAll(limit: number, page: number, search?: string | undefined): Promise<{ data: ITransacao[], total: number}> {

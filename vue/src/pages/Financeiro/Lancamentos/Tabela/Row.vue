@@ -27,7 +27,9 @@
                 </Tooltip>
             </TooltipProvider>
         </TableCell>
-        <TableCell class="font-bold">{{ formatRealValue(data.valorFinal!) }}</TableCell>
+        <TableCell class="font-bold">
+            <CellValor :data="data" />
+        </TableCell>
         <TableCell class="font-bold hidden md:table-cell">
             <div class="flex items-center bg-secondary px-2 py-1 text-secondary-foreground rounded-md w-max">
                 <ChartPie class="w-3 h-3 mr-1" /> {{ data.Categoria?.categoria }}
@@ -55,13 +57,13 @@ import { computed } from "vue";
 import { Checkbox } from "@/components/ui/checkbox";
 import { LancamentosAction, LancamentosBadge } from ".";
 import { ChartPie, CircleArrowOutDownLeft, CircleArrowOutUpRight, Receipt } from "lucide-vue-next";
-import { formatRealValue } from "@/utils/formatterUtil";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import ITransacao from "@/types/financeiro/ILancamentos";
 import { useLancamentosStore } from "@/stores/financeiro/lancamentos/lancamentoStore";
 import BadgeMetodo from "./BadgeMetodo.vue";
 import { useLancamentosFormularioStore } from "@/stores/financeiro/lancamentos/lancamentosFormularioStore";
 import CellVencimentos from "./CellVencimentos.vue";
+import CellValor from "./CellValor.vue";
 const mainStore = useLancamentosStore();
 const formularioStore = useLancamentosFormularioStore();
 

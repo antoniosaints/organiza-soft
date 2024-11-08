@@ -144,6 +144,12 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
         show: menuStore.permissions.financeiro,
         items: [
             {
+                title: "Resumo",
+                icon: FileChartPie,
+                show: menuStore.permissions.financeiro,
+                url: "/app/financeiro/dashboard"
+            },
+            {
                 icon: Wallet,
                 title: 'Lançamentos',
                 show: menuStore.permissions.financeiro,

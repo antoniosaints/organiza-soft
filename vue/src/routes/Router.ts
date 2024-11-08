@@ -90,6 +90,12 @@ const routes: RouteRecordRaw[] = [
                         name: "Lancamentos",
                         meta: { breadcrumb: 'Lançamentos financeiros' },
                         component: () => import("@/views/Financeiro/Lancamentos.vue")
+                    },
+                    {
+                        path: "/app/financeiro/dashboard",
+                        name: "DashboardFinanceiro",
+                        meta: { breadcrumb: 'Dashboard financeiro' },
+                        component: () => import("@/views/Financeiro/DashboardLancamento.vue")
                     }
                 ]
             },

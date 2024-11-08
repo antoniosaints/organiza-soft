@@ -13,23 +13,11 @@ export class LancamentoService {
 
   async initialize() {
     this.data.lancamento.contaSistemaId = this.data.contaSistemaId;
-    this.verificaEntradaValor();
     this.gerenciaValores();
     this.gerenciaJuros();
     this.verificaEfetivado();
     this.verificaParcelado();
     this.verificaNatureza();
-  }
-  async verificaEntradaValor() {
-    if (
-      this.data.hasEntrada &&
-      this.data.valorEntrada >= this.data.valorLancamento
-    ) {
-      return ResponseService.notFound(
-        this.response,
-        "O Valor da entrada nao pode ser maior ou igual ao valor do lancamento"
-      );
-    }
   }
   async gerenciaValores() {
     this.data.lancamento.valor = this.data.valorLancamento;
@@ -75,30 +63,37 @@ export class LancamentoService {
   }
 
   async commitLancamento() {
-    const [lancamento] = await prismaService.$transaction(async (prisma) => {
-      const {FinanceiroParcelamento, ...novoObjeto} = this.data.lancamento;
-      const lancamento = await prisma.financeiroTransacao.create({
-        data: {
-          ...novoObjeto,
-        },
-      });
-
-      if (this.data.isParcelado) {
-        await this.parcelar(lancamento.id);
-        await prisma.financeiroParcelamento.createMany({
-          data: this.parcelas,
+    if (this.data.hasEntrada && this.data.valorEntrada >= this.data.valorLancamento) {
+      ResponseService.notFound(
+        this.response,
+        "O Valor da entrada nao pode ser maior ou igual ao valor do lancamento"
+      );
+    }else {
+      const [lancamento] = await prismaService.$transaction(async (prisma) => {
+        const {FinanceiroParcelamento, ...novoObjeto} = this.data.lancamento;
+        const lancamento = await prisma.financeiroTransacao.create({
+          data: {
+            ...novoObjeto,
+          },
         });
-        this.parcelas = [];
-      }
-
-      return [lancamento];
-    });
-
-    return ResponseService.created(
-      this.response,
-      { lancamento },
-      "Lançamento registrado com sucesso"
-    );
+  
+        if (this.data.isParcelado) {
+          await this.parcelar(lancamento.id);
+          await prisma.financeiroParcelamento.createMany({
+            data: this.parcelas,
+          });
+          this.parcelas = [];
+        }
+  
+        return [lancamento];
+      });
+  
+      return ResponseService.created(
+        this.response,
+        { lancamento },
+        "Lançamento registrado com sucesso"
+      );
+    }
   }
   async parcelar(idLancamento: number) {
     let valorAParcelar = this.data.lancamento.valorFinal!;
