@@ -27,7 +27,7 @@ const dataShow = computed(() => {
 const verifyIfdateOverdue = computed(() => {
     const data = new Date(dataShow.value as string)
     const hoje = new Date()
-    if (data < hoje) return true
+    if (data < hoje && props.data.status === 'pendente') return true
     return false
 })
 
