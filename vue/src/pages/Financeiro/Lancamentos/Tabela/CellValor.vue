@@ -15,7 +15,7 @@ const props = defineProps<{
 
 const valor = computed(() => {
     if (props.data.parcelado === 'sim' && props.data.FinanceiroParcelamento?.length) {
-        return props.data.FinanceiroParcelamento.reduce((total, item) => total + item.valor, 0)
+        return props.data.FinanceiroParcelamento.filter(item => item.status != "cancelada").reduce((total, item) => total + item.valor, 0)
     } else {
         return props.data.valorFinal!
     }

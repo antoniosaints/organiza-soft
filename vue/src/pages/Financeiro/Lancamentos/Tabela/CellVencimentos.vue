@@ -18,7 +18,9 @@ const props = defineProps<{
 
 const dataShow = computed(() => {
     if (props.data.parcelado === 'sim' && props.data.FinanceiroParcelamento?.length) {
-        return props.data.FinanceiroParcelamento.filter((item) => item.status === 'pendente')[0].dataVencimento
+        const dataVencimento = props.data.FinanceiroParcelamento.filter((item) => item.status === 'pendente')
+        if (dataVencimento.length) return dataVencimento.at(0)?.dataVencimento
+        else return props.data.FinanceiroParcelamento.filter((item) => item.status != 'cancelada').at(-1)?.dataVencimento
     } else {
         return props.data.dataVencimento
     }
