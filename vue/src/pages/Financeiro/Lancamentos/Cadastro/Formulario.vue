@@ -177,7 +177,7 @@ const submitLancamento = async () => {
                             </div>
                             <div class="space-y-2 p-2">
                                 <Label for="primeiroVencimento">Data Primeira Parcela</Label>
-                                <Input id="primeiroVencimento" type="date" v-model="schema.dataPrimeiraParcela" />
+                                <Input id="primeiroVencimento" :required="schema.isParcelado" type="date" v-model="schema.dataPrimeiraParcela" />
                             </div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-2" v-if="schema.hasEntrada">
@@ -202,13 +202,13 @@ const submitLancamento = async () => {
                             </div>
                             <div class="space-y-2 p-2">
                                 <Label for="primeiroVencimento">Data da entrada</Label>
-                                <Input id="primeiroVencimento" type="date" v-model="schema.dataEntrada" />
+                                <Input id="primeiroVencimento" :required="schema.hasEntrada" type="date" v-model="schema.dataEntrada" />
                             </div>
                         </div>
                         <div v-if="schema.isEfetivado" class="grid grid-cols-1 md:grid-cols-2 gap-2">
                             <div class="space-y-2 p-2">
                                 <Label for="dataPagamento">Data do Pagamento</Label>
-                                <Input id="dataPagamento" type="date" v-model="schema.dataPagamento" />
+                                <Input id="dataPagamento" type="date" :required="schema.isEfetivado" v-model="schema.dataPagamento" />
                             </div>
                             <div class="space-y-2 p-2">
                                 <Label for="tipoPagamento">Tipo de Pagamento</Label>
