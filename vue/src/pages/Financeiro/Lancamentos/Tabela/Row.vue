@@ -39,8 +39,9 @@
         <TableCell class="hidden md:table-cell">
             <BadgeMetodo :data="data" />
         </TableCell>
-        <TableCell class="hidden md:table-cell"><span class="px-2 py-1 bg-secondary rounded-md">{{
-            formatDateToPtbr(data.dataLancamento as string) }}</span></TableCell>
+        <TableCell class="hidden md:table-cell">
+            <CellVencimentos :data="data" />
+        </TableCell>
         <TableCell class="text-right">
             <LancamentosAction :data="data" />
         </TableCell>
@@ -54,12 +55,13 @@ import { computed } from "vue";
 import { Checkbox } from "@/components/ui/checkbox";
 import { LancamentosAction, LancamentosBadge } from ".";
 import { ChartPie, CircleArrowOutDownLeft, CircleArrowOutUpRight, Receipt } from "lucide-vue-next";
-import { formatDateToPtbr, formatRealValue } from "@/utils/formatterUtil";
+import { formatRealValue } from "@/utils/formatterUtil";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import ITransacao from "@/types/financeiro/ILancamentos";
 import { useLancamentosStore } from "@/stores/financeiro/lancamentos/lancamentoStore";
 import BadgeMetodo from "./BadgeMetodo.vue";
 import { useLancamentosFormularioStore } from "@/stores/financeiro/lancamentos/lancamentosFormularioStore";
+import CellVencimentos from "./CellVencimentos.vue";
 const mainStore = useLancamentosStore();
 const formularioStore = useLancamentosFormularioStore();
 

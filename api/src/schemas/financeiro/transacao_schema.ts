@@ -1,5 +1,6 @@
 import { generateUniqueIdWithPrefix } from "../../utils/tools/UniqueId";
 import zodUtil from "../../utils/validations/zod_util";
+import { createParcelamento } from "./parcelamento_schema";
 
 const createTransacao = zodUtil.object({
   codigoLancamento: zodUtil
@@ -33,6 +34,12 @@ const createTransacao = zodUtil.object({
   dataEfetivado: zodUtil
     .string({
       invalid_type_error: "A dataEfetivado deve ser uma data",
+    })
+    .transform((val) => new Date(val))
+    .optional(),
+  dataPagamento: zodUtil
+    .string({
+      invalid_type_error: "A dataPagamento deve ser uma data",
     })
     .transform((val) => new Date(val))
     .optional(),
@@ -143,6 +150,9 @@ const createTransacao = zodUtil.object({
     .default(0)
     .refine((val) => val >= 0, { message: "A taxaCambio deve ser positiva" })
     .optional(),
+  FinanceiroParcelamento: zodUtil
+    .array(createParcelamento)
+    .optional(),
 });
 
 const updateTransacao = zodUtil.object({
@@ -179,6 +189,12 @@ const updateTransacao = zodUtil.object({
   dataEfetivado: zodUtil
     .string({
       invalid_type_error: "A dataEfetivado deve ser uma data",
+    })
+    .transform((val) => new Date(val))
+    .optional(),
+  dataPagamento: zodUtil
+    .string({
+      invalid_type_error: "A dataPagamento deve ser uma data",
     })
     .transform((val) => new Date(val))
     .optional(),

@@ -7,6 +7,7 @@ export default interface IParcelamento {
     status: IStatusTransacao;
     valor: number;
     valorRecebido?: number;
+    dataVencimento?: Date;
     dataRecebimento?: Date;
     dataCadastro?: Date;
   }

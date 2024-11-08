@@ -14,6 +14,7 @@ import {
 } from "../../services";
 import { LancamentoBodySchema } from "../../schemas/financeiro/lancamento_body_schema";
 import { LancamentoService } from "../../services/lancamentos_service";
+import { getResumoTransacoes } from "../../hooks/financeiro/get_resumo";
 
 // Criação de transação
 export const createTransacao = async (req: Request, res: Response) => {
@@ -22,6 +23,25 @@ export const createTransacao = async (req: Request, res: Response) => {
     const Lancamento = new LancamentoService(validated, res);
     await Lancamento.initialize();
     return await Lancamento.commitLancamento();
+  } catch (error: any) {
+    HttpErrorService.hadle(error, res);
+  }
+};
+
+export const getResumoLancamentos = async (req: Request, res: Response) => {
+  try {
+    const data = await prismaService.financeiroTransacao.findMany({
+      where: { contaSistemaId: req.body.contaSistemaId },
+      include: { FinanceiroParcelamento: true },
+    });
+
+    const resp = getResumoTransacoes(data);
+
+    ResponseService.success(
+      res,
+      resp,
+      "Transações recuperadas"
+    );
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
   }
@@ -70,7 +90,7 @@ export const getTransacoes = async (req: Request, res: Response) => {
                 { codigo_servico: { contains: busca } },
                 { moeda: { contains: busca } },
                 { referenciaExterna: { contains: busca } },
-                { metodoPagamento: { contains: busca } }
+                { metodoPagamento: { contains: busca } },
               ],
             }
           : {},
@@ -88,7 +108,7 @@ export const getTransacoes = async (req: Request, res: Response) => {
           : {},
         { contaSistemaId: req.body.contaSistemaId },
       ],
-    }
+    };
     const [items, total] = await Promise.all([
       prismaService.financeiroTransacao.findMany({
         skip: offset || 0,
@@ -96,7 +116,7 @@ export const getTransacoes = async (req: Request, res: Response) => {
         orderBy: { dataLancamento: "desc" },
         include: {
           FinanceiroParcelamento: true,
-          Categoria: {select: {categoria: true}},
+          Categoria: { select: { categoria: true } },
         },
         where: whereFilter,
       }),
@@ -115,8 +135,8 @@ export const getTransacoes = async (req: Request, res: Response) => {
 
 // Obter transação por ID
 export const getTransacao = async (req: Request, res: Response) => {
-  const { id } = req.params;
   try {
+    const { id } = req.params;
     const transacao = await prismaService.financeiroTransacao.findUnique({
       where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
     });

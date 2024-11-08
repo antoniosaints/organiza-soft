@@ -37,8 +37,12 @@ export class LancamentoService {
   }
 
   async verificaEfetivado() {
-    if (this.data.isEfetivado) {
+    if (this.data.isEfetivado && !this.data.isParcelado) {
       this.data.lancamento.status = "recebido";
+      this.data.lancamento.dataEfetivado = this.data.dataPagamento;
+      this.data.lancamento.dataVencimento = this.data.dataPagamento;
+      this.data.lancamento.dataPagamento = this.data.dataPagamento;
+      this.data.lancamento.usuarioEfetivou = this.data.lancamento.usuarioLancamento
     }
   }
   async gerenciaJuros() {
@@ -48,6 +52,7 @@ export class LancamentoService {
   async verificaParcelado() {
     if (this.data.isParcelado) {
       this.data.lancamento.parcelado = "sim";
+      this.data.lancamento.dataVencimento = this.data.dataPrimeiraParcela;
       this.data.lancamento.status = "pendente";
     } else {
       this.data.lancamento.parcelado = "nao";
@@ -71,9 +76,10 @@ export class LancamentoService {
 
   async commitLancamento() {
     const [lancamento] = await prismaService.$transaction(async (prisma) => {
+      const {FinanceiroParcelamento, ...novoObjeto} = this.data.lancamento;
       const lancamento = await prisma.financeiroTransacao.create({
         data: {
-          ...this.data.lancamento,
+          ...novoObjeto,
         },
       });
 
@@ -103,6 +109,7 @@ export class LancamentoService {
         parcela: 0,
         valor: this.data.valorEntrada,
         dataVencimento: this.data.dataEntrada!.toISOString(),
+        dataRecebimento: this.data.dataEntrada!.toISOString(),
         contaSistemaId: this.data.contaSistemaId,
         status: "recebido",
         transacaoId: idLancamento,

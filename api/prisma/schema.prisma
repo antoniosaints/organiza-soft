@@ -140,7 +140,7 @@ model FinanceiroTransacao {
   ContaSistema           ContasSistema            @relation(fields: [contaSistemaId], references: [id])
   codigoLancamento       String
   valor                  Float                    @default(0)
-  descricao              String?                  @db.Text
+  descricao              String                   @db.Text
   categoriaId            Int
   fornecedorId           Int?
   contaId                Int
@@ -148,6 +148,7 @@ model FinanceiroTransacao {
   usuarioEfetivou        Int?
   dataVencimento         DateTime
   dataLancamento         DateTime                 @default(now())
+  dataPagamento          DateTime?
   usuarioLancamento      Int
   codigoNfe              String?
   codigo_servico         String?
