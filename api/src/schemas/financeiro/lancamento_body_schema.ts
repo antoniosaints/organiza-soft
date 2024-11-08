@@ -1,4 +1,5 @@
 import zodUtil from "../../utils/validations/zod_util";
+import { createTransacao } from "./transacao_schema";
 
 const LancamentoBodySchema = zodUtil.object({
   contaSistemaId: zodUtil
@@ -7,44 +8,70 @@ const LancamentoBodySchema = zodUtil.object({
       invalid_type_error: "O contaSistemaId deve ser um número",
     })
     .int("O contaSistemaId deve ser um inteiro"),
-  descricao: zodUtil.string({
-    required_error: "A descrição é obrigatorio",
-    invalid_type_error: "A descrição deve ser uma string",
+  lancamento: zodUtil.lazy(() => createTransacao, {
+    description: "A transacao deve ser uma transacao",
   }),
-  usuarioLancamento: zodUtil.number({
-    required_error: "O usuarioLancamento é obrigatorio",
-    invalid_type_error: "O usuarioLancamento deve ser um number",
+  periodo: zodUtil.enum(["semana", "mes", "ano"], {
+    required_error: "O periodo é obrigatorio",
+    invalid_type_error:
+      "O periodo deve ser uma das seguintes opções: (semana, mes ou ano)",
   }),
-  tipoLancamento: zodUtil.enum(["receita", "despesa"], {
-    invalid_type_error: "O tipoLancamento deve ser receita ou despesa",
-    required_error: "O tipoLancamento é obrigatorio",
+  valorEntrada: zodUtil.number({
+    required_error: "O valorEntrada é obrigatorio",
+    invalid_type_error: "O valorEntrada deve ser um número",
   }),
-  categoria: zodUtil.number({
-    invalid_type_error: "A categoria deve ser um number",
-    required_error: "A categoria é obrigatoria",
-  }),
-  fornecedor: zodUtil
-    .number({
-      invalid_type_error: "O fornecedor deve ser um number",
+  isParcelado: zodUtil
+    .boolean({
+      required_error: "O isParcelado é obrigatorio",
+      invalid_type_error: "O isParcelado deve ser um booleano",
     })
-    .optional(),
-  conta: zodUtil.number({
-    invalid_type_error: "A conta deve ser um number",
-    required_error: "A conta é obrigatoria",
-  }),
-  parcelado: zodUtil
-    .enum(["sim", "nao"], {
-      invalid_type_error: "O parcelado deve ser sim ou nao",
-    })
-    .default("nao"),
+    .default(false),
   quantidadeParcelas: zodUtil
     .number({
-      invalid_type_error: "A quantidade de parcelas deve ser um number",
+      required_error: "A quantidadeParcelas é obrigatorio",
+      invalid_type_error: "A quantidadeParcelas deve ser um número",
+    })
+    .default(1),
+  dataEntrada: zodUtil
+    .string({
+      required_error: "A dataEntrada é obrigatorio",
+      invalid_type_error: "A dataEntrada deve ser uma string",
+    })
+    .transform((val) => new Date(val))
+    .default(() => new Date().toISOString())
+    .optional(),
+  dataPagamento: zodUtil
+    .string({
+      invalid_type_error: "A dataPagamento deve ser uma string",
+    })
+    .transform((val) => new Date(val))
+    .default(() => new Date().toISOString()),
+  dataPrimeiraParcela: zodUtil
+    .string({
+      invalid_type_error: "A dataPrimeiraParcela deve ser uma string",
+    })
+    .transform((val) => new Date(val))
+    .default(() => new Date().toISOString()),
+  isEfetivado: zodUtil
+    .boolean({
+      required_error: "O isEfetivado é obrigatorio",
+      invalid_type_error: "O isEfetivado deve ser um booleano",
+    })
+    .default(false),
+  hasEntrada: zodUtil
+    .boolean({
+      required_error: "O hasEntrada é obrigatorio",
+      invalid_type_error: "O hasEntrada deve ser um booleano",
+    })
+    .default(false),
+  valorLancamento: zodUtil
+    .number({
+      required_error: "O valorLancamento é obrigatorio",
+      invalid_type_error: "O valorLancamento deve ser um número",
     })
     .refine((val) => val >= 0, {
-      message: "Quantidade de parcelas deve ser maior que 0",
-    })
-    .optional(),
+      message: "O valorLancamento deve ser positivo",
+    }),
 });
 
 export { LancamentoBodySchema };

@@ -5,6 +5,10 @@ const createParcelamento = zodUtil.object({
     required_error: "O transacaoId é obrigatório",
     invalid_type_error: "O transacaoId deve ser um número",
   }),
+  tipo: zodUtil.enum(["entrada", "parcela", "ajuste"], {
+    invalid_type_error: "O tipo deve ser entrada, parcela ou ajuste",
+    required_error: "O tipo é obrigatório",
+  }).default("parcela"),
   parcela: zodUtil.number({
     required_error: "A parcela é obrigatória",
     invalid_type_error: "A parcela deve ser um número",
@@ -26,6 +30,9 @@ const createParcelamento = zodUtil.object({
   dataRecebimento: zodUtil.string({
     invalid_type_error: "A dataRecebimento deve ser uma string",
   }).optional(), // Também é opcional
+  dataVencimento: zodUtil.string({
+    invalid_type_error: "A dataVencimento deve ser uma string",
+  }),
   contaSistemaId: zodUtil.number({
     required_error: "O contaSistemaId é obrigatorio",
     invalid_type_error: "O contaSistemaId deve ser um número",

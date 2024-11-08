@@ -1,5 +1,6 @@
 import ITransacao from "@/types/financeiro/ILancamentos";
 import axiosService from "../../services/http/axiosService";
+import { ISchemaLancamento } from "@/stores/financeiro/lancamentos/lancamentoSchemaStore";
 
 export default class LancamentosRepository {
     static async get(id: number): Promise<ITransacao> {
@@ -26,7 +27,7 @@ export default class LancamentosRepository {
         const { data } = await axiosService.put(`financeiro/transacao/${id}`, transacao);
         return data.data;
     }
-    static async create(transacao: ITransacao): Promise<any> {
+    static async create(transacao: ISchemaLancamento): Promise<any> {
         const { data } = await axiosService.post(`financeiro/transacao`, transacao);
         return data.data;
     }

@@ -1,22 +1,25 @@
+import { generateUniqueIdWithPrefix } from "../../utils/tools/UniqueId";
 import zodUtil from "../../utils/validations/zod_util";
 
 const createTransacao = zodUtil.object({
-  codigoLancamento: zodUtil.string({
-    invalid_type_error: "O codigoLancamento deve ser uma string",
-    required_error: "O codigoLancamento é obrigatório",
-  }),
-  valor: zodUtil.number({
-    required_error: "O valor é obrigatório",
-    invalid_type_error: "O valor deve ser um number",
-  }),
-  descricao: zodUtil
+  codigoLancamento: zodUtil
     .string({
-      invalid_type_error: "A descrição deve ser uma string",
+      invalid_type_error: "O codigoLancamento deve ser uma string",
+      required_error: "O codigoLancamento é obrigatorio",
+    })
+    .default(() => generateUniqueIdWithPrefix("lcm")),
+  valor: zodUtil
+    .number({
+      invalid_type_error: "O valor deve ser um number",
     })
     .optional(),
+  descricao: zodUtil.string({
+    invalid_type_error: "A descrição deve ser uma string",
+    required_error: "A descrição é obrigatória",
+  }),
   categoriaId: zodUtil.number({
-    required_error: "As categoriaId é obrigatória",
-    invalid_type_error: "As categoriasId deve ser um number",
+    required_error: "A categoriaId é obrigatória",
+    invalid_type_error: "s categoriaId deve ser um number",
   }),
   fornecedorId: zodUtil
     .number({
@@ -38,6 +41,7 @@ const createTransacao = zodUtil.object({
       invalid_type_error: "A dataVencimento deve ser uma data",
       required_error: "A dataVencimento é obrigatória",
     })
+    .default(() => new Date().toISOString())
     .transform((val) => new Date(val)),
   usuarioEfetivou: zodUtil
     .number({
@@ -60,28 +64,34 @@ const createTransacao = zodUtil.object({
     invalid_type_error: "A natureza deve ser receita ou despesa",
     required_error: "A natureza é obrigatória",
   }),
-  operacao: zodUtil.enum(["entrada", "saida", "transferencia", "ajuste"], {
-    invalid_type_error:
-      "A operação deve ser entrada, saida, transferencia ou ajuste",
-    required_error: "A operação é obrigatória",
-  }),
+  operacao: zodUtil
+    .enum(["entrada", "saida", "transferencia", "ajuste"], {
+      required_error: "A operação é obrigatória",
+      invalid_type_error:
+        "A operação deve ser entrada, saida, transferencia ou ajuste",
+    })
+    .default("entrada"),
   parcelado: zodUtil
     .enum(["sim", "nao"], {
       invalid_type_error: "O parcelado deve ser sim ou não",
     })
     .optional(),
-  status: zodUtil.enum(["pendente", "recebido", "cancelada"], {
-    invalid_type_error: "O status deve ser pendente, recebido ou cancelada",
-    required_error: "O status é obrigatório",
-  }),
-  valorFinal: zodUtil.number({
-    required_error: "O valorFinal é obrigatório",
-    invalid_type_error: "O valorFinal deve ser um number",
-  }),
-  contaSistemaId: zodUtil.number({
-    required_error: "O contaSistemaId é obrigatorio",
-    invalid_type_error: "O contaSistemaId deve ser um number",
-  }),
+  status: zodUtil
+    .enum(["pendente", "recebido", "cancelada"], {
+      invalid_type_error: "O status deve ser pendente, recebido ou cancelada",
+    })
+    .default("pendente")
+    .optional(),
+  valorFinal: zodUtil
+    .number({
+      invalid_type_error: "O valorFinal deve ser um number",
+    })
+    .optional(),
+  contaSistemaId: zodUtil
+    .number({
+      invalid_type_error: "O contaSistemaId deve ser um number",
+    })
+    .default(1),
   codigoNfe: zodUtil
     .string({
       invalid_type_error: "O codigoNfe deve ser uma string",
@@ -136,9 +146,9 @@ const createTransacao = zodUtil.object({
 });
 
 const updateTransacao = zodUtil.object({
-  clienteId: zodUtil
-    .number({
-      invalid_type_error: "O clienteId deve ser um number",
+  codigoLancamento: zodUtil
+    .string({
+      invalid_type_error: "O codigoLancamento deve ser uma string",
     })
     .optional(),
   valor: zodUtil
@@ -153,7 +163,7 @@ const updateTransacao = zodUtil.object({
     .optional(),
   categoriaId: zodUtil
     .number({
-      invalid_type_error: "As categoriaId deve ser um number",
+      invalid_type_error: "s categoriaId deve ser um number",
     })
     .optional(),
   fornecedorId: zodUtil
@@ -175,6 +185,7 @@ const updateTransacao = zodUtil.object({
   dataVencimento: zodUtil
     .string({
       invalid_type_error: "A dataVencimento deve ser uma data",
+      required_error: "A dataVencimento é obrigatória",
     })
     .transform((val) => new Date(val))
     .optional(),
@@ -189,6 +200,7 @@ const updateTransacao = zodUtil.object({
       invalid_type_error:
         "O metodoPagamento deve ser uma das seguintes opções: (pix, dinheiro, cartao, transferencia, boleto ou cheque)",
     })
+    .default("dinheiro")
     .optional(),
   natureza: zodUtil
     .enum(["receita", "despesa"], {
@@ -210,6 +222,7 @@ const updateTransacao = zodUtil.object({
     .enum(["pendente", "recebido", "cancelada"], {
       invalid_type_error: "O status deve ser pendente, recebido ou cancelada",
     })
+    .default("pendente")
     .optional(),
   valorFinal: zodUtil
     .number({

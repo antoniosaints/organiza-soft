@@ -13,28 +13,17 @@ import {
   validateSchema,
 } from "../../services";
 import { LancamentoBodySchema } from "../../schemas/financeiro/lancamento_body_schema";
+import { LancamentoService } from "../../services/lancamentos_service";
 
 // Criação de transação
 export const createTransacao = async (req: Request, res: Response) => {
   try {
     const validated = validateSchema(LancamentoBodySchema, req.body);
-
-    // const transacao = await prismaService.financeiroTransacao.create({
-    //   data: validated,
-    // });
-
-    ResponseService.created(
-      res,
-      {
-        message: "Transação criada com sucesso",
-        data: validated,
-      },
-      "Transação criada com sucesso"
-    );
+    const Lancamento = new LancamentoService(validated, res);
+    await Lancamento.initialize();
+    return await Lancamento.commitLancamento();
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 
