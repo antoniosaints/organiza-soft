@@ -5,8 +5,11 @@ import { createParcelamento } from "../schemas/financeiro/parcelamento_schema";
 import { Response } from "express";
 import ResponseService from "./response_service";
 export class LancamentoService {
-  private parcelas: z.infer<typeof createParcelamento>[] = []
-  constructor(private data: z.infer<typeof LancamentoBodySchema>, private response: Response) {}
+  private parcelas: z.infer<typeof createParcelamento>[] = [];
+  constructor(
+    private data: z.infer<typeof LancamentoBodySchema>,
+    private response: Response
+  ) {}
 
   async initialize() {
     this.data.lancamento.contaSistemaId = this.data.contaSistemaId;
@@ -22,12 +25,15 @@ export class LancamentoService {
       this.data.hasEntrada &&
       this.data.valorEntrada >= this.data.valorLancamento
     ) {
-      return ResponseService.notFound(this.response, "O Valor da entrada nao pode ser maior ou igual ao valor do lancamento");
+      return ResponseService.notFound(
+        this.response,
+        "O Valor da entrada nao pode ser maior ou igual ao valor do lancamento"
+      );
     }
   }
   async gerenciaValores() {
-    this.data.lancamento.valorFinal = this.data.valorLancamento;
     this.data.lancamento.valor = this.data.valorLancamento;
+    this.data.lancamento.valorFinal = this.data.valorLancamento;
   }
 
   async verificaEfetivado() {
@@ -36,10 +42,8 @@ export class LancamentoService {
     }
   }
   async gerenciaJuros() {
-    if (this.data.lancamento.taxaDesconto! > 0)
-      this.calcularDesconto(this.data.lancamento.taxaDesconto!);
-    if (this.data.lancamento.taxaJuros! > 0)
-      this.calcularJuros(this.data.lancamento.taxaJuros!);
+    if (this.data.lancamento.taxaDesconto! > 0) this.calcularDesconto();
+    if (this.data.lancamento.taxaJuros! > 0) this.calcularJuros();
   }
   async verificaParcelado() {
     if (this.data.isParcelado) {
@@ -54,21 +58,15 @@ export class LancamentoService {
       this.data.lancamento.operacao = "entrada";
     else this.data.lancamento.operacao = "saida";
   }
-  async calcularDesconto(taxa: number) {
-    this.data.lancamento.taxaDesconto = taxa;
-    this.data.lancamento.juros =
-      this.data.lancamento.taxaDesconto * this.data.lancamento.valor!;
-    this.data.lancamento.valorFinal =
-      this.data.lancamento.valor! - this.data.lancamento.juros!;
-    return this;
+  async calcularDesconto() {
+    this.data.lancamento.desconto =
+      this.data.lancamento.taxaDesconto! * this.data.lancamento.valor!;
+    this.data.lancamento.valorFinal! -= this.data.lancamento.desconto!;
   }
-  async calcularJuros(taxa: number) {
-    this.data.lancamento.taxaJuros = taxa;
+  async calcularJuros() {
     this.data.lancamento.juros =
-      this.data.lancamento.taxaJuros * this.data.lancamento.valor!;
-    this.data.lancamento.valorFinal =
-      this.data.lancamento.valor! + this.data.lancamento.juros!;
-    return this;
+      this.data.lancamento.taxaJuros! * this.data.lancamento.valor!;
+    this.data.lancamento.valorFinal! += this.data.lancamento.juros!
   }
 
   async commitLancamento() {
@@ -90,7 +88,11 @@ export class LancamentoService {
       return [lancamento];
     });
 
-    return ResponseService.created(this.response, { lancamento }, "Lançamento registrado com sucesso");
+    return ResponseService.created(
+      this.response,
+      { lancamento },
+      "Lançamento registrado com sucesso"
+    );
   }
   async parcelar(idLancamento: number) {
     let valorAParcelar = this.data.lancamento.valorFinal!;

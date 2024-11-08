@@ -27,7 +27,7 @@
                 </Tooltip>
             </TooltipProvider>
         </TableCell>
-        <TableCell class="font-bold">{{ formatRealValue(data.valor - data.desconto!) }}</TableCell>
+        <TableCell class="font-bold">{{ formatRealValue(data.valorFinal!) }}</TableCell>
         <TableCell class="font-bold hidden md:table-cell">
             <div class="flex items-center bg-secondary px-2 py-1 text-secondary-foreground rounded-md w-max">
                 <ChartPie class="w-3 h-3 mr-1" /> {{ data.Categoria?.categoria }}

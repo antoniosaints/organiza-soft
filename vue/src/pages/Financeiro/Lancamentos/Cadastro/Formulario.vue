@@ -79,7 +79,7 @@ const submitLancamento = async () => {
                                     currency: 'BRL',
                                     maximumFractionDigits: 2,
                                     compactDisplay: 'short',
-                                    notation: 'compact',
+                                    notation: 'standard',
                                     currencyDisplay: 'narrowSymbol',
                                     currencySign: 'standard',
                                 }" :step="0.01" :default-value="0.01" v-model="schema.valorLancamento" :min="0.01">
@@ -188,7 +188,7 @@ const submitLancamento = async () => {
                                     currency: 'BRL',
                                     maximumFractionDigits: 2,
                                     compactDisplay: 'short',
-                                    notation: 'compact',
+                                    notation: 'standard',
                                     currencyDisplay: 'narrowSymbol',
                                     currencySign: 'standard',
                                 }" :step="0.01" :default-value="1" :required="schema.hasEntrada"
@@ -247,7 +247,7 @@ const submitLancamento = async () => {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                             <div class="space-y-2 p-2">
                                 <Label for="codigoServico">Código do serviço</Label>
-                                <Input id="codigoServico" v-model="schema.lancamento.codigoServico" type="text"
+                                <Input id="codigoServico" v-model="schema.lancamento.codigo_servico" type="text"
                                     placeholder="Código do serviço" />
                             </div>
 

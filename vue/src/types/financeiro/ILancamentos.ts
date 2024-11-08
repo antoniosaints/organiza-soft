@@ -30,7 +30,7 @@ export default interface ITransacao {
   dataLancamento?: string | Date;
   usuarioLancamento?: number;
   codigoNfe?: string;
-  codigoServico?: string;
+  codigo_servico?: string;
   taxaJuros?: number;
   juros?: number;
   taxaDesconto?: number;
