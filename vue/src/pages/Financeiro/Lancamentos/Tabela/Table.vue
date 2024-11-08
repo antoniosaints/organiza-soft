@@ -7,6 +7,7 @@
                 </p>
             </div>
             <div class="flex space-x-2">
+                <DetalhesLancamento />
                 <TooltipProvider>
                     <Tooltip>
                         <TooltipTrigger>
@@ -207,6 +208,7 @@ import DateRangePicker from "@/components/customs/DateRangePicker.vue";
 import { useLancamentosStore } from "@/stores/financeiro/lancamentos/lancamentoStore";
 import SheetModal from "../Cadastro/SheetModal.vue";
 import { useLancamentosFormularioStore } from "@/stores/financeiro/lancamentos/lancamentosFormularioStore";
+import DetalhesLancamento from "../Modais/DetalhesLancamento.vue";
 
 const mainStore = useLancamentosStore();
 const formularioStore = useLancamentosFormularioStore();

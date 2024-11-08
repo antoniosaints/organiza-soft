@@ -6,7 +6,7 @@ import { IResumoFinanceiro } from "@/types/financeiro/IResumoFinanceiro";
 export default class LancamentosRepository {
     static async get(id: number): Promise<ITransacao> {
         const { data } = await axiosService.get(`financeiro/transacao/${id}`);
-        return data;
+        return data.data;
     }
     static async efetivar(id: number): Promise<ITransacao> {
         const { data } = await axiosService.get(`financeiro/transacao/efetivar/${id}`);
