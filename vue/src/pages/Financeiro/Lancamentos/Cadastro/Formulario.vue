@@ -254,7 +254,7 @@ const submitLancamento = async () => {
                             <div class="space-y-2 p-2">
                                 <Label for="taxaJuros">Taxa de juros</Label>
                                 <NumberField id="taxaJuros" :format-options="{ style: 'percent'}" :step="0.01" :default-value="0"
-                                    v-model="schema.lancamento.taxaJuros" :min="0.01">
+                                    v-model="schema.lancamento.taxaJuros" :min="0">
                                     <NumberFieldContent>
                                         <NumberFieldDecrement />
                                         <NumberFieldInput />
@@ -267,7 +267,7 @@ const submitLancamento = async () => {
                             <div class="space-y-2 p-2">
                                 <Label for="taxaCambio">Taxa de cambio</Label>
                                 <NumberField id="taxaCambio" :format-options="{ style: 'percent'}" :step="0.01" :default-value="0"
-                                    v-model="schema.lancamento.taxaCambio" :min="0.01">
+                                    v-model="schema.lancamento.taxaCambio" :min="0">
                                     <NumberFieldContent>
                                         <NumberFieldDecrement />
                                         <NumberFieldInput />
@@ -279,7 +279,7 @@ const submitLancamento = async () => {
                             <div class="space-y-2 p-2">
                                 <Label for="taxaDesconto">Taxa de desconto</Label>
                                 <NumberField id="taxaDesconto" :format-options="{ style: 'percent'}" :step="0.01" :default-value="0"
-                                    v-model="schema.lancamento.taxaDesconto" :min="0.01">
+                                    v-model="schema.lancamento.taxaDesconto" :min="0">
                                     <NumberFieldContent>
                                         <NumberFieldDecrement />
                                         <NumberFieldInput />
