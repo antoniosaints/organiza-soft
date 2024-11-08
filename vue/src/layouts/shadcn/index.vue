@@ -52,7 +52,7 @@
                     <ProfileHome />
                 </div>
             </header>
-            <main class="p-4 lg:p-6">
+            <main class="p-4 lg:p-6 max-w-7xl mx-auto">
                 <GlobalAlert class="mb-2" />
                 <router-view v-if="showComponent" v-slot="{ Component }">
                     <transition name="fade" @before-enter="beforeEnter" @after-leave="afterLeave">
