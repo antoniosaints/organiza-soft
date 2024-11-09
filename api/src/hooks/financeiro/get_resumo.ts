@@ -1,4 +1,8 @@
-export const getResumoTransacoes = (data: any[]) => {
+import { FinanceiroParcelamento, FinanceiroTransacao } from "@prisma/client";
+type ResumoTransacoes = FinanceiroTransacao & {
+  FinanceiroParcelamento?: FinanceiroParcelamento[]
+}
+export const getResumoTransacoes = (data: ResumoTransacoes[]) => {
     const total = data.reduce((acc, item) => acc + item.valorFinal!, 0);
 
     const pendenteReceitaAVista = data.reduce((acc, item) => {
@@ -14,8 +18,8 @@ export const getResumoTransacoes = (data: any[]) => {
       return acc + ((item.status == "recebido" && item.parcelado == "nao" && item.natureza == "despesa") ? item.valorFinal! : 0);
     }, 0);
 
-    const receitasParceladas = data.filter((item) => (item.parcelado == "sim" && item.natureza == "despesa"));
-    const despesasParceladas = data.filter((item) => (item.parcelado == "sim" && item.natureza == "receita"));
+    const receitasParceladas = data.filter((item) => item.parcelado == "sim" && item.natureza == "receita");
+    const despesasParceladas = data.filter((item) => item.parcelado == "sim" && item.natureza == "despesa");
 
     const pendentesReceitasAPrazo = receitasParceladas.reduce(
       (acc, item) =>

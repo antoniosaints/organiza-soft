@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import {
-  createTransacao as createTransacaoSchema,
   updateTransacao as updateTransacaoSchema,
 } from "../../schemas/financeiro/transacao_schema";
 import {
@@ -15,6 +14,7 @@ import {
 import { LancamentoBodySchema } from "../../schemas/financeiro/lancamento_body_schema";
 import { LancamentoService } from "../../services/lancamentos_service";
 import { getResumoTransacoes } from "../../hooks/financeiro/get_resumo";
+import { resumoGraficos } from "../../hooks/financeiro/get_resumo_graficos";
 
 // Criação de transação
 export const createTransacao = async (req: Request, res: Response) => {
@@ -32,14 +32,15 @@ export const getResumoLancamentos = async (req: Request, res: Response) => {
   try {
     const data = await prismaService.financeiroTransacao.findMany({
       where: { contaSistemaId: req.body.contaSistemaId },
-      include: { FinanceiroParcelamento: true },
+      include: { FinanceiroParcelamento: true, Categoria: true },
     });
 
-    const resp = getResumoTransacoes(data);
+    const resumo = getResumoTransacoes(data);
+    const chart = resumoGraficos(data);
 
     ResponseService.success(
       res,
-      resp,
+      {resumo, chart},
       "Transações recuperadas"
     );
   } catch (error: any) {

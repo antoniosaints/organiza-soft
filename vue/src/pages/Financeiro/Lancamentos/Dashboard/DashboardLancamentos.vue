@@ -10,15 +10,13 @@
                     </CardHeader>
                     <CardContent>
                         <div class="text-2xl font-bold text-blue-500">
-                            {{ resumoFinanceiro.total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
+                            {{ formatRealValue(totalReceita + totalDespesa) }}
                         </div>
                         <div class="flex gap-1 text-xs items-center">
                             <ArrowBigDown class="h-4 w-4 text-green-500" />
-                            {{ totalReceita.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                            }}
+                            {{ formatRealValue(totalReceita)}}
                             <ArrowBigUp class="h-4 w-4 text-red-500" />
-                            {{ totalDespesa.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                            }}
+                            {{ formatRealValue(totalDespesa)}}
                         </div>
                     </CardContent>
                 </Card>
@@ -31,7 +29,7 @@
                 </CardHeader>
                 <CardContent>
                     <div class="text-2xl font-bold" :class="totalReceita - totalDespesa > 0 ? 'text-green-500' : 'text-red-500'">
-                        {{ (totalReceita - totalDespesa).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
+                        {{ formatRealValue(totalReceita - totalDespesa) }}
                     </div>
                     <p class="flex gap-1 text-xs items-center">
                         <CircleArrowOutDownLeft class="h-3 w-3 text-green-500" />
@@ -58,15 +56,13 @@
                     </CardHeader>
                     <CardContent>
                         <div class="text-2xl font-bold text-yellow-500">
-                            {{ (totalReceitaPendente + totalDespesaPendente).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
+                            {{ formatRealValue(totalReceitaPendente + totalDespesaPendente) }}
                         </div>
                         <div class="flex gap-1 text-xs items-center">
                             <ClockArrowDown class="h-3 w-3 text-green-500" />
-                            {{ totalReceitaPendente.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                            }}
+                            {{ formatRealValue(totalReceitaPendente) }}
                             <ClockArrowDown class="h-3 w-3 text-red-500" />
-                            {{ totalDespesaPendente.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                            }}
+                            {{ formatRealValue(totalDespesaPendente) }}
                         </div>
                     </CardContent>
                 </Card>
@@ -79,15 +75,13 @@
                 </CardHeader>
                 <CardContent>
                     <div class="text-2xl font-bold text-blue-500">
-                        {{ (totalEfetivoDespesa + totalEfetivoReceita).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
+                        {{ formatRealValue(totalEfetivoDespesa + totalEfetivoReceita) }}
                     </div>
                     <div class="flex gap-1 text-xs items-center">
                         <CircleCheckBig class="h-3 w-3 text-green-500" />
-                        {{ totalEfetivoReceita.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                        }}
+                        {{ formatRealValue(totalEfetivoReceita) }}
                         <CircleCheckBig class="h-3 w-3 text-red-500" />
-                        {{ totalEfetivoDespesa.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                        }}
+                        {{ formatRealValue(totalEfetivoDespesa) }}
                     </div>
                 </CardContent>
             </Card>
@@ -95,33 +89,35 @@
         <div class="grid gap-4 md:gap-4 lg:grid-cols-2 xl:grid-cols-3">
             <Card class="col-span-1">
                 <CardHeader>
-                    <CardTitle>Resumo - Forma de pagamento</CardTitle>
+                    <CardTitle>Método de pagamento</CardTitle>
                     <CardDescription>Resumo mensal por forma de pagamento</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <BarChart class="h-48 py-4" :rounded-corners="4" :data="calcularTotalPorMetodoPagamento()"
-                        index="index" :categories="['total']" :y-formatter="formateTicketValue"
-                        :custom-tooltip="CustomTooltipChart" />
+                    <BarChart class="h-48 py-4" :rounded-corners="4" :data="resumoFinanceiro.chart.resumoPorFormaPagamento"
+                        :custom-tooltip="CustomTooltipChart"
+                        index="name" :categories="['total', 'pendente', 'pago']" :colors="['#3b82f6', '#ef4444', '#22c55e']" />
                 </CardContent>
             </Card>
             <Card class="col-span-1">
                 <CardHeader>
-                    <CardTitle>Resumo - Natureza</CardTitle>
-                    <CardDescription>Resumo mensal por natureza</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <BarChart class="h-48 py-4" :rounded-corners="4" :data="data" index="name"
-                        :categories="['total', 'meta']" :y-formatter="formateTicketValue" />
-                </CardContent>
-            </Card>
-            <Card class="col-span-1">
-                <CardHeader>
-                    <CardTitle>Resumo - Categoria</CardTitle>
+                    <CardTitle>Categorias</CardTitle>
                     <CardDescription>Resumo mensal por categoria</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <BarChart class="h-48 py-4" :rounded-corners="4" :data="data" index="name"
-                        :categories="['total', 'meta']" :y-formatter="formateTicketValue" />
+                    <BarChart class="h-48 py-4" :rounded-corners="4" :data="resumoFinanceiro.chart.resumoPorCategoria"
+                        :custom-tooltip="CustomTooltipChart"
+                        index="name" :categories="['total', 'pendente', 'pago']" :colors="['#3b82f6', '#ef4444', '#22c55e']" />
+                </CardContent>
+            </Card>
+            <Card class="col-span-1">
+                <CardHeader>
+                    <CardTitle>Resumo mensal</CardTitle>
+                    <CardDescription>Resumo mensal por natureza</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <BarChart class="h-48 py-4" :rounded-corners="4" :data="resumoFinanceiro.chart.resumoPorMes"
+                        :custom-tooltip="CustomTooltipChart"
+                        index="name" :categories="['receita', 'despesa']" :colors="['#22c55e', '#ef4444']" />
                 </CardContent>
             </Card>
             <Card class="xl:col-span-2">
@@ -133,10 +129,10 @@
                         </CardDescription>
                     </div>
                     <Button as-child size="sm" class="ml-auto gap-1">
-                        <a href="#">
+                        <RouterLink to="/app/financeiro/lancamentos">
                             Ver tudo
                             <ArrowUpRight class="h-4 w-4" />
-                        </a>
+                        </RouterLink>
                     </Button>
                 </CardHeader>
                 <CardContent>
@@ -230,43 +226,52 @@ import { IVenda } from "@/types/vendas/IVenda";
 import CustomTooltipChart from "@/components/customs/CustomTooltipChart.vue";
 import { IResumoFinanceiro } from "@/types/financeiro/IResumoFinanceiro";
 import LancamentosRepository from "@/repositories/financeiro/lancamentosRepository";
+import { formatRealValue } from "@/utils/formatterUtil";
+import { RouterLink } from "vue-router";
 
 const vendas = ref<IVenda[]>([])
 const vendasRecents = ref<IVenda[]>([])
 const resumoFinanceiro = ref<IResumoFinanceiro>({
-    efetivadoDespesaAVista: 0,
-    efetivadoReceitaAVista: 0,
-    pendenteDespesaAVista: 0,
-    pendenteReceitaAVista: 0,
-    pendentesDespesasAPrazo: 0,
-    pendentesReceitasAPrazo: 0,
-    efetivadoDespesasAPrazo: 0,
-    efetivadoReceitasAPrazo: 0,
-    total: 0
+    resumo: {
+        efetivadoDespesaAVista: 0,
+        efetivadoReceitaAVista: 0,
+        pendenteDespesaAVista: 0,
+        pendenteReceitaAVista: 0,
+        pendentesDespesasAPrazo: 0,
+        pendentesReceitasAPrazo: 0,
+        efetivadoDespesasAPrazo: 0,
+        efetivadoReceitasAPrazo: 0,
+        total: 0,
+    },
+    chart: {
+        resumoPorCategoria: [],
+        resumoPorFormaPagamento: [],
+        resumoPorMes: []
+    }
 })
 
 const totalReceita = computed(() => {
-    return resumoFinanceiro.value.efetivadoReceitaAVista + resumoFinanceiro.value.efetivadoReceitasAPrazo + resumoFinanceiro.value.pendenteReceitaAVista + resumoFinanceiro.value.pendentesReceitasAPrazo
+    return resumoFinanceiro.value.resumo.efetivadoReceitaAVista + resumoFinanceiro.value.resumo.efetivadoReceitasAPrazo + resumoFinanceiro.value.resumo.pendenteReceitaAVista + resumoFinanceiro.value.resumo.pendentesReceitasAPrazo
 })
 
 const totalDespesa = computed(() => {
-    return resumoFinanceiro.value.efetivadoDespesaAVista + resumoFinanceiro.value.efetivadoDespesasAPrazo + resumoFinanceiro.value.pendenteDespesaAVista + resumoFinanceiro.value.pendentesDespesasAPrazo
+    return resumoFinanceiro.value.resumo.efetivadoDespesaAVista + resumoFinanceiro.value.resumo.efetivadoDespesasAPrazo + resumoFinanceiro.value.resumo.pendenteDespesaAVista + resumoFinanceiro.value.resumo.pendentesDespesasAPrazo
 })
 
 const totalReceitaPendente = computed(() => {
-    return resumoFinanceiro.value.pendenteReceitaAVista + resumoFinanceiro.value.pendentesReceitasAPrazo
+    return resumoFinanceiro.value.resumo.pendenteReceitaAVista + resumoFinanceiro.value.resumo.pendentesReceitasAPrazo
 })
 
 const totalDespesaPendente = computed(() => {
-    return resumoFinanceiro.value.pendenteDespesaAVista + resumoFinanceiro.value.pendentesDespesasAPrazo
+    return resumoFinanceiro.value.resumo.pendenteDespesaAVista + resumoFinanceiro.value.resumo.pendentesDespesasAPrazo
 })
 
 const totalEfetivoReceita = computed(() => {
-    return resumoFinanceiro.value.efetivadoReceitaAVista + resumoFinanceiro.value.efetivadoReceitasAPrazo
+    return resumoFinanceiro.value.resumo.efetivadoReceitaAVista + resumoFinanceiro.value.resumo.efetivadoReceitasAPrazo
 })
 
 const totalEfetivoDespesa = computed(() => {
-    return resumoFinanceiro.value.efetivadoDespesaAVista + resumoFinanceiro.value.efetivadoDespesasAPrazo
+    return resumoFinanceiro.value.resumo.efetivadoDespesaAVista + resumoFinanceiro.value.resumo.efetivadoDespesasAPrazo
 })
 
 const getVendasResumo = async () => {
@@ -281,33 +286,14 @@ const getResumoFinanceiro = async () => {
 }
 
 onMounted(async () => {
-    getVendasResumo()
-    getResumoFinanceiro()
+    await getVendasResumo()
+    await getResumoFinanceiro()
+    console.log(resumoFinanceiro.value)
 })
 
-const formateTicketValue = (value: any) => {
-    return typeof value === 'number'
-        ? `R$ ${new Intl.NumberFormat('us').format(value).toString()}`
-        : ''
-}
 interface IDataOutput {
     index: string;
     total: number;
-}
-function calcularTotalPorMetodoPagamento(): IDataOutput[] {
-    const totaisPorMetodo: Record<string, number> = {};
-    vendas.value.forEach(venda => {
-        const metodoPagamento = venda.metodoPagamento || 'Indefinido';
-        if (totaisPorMetodo[metodoPagamento]) {
-            totaisPorMetodo[metodoPagamento] += (venda.valor - venda.valorDesconto!);
-        } else {
-            totaisPorMetodo[metodoPagamento] = (venda.valor - venda.valorDesconto!);
-        }
-    });
-    return Object.keys(totaisPorMetodo).map(metodo => ({
-        index: metodo,
-        total: totaisPorMetodo[metodo],
-    }));
 }
 
 function calcularTotalPorMes(): IDataOutput[] {
@@ -331,15 +317,5 @@ function calcularTotalPorMes(): IDataOutput[] {
     }));
 }
 calcularTotalPorMes()
-
-const data = [
-    { name: 'Jan', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
-    { name: 'Fev', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
-    { name: 'Mar', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
-    { name: 'Abr', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
-    { name: 'Mar', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
-    { name: 'Jun', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
-    { name: 'Jul', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
-]
 
 </script>

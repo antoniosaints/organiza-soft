@@ -31,7 +31,11 @@ const fetchContasLancamentos = async (query: string, id?: number) => {
 
 const managerState = () => {
     if (schema.isParcelado) schema.isEfetivado = false
-    if (schema.isEfetivado) schema.isParcelado = false
+    else schema.hasEntrada = false
+    if (schema.isEfetivado) {
+        schema.isParcelado = false
+        schema.hasEntrada = false
+    }
 }
 
 watch(() => [schema.isParcelado, schema.isEfetivado], managerState)
