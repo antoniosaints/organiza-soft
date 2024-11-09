@@ -1,7 +1,7 @@
 <template>
     <div class="gap-4 grid">
         <div class="grid gap-4 md:grid-cols-2 md:gap-4 lg:grid-cols-4">
-            <RouterLink to="/app/financeiro/lancamentos">
+            <RouterLink to="/app/financeiro/dashboard">
                 <Card>
                     <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle class="text-sm font-medium">
@@ -10,15 +10,15 @@
                         <DollarSign class="h-4 w-4" />
                     </CardHeader>
                     <CardContent>
-                        <div class="text-2xl font-bold text-blue-500">
-                            {{ resumoFinanceiro.total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
+                        <div class="text-2xl font-bold text-green-500">
+                            {{ formatRealValue(totalReceita + totalDespesa) }}
                         </div>
                         <div class="flex gap-1 text-xs">
                             <ArrowBigDown class="h-4 w-4 text-green-500" />
-                            {{ totalReceita.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                            {{ formatRealValue(totalReceita)
                             }}
                             <ArrowBigUp class="h-4 w-4 text-red-500" />
-                            {{ totalDespesa.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                            {{ formatRealValue(totalDespesa)
                             }}
                         </div>
                     </CardContent>
@@ -50,8 +50,8 @@
                     </CardHeader>
                     <CardContent>
                         <div class="text-2xl font-bold text-blue-500">
-                            {{ vendas.reduce((total, item) => total + (item.valor - item.valorDesconto!),
-                                0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
+                            {{ formatRealValue(vendas.reduce((total, item) => total + (item.valor -
+                                item.valorDesconto!), 0)) }}
                         </div>
                         <p class="text-xs text-muted-foreground">
                             Resumo das vendas
@@ -83,19 +83,13 @@
                     <CardDescription>Resumo de vendas por mês</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <BarChart class="h-48 py-4" :rounded-corners="4" :data="calcularTotalPorMetodoPagamento()"
-                        index="index" :categories="['total']" :y-formatter="formateTicketValue"
-                        :custom-tooltip="CustomTooltipChart" />
-                </CardContent>
-            </Card>
-            <Card class="col-span-1">
-                <CardHeader>
-                    <CardTitle>Resumo de assinaturas</CardTitle>
-                    <CardDescription>Resumo de assinaturas por mês</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <BarChart class="h-48 py-4" :rounded-corners="4" :data="data" index="name"
-                        :categories="['total', 'meta']" :y-formatter="formateTicketValue" />
+                    <BarChart v-if="vendas.length > 0" class="h-48 py-4" :rounded-corners="4"
+                        :data="calcularTotalPorMes()" index="index" :categories="['total']"
+                        :y-formatter="formateTicketValue" :custom-tooltip="CustomTooltipChart" />
+                    <div v-else class="flex flex-col items-center justify-center h-s w-full mt-8">
+                        <ChartColumnBig class="w-16 h-16 text-muted-foreground" />
+                        <p class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
+                    </div>
                 </CardContent>
             </Card>
             <Card class="col-span-1">
@@ -104,8 +98,28 @@
                     <CardDescription>Resumo de lançamentos por mês</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <BarChart class="h-48 py-4" :rounded-corners="4" :data="data" index="name"
+                    <BarChart v-if="resumoFinanceiro.resumo.total > 0" class="h-48 py-4" :rounded-corners="4"
+                        :data="resumoFinanceiro.chart.resumoPorMes" index="name" :custom-tooltip="CustomTooltipChart"
+                        :categories="['receita', 'despesa']" :colors="['#22c55e', '#ef4444']"
+                        :y-formatter="formateTicketValue" />
+                    <div v-else class="flex flex-col items-center justify-center h-s w-full mt-8">
+                        <ChartColumnBig class="w-16 h-16 text-muted-foreground" />
+                        <p class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
+                    </div>
+                </CardContent>
+            </Card>
+            <Card class="col-span-1">
+                <CardHeader>
+                    <CardTitle>Resumo de assinaturas</CardTitle>
+                    <CardDescription>Resumo de assinaturas por mês</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <BarChart v-if="false" class="h-48 py-4" :rounded-corners="4" :data="data" index="name"
                         :categories="['total', 'meta']" :y-formatter="formateTicketValue" />
+                    <div v-else class="flex flex-col items-center justify-center h-s w-full mt-8">
+                        <ChartColumnBig class="w-16 h-16 text-muted-foreground" />
+                        <p class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
+                    </div>
                 </CardContent>
             </Card>
             <Card class="xl:col-span-2">
@@ -288,7 +302,8 @@
                         <div class="ml-auto font-medium">
                             {{ (sale.valor - sale.valorDesconto!).toLocaleString('pt-BR', {
                                 style: 'currency', currency:
-                            'BRL' }) }}
+                                    'BRL'
+                            }) }}
                         </div>
                     </div>
                 </CardContent>
@@ -298,7 +313,7 @@
 </template>
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { Activity, ArrowBigDown, ArrowBigUp, ArrowUpRight, CreditCard, DollarSign, Users } from "lucide-vue-next"
+import { Activity, ArrowBigDown, ArrowBigUp, ArrowUpRight, ChartColumnBig, CreditCard, DollarSign, Users } from "lucide-vue-next"
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -312,27 +327,35 @@ import { RouterLink } from "vue-router";
 import { IResumoFinanceiro } from "@/types/financeiro/IResumoFinanceiro";
 import LancamentosRepository from "@/repositories/financeiro/lancamentosRepository";
 import { computed } from "vue";
+import { formatRealValue } from "@/utils/formatterUtil";
 
 const vendas = ref<IVenda[]>([])
 const vendasRecents = ref<IVenda[]>([])
 const resumoFinanceiro = ref<IResumoFinanceiro>({
-    efetivadoDespesaAVista: 0,
-    efetivadoReceitaAVista: 0,
-    pendenteDespesaAVista: 0,
-    pendenteReceitaAVista: 0,
-    pendentesDespesasAPrazo: 0,
-    pendentesReceitasAPrazo: 0,
-    efetivadoDespesasAPrazo: 0,
-    efetivadoReceitasAPrazo: 0,
-    total: 0
+    resumo: {
+        efetivadoDespesaAVista: 0,
+        efetivadoReceitaAVista: 0,
+        pendenteDespesaAVista: 0,
+        pendenteReceitaAVista: 0,
+        pendentesDespesasAPrazo: 0,
+        pendentesReceitasAPrazo: 0,
+        efetivadoDespesasAPrazo: 0,
+        efetivadoReceitasAPrazo: 0,
+        total: 0,
+    },
+    chart: {
+        resumoPorCategoria: [],
+        resumoPorFormaPagamento: [],
+        resumoPorMes: []
+    }
 })
 
 const totalReceita = computed(() => {
-    return resumoFinanceiro.value.efetivadoReceitaAVista + resumoFinanceiro.value.efetivadoReceitasAPrazo + resumoFinanceiro.value.pendenteReceitaAVista + resumoFinanceiro.value.pendentesReceitasAPrazo
+    return resumoFinanceiro.value.resumo.efetivadoReceitaAVista + resumoFinanceiro.value.resumo.efetivadoReceitasAPrazo + resumoFinanceiro.value.resumo.pendenteReceitaAVista + resumoFinanceiro.value.resumo.pendentesReceitasAPrazo
 })
 
 const totalDespesa = computed(() => {
-    return resumoFinanceiro.value.efetivadoDespesaAVista + resumoFinanceiro.value.efetivadoDespesasAPrazo + resumoFinanceiro.value.pendenteDespesaAVista + resumoFinanceiro.value.pendentesDespesasAPrazo
+    return resumoFinanceiro.value.resumo.efetivadoDespesaAVista + resumoFinanceiro.value.resumo.efetivadoDespesasAPrazo + resumoFinanceiro.value.resumo.pendenteDespesaAVista + resumoFinanceiro.value.resumo.pendentesDespesasAPrazo
 })
 
 const getVendasResumo = async () => {
@@ -360,22 +383,6 @@ interface IDataOutput {
     index: string;
     total: number;
 }
-function calcularTotalPorMetodoPagamento(): IDataOutput[] {
-    const totaisPorMetodo: Record<string, number> = {};
-    vendas.value.forEach(venda => {
-        const metodoPagamento = venda.metodoPagamento || 'Indefinido';
-        if (totaisPorMetodo[metodoPagamento]) {
-            totaisPorMetodo[metodoPagamento] += (venda.valor - venda.valorDesconto!);
-        } else {
-            totaisPorMetodo[metodoPagamento] = (venda.valor - venda.valorDesconto!);
-        }
-    });
-    return Object.keys(totaisPorMetodo).map(metodo => ({
-        index: metodo,
-        total: totaisPorMetodo[metodo],
-    }));
-}
-
 function calcularTotalPorMes(): IDataOutput[] {
     const totaisPorMes: Record<string, number> = {};
 
@@ -396,7 +403,6 @@ function calcularTotalPorMes(): IDataOutput[] {
         total: totaisPorMes[mes],
     }));
 }
-calcularTotalPorMes()
 
 const data = [
     { name: 'Jan', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
