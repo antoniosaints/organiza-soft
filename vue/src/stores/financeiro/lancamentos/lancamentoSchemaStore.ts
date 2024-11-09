@@ -39,7 +39,7 @@ export const useLancamentoSchemaStore = defineStore("lancamentoSchemaStore", () 
         dataEntrada: new Date(),
         isEfetivado: false,
         hasEntrada: false,
-        valorLancamento: 0
+        valorLancamento: 0.01
     }) as Ref<ISchemaLancamento>
 
     return { schema }

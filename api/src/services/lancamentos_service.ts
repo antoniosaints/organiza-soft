@@ -28,7 +28,6 @@ export class LancamentoService {
     if (this.data.isEfetivado && !this.data.isParcelado) {
       this.data.lancamento.status = "recebido";
       this.data.lancamento.dataEfetivado = this.data.dataPagamento;
-      this.data.lancamento.dataVencimento = this.data.dataPagamento;
       this.data.lancamento.dataPagamento = this.data.dataPagamento;
       this.data.lancamento.usuarioEfetivou = this.data.lancamento.usuarioLancamento
     }
