@@ -1,75 +1,125 @@
 <template>
     <div class="gap-4 grid">
         <div class="grid gap-4 md:grid-cols-2 md:gap-4 lg:grid-cols-4">
-                <Card>
-                    <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle class="text-sm font-medium">
-                            Resumo geral
-                        </CardTitle>
-                        <DollarSign class="h-4 w-4" />
-                    </CardHeader>
-                    <CardContent>
-                        <div class="text-2xl font-bold text-blue-500">
-                            {{ formatRealValue(totalReceita + totalDespesa) }}
-                        </div>
-                        <div class="flex gap-1 text-xs items-center">
-                            <ArrowBigDown class="h-4 w-4 text-green-500" />
-                            {{ formatRealValue(totalReceita)}}
-                            <ArrowBigUp class="h-4 w-4 text-red-500" />
-                            {{ formatRealValue(totalDespesa)}}
-                        </div>
-                    </CardContent>
-                </Card>
             <Card>
                 <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle class="text-sm font-medium">
+                    <CardTitle class="text-sm font-medium flex items-center">
+                        Resumo geral
+                        <Popover>
+                            <PopoverTrigger>
+                                <CircleHelp class="h-4 w-4 ml-2 text-muted-foreground cursor-pointer" />
+                            </PopoverTrigger>
+                            <PopoverContent class="w-60 flex justify-center items-center gap-2 text-xs"
+                                :align="'start'">
+                                <p>
+                                    O resumo geral mostra o valor total somando receitas e despesas, logo abaixo com um
+                                    ícone de seta pra baixo, o valor total de receitas e um ícone de seta pra cima, o
+                                    valor total de despesas
+                                </p>
+                            </PopoverContent>
+                        </Popover>
+                    </CardTitle>
+                    <DollarSign class="h-4 w-4" />
+                </CardHeader>
+                <CardContent>
+                    <div class="text-2xl font-bold text-blue-500">
+                        {{ formatRealValue(totalReceita + totalDespesa) }}
+                    </div>
+                    <div class="flex gap-1 text-xs items-center">
+                        <ArrowBigDown class="h-4 w-4 text-green-500" />
+                        {{ formatRealValue(totalReceita) }}
+                        <ArrowBigUp class="h-4 w-4 text-red-500" />
+                        {{ formatRealValue(totalDespesa) }}
+                    </div>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle class="text-sm font-medium flex items-center">
                         Balanço
+                        <Popover>
+                            <PopoverTrigger>
+                                <CircleHelp class="h-4 w-4 ml-2 text-muted-foreground cursor-pointer" />
+                            </PopoverTrigger>
+                            <PopoverContent class="w-60 flex justify-center items-center gap-2 text-xs"
+                                :align="'start'">
+                                <p>
+                                    O Balanço mostra o saldo subtraindo as despesas da receita, mostrando o saldo em <p class="text-green-500 inline">verde</p> e mostrando abaixo a
+                                    porcentagem de <p class="text-green-500 inline">receitas</p> e <p class="text-red-500 inline">despesas</p>
+                                </p>
+                            </PopoverContent>
+                        </Popover>
                     </CardTitle>
                     <ChartCandlestick class="h-4 w-4" />
                 </CardHeader>
                 <CardContent>
-                    <div class="text-2xl font-bold" :class="totalReceita - totalDespesa > 0 ? 'text-green-500' : 'text-red-500'">
+                    <div class="text-2xl font-bold"
+                        :class="totalReceita - totalDespesa > 0 ? 'text-green-500' : 'text-red-500'">
                         {{ formatRealValue(totalReceita - totalDespesa) }}
                     </div>
                     <p class="flex gap-1 text-xs items-center">
                         <CircleArrowOutDownLeft class="h-3 w-3 text-green-500" />
-                        {{ 
-                        (totalReceita + totalDespesa) > 0 
-                            ? ((totalReceita / (totalReceita + totalDespesa)) * 100).toFixed(2) 
-                            : 0 
+                        {{
+                            (totalReceita + totalDespesa) > 0
+                                ? ((totalReceita / (totalReceita + totalDespesa)) * 100).toFixed(2)
+                                : 0
                         }}% receita
                         <CircleArrowOutUpRight class="h-3 w-3 text-red-500" />
-                        {{ 
-                        (totalReceita + totalDespesa) > 0 
-                            ? ((totalDespesa / (totalReceita + totalDespesa)) * 100).toFixed(2) 
-                            : 0 
+                        {{
+                            (totalReceita + totalDespesa) > 0
+                                ? ((totalDespesa / (totalReceita + totalDespesa)) * 100).toFixed(2)
+                                : 0
                         }}% despesa
                     </p>
                 </CardContent>
             </Card>
-                <Card>
-                    <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle class="text-sm font-medium">
-                            Pendentes
-                        </CardTitle>
-                        <ClockArrowDown class="h-4 w-4" />
-                    </CardHeader>
-                    <CardContent>
-                        <div class="text-2xl font-bold text-yellow-500">
-                            {{ formatRealValue(totalReceitaPendente + totalDespesaPendente) }}
-                        </div>
-                        <div class="flex gap-1 text-xs items-center">
-                            <ClockArrowDown class="h-3 w-3 text-green-500" />
-                            {{ formatRealValue(totalReceitaPendente) }}
-                            <ClockArrowDown class="h-3 w-3 text-red-500" />
-                            {{ formatRealValue(totalDespesaPendente) }}
-                        </div>
-                    </CardContent>
-                </Card>
             <Card>
                 <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle class="text-sm font-medium">
-                        Consolidado
+                    <CardTitle class="text-sm font-medium flex items-center">
+                        Pendentes
+                        <Popover>
+                            <PopoverTrigger>
+                                <CircleHelp class="h-4 w-4 ml-2 text-muted-foreground cursor-pointer" />
+                            </PopoverTrigger>
+                            <PopoverContent class="w-60 flex justify-center items-center gap-2 text-xs"
+                                :align="'start'">
+                                <p>
+                                    Esse cartão mostra os valores pendentes dos lançamentos, tanto receitas quanto despesas, mostrando o valor total em <p class="text-yellow-500 inline">amarelo</p>
+                                    e abaixo, mostra o valor referente à cada tipo de lançamento.
+                                </p>
+                            </PopoverContent>
+                        </Popover>
+                    </CardTitle>
+                    <ClockArrowDown class="h-4 w-4" />
+                </CardHeader>
+                <CardContent>
+                    <div class="text-2xl font-bold text-yellow-500">
+                        {{ formatRealValue(totalReceitaPendente + totalDespesaPendente) }}
+                    </div>
+                    <div class="flex gap-1 text-xs items-center">
+                        <ClockArrowDown class="h-3 w-3 text-green-500" />
+                        {{ formatRealValue(totalReceitaPendente) }}
+                        <ClockArrowDown class="h-3 w-3 text-red-500" />
+                        {{ formatRealValue(totalDespesaPendente) }}
+                    </div>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle class="text-sm font-medium flex items-center">
+                        Consolidados
+                        <Popover>
+                            <PopoverTrigger>
+                                <CircleHelp class="h-4 w-4 ml-2 text-muted-foreground cursor-pointer" />
+                            </PopoverTrigger>
+                            <PopoverContent class="w-60 flex justify-center items-center gap-2 text-xs"
+                                :align="'start'">
+                                <p>
+                                    Esse cartão mostra os valores consolidados dos lançamentos, tanto receitas quanto despesas, mostrando o valor total em <p class="text-blue-500 inline">azul</p>
+                                    e abaixo, mostra o valor referente à cada tipo de lançamento.
+                                </p>
+                            </PopoverContent>
+                        </Popover>
                     </CardTitle>
                     <CircleCheckBig class="h-4 w-4" />
                 </CardHeader>
@@ -89,35 +139,79 @@
         <div class="grid gap-4 md:gap-4 lg:grid-cols-2 xl:grid-cols-3">
             <Card class="col-span-1">
                 <CardHeader>
-                    <CardTitle>Método de pagamento</CardTitle>
+                    <CardTitle class="flex items-center">
+                        Método de pagamento 
+                        <Popover>
+                            <PopoverTrigger>
+                                <CircleHelp class="h-4 w-4 ml-2 text-muted-foreground cursor-pointer" />
+                            </PopoverTrigger>
+                            <PopoverContent class="w-60 flex justify-center items-center gap-2 text-xs"
+                                :align="'start'">
+                                <p>
+                                    Esse gráfico mostra os lançamentos de acordo com o seu método de pagamento, 
+                                    onde a cor vermelha representa os lançamentos pendentes, 
+                                    a cor verde representa os lançamentos pagos e a cor azul representa o total de lançamentos por Método de pagamento.
+                                </p>
+                            </PopoverContent>
+                        </Popover>
+                    </CardTitle>
                     <CardDescription>Resumo mensal por forma de pagamento</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <BarChart class="h-48 py-4" :rounded-corners="4" :data="resumoFinanceiro.chart.resumoPorFormaPagamento"
-                        :custom-tooltip="CustomTooltipChart"
-                        index="name" :categories="['total', 'pendente', 'pago']" :colors="['#3b82f6', '#ef4444', '#22c55e']" />
+                    <BarChart class="h-48 py-4" :rounded-corners="4"
+                        :data="resumoFinanceiro.chart.resumoPorFormaPagamento" :custom-tooltip="CustomTooltipChart"
+                        index="name" :categories="['total', 'pendente', 'pago']"
+                        :colors="['#3b82f6', '#ef4444', '#22c55e']" />
                 </CardContent>
             </Card>
             <Card class="col-span-1">
                 <CardHeader>
-                    <CardTitle>Categorias</CardTitle>
+                    <CardTitle class="flex items-center">
+                        Categorias
+                        <Popover>
+                            <PopoverTrigger>
+                                <CircleHelp class="h-4 w-4 ml-2 text-muted-foreground cursor-pointer" />
+                            </PopoverTrigger>
+                            <PopoverContent class="w-60 flex justify-center items-center gap-2 text-xs"
+                                :align="'start'">
+                                <p>
+                                    Esse gráfico mostra os lançamentos de acordo com o sua categoria,
+                                    onde a cor vermelha representa os lançamentos pendentes, 
+                                    a cor verde representa os lançamentos pagos e a cor azul representa o total de lançamentos por categoria.
+                                </p>
+                            </PopoverContent>
+                        </Popover>
+                    </CardTitle>
                     <CardDescription>Resumo mensal por categoria</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <BarChart class="h-48 py-4" :rounded-corners="4" :data="resumoFinanceiro.chart.resumoPorCategoria"
-                        :custom-tooltip="CustomTooltipChart"
-                        index="name" :categories="['total', 'pendente', 'pago']" :colors="['#3b82f6', '#ef4444', '#22c55e']" />
+                        :custom-tooltip="CustomTooltipChart" index="name" :categories="['total', 'pendente', 'pago']"
+                        :colors="['#3b82f6', '#ef4444', '#22c55e']" />
                 </CardContent>
             </Card>
             <Card class="col-span-1">
                 <CardHeader>
-                    <CardTitle>Resumo mensal</CardTitle>
+                    <CardTitle class="flex items-center">
+                        Resumo mensal
+                        <Popover>
+                            <PopoverTrigger>
+                                <CircleHelp class="h-4 w-4 ml-2 text-muted-foreground cursor-pointer" />
+                            </PopoverTrigger>
+                            <PopoverContent class="w-60 flex justify-center items-center gap-2 text-xs"
+                                :align="'start'">
+                                <p>
+                                    Esse gráfico mostra os lançamentos por mês, onde a cor verde representa as receitas e a cor vermelha representa as despesas.
+                                </p>
+                            </PopoverContent>
+                        </Popover>
+                    </CardTitle>
                     <CardDescription>Resumo mensal por natureza</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <BarChart class="h-48 py-4" :rounded-corners="4" :data="resumoFinanceiro.chart.resumoPorMes"
-                        :custom-tooltip="CustomTooltipChart"
-                        index="name" :categories="['receita', 'despesa']" :colors="['#22c55e', '#ef4444']" />
+                        :custom-tooltip="CustomTooltipChart" index="name" :categories="['receita', 'despesa']"
+                        :colors="['#22c55e', '#ef4444']" />
                 </CardContent>
             </Card>
             <Card class="xl:col-span-2">
@@ -204,7 +298,8 @@
                         <div class="ml-auto font-medium">
                             {{ (sale.valor - sale.valorDesconto!).toLocaleString('pt-BR', {
                                 style: 'currency', currency:
-                            'BRL' }) }}
+                                    'BRL'
+                            }) }}
                         </div>
                     </div>
                 </CardContent>
@@ -214,7 +309,7 @@
 </template>
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
-import { ArrowBigDown, ArrowBigUp, ArrowUpRight, ChartCandlestick, CircleArrowOutDownLeft, CircleArrowOutUpRight, CircleCheckBig, ClockArrowDown, DollarSign } from "lucide-vue-next"
+import { ArrowBigDown, ArrowBigUp, ArrowUpRight, ChartCandlestick, CircleArrowOutDownLeft, CircleArrowOutUpRight, CircleCheckBig, CircleHelp, ClockArrowDown, DollarSign } from "lucide-vue-next"
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -228,6 +323,7 @@ import { IResumoFinanceiro } from "@/types/financeiro/IResumoFinanceiro";
 import LancamentosRepository from "@/repositories/financeiro/lancamentosRepository";
 import { formatRealValue } from "@/utils/formatterUtil";
 import { RouterLink } from "vue-router";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 const vendas = ref<IVenda[]>([])
 const vendasRecents = ref<IVenda[]>([])
