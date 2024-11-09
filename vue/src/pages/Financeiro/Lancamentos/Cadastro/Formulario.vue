@@ -14,6 +14,7 @@ import { NumberField, NumberFieldContent, NumberFieldDecrement, NumberFieldIncre
 import { useLancamentoSchemaStore } from '@/stores/financeiro/lancamentos/lancamentoSchemaStore'
 import { LancamentoService } from '@/services/financeiro/LancamentoService'
 import { watch } from 'vue'
+import { useColorMode } from '@vueuse/core'
 
 const { schema } = useLancamentoSchemaStore()
 
@@ -39,6 +40,8 @@ const managerState = () => {
 }
 
 watch(() => [schema.isParcelado, schema.isEfetivado], managerState)
+
+const isDark = useColorMode().value === 'dark'
 
 const submitLancamento = async () => {
     await LancamentoService.create(schema)
@@ -189,7 +192,7 @@ const submitLancamento = async () => {
                             </div>
                             <div class="space-y-2 p-2">
                                 <Label for="primeiroVencimento">Data Primeira Parcela</Label>
-                                <Input id="primeiroVencimento" :required="schema.isParcelado" type="date" v-model="schema.dataPrimeiraParcela" />
+                                <VueDatePicker placeholder="Data da primeira parcela" id="primeiroVencimento" :required="schema.isParcelado" :dark="isDark" v-model="schema.dataPrimeiraParcela" format="dd/MM/yyyy" locale="pt" auto-apply utc />
                             </div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-2" v-if="schema.hasEntrada">
@@ -214,13 +217,13 @@ const submitLancamento = async () => {
                             </div>
                             <div class="space-y-2 p-2">
                                 <Label for="primeiroVencimento">Data da entrada</Label>
-                                <Input id="primeiroVencimento" :required="schema.hasEntrada" type="date" v-model="schema.dataEntrada" />
+                                <VueDatePicker placeholder="Selecione a data da entrada" id="primeiroVencimento" :required="schema.hasEntrada" :dark="isDark" v-model="schema.dataEntrada" format="dd/MM/yyyy" locale="pt" auto-apply utc />
                             </div>
                         </div>
                         <div v-if="schema.isEfetivado" class="grid grid-cols-1 md:grid-cols-2 gap-2">
                             <div class="space-y-2 p-2">
                                 <Label for="dataPagamento">Data do Pagamento</Label>
-                                <Input id="dataPagamento" type="date" :required="schema.isEfetivado" v-model="schema.dataPagamento" />
+                                <VueDatePicker placeholder="Selecione a data do pagamento" id="dataPagamento" :required="schema.isEfetivado" :dark="isDark" v-model="schema.dataPagamento" format="dd/MM/yyyy" locale="pt" auto-apply utc />
                             </div>
                             <div class="space-y-2 p-2">
                                 <Label for="tipoPagamento">Tipo de Pagamento</Label>

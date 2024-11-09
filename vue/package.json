@@ -28,6 +28,7 @@
     "@unovis/ts": "^1.4.3-beta.0",
     "@unovis/vue": "^1.4.3-beta.0",
     "@vee-validate/zod": "^4.13.2",
+    "@vuepic/vue-datepicker": "^10.0.0",
     "@vueuse/core": "^11.1.0",
     "axios": "^1.7.2",
     "class-variance-authority": "^0.7.0",

@@ -7,6 +7,8 @@ import { useMainStore } from './stores/mainStore';
 import { VueQueryPlugin } from '@tanstack/vue-query'
 import { Router } from './routes/Router';
 import { i18n } from './i18n';
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
 
 const pinia = createPinia();
 const app = createApp(App);
@@ -19,4 +21,5 @@ app.use(pinia);
 app.use(i18n);
 app.use(Router);
 app.component('IconFA', IconsUtil);
+app.component('VueDatePicker', VueDatePicker);
 app.mount('#app');

@@ -18,7 +18,7 @@ export const formatDateToPtbr = (date: string) => {
 }
 export const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('pt-BR', {
-        timeZone: 'UTC',          // Define o timezone para UTC
+        timeZone: 'America/Sao_Paulo',          // Define o timezone para UTC
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',
