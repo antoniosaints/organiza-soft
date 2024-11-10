@@ -1,4 +1,5 @@
 import './assets/index.css';
+import '@vuepic/vue-datepicker/dist/main.css'
 import App from './App.vue';
 import IconsUtil from './utils/iconsUtil';
 import { createApp } from 'vue';
@@ -8,7 +9,7 @@ import { VueQueryPlugin } from '@tanstack/vue-query'
 import { Router } from './routes/Router';
 import { i18n } from './i18n';
 import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css'
+import './assets/datepicker.css';
 
 const pinia = createPinia();
 const app = createApp(App);

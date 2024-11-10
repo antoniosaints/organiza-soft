@@ -15,8 +15,7 @@ export const useLancamentosStore = defineStore(
     const total = ref<number>(0);
     const search = ref<string>("");
     const selectedItens = ref<number[]>([]);
-    const startDate = ref<string>("");
-    const endDate = ref<string>("");
+    const dateFilter = ref<string[]>([]);
 
     const getLancamentos = async (): Promise<void> => {
       try {
@@ -25,7 +24,8 @@ export const useLancamentosStore = defineStore(
           await LancamentosRepository.getAll(
             Number(limit.value),
             page.value,
-            search.value
+            search.value,
+            dateFilter.value
           );
         lancamentos.value = data;
         total.value = totalClientes;
@@ -64,8 +64,7 @@ export const useLancamentosStore = defineStore(
     };
 
     return {
-      startDate,
-      endDate,
+      dateFilter,
       lancamentos,
       limit,
       page,

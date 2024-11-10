@@ -33,6 +33,7 @@
     "axios": "^1.7.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.4.5",
     "flowbite": "^2.4.1",
     "flowbite-vue": "^0.1.5",

@@ -46,12 +46,12 @@
                     <DropdownMenuSeparator />
                 </DropdownMenu>
             </div>
-            <div class="flex space-x-2">
-                <div class="flex space-x-2">
+            <div class="flex md:w-1/3 lg:w-1/4 w-full">
+                <div class="flex space-x-2 mr-2" v-if="false">
                     <TooltipProvider>
                         <Tooltip>
                             <TooltipTrigger>
-                                <Button @click="clearFilterDate" v-if="showClearFilter" size="sm" variant="destructive">
+                                <Button @click="dateRangeFilter" size="xs" variant="destructive">
                                     <FilterX class="w-4 h-4" />
                                 </Button>
                             </TooltipTrigger>
@@ -59,7 +59,15 @@
                         </Tooltip>
                     </TooltipProvider>
                 </div>
-                <DateRangePicker v-model="dateFilter" :startDate="mainStore.startDate" :endDate="mainStore.endDate" />
+                <VueDatePicker placeholder="Período de filtragem" format="dd/MM/yyyy" :preset-dates="presetDates" locale="pt" auto-apply
+                    :dark="isDark" v-model="mainStore.dateFilter" range :multi-calendars="{ solo: true }">
+                    <template #preset-date-range-button="{ label, value, presetDate }">
+                        <span role="button" :tabindex="0" @click="presetDate(value)"
+                            @keyup.enter.prevent="presetDate(value)" @keyup.space.prevent="presetDate(value)">
+                            {{ label }}
+                        </span>
+                    </template>
+                </VueDatePicker>
             </div>
             <AlertDialog v-model:open="openDialogMultilineDelete">
                 <AlertDialogContent>
@@ -204,11 +212,12 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { LancamentosRow } from ".";
 import DetalhesProduto from "./Infos/DetalhesProduto.vue";
 import CompartilharLink from "@/views/Vendas/Pdv/CompartilharLink.vue";
-import DateRangePicker from "@/components/customs/DateRangePicker.vue";
 import { useLancamentosStore } from "@/stores/financeiro/lancamentos/lancamentoStore";
 import SheetModal from "../Cadastro/SheetModal.vue";
 import { useLancamentosFormularioStore } from "@/stores/financeiro/lancamentos/lancamentosFormularioStore";
 import DetalhesLancamento from "../Modais/DetalhesLancamento.vue";
+import { useColorMode } from "@vueuse/core";
+import { endOfMonth, endOfYear, startOfMonth, startOfYear, subMonths } from "date-fns";
 
 const mainStore = useLancamentosStore();
 const formularioStore = useLancamentosFormularioStore();
@@ -220,38 +229,30 @@ const dataExists = computed(() => mainStore.lancamentos.length > 0);
 watch(perPage, () => {
     loadDataChange(1);
 });
+const isDark = computed(() => useColorMode().value === 'dark')
 
-interface DatePickerReturn {
-    start: string,
-    end: string
-}
-const dateFilter = ref<DatePickerReturn>()
+const dateRangeFilter = ref()
 
-watch(() => [dateFilter.value?.start, dateFilter.value?.end], () => {
-    if (dateFilter.value?.start && dateFilter.value?.end) {
-        mainStore.startDate = dateFilter.value?.start
-        const endDate = new Date(dateFilter.value?.end)
-        endDate.setHours(23, 50, 0, 0);
-        mainStore.endDate = endDate.toISOString()
-        mainStore.page = 1
-        mainStore.getLancamentos()
-    }
+onMounted(() => {
+    const startDate = startOfMonth(new Date())
+    const endDate = endOfMonth(new Date());
+    mainStore.dateFilter = [startDate.toISOString(), endDate.toISOString()]
 })
 
-const showClearFilter = computed(() => {
-    if (dateFilter.value?.start && dateFilter.value?.end) {
-        return true
-    } else {
-        return false
-    }
-})
+const presetDates = ref([
+  { label: 'Hoje', value: [new Date(), new Date()] },
+  { label: 'Este mês', value: [startOfMonth(new Date()), endOfMonth(new Date())] },
+  {
+    label: 'Mês passado',
+    value: [startOfMonth(subMonths(new Date(), 1)), endOfMonth(subMonths(new Date(), 1))],
+  },
+  { label: 'Nesse ano', value: [startOfYear(new Date()), endOfYear(new Date())] },
+]);
 
-const clearFilterDate = () => {
-    dateFilter.value = undefined
-    mainStore.startDate = ""
-    mainStore.endDate = ""
+watch(() => mainStore.dateFilter, () => {
+    mainStore.page = 1
     mainStore.getLancamentos()
-}
+})
 
 const openDialogMultilineDelete = ref(false);
 

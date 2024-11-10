@@ -122,7 +122,7 @@ const submitLancamento = async () => {
                                 <div class="space-y-2 p-2">
                                     <Label for="primeiroVencimento">Data vencimento</Label>
                                     <VueDatePicker :day-names="['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom']"
-                                        placeholder="Data da primeira parcela" id="primeiroVencimento"
+                                        placeholder="Data do vencimento" id="primeiroVencimento"
                                         required :dark="isDark" v-model="schema.lancamento.dataVencimento"
                                         format="dd/MM/yyyy" locale="pt" auto-apply utc />
                                 </div>

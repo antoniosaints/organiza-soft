@@ -112,7 +112,7 @@
     @apply bg-background text-foreground;
   }
 }
-
+/* 
 .dp__input {
   gap: 10px !important;
   padding: 6px 5px 5px 32px !important;
@@ -123,4 +123,4 @@
   font-family: sans-serif !important;
   border-radius: 0.5rem !important;
   color: inherit !important;
-}
+} */

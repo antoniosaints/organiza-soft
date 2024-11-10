@@ -3,8 +3,7 @@ import ITransacao from "./ILancamentos";
 
 export interface ILancamentosStore {
     getLancamentos(): Promise<void>;
-    startDate: Ref<string>;
-    endDate: Ref<string>;
+    dateFilter: Ref<string[]>;
     lancamentos: Ref<ITransacao[]>;
     limit: Ref<string>;
     page: Ref<number>;
