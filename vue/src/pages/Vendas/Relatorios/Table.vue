@@ -73,7 +73,7 @@
                         </TooltipProvider>
                     </div>
                     <VueDatePicker placeholder="Período de filtragem" format="dd/MM/yyyy" select-text="Aplicar"
-                        cancel-text="Fechar" :preset-dates="presetDates" locale="pt"
+                        cancel-text="Fechar" :preset-dates="presetsDatePickerVue" locale="pt"
                         :dark="isDark" utc v-model="dateFilter" range>
                         <template #preset-date-range-button="{ label, value, presetDate }">
                             <span role="button" :tabindex="0" @click="presetDate(value)"
@@ -232,7 +232,7 @@ import { useVendasRelatorioStore } from "@/stores/vendas/relatorios/vendasRelato
 import CompartilharLink from "@/views/Vendas/Pdv/CompartilharLink.vue";
 import CadastrarVendaView from "@/views/Vendas/Relatorios/CadastrarVendaView.vue";
 import { useColorMode } from "@vueuse/core";
-import { endOfMonth, endOfYear, startOfMonth, startOfYear, subMonths } from "date-fns";
+import { presetsDatePickerVue } from "@/utils/datepickerUtil";
 
 const mainStore = useVendasRelatorioStore();
 const perPage = computed(() => Number(mainStore.limit) || 0);
@@ -256,16 +256,6 @@ const dataExists = computed(() => Number(mainStore.total) > 0);
 const isDark = computed(() => useColorMode().value === 'dark')
 
 const dateFilter = ref<string[]>([])
-const presetDates = ref([
-  { label: 'Hoje', value: [new Date().toUTCString(), new Date().toUTCString()] },
-  { label: 'Este mês', value: [startOfMonth(new Date()).toUTCString(), endOfMonth(new Date()).toUTCString()] },
-  {
-    label: 'Mês passado',
-    value: [startOfMonth(subMonths(new Date(), 1)).toUTCString(), endOfMonth(subMonths(new Date(), 1)).toUTCString()],
-  },
-  { label: 'Nesse ano', value: [startOfYear(new Date()).toUTCString(), endOfYear(new Date()).toUTCString()] },
-]);
-
 const openDialogMultilineDelete = ref(false);
 
 const deleteMultilineSelects = async () => {

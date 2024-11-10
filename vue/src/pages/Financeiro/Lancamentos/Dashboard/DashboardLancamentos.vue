@@ -7,7 +7,7 @@
             </div>
             <div class="flex items-center gap-2 md:w-1/3 lg:w-1/4">
                 <VueDatePicker placeholder="Período de filtragem" format="dd/MM/yyyy" select-text="Aplicar"
-                    cancel-text="Fechar" :preset-dates="presetDates" locale="pt" :dark="isDark"
+                    cancel-text="Fechar" :preset-dates="presetsDatePickerVue" locale="pt" :dark="isDark"
                     utc v-model="dateFilter" range>
                     <template #preset-date-range-button="{ label, value, presetDate }">
                         <span role="button" :tabindex="0" @click="presetDate(value)"
@@ -62,7 +62,7 @@
                             <PopoverContent class="w-60 flex justify-center items-center gap-2 text-xs"
                                 :align="'start'">
                                 <p>
-                                    O Balanço mostra o saldo subtraindo as despesas da receita, mostrando o saldo em
+                                    O Balanço mostra o saldo subtraindo as receitas efetivadas das despesas efetivadas, mostrando o saldo em
                                 <p class="text-green-500 inline">verde</p> e mostrando abaixo a
                                 porcentagem de <p class="text-green-500 inline">receitas</p> e <p
                                     class="text-red-500 inline">
@@ -75,20 +75,20 @@
                 </CardHeader>
                 <CardContent>
                     <div class="text-2xl font-bold"
-                        :class="totalReceita - totalDespesa > 0 ? 'text-green-500' : 'text-red-500'">
-                        {{ formatRealValue(totalReceita - totalDespesa) }}
+                        :class="totalEfetivoReceita - totalEfetivoDespesa > 0 ? 'text-green-500' : 'text-red-500'">
+                        {{ formatRealValue(totalEfetivoReceita - totalEfetivoDespesa) }}
                     </div>
                     <p class="flex gap-1 text-xs items-center">
                         <CircleArrowOutDownLeft class="h-3 w-3 text-green-500" />
                         {{
-                            (totalReceita + totalDespesa) > 0
-                                ? ((totalReceita / (totalReceita + totalDespesa)) * 100).toFixed(2)
+                            (totalEfetivoReceita + totalEfetivoDespesa) > 0
+                                ? ((totalEfetivoReceita / (totalEfetivoReceita + totalEfetivoDespesa)) * 100).toFixed(2)
                                 : 0
                         }}% receita
                         <CircleArrowOutUpRight class="h-3 w-3 text-red-500" />
                         {{
-                            (totalReceita + totalDespesa) > 0
-                                ? ((totalDespesa / (totalReceita + totalDespesa)) * 100).toFixed(2)
+                            (totalEfetivoReceita + totalEfetivoDespesa) > 0
+                                ? ((totalEfetivoDespesa / (totalEfetivoReceita + totalEfetivoDespesa)) * 100).toFixed(2)
                                 : 0
                         }}% despesa
                     </p>
@@ -357,24 +357,14 @@ import LancamentosRepository from "@/repositories/financeiro/lancamentosReposito
 import { formatRealValue } from "@/utils/formatterUtil";
 import { RouterLink } from "vue-router";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { endOfMonth, endOfYear, startOfMonth, startOfYear, subMonths } from "date-fns";
 import { useColorMode } from "@vueuse/core";
+import { presetsDatePickerVue } from "@/utils/datepickerUtil";
 
 const vendas = ref<IVenda[]>([])
 const vendasRecents = ref<IVenda[]>([])
 const dateFilter = ref<string[]>([])
 
 const isDark = computed(() => useColorMode().value === 'dark')
-const presetDates = ref([
-    { label: 'Hoje', value: [new Date().toUTCString(), new Date().toUTCString()] },
-    { label: 'Este mês', value: [startOfMonth(new Date()).toUTCString(), endOfMonth(new Date()).toUTCString()] },
-    {
-        label: 'Mês passado',
-        value: [startOfMonth(subMonths(new Date(), 1)).toUTCString(), endOfMonth(subMonths(new Date(), 1)).toUTCString()],
-    },
-    { label: 'Nesse ano', value: [startOfYear(new Date()).toUTCString(), endOfYear(new Date()).toUTCString()] },
-]);
-
 const resumoFinanceiro = ref<IResumoFinanceiro>({
     resumo: {
         efetivadoDespesaAVista: 0,
