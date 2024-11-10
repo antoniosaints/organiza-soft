@@ -51,7 +51,7 @@
                     <TooltipProvider>
                         <Tooltip>
                             <TooltipTrigger>
-                                <Button @click="dateRangeFilter" size="xs" variant="destructive">
+                                <Button size="xs" variant="destructive">
                                     <FilterX class="w-4 h-4" />
                                 </Button>
                             </TooltipTrigger>
@@ -231,14 +231,6 @@ watch(perPage, () => {
 });
 const isDark = computed(() => useColorMode().value === 'dark')
 
-const dateRangeFilter = ref()
-
-onMounted(() => {
-    const startDate = startOfMonth(new Date())
-    const endDate = endOfMonth(new Date());
-    mainStore.dateFilter = [startDate.toISOString(), endDate.toISOString()]
-})
-
 const presetDates = ref([
   { label: 'Hoje', value: [new Date(), new Date()] },
   { label: 'Este mês', value: [startOfMonth(new Date()), endOfMonth(new Date())] },
@@ -248,11 +240,6 @@ const presetDates = ref([
   },
   { label: 'Nesse ano', value: [startOfYear(new Date()), endOfYear(new Date())] },
 ]);
-
-watch(() => mainStore.dateFilter, () => {
-    mainStore.page = 1
-    mainStore.getLancamentos()
-})
 
 const openDialogMultilineDelete = ref(false);
 

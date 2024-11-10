@@ -26,11 +26,12 @@ export default class LancamentosRepository {
     search?: string | undefined,
     dateFilter?: string[]
   ): Promise<{ data: ITransacao[]; total: number }> {
-    if (!dateFilter?.length)
-      dateFilter = [new Date().toISOString(), new Date().toISOString()];
+    let filterDate = "";
+    if (dateFilter) filterDate = dateFilter.join(",");
     const { data } = await axiosService.get(
-      `financeiro/transacao?limit=${limit}&page=${page}&search=${search}&dataFiltro=${dateFilter.join(",")}`
+      `financeiro/transacao?limit=${limit}&page=${page}&search=${search}&dataFiltro=${filterDate}`
     );
+    console.log(data);
     return data;
   }
   static async getAllByConta(id: number): Promise<ITransacao[]> {

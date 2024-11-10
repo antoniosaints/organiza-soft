@@ -77,8 +77,11 @@ export const efetivarTransacao = async (req: Request, res: Response) => {
 export const getTransacoes = async (req: Request, res: Response) => {
   try {
     const { limit, page, search, dataFiltro } = req.query;
-    const [startDate, endDate] = (dataFiltro as string).split(",");
-  
+    let startDate = null;
+    let endDate = null;
+    if (dataFiltro) {
+      [startDate, endDate] = (dataFiltro as string).split(",");
+    }
     const offset = (Number(page) - 1) * Number(limit);
     const busca = search as string;
 
