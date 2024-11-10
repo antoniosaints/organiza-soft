@@ -59,8 +59,10 @@
                         </Tooltip>
                     </TooltipProvider>
                 </div>
-                <VueDatePicker placeholder="Período de filtragem" format="dd/MM/yyyy" :preset-dates="presetDates" locale="pt" auto-apply
-                    :dark="isDark" v-model="mainStore.dateFilter" range :multi-calendars="{ solo: true }">
+                <VueDatePicker placeholder="Período de filtragem" format="dd/MM/yyyy" 
+                    select-text="Aplicar" cancel-text="Fechar" :preset-dates="presetDates" locale="pt"
+                    :enable-time-picker="false"
+                    :dark="isDark" utc v-model="mainStore.dateFilter" range>
                     <template #preset-date-range-button="{ label, value, presetDate }">
                         <span role="button" :tabindex="0" @click="presetDate(value)"
                             @keyup.enter.prevent="presetDate(value)" @keyup.space.prevent="presetDate(value)">
@@ -232,13 +234,13 @@ watch(perPage, () => {
 const isDark = computed(() => useColorMode().value === 'dark')
 
 const presetDates = ref([
-  { label: 'Hoje', value: [new Date(), new Date()] },
-  { label: 'Este mês', value: [startOfMonth(new Date()), endOfMonth(new Date())] },
+  { label: 'Hoje', value: [new Date().toUTCString(), new Date().toUTCString()] },
+  { label: 'Este mês', value: [startOfMonth(new Date()).toUTCString(), endOfMonth(new Date()).toUTCString()] },
   {
     label: 'Mês passado',
-    value: [startOfMonth(subMonths(new Date(), 1)), endOfMonth(subMonths(new Date(), 1))],
+    value: [startOfMonth(subMonths(new Date(), 1)).toUTCString(), endOfMonth(subMonths(new Date(), 1)).toUTCString()],
   },
-  { label: 'Nesse ano', value: [startOfYear(new Date()), endOfYear(new Date())] },
+  { label: 'Nesse ano', value: [startOfYear(new Date()).toUTCString(), endOfYear(new Date()).toUTCString()] },
 ]);
 
 const openDialogMultilineDelete = ref(false);
