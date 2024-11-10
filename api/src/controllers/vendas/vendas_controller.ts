@@ -11,7 +11,12 @@ import { MercadoPagoGateway } from "../../gateways/mercadopago/mercado_pago";
 import "dotenv/config";
 export const getVendas = async (req: Request, res: Response) => {
   try {
-    const { limit, page, search, startDate, endDate } = req.query;
+    const { limit, page, search, dataFiltro } = req.query;
+    let startDate = null;
+    let endDate = null;
+    if (dataFiltro) {
+      [startDate, endDate] = (dataFiltro as string).split(",");
+    }
     const offset = (Number(page) - 1) * Number(limit);
     const busca = search as string;
 

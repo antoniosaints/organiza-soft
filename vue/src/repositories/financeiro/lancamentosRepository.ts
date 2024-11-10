@@ -14,9 +14,11 @@ export default class LancamentosRepository {
     );
     return data;
   }
-  static async getResume(): Promise<IResumoFinanceiro> {
+  static async getResume(dateFilter?: string[]): Promise<IResumoFinanceiro> {
+    let date = "";
+    if (dateFilter) date = dateFilter.join(",");
     const { data } = await axiosService.get(
-      `/financeiro/transacao/resumo/totais`
+      `/financeiro/transacao/resumo/totais?dataFiltro=${date}`
     );
     return data;
   }

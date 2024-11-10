@@ -15,9 +15,8 @@ export const useLancamentosStore = defineStore(
     const total = ref<number>(0);
     const search = ref<string>("");
     const selectedItens = ref<number[]>([]);
-    const dateFilter = ref<string[]>([]);
 
-    const getLancamentos = async (): Promise<void> => {
+    const getLancamentos = async (dateFilter?: string[]): Promise<void> => {
       try {
         if (!Autorize.can("visualizar", "lancamentos")) return;
         const { data, total: totalClientes } =
@@ -25,10 +24,11 @@ export const useLancamentosStore = defineStore(
             Number(limit.value),
             page.value,
             search.value,
-            dateFilter.value
+            dateFilter
           );
         lancamentos.value = data;
         total.value = totalClientes;
+        console.log(lancamentos.value, total.value);
       } catch (error: any) {
         const errorMessage =
           error?.response?.data?.message || "Erro desconhecido.";
@@ -64,7 +64,6 @@ export const useLancamentosStore = defineStore(
     };
 
     return {
-      dateFilter,
       lancamentos,
       limit,
       page,

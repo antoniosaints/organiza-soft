@@ -15,18 +15,15 @@ export const useVendasRelatorioStore = defineStore(
     const total = ref<number>(0);
     const search = ref<string>("");
     const selectedItens = ref<number[]>([]);
-    const startDate = ref<string>("");
-    const endDate = ref<string>("");
 
-    const getVendas = async (): Promise<void> => {
+    const getVendas = async (dateFilter?: string[]): Promise<void> => {
       try {
         if (!Autorize.can("visualizar", "vendas")) return;
         const { data, total: totalClientes } = await VendasRepository.getAll(
           Number(limit.value),
           page.value,
           search.value,
-          startDate.value,
-          endDate.value
+          dateFilter
         );
         console.log(data);
         vendas.value = data;
@@ -66,8 +63,6 @@ export const useVendasRelatorioStore = defineStore(
     };
 
     return {
-      startDate,
-      endDate,
       vendas,
       limit,
       page,

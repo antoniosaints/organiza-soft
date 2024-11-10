@@ -25,10 +25,10 @@
         </div>
         <div class="flex space-x-1 w-full flex-col md:flex-row justify-between gap-4 mb-4">
             <div class="flex space-x-2 md:w-1/2 w-full">
-                <Input type="search" @input="(event: any) => { if (event.target.value == '') reloadTable() }"
-                    @keyup.enter="reloadTable" id="rows-per-page" v-model="mainStore.search"
+                <Input type="search" @input="(event: any) => { if (event.target.value == '') loadDataChange() }"
+                    @keyup.enter="loadDataChange" id="rows-per-page" v-model="mainStore.search"
                     placeholder="Pesquisar produto..." />
-                <Button variant="default" class="w-max" @click="reloadTable">
+                <Button variant="default" class="w-max" @click="loadDataChange">
                     <Search class="w-4 h-4 mr-2" />Buscar
                 </Button>
                 <DropdownMenu v-if="mainStore.selectedItens.length > 0">
@@ -46,12 +46,12 @@
                     <DropdownMenuSeparator />
                 </DropdownMenu>
             </div>
-            <div class="flex space-x-2">
-                <div class="flex space-x-2">
+            <div class="flex space-x-1 w-full flex-col md:flex-row justify-between gap-4">
+                <div class="flex space-x-2 md:w-1/2 w-full">
                     <TooltipProvider>
                         <Tooltip>
                             <TooltipTrigger>
-                                <Button @click="clearFilterDate" v-if="showClearFilter" size="sm" variant="destructive">
+                                <Button v-if="false" size="sm" variant="destructive">
                                     <FilterX class="w-4 h-4" />
                                 </Button>
                             </TooltipTrigger>
@@ -59,7 +59,30 @@
                         </Tooltip>
                     </TooltipProvider>
                 </div>
-                <DateRangePicker v-model="dateFilter" :startDate="mainStore.startDate" :endDate="mainStore.endDate" />
+                <div class="flex md:w-1/3 lg:w-1/3 w-full">
+                    <div class="flex space-x-2 mr-2" v-if="false">
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <Button size="xs" variant="destructive">
+                                        <FilterX class="w-4 h-4" />
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>Limpar filtros</TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    </div>
+                    <VueDatePicker placeholder="Período de filtragem" format="dd/MM/yyyy" select-text="Aplicar"
+                        cancel-text="Fechar" :preset-dates="presetDates" locale="pt"
+                        :dark="isDark" utc v-model="dateFilter" range>
+                        <template #preset-date-range-button="{ label, value, presetDate }">
+                            <span role="button" :tabindex="0" @click="presetDate(value)"
+                                @keyup.enter.prevent="presetDate(value)" @keyup.space.prevent="presetDate(value)">
+                                {{ label }}
+                            </span>
+                        </template>
+                    </VueDatePicker>
+                </div>
             </div>
             <AlertDialog v-model:open="openDialogMultilineDelete">
                 <AlertDialogContent>
@@ -207,51 +230,41 @@ import { VendasRow } from ".";
 import DetalhesProduto from "./Infos/DetalhesProduto.vue";
 import { useVendasRelatorioStore } from "@/stores/vendas/relatorios/vendasRelatorioStore";
 import CompartilharLink from "@/views/Vendas/Pdv/CompartilharLink.vue";
-import DateRangePicker from "@/components/customs/DateRangePicker.vue";
 import CadastrarVendaView from "@/views/Vendas/Relatorios/CadastrarVendaView.vue";
+import { useColorMode } from "@vueuse/core";
+import { endOfMonth, endOfYear, startOfMonth, startOfYear, subMonths } from "date-fns";
 
 const mainStore = useVendasRelatorioStore();
-const perPage = computed(() => mainStore.limit);
-const rangeStart = computed(() => (mainStore.page - 1) * Number(mainStore.limit) + 1);
-const rangeEnd = computed(() => (mainStore.page - 1) * Number(mainStore.limit) + mainStore.vendas.length);
-const dataExists = computed(() => mainStore.vendas.length > 0);
+const perPage = computed(() => Number(mainStore.limit) || 0);
+const currentPage = computed(() => Number(mainStore.page) || 1);
+const vendasLength = computed(() => mainStore.vendas?.length ?? 0);
 
-watch(perPage, () => {
-    loadDataChange(1);
+const rangeStart = computed(() => {
+    const page = currentPage.value;
+    const limit = perPage.value;
+    return page > 0 && limit > 0 ? (page - 1) * limit + 1 : 1;
 });
 
+const rangeEnd = computed(() => {
+    const page = currentPage.value;
+    const limit = perPage.value;
+    const lancLength = vendasLength.value;
+    return page > 0 && limit > 0 ? (page - 1) * limit + lancLength : rangeStart.value;
+});
 
-interface DatePickerReturn {
-    start: string,
-    end: string
-}
-const dateFilter = ref<DatePickerReturn>()
+const dataExists = computed(() => Number(mainStore.total) > 0);
+const isDark = computed(() => useColorMode().value === 'dark')
 
-watch(() => [dateFilter.value?.start, dateFilter.value?.end], () => {
-    if (dateFilter.value?.start && dateFilter.value?.end) {
-        mainStore.startDate = dateFilter.value?.start
-        const endDate = new Date(dateFilter.value?.end)
-        endDate.setHours(23, 50, 0, 0);
-        mainStore.endDate = endDate.toISOString()
-        mainStore.page = 1
-        mainStore.getVendas()
-    }
-})
-
-const showClearFilter = computed(() => {
-    if (dateFilter.value?.start && dateFilter.value?.end) {
-        return true
-    } else {
-        return false
-    }
-})
-
-const clearFilterDate = () => {
-    dateFilter.value = undefined
-    mainStore.startDate = ""
-    mainStore.endDate = ""
-    mainStore.getVendas()
-}
+const dateFilter = ref<string[]>([])
+const presetDates = ref([
+  { label: 'Hoje', value: [new Date().toUTCString(), new Date().toUTCString()] },
+  { label: 'Este mês', value: [startOfMonth(new Date()).toUTCString(), endOfMonth(new Date()).toUTCString()] },
+  {
+    label: 'Mês passado',
+    value: [startOfMonth(subMonths(new Date(), 1)).toUTCString(), endOfMonth(subMonths(new Date(), 1)).toUTCString()],
+  },
+  { label: 'Nesse ano', value: [startOfYear(new Date()).toUTCString(), endOfYear(new Date()).toUTCString()] },
+]);
 
 const openDialogMultilineDelete = ref(false);
 
@@ -260,17 +273,15 @@ const deleteMultilineSelects = async () => {
     openDialogMultilineDelete.value = false
 }
 
-const loadDataChange = async (paginate: number) => {
+const loadDataChange = async (paginate?: number) => {
     mainStore.page = paginate || 1;
-    await mainStore.getVendas();
-};
-
-const reloadTable = async () => {
-    mainStore.page = 1;
-    await mainStore.getVendas();
+    await mainStore.getVendas(dateFilter.value);
 };
 
 onMounted(() => {
-    loadDataChange(1);
+    loadDataChange();
+});
+watch(perPage, () => {
+    loadDataChange();
 });
 </script>

@@ -2,8 +2,7 @@ import { Ref } from "vue";
 import ITransacao from "./ILancamentos";
 
 export interface ILancamentosStore {
-    getLancamentos(): Promise<void>;
-    dateFilter: Ref<string[]>;
+    getLancamentos(dateFilter?: string[]): Promise<void>;
     lancamentos: Ref<ITransacao[]>;
     limit: Ref<string>;
     page: Ref<number>;

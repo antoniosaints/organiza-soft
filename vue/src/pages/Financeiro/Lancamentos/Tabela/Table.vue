@@ -25,10 +25,10 @@
         </div>
         <div class="flex space-x-1 w-full flex-col md:flex-row justify-between gap-4 mb-4">
             <div class="flex space-x-2 md:w-1/2 w-full">
-                <Input type="search" @input="(event: any) => { if (event.target.value == '') reloadTable() }"
-                    @keyup.enter="reloadTable" id="rows-per-page" v-model="mainStore.search"
+                <Input type="search" @input="(event: any) => { if (event.target.value == '') loadDataChange() }"
+                    @keyup.enter="loadDataChange" id="rows-per-page" v-model="mainStore.search"
                     placeholder="Pesquisar produto..." />
-                <Button variant="default" class="w-max" @click="reloadTable">
+                <Button variant="default" class="w-max" @click="loadDataChange">
                     <Search class="w-4 h-4 mr-2" />Buscar
                 </Button>
                 <DropdownMenu v-if="mainStore.selectedItens.length > 0">
@@ -61,8 +61,7 @@
                 </div>
                 <VueDatePicker placeholder="Período de filtragem" format="dd/MM/yyyy" 
                     select-text="Aplicar" cancel-text="Fechar" :preset-dates="presetDates" locale="pt"
-                    :enable-time-picker="false"
-                    :dark="isDark" utc v-model="mainStore.dateFilter" range>
+                    :dark="isDark" utc v-model="dateFilter" range>
                     <template #preset-date-range-button="{ label, value, presetDate }">
                         <span role="button" :tabindex="0" @click="presetDate(value)"
                             @keyup.enter.prevent="presetDate(value)" @keyup.space.prevent="presetDate(value)">
@@ -179,6 +178,7 @@
                         </PaginationLast>
                     </PaginationList>
                 </Pagination>
+                {{ dateFilter }}
             </div>
         </div>
     </div>
@@ -223,16 +223,28 @@ import { endOfMonth, endOfYear, startOfMonth, startOfYear, subMonths } from "dat
 
 const mainStore = useLancamentosStore();
 const formularioStore = useLancamentosFormularioStore();
-const perPage = computed(() => mainStore.limit);
-const rangeStart = computed(() => (mainStore.page - 1) * Number(mainStore.limit) + 1);
-const rangeEnd = computed(() => (mainStore.page - 1) * Number(mainStore.limit) + mainStore.lancamentos.length);
-const dataExists = computed(() => mainStore.lancamentos.length > 0);
+const perPage = computed(() => Number(mainStore.limit) || 0);
+const currentPage = computed(() => Number(mainStore.page) || 1);
+const lancamentosLength = computed(() => mainStore.lancamentos?.length ?? 0);
 
-watch(perPage, () => {
-    loadDataChange(1);
+const rangeStart = computed(() => {
+  const page = currentPage.value;
+  const limit = perPage.value;
+  return page > 0 && limit > 0 ? (page - 1) * limit + 1 : 1;
 });
+
+const rangeEnd = computed(() => {
+  const page = currentPage.value;
+  const limit = perPage.value;
+  const lancLength = lancamentosLength.value;
+  return page > 0 && limit > 0 ? (page - 1) * limit + lancLength : rangeStart.value;
+});
+
+const dataExists = computed(() => Number(mainStore.total) > 0);
+
 const isDark = computed(() => useColorMode().value === 'dark')
 
+const dateFilter = ref<string[]>([])
 const presetDates = ref([
   { label: 'Hoje', value: [new Date().toUTCString(), new Date().toUTCString()] },
   { label: 'Este mês', value: [startOfMonth(new Date()).toUTCString(), endOfMonth(new Date()).toUTCString()] },
@@ -250,17 +262,15 @@ const deleteMultilineSelects = async () => {
     openDialogMultilineDelete.value = false
 }
 
-const loadDataChange = async (paginate: number) => {
+const loadDataChange = async (paginate?: number) => {
     mainStore.page = paginate || 1;
-    await mainStore.getLancamentos();
-};
-
-const reloadTable = async () => {
-    mainStore.page = 1;
-    await mainStore.getLancamentos();
+    await mainStore.getLancamentos(dateFilter.value);
 };
 
 onMounted(() => {
-    loadDataChange(1);
+    loadDataChange();
+});
+watch(perPage, () => {
+    loadDataChange();
 });
 </script>

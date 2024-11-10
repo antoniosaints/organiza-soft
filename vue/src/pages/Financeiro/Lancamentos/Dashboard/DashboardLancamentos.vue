@@ -1,5 +1,23 @@
 <template>
     <div class="gap-4 grid">
+        <div class="flex items-center justify-between">
+            <div class="text-left mb-2">
+                <h2 class="text-2xl font-semibold">Resumo financeiro 💰</h2>
+                <p class="text-sm text-muted-foreground">Acompanhe o seu desempenho financeiro.</p>
+            </div>
+            <div class="flex items-center gap-2 md:w-1/3 lg:w-1/4">
+                <VueDatePicker placeholder="Período de filtragem" format="dd/MM/yyyy" select-text="Aplicar"
+                    cancel-text="Fechar" :preset-dates="presetDates" locale="pt" :dark="isDark"
+                    utc v-model="dateFilter" range>
+                    <template #preset-date-range-button="{ label, value, presetDate }">
+                        <span role="button" :tabindex="0" @click="presetDate(value)"
+                            @keyup.enter.prevent="presetDate(value)" @keyup.space.prevent="presetDate(value)">
+                            {{ label }}
+                        </span>
+                    </template>
+                </VueDatePicker>
+            </div>
+        </div>
         <div class="grid gap-4 md:grid-cols-2 md:gap-4 lg:grid-cols-4">
             <Card>
                 <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -44,8 +62,11 @@
                             <PopoverContent class="w-60 flex justify-center items-center gap-2 text-xs"
                                 :align="'start'">
                                 <p>
-                                    O Balanço mostra o saldo subtraindo as despesas da receita, mostrando o saldo em <p class="text-green-500 inline">verde</p> e mostrando abaixo a
-                                    porcentagem de <p class="text-green-500 inline">receitas</p> e <p class="text-red-500 inline">despesas</p>
+                                    O Balanço mostra o saldo subtraindo as despesas da receita, mostrando o saldo em
+                                <p class="text-green-500 inline">verde</p> e mostrando abaixo a
+                                porcentagem de <p class="text-green-500 inline">receitas</p> e <p
+                                    class="text-red-500 inline">
+                                    despesas</p>
                                 </p>
                             </PopoverContent>
                         </Popover>
@@ -84,8 +105,11 @@
                             <PopoverContent class="w-60 flex justify-center items-center gap-2 text-xs"
                                 :align="'start'">
                                 <p>
-                                    Esse cartão mostra os valores pendentes dos lançamentos, tanto receitas quanto despesas, mostrando o valor total em <p class="text-yellow-500 inline">amarelo</p>
-                                    e abaixo, mostra o valor referente à cada tipo de lançamento.
+                                    Esse cartão mostra os valores pendentes dos lançamentos, tanto receitas quanto
+                                    despesas,
+                                    mostrando o valor total em
+                                <p class="text-yellow-500 inline">amarelo</p>
+                                e abaixo, mostra o valor referente à cada tipo de lançamento.
                                 </p>
                             </PopoverContent>
                         </Popover>
@@ -115,8 +139,11 @@
                             <PopoverContent class="w-60 flex justify-center items-center gap-2 text-xs"
                                 :align="'start'">
                                 <p>
-                                    Esse cartão mostra os valores consolidados dos lançamentos, tanto receitas quanto despesas, mostrando o valor total em <p class="text-blue-500 inline">azul</p>
-                                    e abaixo, mostra o valor referente à cada tipo de lançamento.
+                                    Esse cartão mostra os valores consolidados dos lançamentos, tanto receitas quanto
+                                    despesas,
+                                    mostrando o valor total em
+                                <p class="text-blue-500 inline">azul</p>
+                                e abaixo, mostra o valor referente à cada tipo de lançamento.
                                 </p>
                             </PopoverContent>
                         </Popover>
@@ -140,7 +167,7 @@
             <Card class="col-span-1">
                 <CardHeader>
                     <CardTitle class="flex items-center">
-                        Método de pagamento 
+                        Método de pagamento
                         <Popover>
                             <PopoverTrigger>
                                 <CircleHelp class="h-4 w-4 ml-2 text-muted-foreground cursor-pointer" />
@@ -148,9 +175,11 @@
                             <PopoverContent class="w-60 flex justify-center items-center gap-2 text-xs"
                                 :align="'start'">
                                 <p>
-                                    Esse gráfico mostra os lançamentos de acordo com o seu método de pagamento, 
-                                    onde a cor vermelha representa os lançamentos pendentes, 
-                                    a cor verde representa os lançamentos pagos e a cor azul representa o total de lançamentos por Método de pagamento.
+                                    Esse gráfico mostra os lançamentos de acordo com o seu método de pagamento,
+                                    onde a cor vermelha representa os lançamentos pendentes,
+                                    a cor verde representa os lançamentos pagos e a cor azul representa o total de
+                                    lançamentos
+                                    por Método de pagamento.
                                 </p>
                             </PopoverContent>
                         </Popover>
@@ -176,8 +205,10 @@
                                 :align="'start'">
                                 <p>
                                     Esse gráfico mostra os lançamentos de acordo com o sua categoria,
-                                    onde a cor vermelha representa os lançamentos pendentes, 
-                                    a cor verde representa os lançamentos pagos e a cor azul representa o total de lançamentos por categoria.
+                                    onde a cor vermelha representa os lançamentos pendentes,
+                                    a cor verde representa os lançamentos pagos e a cor azul representa o total de
+                                    lançamentos
+                                    por categoria.
                                 </p>
                             </PopoverContent>
                         </Popover>
@@ -201,7 +232,9 @@
                             <PopoverContent class="w-60 flex justify-center items-center gap-2 text-xs"
                                 :align="'start'">
                                 <p>
-                                    Esse gráfico mostra os lançamentos por mês, onde a cor verde representa as receitas e a cor vermelha representa as despesas.
+                                    Esse gráfico mostra os lançamentos por mês, onde a cor verde representa as receitas
+                                    e a cor
+                                    vermelha representa as despesas.
                                 </p>
                             </PopoverContent>
                         </Popover>
@@ -308,7 +341,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { ArrowBigDown, ArrowBigUp, ArrowUpRight, ChartCandlestick, CircleArrowOutDownLeft, CircleArrowOutUpRight, CircleCheckBig, CircleHelp, ClockArrowDown, DollarSign } from "lucide-vue-next"
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -324,9 +357,24 @@ import LancamentosRepository from "@/repositories/financeiro/lancamentosReposito
 import { formatRealValue } from "@/utils/formatterUtil";
 import { RouterLink } from "vue-router";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { endOfMonth, endOfYear, startOfMonth, startOfYear, subMonths } from "date-fns";
+import { useColorMode } from "@vueuse/core";
 
 const vendas = ref<IVenda[]>([])
 const vendasRecents = ref<IVenda[]>([])
+const dateFilter = ref<string[]>([])
+
+const isDark = computed(() => useColorMode().value === 'dark')
+const presetDates = ref([
+    { label: 'Hoje', value: [new Date().toUTCString(), new Date().toUTCString()] },
+    { label: 'Este mês', value: [startOfMonth(new Date()).toUTCString(), endOfMonth(new Date()).toUTCString()] },
+    {
+        label: 'Mês passado',
+        value: [startOfMonth(subMonths(new Date(), 1)).toUTCString(), endOfMonth(subMonths(new Date(), 1)).toUTCString()],
+    },
+    { label: 'Nesse ano', value: [startOfYear(new Date()).toUTCString(), endOfYear(new Date()).toUTCString()] },
+]);
+
 const resumoFinanceiro = ref<IResumoFinanceiro>({
     resumo: {
         efetivadoDespesaAVista: 0,
@@ -377,7 +425,7 @@ const getVendasResumo = async () => {
 }
 
 const getResumoFinanceiro = async () => {
-    const resultado = await LancamentosRepository.getResume()
+    const resultado = await LancamentosRepository.getResume(dateFilter.value);
     resumoFinanceiro.value = resultado
 }
 
@@ -385,6 +433,10 @@ onMounted(async () => {
     await getVendasResumo()
     await getResumoFinanceiro()
     console.log(resumoFinanceiro.value)
+})
+
+watch(dateFilter, async () => {
+    await getResumoFinanceiro()
 })
 
 interface IDataOutput {

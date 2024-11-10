@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
-import {
-  updateTransacao as updateTransacaoSchema,
-} from "../../schemas/financeiro/transacao_schema";
+import { updateTransacao as updateTransacaoSchema } from "../../schemas/financeiro/transacao_schema";
 import {
   deleteFileService,
   HttpErrorService,
@@ -30,19 +28,37 @@ export const createTransacao = async (req: Request, res: Response) => {
 
 export const getResumoLancamentos = async (req: Request, res: Response) => {
   try {
+    const { dataFiltro } = req.query;
+    let startDate = null;
+    let endDate = null;
+    if (dataFiltro) {
+      [startDate, endDate] = (dataFiltro as string).split(",");
+    }
     const data = await prismaService.financeiroTransacao.findMany({
-      where: { contaSistemaId: req.body.contaSistemaId },
+      where: {
+        AND: [
+          startDate && endDate
+            ? {
+                dataVencimento: {
+                  ...(startDate
+                    ? { gte: new Date(startDate as string).toISOString() }
+                    : {}),
+                  ...(endDate
+                    ? { lte: new Date(endDate as string).toISOString() }
+                    : {}),
+                },
+              }
+            : {},
+          { contaSistemaId: req.body.contaSistemaId },
+        ],
+      },
       include: { FinanceiroParcelamento: true, Categoria: true },
     });
 
     const resumo = getResumoTransacoes(data);
     const chart = resumoGraficos(data);
 
-    ResponseService.success(
-      res,
-      {resumo, chart},
-      "Transações recuperadas"
-    );
+    ResponseService.success(res, { resumo, chart }, "Transações recuperadas");
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
   }
