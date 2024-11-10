@@ -28,7 +28,6 @@ export const useLancamentosStore = defineStore(
           );
         lancamentos.value = data;
         total.value = totalClientes;
-        console.log(lancamentos.value, total.value);
       } catch (error: any) {
         const errorMessage =
           error?.response?.data?.message || "Erro desconhecido.";

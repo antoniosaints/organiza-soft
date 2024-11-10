@@ -25,7 +25,6 @@ export const useVendasRelatorioStore = defineStore(
           search.value,
           dateFilter
         );
-        console.log(data);
         vendas.value = data;
         total.value = totalClientes;
       } catch (error: any) {

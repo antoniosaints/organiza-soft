@@ -33,7 +33,6 @@ export default class LancamentosRepository {
     const { data } = await axiosService.get(
       `financeiro/transacao?limit=${limit}&page=${page}&search=${search}&dataFiltro=${filterDate}`
     );
-    console.log(data);
     return data;
   }
   static async getAllByConta(id: number): Promise<ITransacao[]> {

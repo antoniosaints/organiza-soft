@@ -178,7 +178,6 @@
                         </PaginationLast>
                     </PaginationList>
                 </Pagination>
-                {{ dateFilter }}
             </div>
         </div>
     </div>
