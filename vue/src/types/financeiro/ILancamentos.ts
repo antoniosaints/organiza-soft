@@ -38,7 +38,7 @@ export default interface ITransacao {
   moeda?: string;
   taxaCambio?: number;
   referenciaExterna?: string;
-  metodoPagamento: "pix" | "dinheiro" | "cartao" | "transferencia" | "boleto" | "cheque";
+  metodoPagamento?: "pix" | "dinheiro" | "cartao" | "transferencia" | "boleto" | "cheque";
   natureza: "receita" | "despesa";
   operacao: "entrada" | "saida" | "transferencia" | "ajuste";
   parcelado?: "sim" | "nao";

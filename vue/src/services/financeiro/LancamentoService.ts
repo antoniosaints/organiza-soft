@@ -1,6 +1,6 @@
 import { Autorize } from "@/autorization";
 import LancamentosRepository from "@/repositories/financeiro/lancamentosRepository";
-import { ISchemaLancamento } from "@/stores/financeiro/lancamentos/lancamentoSchemaStore";
+import { ISchemaLancamento, useLancamentoSchemaStore } from "@/stores/financeiro/lancamentos/lancamentoSchemaStore";
 import { useLancamentosFormularioStore } from "@/stores/financeiro/lancamentos/lancamentosFormularioStore";
 import { useLancamentosStore } from "@/stores/financeiro/lancamentos/lancamentoStore";
 import { ScToastUtil } from "@/utils/scToastUtil";
@@ -13,9 +13,9 @@ export class LancamentoService {
       ScToastUtil.success("Lançamento criado com sucesso");
       useLancamentosFormularioStore().isModalDetalhesOpen = false;
       useLancamentosStore().getLancamentos();
+      useLancamentoSchemaStore().resetData();
       return true;
     } catch (error: any) {
-        console.log(error);
       ScToastUtil.warning("Erro ao criar o lançamento: " + error.response.data.message || "erro interno");
       return false;
     }

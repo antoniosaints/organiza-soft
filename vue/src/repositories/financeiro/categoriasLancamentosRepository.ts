@@ -1,5 +1,4 @@
 import axiosService from "../../services/http/axiosService";
-import { ISchemaLancamento } from "@/stores/financeiro/lancamentos/lancamentoSchemaStore";
 import ICategoria from "@/types/financeiro/ICategoria";
 
 export default class CategoriasLancamentosRepository {
@@ -11,8 +10,12 @@ export default class CategoriasLancamentosRepository {
         const { data } = await axiosService.get(`/financeiro/categoria?limit=${limit}&page=${page}&search=${search}`);
         return data;
     }
-    static async create(transacao: ISchemaLancamento): Promise<any> {
+    static async create(transacao: ICategoria): Promise<any> {
         const { data } = await axiosService.post(`/financeiro/categoria`, transacao);
+        return data.data;
+    }
+    static async delete(id: number): Promise<any> {
+        const { data } = await axiosService.delete(`/financeiro/categoria/${id}`);
         return data.data;
     }
 }

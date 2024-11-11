@@ -4,7 +4,7 @@ import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectSearchAjax, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { ArrowDownCircle, ArrowUpCircle, CheckCheck, PiggyBank } from 'lucide-vue-next'
+import { ArrowDownCircle, ArrowUpCircle, CheckCheck, CircleFadingPlus, PiggyBank } from 'lucide-vue-next'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Textarea } from '@/components/ui/textarea'
@@ -16,9 +16,11 @@ import { LancamentoService } from '@/services/financeiro/LancamentoService'
 import { watch } from 'vue'
 import { useColorMode } from '@vueuse/core'
 import CategoriasLancamentosRepository from '@/repositories/financeiro/categoriasLancamentosRepository'
+import { useCategoriaFormularioStore } from '@/stores/financeiro/categorias/categoriaFormularioStore'
+import { ModalFormularioCategoria } from '../../Categorias/Cadastro'
 
 const { schema } = useLancamentoSchemaStore()
-
+const storeCategoria = useCategoriaFormularioStore()
 const fetchContasLancamentos = async (query: string, id?: number) => {
     if (id) {
         return await ContasLancamentosRepository.get(id).then(response => {
@@ -135,7 +137,13 @@ const submitLancamento = async () => {
                                     v-model="(schema.lancamento.contaId as number)" :ajax="fetchContasLancamentos" />
                             </div>
                             <div class="space-y-2 p-2">
-                                <Label for="categoria">Categoria</Label>
+                                <Label class="flex items-center justify-between" for="categoria">Categoria 
+                                    <p @click="storeCategoria.isModalOpen = true" 
+                                    class="bg-primary text-primary-foreground cursor-pointer px-2 text-xs py-1 rounded-md inline-flex ml-2">
+                                    <CircleFadingPlus class="mr-1 h-4 w-4" />
+                                    Criar nova
+                                </p> 
+                                </Label>
                                 <SelectSearchAjax id="categoria" labelSearch="Selecione uma categoria"
                                     v-model="(schema.lancamento.categoriaId as number)"
                                     :ajax="fetchCategoriasLancamentos" />
@@ -344,6 +352,7 @@ const submitLancamento = async () => {
                 </TabsContent>
                 <Button type="submit" class="w-full">Salvar Lançamento</Button>
             </form>
+            <ModalFormularioCategoria />
         </Tabs>
     </div>
 </template>

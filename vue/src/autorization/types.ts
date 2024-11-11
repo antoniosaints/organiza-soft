@@ -16,4 +16,5 @@ export type IEntity =
   | "clientes"
   | "produtos"
   | "vendas"
-  | "lancamentos";
+  | "lancamentos"
+  | "categorias_lancamentos"

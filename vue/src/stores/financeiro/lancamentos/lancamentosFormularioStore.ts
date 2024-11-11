@@ -11,7 +11,7 @@ export const useLancamentosFormularioStore = defineStore(
       valor: 0,
       categoriaId: 0,
       contaId: 1,
-      dataVencimento: new Date(),
+      dataVencimento: new Date().toUTCString(),
       metodoPagamento: "dinheiro",
       natureza: "receita",
       operacao: "entrada",
