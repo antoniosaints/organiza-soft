@@ -10,6 +10,9 @@
       <template v-slot:general>
         <DashboardGeral />
       </template>
+      <template v-slot:financeiro>
+        <DashboardLancamentos :title-dashboard="false" />
+      </template>
     </TabsDashboardView>
   </div>
 </template>
@@ -18,6 +21,7 @@
 import TabsDashboardView from "./TabsDashboardView.vue";
 import DashboardGeral from "./DashboardGeral.vue";
 import { useLoginStore } from "@/stores/login/loginStore";
+import DashboardLancamentos from "@/pages/Financeiro/Lancamentos/Dashboard/DashboardLancamentos.vue";
 
 const loginStore = useLoginStore();
 const saudacaoDinamica = () => {

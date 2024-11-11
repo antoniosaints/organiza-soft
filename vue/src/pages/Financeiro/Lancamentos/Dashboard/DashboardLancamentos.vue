@@ -1,6 +1,6 @@
 <template>
     <div class="gap-4 grid">
-        <div class="flex items-center justify-between">
+        <div v-show="titleDashboard" class="flex items-center justify-between">
             <div class="text-left mb-2">
                 <h2 class="text-2xl font-semibold">Resumo financeiro 💰</h2>
                 <p class="text-sm text-muted-foreground">Acompanhe o seu desempenho financeiro.</p>
@@ -363,6 +363,14 @@ import { presetsDatePickerVue } from "@/utils/datepickerUtil";
 const vendas = ref<IVenda[]>([])
 const vendasRecents = ref<IVenda[]>([])
 const dateFilter = ref<string[]>([])
+
+defineProps({
+    titleDashboard: {
+        type: Boolean,
+        required: false,
+        default: true
+    }
+})
 
 const isDark = computed(() => useColorMode().value === 'dark')
 const resumoFinanceiro = ref<IResumoFinanceiro>({
