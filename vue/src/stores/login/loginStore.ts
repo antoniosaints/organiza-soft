@@ -42,7 +42,7 @@ export const useLoginStore = defineStore("login", () => {
       const data = await ContasRepository.get(Number(idAccount));
       dataAccountLogged.value = data;
       statusAccount.value = dataAccountLogged.value?.status || "inativa";
-      isProAccount.value = data.plano == "pro";
+      isProAccount.value = data.plano == "pro" || data.plano == "admin";
     } catch (error: any) {
       console.log(error);
     }

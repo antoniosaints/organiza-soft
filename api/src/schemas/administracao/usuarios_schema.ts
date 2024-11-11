@@ -41,6 +41,18 @@ const createUser = zodUtil.object({
       invalid_type_error: "O telefone deve ser uma string",
     })
     .optional(),
+  rh: zodUtil.boolean().optional(),
+  assistenteIa: zodUtil.boolean().optional(),
+  crm: zodUtil.boolean().optional(),
+  vendas: zodUtil.boolean().optional(),
+  financeiro: zodUtil.boolean().optional(),
+  patrimonio: zodUtil.boolean().optional(),
+  servicos: zodUtil.boolean().optional(),
+  assinantes: zodUtil.boolean().optional(),
+  dashboardFinanceiro: zodUtil.boolean().optional(),
+  dashboardVendas: zodUtil.boolean().optional(),
+  dashboardPatrimonio: zodUtil.boolean().optional(),
+  dashboardCrm: zodUtil.boolean().optional(),
   regra: zodUtil.enum(
     [
       "proprietario",
@@ -97,7 +109,8 @@ const updateUser = zodUtil.object({
       message: "A senha deve conter pelo menos um número",
     })
     .regex(/^(?=.*[@$!%*?&.#])/, {
-      message: "A senha deve conter pelo menos um caractere especial (@$!%*?&.#)",
+      message:
+        "A senha deve conter pelo menos um caractere especial (@$!%*?&.#)",
     })
     .trim()
     .optional(),
@@ -106,6 +119,18 @@ const updateUser = zodUtil.object({
       invalid_type_error: "O telefone deve ser uma string",
     })
     .optional(),
+  rh: zodUtil.boolean().optional(),
+  assistenteIa: zodUtil.boolean().optional(),
+  crm: zodUtil.boolean().optional(),
+  vendas: zodUtil.boolean().optional(),
+  financeiro: zodUtil.boolean().optional(),
+  patrimonio: zodUtil.boolean().optional(),
+  servicos: zodUtil.boolean().optional(),
+  assinantes: zodUtil.boolean().optional(),
+  dashboardFinanceiro: zodUtil.boolean().optional(),
+  dashboardVendas: zodUtil.boolean().optional(),
+  dashboardPatrimonio: zodUtil.boolean().optional(),
+  dashboardCrm: zodUtil.boolean().optional(),
   regra: zodUtil
     .enum([
       "proprietario",

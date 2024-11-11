@@ -35,6 +35,7 @@
                         <TableHead>Nome</TableHead>
                         <TableHead class="hidden sm:table-cell">Permissão</TableHead>
                         <TableHead class="hidden md:table-cell">Email</TableHead>
+                        <TableHead class="hidden md:table-cell">Contato</TableHead>
                         <TableHead class="hidden md:table-cell">Status</TableHead>
                         <TableHead class="text-right">Ações</TableHead>
                     </TableRow>

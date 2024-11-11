@@ -29,5 +29,5 @@ export default interface IUsuario {
   assinantes?: boolean;
   anotacoes?: string;
   telefone?: string;
-  dataCriacao?: Date;
+  dataCriacao?: string | Date;
 }
