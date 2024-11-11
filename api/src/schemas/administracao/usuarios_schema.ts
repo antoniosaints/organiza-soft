@@ -41,6 +41,10 @@ const createUser = zodUtil.object({
       invalid_type_error: "O telefone deve ser uma string",
     })
     .optional(),
+  resetarSenha: zodUtil.boolean().optional(),
+  lancamentosRetroativos: zodUtil.boolean().optional(),
+  recebimentosRetroativos: zodUtil.boolean().optional(),
+  pagamentosRetroativos: zodUtil.boolean().optional(),
   rh: zodUtil.boolean().optional(),
   assistenteIa: zodUtil.boolean().optional(),
   crm: zodUtil.boolean().optional(),
@@ -119,6 +123,10 @@ const updateUser = zodUtil.object({
       invalid_type_error: "O telefone deve ser uma string",
     })
     .optional(),
+  resetarSenha: zodUtil.boolean().optional(),
+  lancamentosRetroativos: zodUtil.boolean().optional(),
+  recebimentosRetroativos: zodUtil.boolean().optional(),
+  pagamentosRetroativos: zodUtil.boolean().optional(),
   rh: zodUtil.boolean().optional(),
   assistenteIa: zodUtil.boolean().optional(),
   crm: zodUtil.boolean().optional(),

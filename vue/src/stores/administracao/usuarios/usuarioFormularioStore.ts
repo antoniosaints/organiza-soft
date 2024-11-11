@@ -7,11 +7,10 @@ export const useUsuarioFormularioStore = defineStore("usuarioFormularioStore", (
     const defaultData = ref<IUsuario>({
         nome: "",
         email: "",
-        grupoId: 1,
         telefone: "",
         regra: "gerente",
         senha: "",
-        status: "ativo",
+        status: "ativo"
     });
 
     const data = ref<IUsuario>({ ...defaultData.value });

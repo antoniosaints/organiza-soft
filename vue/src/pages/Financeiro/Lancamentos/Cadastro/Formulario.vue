@@ -13,15 +13,22 @@ import ContasLancamentosRepository from '@/repositories/financeiro/contasLancame
 import { NumberField, NumberFieldContent, NumberFieldDecrement, NumberFieldIncrement, NumberFieldInput } from '@/components/ui/number-field'
 import { useLancamentoSchemaStore } from '@/stores/financeiro/lancamentos/lancamentoSchemaStore'
 import { LancamentoService } from '@/services/financeiro/LancamentoService'
-import { watch } from 'vue'
+import { computed, watch } from 'vue'
 import { useColorMode } from '@vueuse/core'
 import CategoriasLancamentosRepository from '@/repositories/financeiro/categoriasLancamentosRepository'
 import { useCategoriaFormularioStore } from '@/stores/financeiro/categorias/categoriaFormularioStore'
 import { ModalFormularioCategoria } from '../../Categorias/Cadastro'
 import { namesOfWeekDatePicker } from '@/utils/datepickerUtil'
+import { useLoginStore } from '@/stores/login/loginStore'
 
 const { schema } = useLancamentoSchemaStore()
 const storeCategoria = useCategoriaFormularioStore()
+const loginStore = useLoginStore()
+
+const canLancamentoRetroativo = computed(() => {
+    return !!loginStore.dataUserInfosLogged?.lancamentosRetroativos
+})
+
 const fetchContasLancamentos = async (query: string, id?: number) => {
     if (id) {
         return await ContasLancamentosRepository.get(id).then(response => {
@@ -124,7 +131,7 @@ const submitLancamento = async () => {
                                 </div>
                                 <div class="space-y-2 p-2">
                                     <Label for="primeiroVencimento">Data vencimento</Label>
-                                    <VueDatePicker :day-names="namesOfWeekDatePicker"
+                                    <VueDatePicker :min-date="!canLancamentoRetroativo ? new Date() : null" :day-names="namesOfWeekDatePicker"
                                         placeholder="Data do vencimento" id="primeiroVencimento"
                                         required :dark="isDark" v-model="schema.lancamento.dataVencimento"
                                         format="dd/MM/yyyy" locale="pt" auto-apply utc />
@@ -229,7 +236,7 @@ const submitLancamento = async () => {
                             </div>
                             <div class="space-y-2 p-2">
                                 <Label for="primeiroVencimento">Data Primeira Parcela</Label>
-                                <VueDatePicker :day-names="namesOfWeekDatePicker"
+                                <VueDatePicker :min-date="!canLancamentoRetroativo ? new Date() : null" :day-names="namesOfWeekDatePicker"
                                     placeholder="Data da primeira parcela" id="primeiroVencimento"
                                     :required="schema.isParcelado" :dark="isDark" v-model="schema.dataPrimeiraParcela"
                                     format="dd/MM/yyyy" locale="pt" auto-apply utc />
