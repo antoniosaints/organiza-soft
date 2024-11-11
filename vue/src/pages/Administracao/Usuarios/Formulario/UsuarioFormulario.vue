@@ -17,10 +17,17 @@
                     <Label for="name">Nome</Label>
                     <Input id="name" placeholder="Nome completo" v-model="UsuarioFormularioStore.data.nome" required />
                 </div>
-                <div class="space-y-2">
-                    <Label for="email">Email</Label>
-                    <Input id="email" placeholder="Email de acesso" type="email"
-                        v-model="UsuarioFormularioStore.data.email" required />
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                        <Label for="email">Email</Label>
+                        <Input id="email" placeholder="Email de acesso" type="email"
+                            v-model="UsuarioFormularioStore.data.email" required />
+                    </div>
+                    <div class="space-y-2">
+                        <Label for="telefone">Telefone</Label>
+                        <Input id="telefone" placeholder="Telefone" type="text"
+                            v-model="UsuarioFormularioStore.data.telefone" />
+                    </div>
                 </div>
                 <div class="space-y-2">
                     <Label for="senha">Senha</Label>
@@ -66,84 +73,89 @@
                 </div>
             </TabsContent>
             <TabsContent value="parametros">
-                <Card>
-                    <CardHeader>
-                        <CardTitle class="text-xl">Parametros de usuário</CardTitle>
-                        <CardDescription>Defina os parâmetros do usuário</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="flex items-center justify-between">
-                                <div class="space-y-0.5">
-                                    <Label htmlFor="permiteResetarSenha">Resetar a senha</Label>
-                                    <p class="text-sm text-muted-foreground">Pode resetar a senha</p>
-                                </div>
-                                <Switch id="permiteResetarSenha"
-                                    v-model:checked="UsuarioFormularioStore.data.resetarSenha" />
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <div class="space-y-0.5">
-                                    <Label htmlFor="pagamentosRetroativos">Pagamentos retroativos</Label>
-                                    <p class="text-sm text-muted-foreground">Permite pagamentos retroativos</p>
-                                </div>
-                                <Switch id="pagamentosRetroativos"
-                                    v-model:checked="UsuarioFormularioStore.data.pagamentosRetroativos" />
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="flex items-center justify-between">
-                                <div class="space-y-0.5">
-                                    <Label htmlFor="recebimentosRetroativos">Recebimentos retroativos</Label>
-                                    <p class="text-sm text-muted-foreground">Pode Recebimentos retroativos</p>
-                                </div>
-                                <Switch id="recebimentosRetroativos"
-                                    v-model:checked="UsuarioFormularioStore.data.recebimentosRetroativos" />
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <div class="space-y-0.5">
-                                    <Label htmlFor="lancamentosRetroativos">Lançamentos retroativos</Label>
-                                    <p class="text-sm text-muted-foreground">Permite lançamentos retroativos</p>
-                                </div>
-                                <Switch id="lancamentosRetroativos"
-                                    v-model:checked="UsuarioFormularioStore.data.lancamentosRetroativos" />
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-            </TabsContent>
-            <TabsContent value="dashboards">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="flex items-center justify-between">
-                        <div class="space-y-0.5">
-                            <Label htmlFor="dashboardLancamentoFinanceiro">Dashboard Financeiro</Label>
-                            <p class="text-sm text-muted-foreground">Permite acesso à dashboard financeiro</p>
-                        </div>
-                        <Switch id="dashboardLancamentoFinanceiro"
-                            v-model:checked="UsuarioFormularioStore.data.dashboardFinanceiro" />
+                <div class="space-y-4">
+                    <div class="flex flex-col">
+                        <div class="text-xl">Parâmetros</div>
+                        <p class="text-sm text-muted-foreground">Defina os parâmetros de sistema que o usuário deve seguir.</p>
                     </div>
-                    <div class="flex items-center justify-between">
-                        <div class="space-y-0.5">
-                            <Label htmlFor="dashboardDeVendas">Dashboard Vendas</Label>
-                            <p class="text-sm text-muted-foreground">Acesso à dashboard de vendas</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="flex items-center justify-between bg-card px-4 py-2 rounded-lg">
+                            <div class="space-y-0.5">
+                                <Label htmlFor="permiteResetarSenha">Resetar a senha</Label>
+                                <p class="text-sm text-muted-foreground">Pode resetar a senha</p>
+                            </div>
+                            <Switch id="permiteResetarSenha"
+                                v-model:checked="UsuarioFormularioStore.data.resetarSenha" />
                         </div>
-                        <Switch id="dashboardDeVendas" v-model:checked="UsuarioFormularioStore.data.dashboardVendas" />
+                        <div class="flex items-center justify-between bg-card px-4 py-2 rounded-lg">
+                            <div class="space-y-0.5">
+                                <Label htmlFor="pagamentosRetroativos">Pagamentos retroativos</Label>
+                                <p class="text-sm text-muted-foreground">Permite pagamentos retroativos</p>
+                            </div>
+                            <Switch id="pagamentosRetroativos"
+                                v-model:checked="UsuarioFormularioStore.data.pagamentosRetroativos" />
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="flex items-center justify-between bg-card px-4 py-2 rounded-lg">
+                            <div class="space-y-0.5">
+                                <Label htmlFor="recebimentosRetroativos">Recebimentos retroativos</Label>
+                                <p class="text-sm text-muted-foreground">Pode Recebimentos retroativos</p>
+                            </div>
+                            <Switch id="recebimentosRetroativos"
+                                v-model:checked="UsuarioFormularioStore.data.recebimentosRetroativos" />
+                        </div>
+                        <div class="flex items-center justify-between bg-card px-4 py-2 rounded-lg">
+                            <div class="space-y-0.5">
+                                <Label htmlFor="lancamentosRetroativos">Lançamentos retroativos</Label>
+                                <p class="text-sm text-muted-foreground">Permite lançamentos retroativos</p>
+                            </div>
+                            <Switch id="lancamentosRetroativos"
+                                v-model:checked="UsuarioFormularioStore.data.lancamentosRetroativos" />
+                        </div>
                     </div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="flex items-center justify-between">
-                        <div class="space-y-0.5">
-                            <Label htmlFor="dashboardCrm">Dashboard CRM</Label>
-                            <p class="text-sm text-muted-foreground">Acesso ao dashboard CRM</p>
-                        </div>
-                        <Switch id="dashboardCrm" v-model:checked="UsuarioFormularioStore.data.dashboardCrm" />
+            </TabsContent>
+            <TabsContent value="dashboards">
+                <div class="space-y-4">
+                    <div class="flex flex-col">
+                        <div class="text-xl">Dashboards</div>
+                        <p class="text-sm text-muted-foreground">Defina quais dashboards o usuário tem acesso</p>
                     </div>
-                    <div class="flex items-center justify-between">
-                        <div class="space-y-0.5">
-                            <Label htmlFor="dashboardPatrimonio">Dashboard Patrimônio</Label>
-                            <p class="text-sm text-muted-foreground">Acesso ao dashboard Patrimônio</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="flex items-center justify-between bg-card px-4 py-2 rounded-lg">
+                            <div class="space-y-0.5">
+                                <Label htmlFor="dashboardLancamentoFinanceiro">Dashboard Financeiro</Label>
+                                <p class="text-sm text-muted-foreground">Permite acesso à dashboard financeiro</p>
+                            </div>
+                            <Switch id="dashboardLancamentoFinanceiro"
+                                v-model:checked="UsuarioFormularioStore.data.dashboardFinanceiro" />
                         </div>
-                        <Switch id="dashboardPatrimonio"
-                            v-model:checked="UsuarioFormularioStore.data.dashboardPatrimonio" />
+                        <div class="flex items-center bg-card px-4 py-2 rounded-lg justify-between">
+                            <div class="space-y-0.5">
+                                <Label htmlFor="dashboardDeVendas">Dashboard Vendas</Label>
+                                <p class="text-sm text-muted-foreground">Acesso à dashboard de vendas</p>
+                            </div>
+                            <Switch id="dashboardDeVendas"
+                                v-model:checked="UsuarioFormularioStore.data.dashboardVendas" />
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="flex items-center bg-card px-4 py-2 rounded-lg justify-between">
+                            <div class="space-y-0.5">
+                                <Label htmlFor="dashboardCrm">Dashboard CRM</Label>
+                                <p class="text-sm text-muted-foreground">Acesso ao dashboard CRM</p>
+                            </div>
+                            <Switch id="dashboardCrm" v-model:checked="UsuarioFormularioStore.data.dashboardCrm" />
+                        </div>
+                        <div class="flex items-center bg-card px-4 py-2 rounded-lg justify-between">
+                            <div class="space-y-0.5">
+                                <Label htmlFor="dashboardPatrimonio">Dashboard Patrimônio</Label>
+                                <p class="text-sm text-muted-foreground">Acesso ao dashboard Patrimônio</p>
+                            </div>
+                            <Switch id="dashboardPatrimonio"
+                                v-model:checked="UsuarioFormularioStore.data.dashboardPatrimonio" />
+                        </div>
                     </div>
                 </div>
             </TabsContent>
@@ -170,7 +182,6 @@ import { computed } from "vue";
 import { UsuarioService } from "@/services/administracao/usuarioService";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 const UsuarioFormularioStore = useUsuarioFormularioStore();
 const UsuarioStore = useUsuarioStore();
 
