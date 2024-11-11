@@ -1,6 +1,6 @@
 import { ContasRepository } from "@/repositories/contas/contasRepository";
 import axiosService from "@/services/http/axiosService";
-import { IAccountData } from "@/types/administracao/contas/IAccountData";
+import { IContaSistema } from "@/types/administracao/contas/IContaSistema";
 import { IUserData } from "@/types/administracao/usuarios/IUserdata";
 import IUsuario from "@/types/administracao/usuarios/IUsuario";
 import StorageUtil from "@/utils/storageUtil";
@@ -16,7 +16,7 @@ export const useLoginStore = defineStore("login", () => {
   const statusAccount = ref<TStatusAccount>("inativa");
   const dataUserLogged = ref<IUserData>();
   const dataUserInfosLogged = ref<IUsuario>();
-  const dataAccountLogged = ref<IAccountData>();
+  const dataAccountLogged = ref<IContaSistema>();
 
   const getUserData = async () => {
     try {

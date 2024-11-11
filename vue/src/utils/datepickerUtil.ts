@@ -12,6 +12,8 @@ import {
 } from "date-fns";
 import { ref } from "vue";
 
+export const namesOfWeekDatePicker = ['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom'];
+
 const todayStart = new Date();
 todayStart.setHours(0, 0, 0, 0);
 

@@ -150,26 +150,26 @@
                     </Select>
                 </div>
                 <Pagination :total="mainStore.total" :items-per-page="Number(mainStore.limit)" :sibling-count="1"
-                    show-edges :default-page="mainStore.page">
+                    show-edges :default-page="currentPage">
                     <PaginationList v-slot="{ items }" class="flex items-center gap-1">
                         <PaginationFirst as-child @click="loadDataChange(1)">
                             <ChevronFirst :size="14" />
                         </PaginationFirst>
-                        <PaginationPrev as-child @click="loadDataChange(mainStore.page - 1)">
+                        <PaginationPrev as-child @click="loadDataChange(currentPage - 1)">
                             <ChevronLeft :size="14" />
                         </PaginationPrev>
 
                         <template v-for="(item, index) in items">
                             <PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
                                 <Button @click="loadDataChange(item.value)" class="w-10 h-10 p-0"
-                                    :variant="item.value === mainStore.page ? 'default' : 'secondary'">
+                                    :variant="item.value === currentPage ? 'default' : 'secondary'">
                                     {{ item.value }}
                                 </Button>
                             </PaginationListItem>
                             <PaginationEllipsis v-else :key="item.type" :index="index" />
                         </template>
 
-                        <PaginationNext as-child @click="loadDataChange(mainStore.page + 1)">
+                        <PaginationNext as-child @click="loadDataChange(currentPage + 1)">
                             <ChevronRight :size="14" />
                         </PaginationNext>
                         <PaginationLast as-child

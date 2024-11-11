@@ -132,8 +132,8 @@ export const resumoByMes = (data: ResumoTransacoes[]): IReceitaDespesa[] => {
   const totalPorMes = data.reduce<IReceitaDespesa[]>((acc, item) => {
     // Extrair o mês a partir de `dataLancamento`
     const date = new Date(item.dataVencimento);
-    const month = date.toLocaleString("pt-BR", { month: "long" }); // Mês por extenso
-    const index = acc.findIndex((entry) => entry.name === month);
+    const monthYear = date.toLocaleDateString("pt-BR", { month: "2-digit", year: "numeric" });
+    const index = acc.findIndex((entry) => entry.name === monthYear);
 
     if (index !== -1) {
       if (item.parcelado === "nao" && item.natureza === "receita") {
@@ -158,7 +158,7 @@ export const resumoByMes = (data: ResumoTransacoes[]): IReceitaDespesa[] => {
       }
     } else {
       acc.push({
-        name: month,
+        name: monthYear,
         receita:
           item.natureza === "receita" && item.parcelado === "nao"
             ? item.valorFinal

@@ -2,7 +2,7 @@
 import { Skeleton } from '@/components/ui/skeleton';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible"
 import { useMenuStore } from '@/stores/menuStore';
-import { ChevronRight, ClipboardCheck, Computer, Contact, Cpu, FileBox, FileChartPie, FileText, Handshake, History, House, KeyRound, Landmark, Layers, List, LockKeyhole, MessageCircle, Package, Settings2, Tags, User, UserRoundCog, Wallet } from 'lucide-vue-next';
+import { BadgeCheck, BookOpenCheck, ChevronRight, ClipboardCheck, Computer, Contact, Cpu, FileBox, FileChartPie, FileCheck, FileDigit, FileText, Handshake, History, House, KeyRound, Landmark, Layers, List, LockKeyhole, MessageCircle, Package, PenTool, Settings2, Tags, Ticket, User, UserRoundCog, Wallet } from 'lucide-vue-next';
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 const menuStore = useMenuStore()
@@ -188,6 +188,44 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
                 show: menuStore.permissions.patrimonio,
                 url: "/app/patrimonio/produtos"
             }
+        ]
+    },
+    {
+        title: "Serviços",
+        icon: FileDigit,
+        show: menuStore.permissions.servicos,
+        items: [
+            {
+                icon: BookOpenCheck,
+                title: 'Ordens de Serviço',
+                show: menuStore.permissions.servicos,
+                url: "/app/servicos/os"
+            },
+            {
+                icon: FileCheck,
+                title: 'Serviços',
+                show: menuStore.permissions.servicos,
+                url: "/app/servicos/servicos"
+            },
+        ]
+    },
+    {
+        title: "Assinantes",
+        icon: PenTool,
+        show: menuStore.permissions.assinantes,
+        items: [
+            {
+                icon: Ticket,
+                title: 'Assinaturas',
+                show: menuStore.permissions.assinantes,
+                url: "/app/assinantes/assinaturas"
+            },
+            {
+                icon: BadgeCheck,
+                title: 'Planos',
+                show: menuStore.permissions.assinantes,
+                url: "/app/assinantes/planos"
+            },
         ]
     }
 ]

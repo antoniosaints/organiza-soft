@@ -18,6 +18,7 @@ import { useColorMode } from '@vueuse/core'
 import CategoriasLancamentosRepository from '@/repositories/financeiro/categoriasLancamentosRepository'
 import { useCategoriaFormularioStore } from '@/stores/financeiro/categorias/categoriaFormularioStore'
 import { ModalFormularioCategoria } from '../../Categorias/Cadastro'
+import { namesOfWeekDatePicker } from '@/utils/datepickerUtil'
 
 const { schema } = useLancamentoSchemaStore()
 const storeCategoria = useCategoriaFormularioStore()
@@ -112,7 +113,7 @@ const submitLancamento = async () => {
                                         compactDisplay: 'short',
                                         notation: 'standard',
                                         currencyDisplay: 'narrowSymbol',
-                                        currencySign: 'standard',
+                                        currencySign: 'accounting',
                                     }" :step="0.01" :default-value="0.01" v-model="schema.valorLancamento" :min="0.01">
                                         <NumberFieldContent>
                                             <NumberFieldDecrement />
@@ -123,7 +124,7 @@ const submitLancamento = async () => {
                                 </div>
                                 <div class="space-y-2 p-2">
                                     <Label for="primeiroVencimento">Data vencimento</Label>
-                                    <VueDatePicker :day-names="['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom']"
+                                    <VueDatePicker :day-names="namesOfWeekDatePicker"
                                         placeholder="Data do vencimento" id="primeiroVencimento"
                                         required :dark="isDark" v-model="schema.lancamento.dataVencimento"
                                         format="dd/MM/yyyy" locale="pt" auto-apply utc />
@@ -228,7 +229,7 @@ const submitLancamento = async () => {
                             </div>
                             <div class="space-y-2 p-2">
                                 <Label for="primeiroVencimento">Data Primeira Parcela</Label>
-                                <VueDatePicker :day-names="['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom']"
+                                <VueDatePicker :day-names="namesOfWeekDatePicker"
                                     placeholder="Data da primeira parcela" id="primeiroVencimento"
                                     :required="schema.isParcelado" :dark="isDark" v-model="schema.dataPrimeiraParcela"
                                     format="dd/MM/yyyy" locale="pt" auto-apply utc />
@@ -256,7 +257,7 @@ const submitLancamento = async () => {
                             </div>
                             <div class="space-y-2 p-2">
                                 <Label for="primeiroVencimento">Data da entrada</Label>
-                                <VueDatePicker :day-names="['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom']"
+                                <VueDatePicker :day-names="namesOfWeekDatePicker"
                                     placeholder="Selecione a data da entrada" id="primeiroVencimento"
                                     :required="schema.hasEntrada" :dark="isDark" v-model="schema.dataEntrada"
                                     format="dd/MM/yyyy" locale="pt" auto-apply utc />
@@ -265,7 +266,7 @@ const submitLancamento = async () => {
                         <div v-if="schema.isEfetivado" class="grid grid-cols-1 md:grid-cols-2 gap-2">
                             <div class="space-y-2 p-2">
                                 <Label for="dataPagamento">Data do Pagamento</Label>
-                                <VueDatePicker :day-names="['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom']"
+                                <VueDatePicker :day-names="namesOfWeekDatePicker"
                                     :max-date="new Date()" placeholder="Selecione a data do pagamento"
                                     id="dataPagamento" :required="schema.isEfetivado" :dark="isDark"
                                     v-model="schema.dataPagamento" format="dd/MM/yyyy" locale="pt" auto-apply utc />

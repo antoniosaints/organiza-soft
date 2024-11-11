@@ -1,5 +1,5 @@
 import axiosService from "@/services/http/axiosService";
-import { IAccountData } from "@/types/administracao/contas/IAccountData";
+import { IAccountData } from "@/types/administracao/contas/IContaSistema";
 
 export class ContasRepository {
     static async get(id: number): Promise<IAccountData> {

@@ -63,10 +63,10 @@
                                 :align="'start'">
                                 <p>
                                     O Balanço mostra o saldo subtraindo as receitas efetivadas das despesas efetivadas, mostrando o saldo em
-                                <p class="text-green-500 inline">verde</p> e mostrando abaixo a
-                                porcentagem de <p class="text-green-500 inline">receitas</p> e <p
+                                <span class="text-green-500 inline">verde</span> quando positivo e <span class="text-red-500 inline">vermelho</span> quando negativo e abaixo a
+                                porcentagem de <span class="text-green-500 inline">receitas</span> e <span
                                     class="text-red-500 inline">
-                                    despesas</p>
+                                    despesas</span>
                                 </p>
                             </PopoverContent>
                         </Popover>
@@ -108,7 +108,7 @@
                                     Esse cartão mostra os valores pendentes dos lançamentos, tanto receitas quanto
                                     despesas,
                                     mostrando o valor total em
-                                <p class="text-yellow-500 inline">amarelo</p>
+                                <span class="text-yellow-500 inline">amarelo</span>
                                 e abaixo, mostra o valor referente à cada tipo de lançamento.
                                 </p>
                             </PopoverContent>
@@ -142,7 +142,7 @@
                                     Esse cartão mostra os valores consolidados dos lançamentos, tanto receitas quanto
                                     despesas,
                                     mostrando o valor total em
-                                <p class="text-blue-500 inline">azul</p>
+                                <span class="text-blue-500 inline">azul</span>
                                 e abaixo, mostra o valor referente à cada tipo de lançamento.
                                 </p>
                             </PopoverContent>

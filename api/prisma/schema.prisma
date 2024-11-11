@@ -7,21 +7,73 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model RecursosHumanosFuncionarios {
+  id                     Int                                     @id @default(autoincrement())
+  contaSistemaId         Int
+  ContaSistema           ContasSistema                           @relation(fields: [contaSistemaId], references: [id])
+  nome                   String                                  @db.VarChar(140)
+  cpf                    String                                  @db.VarChar(150)
+  dataNascimento         String                                  @db.VarChar(50)
+  email                  String                                  @db.VarChar(100)
+  telefone               String                                  @db.VarChar(50)
+  cargo                  String                                  @db.VarChar(100)
+  dataAdmissao           DateTime?
+  dataDemissao           DateTime?
+  criadoPor              Int
+  status                 StatusUsuario                           @default(ativo)
+  UsuarioCriador         Usuario                                 @relation(fields: [criadoPor], references: [id])
+  datacriado             DateTime                                @default(now())
+  dataAtualizado         DateTime                                @updatedAt
+  UsuariosInFuncionarios RecursosHumanosUsuariosInFuncionarios[]
+}
+
+model RecursosHumanosUsuariosInFuncionarios {
+  id             Int                         @id @default(autoincrement())
+  usuarioId      Int
+  Usuarios       Usuario                     @relation(fields: [usuarioId], references: [id])
+  funcionarioId  Int
+  Funcionarios   RecursosHumanosFuncionarios @relation(fields: [funcionarioId], references: [id])
+  contaSistemaId Int
+  ContaSistema   ContasSistema               @relation(fields: [contaSistemaId], references: [id])
+}
+
 model Usuario {
-  id                  Int                   @id @default(autoincrement())
-  contaSistemaId      Int
-  ContaSistema        ContasSistema         @relation(fields: [contaSistemaId], references: [id])
-  nome                String                @db.VarChar(100)
-  email               String                @db.VarChar(100)
-  senha               String                @db.VarChar(255)
-  regra               Permissao
-  anotacoes           String?               @db.Text
-  telefone            String?               @db.VarChar(20)
-  status              StatusUsuario         @default(ativo)
-  dataCriacao         DateTime              @default(now())
-  Contas              FinanceiroContas[]
-  Vendas              Vendas[]
-  FinanceiroTransacao FinanceiroTransacao[]
+  id                       Int                                     @id @default(autoincrement())
+  contaSistemaId           Int
+  ContaSistema             ContasSistema                           @relation(fields: [contaSistemaId], references: [id])
+  nome                     String                                  @db.VarChar(100)
+  email                    String                                  @db.VarChar(100)
+  senha                    String                                  @db.VarChar(255)
+  regra                    Permissao
+  resetarSenha             Boolean                                 @default(true)
+  lancamentosRetroativos   Boolean                                 @default(false)
+  recebimentosRetroativos  Boolean                                 @default(false)
+  pagamentosRetroativos    Boolean                                 @default(false)
+  descontoMaximoVendaPdv   Float                                   @default(1)
+  jurosMaximoLancamento    Float                                   @default(1)
+  jurosMaximoRenegociacao  Float                                   @default(0)
+  descontoMaximoLancamento Float                                   @default(1)
+  dashboardFinanceiro      Boolean                                 @default(true)
+  dashboardVendas          Boolean                                 @default(true)
+  dashboardPatrimonio      Boolean                                 @default(true)
+  dashboardCrm             Boolean                                 @default(true)
+  rh                       Boolean                                 @default(true)
+  assistenteIa             Boolean                                 @default(true)
+  crm                      Boolean                                 @default(true)
+  vendas                   Boolean                                 @default(true)
+  financeiro               Boolean                                 @default(true)
+  patrimonio               Boolean                                 @default(true)
+  servicos                 Boolean                                 @default(true)
+  assinantes               Boolean                                 @default(true)
+  anotacoes                String?                                 @db.Text
+  telefone                 String?                                 @db.VarChar(20)
+  status                   StatusUsuario                           @default(ativo)
+  dataCriacao              DateTime                                @default(now())
+  Contas                   FinanceiroContas[]
+  Vendas                   Vendas[]
+  FinanceiroTransacao      FinanceiroTransacao[]
+  UsuariosInFuncionarios   RecursosHumanosUsuariosInFuncionarios[]
+  Funcionarios             RecursosHumanosFuncionarios[]
 
   @@unique([email, contaSistemaId, senha])
 }
@@ -228,19 +280,43 @@ model FinanceiroContas {
   @@index([userId], map: "Contas_userId_fkey")
 }
 
+model EmailConfigs {
+  id             Int           @id @default(autoincrement())
+  titulo         String        @db.VarChar(100)
+  servidor       String        @db.VarChar(140)
+  porta          Int
+  emailRemetente String        @db.VarChar(100)
+  senha          String        @db.VarChar(140)
+  contaSistemaId Int
+  ContaSistema   ContasSistema @relation(fields: [contaSistemaId], references: [id], onDelete: Restrict)
+}
+
+model TelegramConfigs {
+  id             Int           @id @default(autoincrement())
+  bot            String        @db.VarChar(100)
+  botApiKey      String        @db.VarChar(150)
+  contaSistemaId Int
+  ContaSistema   ContasSistema @relation(fields: [contaSistemaId], references: [id], onDelete: Restrict)
+}
+
 model ContasSistema {
-  id                            Int                             @id @default(autoincrement())
+  id                            Int                                     @id @default(autoincrement())
   conta                         String
-  email                         String                          @unique
+  email                         String                                  @unique
   slug                          String?
-  descricao                     String?                         @db.Text
-  plano                         PlanosSistema                   @default(free)
-  status                        ContasSistemaStatus             @default(ativa)
-  telefone                      String                          @default("")
+  descricao                     String?                                 @db.Text
+  plano                         PlanosSistema                           @default(free)
+  status                        ContasSistemaStatus                     @default(ativa)
+  telefone                      String                                  @default("")
+  lancamentosRetroativos        Boolean                                 @default(true)
+  notificacaoEmail              Boolean                                 @default(false)
+  notificacaoTelegram           Boolean                                 @default(false)
+  redefinirSenha                Boolean                                 @default(true)
+  monitorarEstoque              Boolean                                 @default(false)
   stripeCustomerId              String
   stripeSubscriptionId          String?
-  dataCriado                    DateTime                        @default(now())
-  dataAtualizada                DateTime                        @updatedAt
+  dataCriado                    DateTime                                @default(now())
+  dataAtualizada                DateTime                                @updatedAt
   Usuario                       Usuario[]
   Cliente                       Cliente[]
   AssinaturaPlano               AssinaturaPlano[]
@@ -261,6 +337,10 @@ model ContasSistema {
   Vendas                        Vendas[]
   VendasRelatorios              VendasRelatorios[]
   VendasPagamentos              VendasPagamentos[]
+  EmailConfigs                  EmailConfigs[]
+  TelegramConfigs               TelegramConfigs[]
+  Funcionarios                  RecursosHumanosFuncionarios[]
+  UsuariosInFuncionarios        RecursosHumanosUsuariosInFuncionarios[]
 }
 
 model PatrimonioProdutos {

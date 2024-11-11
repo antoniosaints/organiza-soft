@@ -21,10 +21,10 @@
             </div>
         </div>
         <div class="flex space-x-1 w-full md:w-1/2 gap-4 mb-4">
-            <Input type="search" @input="(event: any) => { if (event.target.value == '') reloadTable() }"
-                @keyup.enter="reloadTable" id="rows-per-page" v-model="clienteStore.search"
+            <Input type="search" @input="(event: any) => { if (event.target.value == '') loadDataChange() }"
+                @keyup.enter="loadDataChange" id="rows-per-page" v-model="clienteStore.search"
                 placeholder="Pesquisar cliente..." />
-            <Button variant="default" class="w-max" @click="reloadTable">
+            <Button variant="default" class="w-max" @click="loadDataChange">
                 <Search class="w-4 h-4 mr-2" />Buscar
             </Button>
             <DropdownMenu v-if="clienteStore.selectedItens.length > 0">
@@ -113,26 +113,26 @@
                     </Select>
                 </div>
                 <Pagination :total="clienteStore.total" :items-per-page="Number(clienteStore.limit)" :sibling-count="1"
-                    show-edges :default-page="clienteStore.page">
+                    show-edges :default-page="currentPage">
                     <PaginationList v-slot="{ items }" class="flex items-center gap-1">
                         <PaginationFirst as-child @click="loadDataChange(1)">
                             <ChevronFirst :size="14" />
                         </PaginationFirst>
-                        <PaginationPrev as-child @click="loadDataChange(clienteStore.page - 1)">
+                        <PaginationPrev as-child @click="loadDataChange(currentPage - 1)">
                             <ChevronLeft :size="14" />
                         </PaginationPrev>
 
                         <template v-for="(item, index) in items">
                             <PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
                                 <Button @click="loadDataChange(item.value)" class="w-10 h-10 p-0"
-                                    :variant="item.value === clienteStore.page ? 'default' : 'secondary'">
+                                    :variant="item.value === currentPage ? 'default' : 'secondary'">
                                     {{ item.value }}
                                 </Button>
                             </PaginationListItem>
                             <PaginationEllipsis v-else :key="item.type" :index="index" />
                         </template>
 
-                        <PaginationNext as-child @click="loadDataChange(clienteStore.page + 1)">
+                        <PaginationNext as-child @click="loadDataChange(currentPage + 1)">
                             <ChevronRight :size="14" />
                         </PaginationNext>
                         <PaginationLast as-child
@@ -182,14 +182,23 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 
 const clienteStore = useClienteStore();
 const clienteFormularioStore = useClienteFormularioStore();
-const perPage = computed(() => clienteStore.limit);
-const rangeStart = computed(() => (clienteStore.page - 1) * Number(clienteStore.limit) + 1);
-const rangeEnd = computed(() => (clienteStore.page - 1) * Number(clienteStore.limit) + clienteStore.clientes.length);
-const dataExists = computed(() => clienteStore.clientes.length > 0);
-
-watch(perPage, () => {
-    loadDataChange(1);
+const currentPage = computed(() => Number(clienteStore.page) || 1);
+const perPage = computed(() => Number(clienteStore.limit) || 0);
+const dataLength = computed(() => clienteStore.clientes?.length ?? 0);
+const rangeStart = computed(() => {
+  const page = currentPage.value;
+  const limit = perPage.value;
+  return page > 0 && limit > 0 ? (page - 1) * limit + 1 : 1;
 });
+
+const rangeEnd = computed(() => {
+  const page = currentPage.value;
+  const limit = perPage.value;
+  const lancLength = dataLength.value;
+  return page > 0 && limit > 0 ? (page - 1) * limit + lancLength : rangeStart.value;
+});
+
+const dataExists = computed(() => Number(clienteStore.total) > 0);
 
 const openDialogMultilineDelete = ref(false);
 
@@ -204,16 +213,15 @@ const openFormularioNovoCliente = () => {
     clienteFormularioStore.resetData();
 }
 
-const loadDataChange = async (paginate: number) => {
+const loadDataChange = async (paginate?: number) => {
     clienteStore.page = paginate || 1;
     await clienteStore.getClientes();
 };
 
-const reloadTable = async () => {
-    await clienteStore.getClientes();
-};
-
 onMounted(() => {
-    loadDataChange(1);
+    loadDataChange();
+});
+watch(perPage, () => {
+    loadDataChange();
 });
 </script>
