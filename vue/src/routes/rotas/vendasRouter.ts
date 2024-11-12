@@ -3,7 +3,7 @@ import { RouteRecordRaw } from "vue-router";
 export const vendasRouter: RouteRecordRaw = {
   path: "/app/vendas",
   name: "vendas",
-  redirect: "/vendas/pdv",
+  redirect: "/app/vendas/pdv",
   meta: { breadcrumb: "Vendas" },
   children: [
     {

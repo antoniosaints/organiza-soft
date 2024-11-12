@@ -4,11 +4,13 @@ export default interface IParcelamento {
     id?: number;
     transacaoId: number;
     parcela: number;
+    tipo: "parcela" | "entrada" | "ajuste"
     status: IStatusTransacao;
     valor: number;
     valorRecebido?: number;
-    dataVencimento?: Date;
-    dataRecebimento?: Date;
-    dataCadastro?: Date;
+    desconto?: number;
+    dataVencimento?: Date | string;
+    dataRecebimento?: Date | string;
+    dataCadastro?: Date | string;
   }
   

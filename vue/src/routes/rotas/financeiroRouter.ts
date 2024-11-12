@@ -9,7 +9,7 @@ export const financeiroRouter: RouteRecordRaw = {
     {
       path: "/app/financeiro/dashboard",
       name: "DashboardFinanceiro",
-      meta: { breadcrumb: "Dashboard financeiro" },
+      meta: { breadcrumb: "Dashboard financeiro", permissao: true },
       component: () => import("@/views/Financeiro/DashboardLancamento.vue"),
     },
     {

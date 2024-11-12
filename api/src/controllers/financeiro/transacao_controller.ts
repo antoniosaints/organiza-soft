@@ -12,7 +12,7 @@ import {
 import { LancamentoBodySchema } from "../../schemas/financeiro/lancamento_body_schema";
 import { LancamentoService } from "../../services/lancamentos_service";
 import { getResumoTransacoes } from "../../hooks/financeiro/get_resumo";
-import { resumoGraficos } from "../../hooks/financeiro/get_resumo_graficos";
+import { resumoByConta, resumoGraficos } from "../../hooks/financeiro/get_resumo_graficos";
 
 // Criação de transação
 export const createTransacao = async (req: Request, res: Response) => {
@@ -34,31 +34,45 @@ export const getResumoLancamentos = async (req: Request, res: Response) => {
     if (dataFiltro) {
       [startDate, endDate] = (dataFiltro as string).split(",");
     }
-    const data = await prismaService.financeiroTransacao.findMany({
+    const lancamentos = await prismaService.financeiroTransacao.findMany({
       where: {
-        AND: [
-          startDate && endDate
-            ? {
-                dataVencimento: {
-                  ...(startDate
-                    ? { gte: new Date(startDate as string).toISOString() }
-                    : {}),
-                  ...(endDate
-                    ? { lte: new Date(endDate as string).toISOString() }
-                    : {}),
-                },
-              }
-            : {},
-          { contaSistemaId: req.body.contaSistemaId },
-        ],
+        contaSistemaId: req.body.contaSistemaId,
       },
-      include: { FinanceiroParcelamento: true, Categoria: true },
+      include: {
+        FinanceiroParcelamento: true,
+        Categoria: true,
+        Conta: true,
+        ClienteOnLancamentos: true,
+      },
     });
 
-    const resumo = getResumoTransacoes(data);
-    const chart = resumoGraficos(data);
+    const lancamentosFiltradosPorData =
+      startDate && endDate
+        ? lancamentos.filter((lancamento) => {
+            const dataVencimento = new Date(lancamento.dataVencimento);
+            const inicio = new Date(startDate as string);
+            const fim = new Date(endDate as string);
+            return dataVencimento >= inicio && dataVencimento <= fim;
+          })
+        : lancamentos;
 
-    ResponseService.success(res, { resumo, chart }, "Transações recuperadas");
+    const ultimoslancamentos = await prismaService.financeiroTransacao.findMany(
+      {
+        orderBy: { dataLancamento: "desc" },
+        take: 5,
+        include: {FinanceiroParcelamento: true},
+        where: { contaSistemaId: req.body.contaSistemaId },
+      }
+    );
+    const resumo = getResumoTransacoes(lancamentosFiltradosPorData);
+    const graficos = resumoGraficos(lancamentosFiltradosPorData);
+    const resumoContas = resumoByConta(lancamentos)
+
+    ResponseService.success(
+      res,
+      { resumo, graficos, ultimoslancamentos, resumoContas },
+      "Transações recuperadas"
+    );
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
   }
@@ -81,6 +95,80 @@ export const efetivarTransacao = async (req: Request, res: Response) => {
         data: transacao,
       },
       "Transação efetivada com sucesso"
+    );
+  } catch (error: any) {
+    HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
+  }
+};
+
+export const efetivarParcela = async (req: Request, res: Response) => {
+  try {
+    const parcela = await prismaService.financeiroParcelamento.update({
+      data: { status: "recebido" },
+      where: {
+        id: Number(req.params.id),
+        contaSistemaId: req.body.contaSistemaId,
+      },
+    });
+
+    ResponseService.created(
+      res,
+      {
+        message: "Parcela efetivada com sucesso",
+        data: parcela,
+      },
+      "Parcela efetivada com sucesso"
+    );
+  } catch (error: any) {
+    HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
+  }
+};
+
+export const estornarParcela = async (req: Request, res: Response) => {
+  try {
+    const parcela = await prismaService.financeiroParcelamento.update({
+      data: { status: "pendente" },
+      where: {
+        id: Number(req.params.id),
+        contaSistemaId: req.body.contaSistemaId,
+      },
+    });
+
+    ResponseService.created(
+      res,
+      {
+        message: "Parcela estornada com sucesso",
+        data: parcela,
+      },
+      "Parcela estornada com sucesso"
+    );
+  } catch (error: any) {
+    HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
+  }
+};
+export const cancelarParcela = async (req: Request, res: Response) => {
+  try {
+    const parcela = await prismaService.financeiroParcelamento.update({
+      data: { status: "cancelada" },
+      where: {
+        id: Number(req.params.id),
+        contaSistemaId: req.body.contaSistemaId,
+      },
+    });
+
+    ResponseService.created(
+      res,
+      {
+        message: "Parcela cancelada com sucesso",
+        data: parcela,
+      },
+      "Parcela cancelada com sucesso"
     );
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
@@ -161,6 +249,7 @@ export const getTransacao = async (req: Request, res: Response) => {
     const { id } = req.params;
     const transacao = await prismaService.financeiroTransacao.findUnique({
       where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
+      include: {FinanceiroParcelamento: true, Categoria: true, Conta: true}
     });
     ResponseService.success(res, { data: transacao });
   } catch (error: any) {

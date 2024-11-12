@@ -79,33 +79,34 @@ model Usuario {
 }
 
 model Cliente {
-  id                    Int                   @id @default(autoincrement())
+  id                    Int                    @id @default(autoincrement())
   contaSistemaId        Int
-  ContaSistema          ContasSistema         @relation(fields: [contaSistemaId], references: [id])
-  nome                  String                @db.VarChar(100)
-  email                 String                @db.VarChar(100)
-  telefone              String?               @db.VarChar(20)
+  ContaSistema          ContasSistema          @relation(fields: [contaSistemaId], references: [id])
+  nome                  String                 @db.VarChar(100)
+  email                 String                 @db.VarChar(100)
+  telefone              String?                @db.VarChar(20)
   telefoneAlternativo   String?
-  endereco              String?               @db.Text
-  status                StatusUsuario         @default(ativo)
+  endereco              String?                @db.Text
+  status                StatusUsuario          @default(ativo)
   cpfCnpj               String?
-  tipoCliente           TiposClientes         @default(fisica)
+  tipoCliente           TiposClientes          @default(fisica)
   instagram             String?
   site                  String?
-  canalPreferidoContato CanalPreferidoContato @default(telefone)
+  canalPreferidoContato CanalPreferidoContato  @default(telefone)
   cep                   String?
-  estado                String?               @db.Char(2)
-  cidade                String?               @db.VarChar(100)
-  pais                  String?               @db.VarChar(40)
-  saldoDevedor          Float?                @default(0)
-  limiteCredito         Float?                @default(0)
+  estado                String?                @db.Char(2)
+  cidade                String?                @db.VarChar(100)
+  pais                  String?                @db.VarChar(40)
+  saldoDevedor          Float?                 @default(0)
+  limiteCredito         Float?                 @default(0)
   segmento              String?
   scoreFinanceiro       Int?
   dataBloqueio          DateTime?
   dataUltimaCompra      DateTime?
-  dataCriacao           DateTime              @default(now())
+  dataCriacao           DateTime               @default(now())
   Assinatura            Assinatura[]
   Vendas                Vendas[]
+  ClienteOnLancamentos  ClienteOnLancamentos[]
 
   @@unique([contaSistemaId, cpfCnpj], map: "uniqueContaIdECpfCnpj")
 }
@@ -186,6 +187,16 @@ model Configuracoes {
   dataCriacao    DateTime      @default(now())
 }
 
+model ClienteOnLancamentos {
+  id             Int                 @id @default(autoincrement())
+  clienteId      Int
+  lancamentoId   Int
+  Cliente        Cliente             @relation(fields: [clienteId], references: [id])
+  Lancamento     FinanceiroTransacao @relation(fields: [lancamentoId], references: [id])
+  contaSistemaId Int
+  ContaSistema   ContasSistema       @relation(fields: [contaSistemaId], references: [id])
+}
+
 model FinanceiroTransacao {
   id                     Int                      @id @default(autoincrement())
   contaSistemaId         Int
@@ -194,7 +205,6 @@ model FinanceiroTransacao {
   valor                  Float                    @default(0)
   descricao              String                   @db.Text
   categoriaId            Int
-  fornecedorId           Int?
   contaId                Int
   dataEfetivado          DateTime?
   usuarioEfetivou        Int?
@@ -222,6 +232,7 @@ model FinanceiroTransacao {
   UsuarioLancamento      Usuario                  @relation(fields: [usuarioLancamento], references: [id], onDelete: Restrict)
   FinanceiroParcelamento FinanceiroParcelamento[]
   VendasOnLancamentos    VendasOnLancamentos[]
+  ClienteOnLancamentos   ClienteOnLancamentos[]
 
   @@unique([codigoLancamento, contaSistemaId])
   @@index([categoriaId], map: "Transacao_categoriasId_fkey")
@@ -341,6 +352,7 @@ model ContasSistema {
   TelegramConfigs               TelegramConfigs[]
   Funcionarios                  RecursosHumanosFuncionarios[]
   UsuariosInFuncionarios        RecursosHumanosUsuariosInFuncionarios[]
+  ClienteOnLancamentos          ClienteOnLancamentos[]
 }
 
 model PatrimonioProdutos {

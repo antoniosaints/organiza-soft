@@ -75,6 +75,16 @@ export class LancamentoService {
             ...novoObjeto,
           },
         });
+
+        if (this.data.lancamento.fornecedorId) {
+          await prisma.clienteOnLancamentos.create({
+            data: {
+              contaSistemaId: this.data.contaSistemaId,
+              lancamentoId: lancamento.id,
+              clienteId: this.data.lancamento.fornecedorId,
+            },
+          });
+        }
   
         if (this.data.isParcelado) {
           await this.parcelar(lancamento.id);

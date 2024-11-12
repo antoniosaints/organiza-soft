@@ -158,19 +158,19 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
             {
                 icon: FileText,
                 title: 'DRE',
-                show: menuStore.permissions.financeiro,
+                show: menuStore.permissions.financeiro && false,
                 url: "/app/financeiro/dre"
             },
             {
                 icon: Settings2,
                 title: t("sidebar.others"),
-                show: menuStore.permissions.financeiro,
+                show: menuStore.permissions.financeiro && false,
                 items: [
                     {
                         title: 'Categorias',
                         icon: Contact,
                         url: "/app/financeiro/categorias",
-                        show: menuStore.permissions.crm
+                        show: menuStore.permissions.financeiro
                     }
                 ]
             }

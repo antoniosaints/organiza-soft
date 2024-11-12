@@ -53,7 +53,7 @@ import { computed } from "vue";
 
 const colorBadgePermissao = (regra: string) => {
     const colors: Record<string, string> = {
-        'proprietario': 'bg-purple-100 text-purple-500 dark:bg-emerald-900 dark:text-emerald-300',
+        'proprietario': 'bg-purple-100 text-purple-500 dark:bg-purple-900 dark:text-purple-300',
         'socio': 'bg-lime-100 text-lime-500 dark:bg-lime-900 dark:text-lime-300',
         'admin': 'bg-blue-100 text-blue-500 dark:bg-blue-900 dark:text-blue-300',
         'gerente': 'bg-green-100 text-green-500 dark:bg-green-900 dark:text-green-300',

@@ -233,7 +233,7 @@ import CompartilharLink from "@/views/Vendas/Pdv/CompartilharLink.vue";
 import CadastrarVendaView from "@/views/Vendas/Relatorios/CadastrarVendaView.vue";
 import { useColorMode } from "@vueuse/core";
 import { presetsDatePickerVue } from "@/utils/datepickerUtil";
-
+const colorMode = useColorMode();
 const mainStore = useVendasRelatorioStore();
 const perPage = computed(() => Number(mainStore.limit) || 0);
 const currentPage = computed(() => Number(mainStore.page) || 1);
@@ -253,7 +253,7 @@ const rangeEnd = computed(() => {
 });
 
 const dataExists = computed(() => Number(mainStore.total) > 0);
-const isDark = computed(() => useColorMode().value === 'dark')
+const isDark = computed(() => colorMode.value === 'dark')
 
 const dateFilter = ref<string[]>([])
 const openDialogMultilineDelete = ref(false);

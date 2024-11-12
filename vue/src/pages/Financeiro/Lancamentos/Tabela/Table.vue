@@ -60,8 +60,8 @@
                     </TooltipProvider>
                 </div>
                 <VueDatePicker placeholder="Período de filtragem" format="dd/MM/yyyy" 
-                    select-text="Aplicar" cancel-text="Fechar" :preset-dates="presetsDatePickerVue" locale="pt"
-                    :dark="isDark" utc v-model="dateFilter" range>
+                    select-text="Aplicar" cancel-text="Fechar" :preset-dates="presetsDatePickerVue" locale="pt" :dark="darkMode"
+                    utc v-model="dateFilter" range>
                     <template #preset-date-range-button="{ label, value, presetDate }">
                         <span role="button" :tabindex="0" @click="presetDate(value)"
                             @keyup.enter.prevent="presetDate(value)" @keyup.space.prevent="presetDate(value)">
@@ -88,7 +88,7 @@
         </div>
         <div class="rounded-lg border shadow-sm overflow-auto">
             <CompartilharLink />
-            <Table v-if="dataExists">
+            <Table v-show="dataExists">
                 <TableHeader>
                     <TableRow class="bg-secondary">
                         <TableHead></TableHead>
@@ -106,7 +106,7 @@
                     <LancamentosRow v-for="data in mainStore.lancamentos" :key="data.id" :data="data" />
                 </TableBody>
             </Table>
-            <div v-else class="w-full text-blue-100 flex flex-col justify-center items-center">
+            <div v-show="!dataExists" class="w-full text-blue-100 flex flex-col justify-center items-center">
                 <img class="w-64" src="/not_found.svg" />
                 <p class="mb-6 font-sans text-xl text-black dark:text-white flex items-center">Nenhum registro
                     encontrado {{ mainStore.search == '' ? '' : ' com: ' + mainStore.search }}</p>
@@ -120,7 +120,7 @@
             </div>
         </div>
         <DetalhesProduto />
-        <div v-if="dataExists" class="flex flex-col md:flex-row justify-between items-center mt-4">
+        <div v-show="dataExists" class="flex flex-col md:flex-row justify-between items-center mt-4">
             <Label class="text-foreground/80">Mostrando de {{ rangeStart }} até {{ rangeEnd }} de {{ mainStore.total
                 }}</Label>
             <div class="flex item-center flex-col md:flex-row space-x-4">
@@ -217,9 +217,13 @@ import { useLancamentosStore } from "@/stores/financeiro/lancamentos/lancamentoS
 import SheetModal from "../Cadastro/SheetModal.vue";
 import { useLancamentosFormularioStore } from "@/stores/financeiro/lancamentos/lancamentosFormularioStore";
 import DetalhesLancamento from "../Modais/DetalhesLancamento.vue";
-import { useColorMode } from "@vueuse/core";
 import { presetsDatePickerVue } from "@/utils/datepickerUtil";
+import { useColorMode } from "@vueuse/core";
+const colormode = useColorMode();
 
+onMounted(() => {
+    loadDataChange();
+});
 const mainStore = useLancamentosStore();
 const formularioStore = useLancamentosFormularioStore();
 const perPage = computed(() => Number(mainStore.limit) || 0);
@@ -227,24 +231,26 @@ const currentPage = computed(() => Number(mainStore.page) || 1);
 const lancamentosLength = computed(() => mainStore.lancamentos?.length ?? 0);
 
 const rangeStart = computed(() => {
-  const page = currentPage.value;
-  const limit = perPage.value;
-  return page > 0 && limit > 0 ? (page - 1) * limit + 1 : 1;
+    const page = currentPage.value;
+    const limit = perPage.value;
+    return page > 0 && limit > 0 ? (page - 1) * limit + 1 : 1;
 });
 
 const rangeEnd = computed(() => {
-  const page = currentPage.value;
-  const limit = perPage.value;
-  const lancLength = lancamentosLength.value;
-  return page > 0 && limit > 0 ? (page - 1) * limit + lancLength : rangeStart.value;
+    const page = currentPage.value;
+    const limit = perPage.value;
+    const lancLength = lancamentosLength.value;
+    return page > 0 && limit > 0 ? (page - 1) * limit + lancLength : rangeStart.value;
 });
 
+const darkMode = computed(() => colormode.value === "dark" ? true : false)
 const dataExists = computed(() => Number(mainStore.total) > 0);
-
-const isDark = computed(() => useColorMode().value === 'dark')
-
 const dateFilter = ref<string[]>([])
 const openDialogMultilineDelete = ref(false);
+
+watch(perPage, () => {
+    loadDataChange();
+});
 
 const deleteMultilineSelects = async () => {
     await mainStore.deleteSelectedItens()
@@ -255,11 +261,4 @@ const loadDataChange = async (paginate?: number) => {
     mainStore.page = paginate || 1;
     await mainStore.getLancamentos(dateFilter.value);
 };
-
-onMounted(() => {
-    loadDataChange();
-});
-watch(perPage, () => {
-    loadDataChange();
-});
 </script>

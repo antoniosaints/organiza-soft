@@ -14,6 +14,24 @@ export default class LancamentosRepository {
     );
     return data;
   }
+  static async efetivaParcela(id: number): Promise<ITransacao> {
+    const { data } = await axiosService.get(
+      `financeiro/transacao/efetivarParcela/${id}`
+    );
+    return data;
+  }
+  static async estornarParcela(id: number): Promise<ITransacao> {
+    const { data } = await axiosService.get(
+      `financeiro/transacao/estornarParcela/${id}`
+    );
+    return data;
+  }
+  static async cancelarParcela(id: number): Promise<ITransacao> {
+    const { data } = await axiosService.get(
+      `financeiro/transacao/cancelarParcela/${id}`
+    );
+    return data;
+  }
   static async getResume(dateFilter?: string[]): Promise<IResumoFinanceiro> {
     let date = "";
     if (dateFilter) date = dateFilter.join(",");

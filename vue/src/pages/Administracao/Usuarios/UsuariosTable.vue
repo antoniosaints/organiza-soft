@@ -29,7 +29,7 @@
             </Button>
         </div>
         <div class="rounded-lg border shadow-sm overflow-auto">
-            <Table v-if="UsuariosExists">
+            <Table v-show="UsuariosExists">
                 <TableHeader>
                     <TableRow class="bg-secondary">
                         <TableHead>Nome</TableHead>
@@ -45,13 +45,13 @@
                 </TableBody>
             </Table>
 
-            <div v-else class="w-full text-blue-100 flex flex-col justify-center items-center">
+            <div v-show="!UsuariosExists" class="w-full text-blue-100 flex flex-col justify-center items-center">
                 <img class="w-64" src="/not_found.svg" />
                 <p class="mb-6 font-sans text-xl text-black dark:text-white flex items-center">Nenhum registro encontrado {{ usuarioStore.search == '' ? '' : ' com: ' + usuarioStore.search }}</p>
                 <Button @click="openModalNewUser" class="bg-primary mb-6 hover:bg-primary/90"><UserPlus2 class="mr-1 h-4 w-4" />  Novo usuário</Button>
             </div>
         </div>
-        <div v-if="UsuariosExists" class="flex flex-col md:flex-row justify-between items-center mt-4">
+        <div v-show="UsuariosExists" class="flex flex-col md:flex-row justify-between items-center mt-4">
             <Label class="text-foreground/80">Mostrando de {{ rangeStart }} até {{ rangeEnd }} de {{ usuarioStore.total
                 }}</Label>
             <div class="flex item-center flex-col md:flex-row space-x-4">

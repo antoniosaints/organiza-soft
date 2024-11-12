@@ -1,3 +1,4 @@
+import ICliente from "../administracao/clientes/ICliente";
 import IUsuario from "../administracao/usuarios/IUsuario";
 import ICategoria from "./ICategoria";
 import IParcelamento from "./IParcelamento";
@@ -49,4 +50,5 @@ export default interface ITransacao {
   Conta?: IContasLancamentos;
   FormaPagamento?: IFormaPagamento;
   UsuarioLancamento?: IUsuario;
+  ClienteOnLancamentos?: ICliente[];
 }

@@ -20,7 +20,7 @@ import { useCategoriaFormularioStore } from '@/stores/financeiro/categorias/cate
 import { ModalFormularioCategoria } from '../../Categorias/Cadastro'
 import { namesOfWeekDatePicker } from '@/utils/datepickerUtil'
 import { useLoginStore } from '@/stores/login/loginStore'
-
+const colorMode = useColorMode()
 const { schema } = useLancamentoSchemaStore()
 const storeCategoria = useCategoriaFormularioStore()
 const loginStore = useLoginStore()
@@ -63,7 +63,7 @@ const managerState = () => {
 
 watch(() => [schema.isParcelado, schema.isEfetivado], managerState)
 
-const isDark = useColorMode().value === 'dark'
+const isDark = computed(() => colorMode.value === 'dark');
 
 const submitLancamento = async () => {
     await LancamentoService.create(schema)

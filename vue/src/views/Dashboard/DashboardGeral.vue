@@ -99,7 +99,7 @@
                 </CardHeader>
                 <CardContent>
                     <BarChart v-if="resumoFinanceiro.resumo.total > 0" class="h-48 py-4" :rounded-corners="4"
-                        :data="resumoFinanceiro.chart.resumoPorMes" index="name" :custom-tooltip="CustomTooltipChart"
+                        :data="resumoFinanceiro.graficos.resumoPorMes" index="name" :custom-tooltip="CustomTooltipChart"
                         :categories="['receita', 'despesa']" :colors="['#22c55e', '#ef4444']"
                         :y-formatter="formateTicketValue" />
                     <div v-else class="flex flex-col items-center justify-center h-s w-full mt-8">
@@ -114,9 +114,7 @@
                     <CardDescription>Resumo de assinaturas por mês</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <BarChart v-if="false" class="h-48 py-4" :rounded-corners="4" :data="data" index="name"
-                        :categories="['total', 'meta']" :y-formatter="formateTicketValue" />
-                    <div v-else class="flex flex-col items-center justify-center h-s w-full mt-8">
+                    <div class="flex flex-col items-center justify-center h-s w-full mt-8">
                         <ChartColumnBig class="w-16 h-16 text-muted-foreground" />
                         <p class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
                     </div>
@@ -125,187 +123,39 @@
             <Card class="xl:col-span-2">
                 <CardHeader class="flex flex-row items-center">
                     <div class="grid gap-2">
-                        <CardTitle>Transações</CardTitle>
+                        <CardTitle>Lançamentos</CardTitle>
                         <CardDescription>
                             Veja seus lançamentos recentes
                         </CardDescription>
                     </div>
                     <Button as-child size="sm" class="ml-auto gap-1">
-                        <a href="#">
+                        <RouterLink to="/app/financeiro/lancamentos">
                             Ver tudo
                             <ArrowUpRight class="h-4 w-4" />
-                        </a>
+                        </RouterLink>
                     </Button>
                 </CardHeader>
                 <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Cliente</TableHead>
-                                <TableHead class="hidden xl:table-cell">
-                                    Tipo
-                                </TableHead>
-                                <TableHead class="hidden xl:table-cell">
-                                    Status
-                                </TableHead>
-                                <TableHead class="hidden xl:table-cell">
-                                    Data
-                                </TableHead>
-                                <TableHead class="text-right">
-                                    Valor
-                                </TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            <TableRow>
-                                <TableCell>
-                                    <div class="font-medium">
-                                        Liam Johnson
-                                    </div>
-                                    <div class="hidden text-sm text-muted-foreground md:inline">
-                                        liam@example.com
-                                    </div>
-                                </TableCell>
-                                <TableCell class="hidden xl:table-cell">
-                                    Sale
-                                </TableCell>
-                                <TableCell class="hidden xl:table-cell">
-                                    <Badge class="text-xs" variant="outline">
-                                        Approved
-                                    </Badge>
-                                </TableCell>
-                                <TableCell class="hidden md:table-cell lg:hidden xl:table-cell">
-                                    2023-06-23
-                                </TableCell>
-                                <TableCell class="text-right">
-                                    $250.00
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell>
-                                    <div class="font-medium">
-                                        Olivia Smith
-                                    </div>
-                                    <div class="hidden text-sm text-muted-foreground md:inline">
-                                        olivia@example.com
-                                    </div>
-                                </TableCell>
-                                <TableCell class="hidden xl:table-cell">
-                                    Refund
-                                </TableCell>
-                                <TableCell class="hidden xl:table-cell">
-                                    <Badge class="text-xs" variant="outline">
-                                        Declined
-                                    </Badge>
-                                </TableCell>
-                                <TableCell class="hidden md:table-cell lg:hidden xl:table-cell">
-                                    2023-06-24
-                                </TableCell>
-                                <TableCell class="text-right">
-                                    $150.00
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell>
-                                    <div class="font-medium">
-                                        Noah Williams
-                                    </div>
-                                    <div class="hidden text-sm text-muted-foreground md:inline">
-                                        noah@example.com
-                                    </div>
-                                </TableCell>
-                                <TableCell class="hidden xl:table-cell">
-                                    Subscription
-                                </TableCell>
-                                <TableCell class="hidden xl:table-cell">
-                                    <Badge class="text-xs" variant="outline">
-                                        Approved
-                                    </Badge>
-                                </TableCell>
-                                <TableCell class="hidden md:table-cell lg:hidden xl:table-cell">
-                                    2023-06-25
-                                </TableCell>
-                                <TableCell class="text-right">
-                                    $350.00
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell>
-                                    <div class="font-medium">
-                                        Emma Brown
-                                    </div>
-                                    <div class="hidden text-sm text-muted-foreground md:inline">
-                                        emma@example.com
-                                    </div>
-                                </TableCell>
-                                <TableCell class="hidden xl:table-cell">
-                                    Sale
-                                </TableCell>
-                                <TableCell class="hidden xl:table-cell">
-                                    <Badge class="text-xs" variant="outline">
-                                        Approved
-                                    </Badge>
-                                </TableCell>
-                                <TableCell class="hidden md:table-cell lg:hidden xl:table-cell">
-                                    2023-06-26
-                                </TableCell>
-                                <TableCell class="text-right">
-                                    $450.00
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell>
-                                    <div class="font-medium">
-                                        Liam Johnson
-                                    </div>
-                                    <div class="hidden text-sm text-muted-foreground md:inline">
-                                        liam@example.com
-                                    </div>
-                                </TableCell>
-                                <TableCell class="hidden xl:table-cell">
-                                    Sale
-                                </TableCell>
-                                <TableCell class="hidden xl:table-cell">
-                                    <Badge class="text-xs" variant="outline">
-                                        Approved
-                                    </Badge>
-                                </TableCell>
-                                <TableCell class="hidden md:table-cell lg:hidden xl:table-cell">
-                                    2023-06-27
-                                </TableCell>
-                                <TableCell class="text-right">
-                                    $550.00
-                                </TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
+                    <UltimosLancamentos :lancamentos="resumoFinanceiro.ultimoslancamentos" />
                 </CardContent>
             </Card>
             <Card>
-                <CardHeader>
-                    <CardTitle>Vendas recentes</CardTitle>
+                <CardHeader class="flex flex-row items-center">
+                    <div class="grid gap-2">
+                        <CardTitle>Vendas recentes</CardTitle>
+                        <CardDescription>
+                            Veja duas vendas recentes
+                        </CardDescription>
+                    </div>
+                    <Button as-child size="sm" class="ml-auto gap-1">
+                        <RouterLink to="/app/vendas/relatorio">
+                            Ver tudo
+                            <ArrowUpRight class="h-4 w-4" />
+                        </RouterLink>
+                    </Button>
                 </CardHeader>
                 <CardContent class="grid gap-8">
-                    <div v-for="sale in vendasRecents" :key="sale.id" class="flex items-center gap-4">
-                        <Avatar class="hidden h-9 w-9 sm:flex">
-                            <AvatarImage src="/avatars/01.png" alt="Avatar" />
-                            <AvatarFallback>{{ sale.Cliente?.nome.slice(0, 2).toUpperCase() }}</AvatarFallback>
-                        </Avatar>
-                        <div class="grid gap-1">
-                            <p class="text-sm font-medium leading-none">
-                                {{ sale.Cliente?.nome }}
-                            </p>
-                            <p class="text-sm text-muted-foreground">
-                                {{ sale.Cliente?.email }}
-                            </p>
-                        </div>
-                        <div class="ml-auto font-medium">
-                            {{ (sale.valor - sale.valorDesconto!).toLocaleString('pt-BR', {
-                                style: 'currency', currency:
-                                    'BRL'
-                            }) }}
-                        </div>
-                    </div>
+                    <UltimasVendas :vendas="vendasRecents" />
                 </CardContent>
             </Card>
         </div>
@@ -314,11 +164,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { Activity, ArrowBigDown, ArrowBigUp, ArrowUpRight, ChartColumnBig, CreditCard, DollarSign, Users } from "lucide-vue-next"
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { BarChart } from '@/components/ui/chart-bar'
 import VendasRepository from "@/repositories/vendas/vendasRepository";
 import { IVenda } from "@/types/vendas/IVenda";
@@ -328,10 +175,12 @@ import { IResumoFinanceiro } from "@/types/financeiro/IResumoFinanceiro";
 import LancamentosRepository from "@/repositories/financeiro/lancamentosRepository";
 import { computed } from "vue";
 import { formatRealValue } from "@/utils/formatterUtil";
+import UltimosLancamentos from "@/pages/Financeiro/Lancamentos/Dashboard/UltimosLancamentos.vue";
+import UltimasVendas from "@/pages/Vendas/Dashboard/UltimasVendas.vue";
 
 const vendas = ref<IVenda[]>([])
 const vendasRecents = ref<IVenda[]>([])
-const resumoFinanceiro = ref<IResumoFinanceiro>({
+    const resumoFinanceiro = ref<IResumoFinanceiro>({
     resumo: {
         efetivadoDespesaAVista: 0,
         efetivadoReceitaAVista: 0,
@@ -343,7 +192,9 @@ const resumoFinanceiro = ref<IResumoFinanceiro>({
         efetivadoReceitasAPrazo: 0,
         total: 0,
     },
-    chart: {
+    resumoContas: [],
+    ultimoslancamentos: [],
+    graficos: {
         resumoPorCategoria: [],
         resumoPorFormaPagamento: [],
         resumoPorMes: []
@@ -358,21 +209,15 @@ const totalDespesa = computed(() => {
     return resumoFinanceiro.value.resumo.efetivadoDespesaAVista + resumoFinanceiro.value.resumo.efetivadoDespesasAPrazo + resumoFinanceiro.value.resumo.pendenteDespesaAVista + resumoFinanceiro.value.resumo.pendentesDespesasAPrazo
 })
 
-const getVendasResumo = async () => {
-    const resultado = await VendasRepository.getAll(1000, 1, '');
-    vendas.value = resultado.data
-    vendasRecents.value = vendas.value.sort((a: any, b: any) => b.id - a.id).slice(0, 5)
+const getResumo = async () => {
+    const [fetchvendas, fetchFinanceiro] = await Promise.all([
+        VendasRepository.getAll(1000, 1, ''),
+        LancamentosRepository.getResume()
+    ])
+    vendas.value = fetchvendas.data
+    vendasRecents.value = vendas.value.slice().sort((a: any, b: any) => b.id - a.id).slice(0, 10)
+    resumoFinanceiro.value = fetchFinanceiro
 }
-
-const getResumoFinanceiro = async () => {
-    const resultado = await LancamentosRepository.getResume()
-    resumoFinanceiro.value = resultado
-}
-
-onMounted(async () => {
-    getVendasResumo()
-    getResumoFinanceiro()
-})
 
 const formateTicketValue = (value: any) => {
     return typeof value === 'number'
@@ -383,6 +228,7 @@ interface IDataOutput {
     index: string;
     total: number;
 }
+
 function calcularTotalPorMes(): IDataOutput[] {
     const totaisPorMes: Record<string, number> = {};
 
@@ -404,14 +250,7 @@ function calcularTotalPorMes(): IDataOutput[] {
     }));
 }
 
-const data = [
-    { name: 'Jan', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
-    { name: 'Fev', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
-    { name: 'Mar', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
-    { name: 'Abr', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
-    { name: 'Mar', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
-    { name: 'Jun', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
-    { name: 'Jul', total: Math.floor(Math.random() * 2000) + 500, meta: Math.floor(Math.random() * 2000) + 500 },
-]
-
+onMounted(async () => {
+    await getResumo()
+})
 </script>

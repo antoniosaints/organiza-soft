@@ -1,4 +1,6 @@
-interface IGrafico {
+import ITransacao from "./ILancamentos";
+
+export interface IGrafico {
     name: string;
     total: number;
     pendente: number;
@@ -6,6 +8,12 @@ interface IGrafico {
 }
 interface IReceitaDespesa {
     name: string;
+    receita: number;
+    despesa: number;
+}
+export interface IBalanco {
+    name: string;
+    saldo: number;
     receita: number;
     despesa: number;
   }
@@ -21,9 +29,11 @@ export interface IResumoFinanceiro {
         efetivadoReceitasAPrazo: number,
         efetivadoDespesasAPrazo: number,
     }
-    chart: {
+    resumoContas: IBalanco[]
+    ultimoslancamentos: ITransacao[]
+    graficos: {
         resumoPorCategoria: IGrafico[],
-        resumoPorFormaPagamento: IGrafico[],
+        resumoPorFormaPagamento: IGrafico[]
         resumoPorMes: IReceitaDespesa[]
     }
 }

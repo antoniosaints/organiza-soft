@@ -1,8 +1,11 @@
 import LancamentosRepository from "@/repositories/financeiro/lancamentosRepository";
 import ITransacao from "@/types/financeiro/ILancamentos";
+import IParcelamento from "@/types/financeiro/IParcelamento";
 import { ScToastUtil } from "@/utils/scToastUtil";
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import { useLancamentosStore } from "./lancamentoStore";
+const storeLancamento = useLancamentosStore();
 
 export const useLancamentosDetalhesStore = defineStore("lancamentosDetalhesStore", () => {
     const lancamento = ref<ITransacao>();
@@ -16,6 +19,35 @@ export const useLancamentosDetalhesStore = defineStore("lancamentosDetalhesStore
             ScToastUtil.error("Erro ao buscar lancamento");
         }
     }
+    
+    const efetivarParcela = async (parcela: IParcelamento) => {
+        try {
+            await LancamentosRepository.efetivaParcela(parcela.id!)
+            await getLancamento(parcela.transacaoId)
+            await storeLancamento.getLancamentos();
+        }catch (error) {
+            ScToastUtil.error("Erro ao efetivar lancamento");
+        }
+    }
+
+    const estornarParcela = async (parcela: IParcelamento) => {
+        try {
+            await LancamentosRepository.estornarParcela(parcela.id!)
+            await getLancamento(parcela.transacaoId)
+            await storeLancamento.getLancamentos();
+        }catch (error) {
+            ScToastUtil.error("Erro ao estornar lancamento");
+        }
+    }
+    const cancelarParcela = async (parcela: IParcelamento) => {
+        try {
+            await LancamentosRepository.cancelarParcela(parcela.id!)
+            await getLancamento(parcela.transacaoId)
+            await storeLancamento.getLancamentos();
+        }catch (error) {
+            ScToastUtil.error("Erro ao cancelar lancamento");
+        }
+    }
 
     const openModalLancamento = async (id: number) => {
         lancamentoId.value = id;
@@ -23,5 +55,5 @@ export const useLancamentosDetalhesStore = defineStore("lancamentosDetalhesStore
         isOpenModalLancamento.value = true;
     }
 
-    return { lancamento, lancamentoId, isOpenModalLancamento, openModalLancamento };
+    return { lancamento, lancamentoId, efetivarParcela, estornarParcela, cancelarParcela, isOpenModalLancamento, openModalLancamento };
 });
