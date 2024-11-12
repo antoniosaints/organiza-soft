@@ -9,7 +9,7 @@ export const useClienteFormularioStore = defineStore("usuarioFormularioStore", (
         email: "",
         telefone: "",
         endereco: "",
-        status: "ativo",
+        status: "ativo"
     });
 
     const data = ref<ICliente>({ ...defaultData.value });

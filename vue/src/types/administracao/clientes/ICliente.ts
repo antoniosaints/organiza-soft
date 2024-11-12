@@ -24,7 +24,7 @@ export default interface ICliente {
   tipoCliente?: "fisica" | "juridica";
   instagram?: string;
   site?: string;
-  canalPreferido: ICanaisVenda;
+  canalPreferido?: ICanaisVenda;
   cep?: string;
   cidade?: string;
   pais?: string;
