@@ -15,4 +15,4 @@ COPY . .
 EXPOSE 5000
 
 # Define o comando para rodar as migrações, seeds e iniciar a aplicação
-CMD npm run migrate:dev && npm run seed && npm run dev
+CMD npm run migrate:deploy && npm run seed && npm run dev
