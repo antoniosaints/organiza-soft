@@ -1,9 +1,6 @@
-import { Autorize } from "@/autorization";
 import { IOptionAjax, SetOptions, SetSelected } from "@/components/customs/selectAjaxUtils";
 import CategoriasLancamentosRepository from "@/repositories/financeiro/categoriasLancamentosRepository";
 import ICategoria from "@/types/financeiro/ICategoria";
-
-export const canCreateCategoria = Autorize.can("criar", "categorias_lancamentos")!;
 export async function getCategoriasLancamento(
     query: string,
     getOption: number | null = null,

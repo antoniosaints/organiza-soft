@@ -18,13 +18,17 @@ import { ModalFormularioCategoria } from '../../Categorias/Cadastro'
 import { namesOfWeekDatePicker } from '@/utils/datepickerUtil'
 import { useLoginStore } from '@/stores/login/loginStore'
 import { errors as errorsLancamento, checkDataLancamento } from '@/schemas/financeiro/lancamentoSchema'
-import { canCreateCategoria, createCategoriaLancamento, getCategoriasLancamento } from './dataCategoria'
+import { createCategoriaLancamento, getCategoriasLancamento } from './dataCategoria'
 import SelectAjax from '@/components/customs/SelectAjax.vue'
-import { canCreateContaLancamento, createContaLancamento, getContasLancamento } from './dataContas'
-import { canCreateClienteLancamento, createClienteLancamento, getClientesLancamento } from './dataCliente'
+import { createContaLancamento, getContasLancamento } from './dataContas'
+import { createClienteLancamento, getClientesLancamento } from './dataCliente'
+import { Autorize } from '@/autorization'
 const colorMode = useColorMode()
 const { schema } = useLancamentoSchemaStore()
 const loginStore = useLoginStore()
+const canCreateClienteLancamento = Autorize.can("criar", "clientes")!
+const canCreateContaLancamento = Autorize.can("criar", "contas_lancamentos")!;
+const canCreateCategoria = Autorize.can("criar", "categorias_lancamentos")!;
 
 const canLancamentoRetroativo = computed(() => {
     return !!loginStore.dataUserInfosLogged?.lancamentosRetroativos

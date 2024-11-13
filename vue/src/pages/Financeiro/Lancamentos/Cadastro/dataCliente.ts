@@ -1,4 +1,3 @@
-import { Autorize } from "@/autorization";
 import {
   IOptionAjax,
   SetOptions,
@@ -7,8 +6,6 @@ import {
 import { ClientesRepository } from "@/repositories/crm/clientes/clientesRepository";
 import ICliente from "@/types/administracao/clientes/ICliente";
 import { ScToastUtil } from "@/utils/scToastUtil";
-
-export const canCreateClienteLancamento = Autorize.can("criar", "clientes")!;
 export async function getClientesLancamento(
   query: string,
   getOption: number | null = null,

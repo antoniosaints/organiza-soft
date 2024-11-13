@@ -1,11 +1,9 @@
-import { Autorize } from "@/autorization";
 import { IOptionAjax, SetOptions, SetSelected } from "@/components/customs/selectAjaxUtils";
 import ContasLancamentosRepository from "@/repositories/financeiro/contasLancamentosRepository";
 import { useLoginStore } from "@/stores/login/loginStore";
 import IContaTransacao from "@/types/financeiro/IContaTransacao";
 
 const loginStore = useLoginStore();
-export const canCreateContaLancamento = Autorize.can("criar", "contas_lancamentos")!;
 export async function getContasLancamento(
     query: string,
     getOption: number | null = null,
