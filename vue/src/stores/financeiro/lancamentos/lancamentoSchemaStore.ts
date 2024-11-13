@@ -42,29 +42,7 @@ export const useLancamentoSchemaStore = defineStore(
       hasEntrada: false,
       valorLancamento: 0.01,
     };
-    const schema = ref({
-      lancamento: {
-        operacao: "entrada",
-        status: "pendente",
-        contaId: null,
-        natureza: "receita",
-        categoriaId: null,
-        dataVencimento: new Date(),
-        dataLancamento: new Date(),
-        valor: 0,
-        metodoPagamento: "dinheiro",
-      },
-      periodo: "mes",
-      dataPrimeiraParcela: new Date(),
-      valorEntrada: 0,
-      isParcelado: false,
-      dataPagamento: new Date(),
-      quantidadeParcelas: 1,
-      dataEntrada: new Date(),
-      isEfetivado: false,
-      hasEntrada: false,
-      valorLancamento: 0.01,
-    }) as Ref<ISchemaLancamento>;
+    const schema = ref({ ...defaultData }) as Ref<ISchemaLancamento>;
 
     const resetData = () => {
       schema.value = { ...defaultData };

@@ -9,6 +9,8 @@ import IUsuario from '@/types/administracao/usuarios/IUsuario';
 import { IRegra } from '@/types/administracao/usuarios/IRegra';
 import { LancamentosPermissoesACL } from './financeiro/lancamento_permissao';
 import { CategoriasLancamentosPermissoesACL } from './financeiro/categorias_permissao';
+import { CategoriasPermissoesACL } from './patrimonio/categorias_permissao';
+import { ContasLancamentosPermissoesACL } from './patrimonio/contas_lancamentos_permissao';
 
 export class Autorize {
     static can(ability: IAbility, entity: IEntity): boolean | void {
@@ -28,6 +30,10 @@ export class Autorize {
                 return LancamentosPermissoesACL.can(userData, ability, entity);
             case 'categorias_lancamentos':
                 return CategoriasLancamentosPermissoesACL.can(userData, ability, entity);
+            case 'categorias_produtos':
+                return CategoriasPermissoesACL.can(userData, ability, entity);
+            case 'contas_lancamentos':
+                return ContasLancamentosPermissoesACL.can(userData, ability, entity);
             default:
                 return false;
         }

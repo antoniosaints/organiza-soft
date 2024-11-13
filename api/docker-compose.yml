@@ -4,7 +4,7 @@ services:
     ports:
       - "3340:5000"
     env_file:
-      - .env
+      - .env_prod
     volumes:
       - .:/app
     command: sh -c "npm install && npm run migrate:dev && npm run seed && npm run dev"

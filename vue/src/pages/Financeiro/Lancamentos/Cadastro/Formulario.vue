@@ -3,27 +3,27 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Button } from '@/components/ui/button'
-import { Select, SelectContent, SelectItem, SelectSearchAjax, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { ArrowDownCircle, ArrowUpCircle, CheckCheck, CircleFadingPlus, PiggyBank } from 'lucide-vue-next'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { ArrowDownCircle, ArrowUpCircle, CheckCheck, PiggyBank } from 'lucide-vue-next'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Textarea } from '@/components/ui/textarea'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import ContasLancamentosRepository from '@/repositories/financeiro/contasLancamentosRepository'
 import { NumberField, NumberFieldContent, NumberFieldDecrement, NumberFieldIncrement, NumberFieldInput } from '@/components/ui/number-field'
 import { useLancamentoSchemaStore } from '@/stores/financeiro/lancamentos/lancamentoSchemaStore'
 import { LancamentoService } from '@/services/financeiro/LancamentoService'
 import { computed, watch } from 'vue'
 import { useColorMode } from '@vueuse/core'
-import CategoriasLancamentosRepository from '@/repositories/financeiro/categoriasLancamentosRepository'
-import { useCategoriaFormularioStore } from '@/stores/financeiro/categorias/categoriaFormularioStore'
 import { ModalFormularioCategoria } from '../../Categorias/Cadastro'
 import { namesOfWeekDatePicker } from '@/utils/datepickerUtil'
 import { useLoginStore } from '@/stores/login/loginStore'
 import { errors as errorsLancamento, checkDataLancamento } from '@/schemas/financeiro/lancamentoSchema'
+import { canCreateCategoria, createCategoriaLancamento, getCategoriasLancamento } from './dataCategoria'
+import SelectAjax from '@/components/customs/SelectAjax.vue'
+import { canCreateContaLancamento, createContaLancamento, getContasLancamento } from './dataContas'
+import { canCreateClienteLancamento, createClienteLancamento, getClientesLancamento } from './dataCliente'
 const colorMode = useColorMode()
 const { schema } = useLancamentoSchemaStore()
-const storeCategoria = useCategoriaFormularioStore()
 const loginStore = useLoginStore()
 
 const canLancamentoRetroativo = computed(() => {
@@ -31,29 +31,6 @@ const canLancamentoRetroativo = computed(() => {
 })
 
 schema.lancamento.usuarioLancamento = loginStore.dataUserInfosLogged?.id
-
-const fetchContasLancamentos = async (query: string, id?: number) => {
-    if (id) {
-        return await ContasLancamentosRepository.get(id).then(response => {
-            return [{ id: response.id as number, label: response.conta }]
-        })
-    } else {
-        return await ContasLancamentosRepository.getAll(10, 1, query).then(response => {
-            return response.data.map(item => ({ id: item.id as number, label: item.conta! }))
-        })
-    }
-}
-const fetchCategoriasLancamentos = async (query: string, id?: number) => {
-    if (id) {
-        return await CategoriasLancamentosRepository.get(id).then(response => {
-            return [{ id: response.id as number, label: response.categoria }]
-        })
-    } else {
-        return await CategoriasLancamentosRepository.getAll(10, 1, query).then(response => {
-            return response.data.map(item => ({ id: item.id as number, label: item.categoria! }))
-        })
-    }
-}
 
 const managerState = () => {
     if (schema.isParcelado) schema.isEfetivado = false
@@ -148,28 +125,20 @@ const submitLancamento = async () => {
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
                             <div class="space-y-2 p-2">
                                 <Label for="conta">Conta </Label>
-                                <SelectSearchAjax id="conta" labelSearch="Selecione uma conta"
-                                    v-model="(schema.lancamento.contaId as number)" :ajax="fetchContasLancamentos" />
-                                    <span class="text-sm ml-2 text-red-500" v-if="errorsLancamento.contaId">{{ errorsLancamento.contaId }}</span>
+                                <SelectAjax :can-create="canCreateContaLancamento" v-model="(schema.lancamento.contaId as number)" :create-option="createContaLancamento"
+                                    :load-options="getContasLancamento" />
+                                <span class="text-sm ml-2 text-red-500" v-if="errorsLancamento.contaId">{{ errorsLancamento.contaId }}</span>
                             </div>
                             <div class="space-y-2 p-2">
-                                <Label class="flex items-center justify-between" for="categoria">Categoria
-                                    <p @click="storeCategoria.isModalOpen = true"
-                                        class="bg-primary text-primary-foreground cursor-pointer px-2 text-xs py-1 rounded-md inline-flex ml-2">
-                                        <CircleFadingPlus class="mr-1 h-4 w-4" />
-                                        Criar nova
-                                    </p>
-                                </Label>
-                                <SelectSearchAjax id="categoria" labelSearch="Selecione uma categoria"
-                                    v-model="(schema.lancamento.categoriaId as number)"
-                                    :ajax="fetchCategoriasLancamentos" />
+                                <Label for="categoria">Categoria</Label>
+                                <SelectAjax :can-create="canCreateCategoria" v-model="(schema.lancamento.categoriaId as number)" :create-option="createCategoriaLancamento"
+                                    :load-options="getCategoriasLancamento" />
                                     <span class="text-sm ml-2 text-red-500" v-if="errorsLancamento.categoriaId">{{ errorsLancamento.categoriaId }}</span>
                             </div>
                             <div class="space-y-2 p-2">
                                 <Label for="fornecedor">Cliente / Fornecedor</Label>
-                                <SelectSearchAjax id="fornecedor" labelSearch="Selecione um fornecedor"
-                                    v-model="(schema.lancamento.fornecedorId as number)"
-                                    :ajax="fetchContasLancamentos" />
+                                <SelectAjax clearable :can-create="canCreateClienteLancamento" v-model="(schema.lancamento.fornecedorId as number)" :create-option="createClienteLancamento"
+                                    :load-options="getClientesLancamento" />
                             </div>
                         </div>
                         <div class="space-y-2 p-2">

@@ -69,17 +69,17 @@ export class LancamentoService {
       );
     }else {
       const [lancamento] = await prismaService.$transaction(async (prisma) => {
-        const {FinanceiroParcelamento, ...novoObjeto} = this.data.lancamento;
+        const {FinanceiroParcelamento, fornecedorId, ...novoObjeto} = this.data.lancamento;
         const lancamento = await prisma.financeiroTransacao.create({
           data: {
             ...novoObjeto,
           },
         });
-
+        
         if (this.data.lancamento.fornecedorId) {
           await prisma.clienteOnLancamentos.create({
             data: {
-              contaSistemaId: this.data.contaSistemaId,
+              contaSistemaId: lancamento.contaSistemaId,
               lancamentoId: lancamento.id,
               clienteId: this.data.lancamento.fornecedorId,
             },

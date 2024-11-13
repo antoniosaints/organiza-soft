@@ -46,11 +46,11 @@ const getValorLancamento = (lancamento: ITransacao) => {
           <div class="flex flex-col gap-2">
             <div>
               <h3 class="text-md font-semibold mb-1">Detalhes do cliente</h3>
-              <p class="text-sm">{{ store.lancamento?.ClienteOnLancamentos ?
-                store.lancamento.ClienteOnLancamentos[0].nome
+              <p class="text-sm">{{ store.lancamento?.ClienteOnLancamentos?.length ?
+                store.lancamento.ClienteOnLancamentos[0].Cliente.nome
                 : "Sem cliente vinculado" }}</p>
-              <p class="text-sm text-muted-foreground">{{ store.lancamento?.ClienteOnLancamentos ?
-                store.lancamento.ClienteOnLancamentos[0].email : "Sem email vinculado" }}</p>
+              <p class="text-sm text-muted-foreground">{{ store.lancamento?.ClienteOnLancamentos?.length ?
+                store.lancamento.ClienteOnLancamentos[0].Cliente.email : "Sem email vinculado" }}</p>
             </div>
             <div>
               <h3 class="text-md font-semibold mb-1">Informações fiscais</h3>

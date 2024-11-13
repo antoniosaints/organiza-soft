@@ -27,7 +27,7 @@ const getValorLancamento = (lancamento: ITransacao) => {
         <Table>
             <TableHeader>
                 <TableRow>
-                    <TableHead>Cliente</TableHead>
+                    <TableHead>Cliente / Fornecedor</TableHead>
                     <TableHead class="hidden xl:table-cell">
                         Tipo
                     </TableHead>
@@ -50,12 +50,12 @@ const getValorLancamento = (lancamento: ITransacao) => {
                     <TableCell>
                         <div class="font-medium">
                             {{
-                                ((lancamento.ClienteOnLancamentos) ? lancamento.ClienteOnLancamentos[0].nome : "Sem cliente")
+                                ((lancamento.ClienteOnLancamentos?.length) ? lancamento.ClienteOnLancamentos[0].Cliente.nome : "Sem cliente")
                             }}
                         </div>
                         <div class="hidden text-sm text-muted-foreground md:inline">
                             {{
-                                ((lancamento.ClienteOnLancamentos) ? lancamento.ClienteOnLancamentos[0].email : "Nenhum email")
+                                ((lancamento.ClienteOnLancamentos?.length) ? lancamento.ClienteOnLancamentos[0].Cliente.email : "Nenhum email")
                             }}
                         </div>
                     </TableCell>

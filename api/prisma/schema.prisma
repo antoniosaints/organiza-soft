@@ -191,8 +191,8 @@ model ClienteOnLancamentos {
   id             Int                 @id @default(autoincrement())
   clienteId      Int
   lancamentoId   Int
-  Cliente        Cliente             @relation(fields: [clienteId], references: [id])
-  Lancamento     FinanceiroTransacao @relation(fields: [lancamentoId], references: [id])
+  Cliente        Cliente             @relation(fields: [clienteId], references: [id], onDelete: Restrict)
+  Lancamento     FinanceiroTransacao @relation(fields: [lancamentoId], references: [id], onDelete: Cascade)
   contaSistemaId Int
   ContaSistema   ContasSistema       @relation(fields: [contaSistemaId], references: [id])
 }

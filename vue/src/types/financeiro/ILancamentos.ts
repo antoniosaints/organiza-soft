@@ -50,5 +50,9 @@ export default interface ITransacao {
   Conta?: IContasLancamentos;
   FormaPagamento?: IFormaPagamento;
   UsuarioLancamento?: IUsuario;
-  ClienteOnLancamentos?: ICliente[];
+  ClienteOnLancamentos?: IRelationCliente[];
+}
+
+interface IRelationCliente {
+  Cliente: ICliente;
 }

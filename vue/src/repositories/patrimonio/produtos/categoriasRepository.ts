@@ -10,7 +10,7 @@ export class CategoriasRepository {
         const { data } = await axiosService.get(`patrimonio/categoria?limit=${limit}&page=${page}&search=${search}`);
         return data;
     }
-    static async create(user: IPatrimonioCategoria): Promise<any> {
+    static async create(user: IPatrimonioCategoria): Promise<IPatrimonioCategoria> {
         const { data } = await axiosService.post(`patrimonio/categoria`, user);
         return data.data;
     }

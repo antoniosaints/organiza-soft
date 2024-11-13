@@ -12,7 +12,10 @@ import {
 import { LancamentoBodySchema } from "../../schemas/financeiro/lancamento_body_schema";
 import { LancamentoService } from "../../services/lancamentos_service";
 import { getResumoTransacoes } from "../../hooks/financeiro/get_resumo";
-import { resumoByConta, resumoGraficos } from "../../hooks/financeiro/get_resumo_graficos";
+import {
+  resumoByConta,
+  resumoGraficos,
+} from "../../hooks/financeiro/get_resumo_graficos";
 
 // Criação de transação
 export const createTransacao = async (req: Request, res: Response) => {
@@ -60,13 +63,18 @@ export const getResumoLancamentos = async (req: Request, res: Response) => {
       {
         orderBy: { dataLancamento: "desc" },
         take: 5,
-        include: {FinanceiroParcelamento: true},
+        include: {
+          FinanceiroParcelamento: true,
+          ClienteOnLancamentos: {
+            select: { Cliente: { select: { nome: true, email: true } } },
+          },
+        },
         where: { contaSistemaId: req.body.contaSistemaId },
       }
     );
     const resumo = getResumoTransacoes(lancamentosFiltradosPorData);
     const graficos = resumoGraficos(lancamentosFiltradosPorData);
-    const resumoContas = resumoByConta(lancamentos)
+    const resumoContas = resumoByConta(lancamentos);
 
     ResponseService.success(
       res,
@@ -226,6 +234,9 @@ export const getTransacoes = async (req: Request, res: Response) => {
         orderBy: { dataLancamento: "desc" },
         include: {
           FinanceiroParcelamento: true,
+          ClienteOnLancamentos: {
+            select: { Cliente: { select: { nome: true, email: true } } },
+          },
           Categoria: { select: { categoria: true } },
         },
         where: whereFilter,
@@ -249,7 +260,14 @@ export const getTransacao = async (req: Request, res: Response) => {
     const { id } = req.params;
     const transacao = await prismaService.financeiroTransacao.findUnique({
       where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
-      include: {FinanceiroParcelamento: true, Categoria: true, Conta: true}
+      include: {
+        FinanceiroParcelamento: true,
+        Categoria: true,
+        Conta: true,
+        ClienteOnLancamentos: {
+          select: { Cliente: { select: { nome: true, email: true } } },
+        },
+      },
     });
     ResponseService.success(res, { data: transacao });
   } catch (error: any) {

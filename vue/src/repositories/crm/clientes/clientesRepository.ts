@@ -10,7 +10,7 @@ export class ClientesRepository {
         const { data } = await axiosService.get(`cliente?limit=${limit}&page=${page}&search=${search}`);
         return data;
     }
-    static async create(user: ICliente): Promise<any> {
+    static async create(user: ICliente): Promise<ICliente> {
         const { data } = await axiosService.post(`cliente`, user);
         return data.data;
     }
