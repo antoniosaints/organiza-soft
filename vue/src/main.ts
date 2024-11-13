@@ -11,16 +11,17 @@ import { i18n } from './i18n';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import './assets/datepicker.css';
 
-const pinia = createPinia();
 const app = createApp(App);
 
-app.use(VueQueryPlugin)
-app.use(pinia);
+app.use(createPinia());
+app.use(VueQueryPlugin);
 
-(async () => await useMainStore().init())();
-
-app.use(i18n);
-app.use(Router);
-app.component('IconFA', IconsUtil);
-app.component('VueDatePicker', VueDatePicker);
-app.mount('#app');
+(async () => {
+    const mainStore = useMainStore();
+    await mainStore.init();
+    app.use(i18n);
+    app.use(Router);
+    app.component('IconFA', IconsUtil);
+    app.component('VueDatePicker', VueDatePicker);
+    app.mount('#app');
+})();

@@ -8,3 +8,5 @@ services:
     volumes:
       - .:/app
     command: sh -c "npm install && npm run migrate:deploy && npm run seed && npm run dev"
+    stdin_open: true 
+    tty: true 
