@@ -8,14 +8,14 @@
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" class="w-auto">
-                <DropdownMenuItem class="cursor-pointer">
+                <!-- <DropdownMenuItem class="cursor-pointer">
                     <Link class="mr-2 h-3 w-3" />
                     Link de Pagamento
-                </DropdownMenuItem>
-                <DropdownMenuItem class="cursor-pointer">
+                </DropdownMenuItem> -->
+                <!-- <DropdownMenuItem class="cursor-pointer">
                     <RefreshCw class="mr-2 h-3 w-3" />
                     Converter
-                </DropdownMenuItem>
+                </DropdownMenuItem> -->
                 <DropdownMenuItem @click="efetivarLancamento(data.id as number)" v-if="(data.status === 'pendente' && !data.FinanceiroParcelamento?.length )" class="cursor-pointer">
                     <FileCheck class="mr-2 h-3 w-3" />
                     Efetivar
@@ -62,7 +62,7 @@ import LancamentosRepository from '@/repositories/financeiro/lancamentosReposito
 import { useLancamentosStore } from '@/stores/financeiro/lancamentos/lancamentoStore';
 import ITransacao from '@/types/financeiro/ILancamentos';
 import { ScToastUtil } from '@/utils/scToastUtil';
-import { Ellipsis, FileCheck, Link, RefreshCw, Trash2 } from "lucide-vue-next";
+import { Ellipsis, FileCheck, Trash2 } from "lucide-vue-next";
 import { ref } from "vue";
 const MainState = useLancamentosStore();
 

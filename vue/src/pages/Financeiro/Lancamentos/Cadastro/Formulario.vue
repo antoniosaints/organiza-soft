@@ -20,6 +20,7 @@ import { useCategoriaFormularioStore } from '@/stores/financeiro/categorias/cate
 import { ModalFormularioCategoria } from '../../Categorias/Cadastro'
 import { namesOfWeekDatePicker } from '@/utils/datepickerUtil'
 import { useLoginStore } from '@/stores/login/loginStore'
+import { errors as errorsLancamento, checkDataLancamento } from '@/schemas/financeiro/lancamentoSchema'
 const colorMode = useColorMode()
 const { schema } = useLancamentoSchemaStore()
 const storeCategoria = useCategoriaFormularioStore()
@@ -28,6 +29,8 @@ const loginStore = useLoginStore()
 const canLancamentoRetroativo = computed(() => {
     return !!loginStore.dataUserInfosLogged?.lancamentosRetroativos
 })
+
+schema.lancamento.usuarioLancamento = loginStore.dataUserInfosLogged?.id
 
 const fetchContasLancamentos = async (query: string, id?: number) => {
     if (id) {
@@ -66,6 +69,9 @@ watch(() => [schema.isParcelado, schema.isEfetivado], managerState)
 const isDark = computed(() => colorMode.value === 'dark');
 
 const submitLancamento = async () => {
+    if (!checkDataLancamento(schema.lancamento)) {
+        return
+    }
     await LancamentoService.create(schema)
 }
 </script>
@@ -131,30 +137,33 @@ const submitLancamento = async () => {
                                 </div>
                                 <div class="space-y-2 p-2">
                                     <Label for="primeiroVencimento">Data vencimento</Label>
-                                    <VueDatePicker :min-date="!canLancamentoRetroativo ? new Date() : null" :day-names="namesOfWeekDatePicker"
-                                        placeholder="Data do vencimento" id="primeiroVencimento"
-                                        required :dark="isDark" v-model="schema.lancamento.dataVencimento"
-                                        format="dd/MM/yyyy" locale="pt" auto-apply utc />
+                                    <VueDatePicker :min-date="!canLancamentoRetroativo ? new Date() : null"
+                                        :day-names="namesOfWeekDatePicker" placeholder="Data do vencimento"
+                                        id="primeiroVencimento" required :dark="isDark"
+                                        v-model="schema.lancamento.dataVencimento" format="dd/MM/yyyy" locale="pt"
+                                        auto-apply utc />
                                 </div>
                             </div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
                             <div class="space-y-2 p-2">
-                                <Label for="conta">Conta</Label>
+                                <Label for="conta">Conta </Label>
                                 <SelectSearchAjax id="conta" labelSearch="Selecione uma conta"
                                     v-model="(schema.lancamento.contaId as number)" :ajax="fetchContasLancamentos" />
+                                    <span class="text-sm ml-2 text-red-500" v-if="errorsLancamento.contaId">{{ errorsLancamento.contaId }}</span>
                             </div>
                             <div class="space-y-2 p-2">
-                                <Label class="flex items-center justify-between" for="categoria">Categoria 
-                                    <p @click="storeCategoria.isModalOpen = true" 
-                                    class="bg-primary text-primary-foreground cursor-pointer px-2 text-xs py-1 rounded-md inline-flex ml-2">
-                                    <CircleFadingPlus class="mr-1 h-4 w-4" />
-                                    Criar nova
-                                </p> 
+                                <Label class="flex items-center justify-between" for="categoria">Categoria
+                                    <p @click="storeCategoria.isModalOpen = true"
+                                        class="bg-primary text-primary-foreground cursor-pointer px-2 text-xs py-1 rounded-md inline-flex ml-2">
+                                        <CircleFadingPlus class="mr-1 h-4 w-4" />
+                                        Criar nova
+                                    </p>
                                 </Label>
                                 <SelectSearchAjax id="categoria" labelSearch="Selecione uma categoria"
                                     v-model="(schema.lancamento.categoriaId as number)"
                                     :ajax="fetchCategoriasLancamentos" />
+                                    <span class="text-sm ml-2 text-red-500" v-if="errorsLancamento.categoriaId">{{ errorsLancamento.categoriaId }}</span>
                             </div>
                             <div class="space-y-2 p-2">
                                 <Label for="fornecedor">Cliente / Fornecedor</Label>
@@ -236,10 +245,11 @@ const submitLancamento = async () => {
                             </div>
                             <div class="space-y-2 p-2">
                                 <Label for="primeiroVencimento">Data Primeira Parcela</Label>
-                                <VueDatePicker :min-date="!canLancamentoRetroativo ? new Date() : null" :day-names="namesOfWeekDatePicker"
-                                    placeholder="Data da primeira parcela" id="primeiroVencimento"
-                                    :required="schema.isParcelado" :dark="isDark" v-model="schema.dataPrimeiraParcela"
-                                    format="dd/MM/yyyy" locale="pt" auto-apply utc />
+                                <VueDatePicker :min-date="!canLancamentoRetroativo ? new Date() : null"
+                                    :day-names="namesOfWeekDatePicker" placeholder="Data da primeira parcela"
+                                    id="primeiroVencimento" :required="schema.isParcelado" :dark="isDark"
+                                    v-model="schema.dataPrimeiraParcela" format="dd/MM/yyyy" locale="pt" auto-apply
+                                    utc />
                             </div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-2" v-if="schema.hasEntrada">
@@ -273,10 +283,10 @@ const submitLancamento = async () => {
                         <div v-if="schema.isEfetivado" class="grid grid-cols-1 md:grid-cols-2 gap-2">
                             <div class="space-y-2 p-2">
                                 <Label for="dataPagamento">Data do Pagamento</Label>
-                                <VueDatePicker :day-names="namesOfWeekDatePicker"
-                                    :max-date="new Date()" placeholder="Selecione a data do pagamento"
-                                    id="dataPagamento" :required="schema.isEfetivado" :dark="isDark"
-                                    v-model="schema.dataPagamento" format="dd/MM/yyyy" locale="pt" auto-apply utc />
+                                <VueDatePicker :day-names="namesOfWeekDatePicker" :max-date="new Date()"
+                                    placeholder="Selecione a data do pagamento" id="dataPagamento"
+                                    :required="schema.isEfetivado" :dark="isDark" v-model="schema.dataPagamento"
+                                    format="dd/MM/yyyy" locale="pt" auto-apply utc />
                             </div>
                             <div class="space-y-2 p-2">
                                 <Label for="tipoPagamento">Tipo de Pagamento</Label>

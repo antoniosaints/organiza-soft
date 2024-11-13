@@ -11,8 +11,8 @@ export const useProdutoFormularioStore = defineStore("patrimonioProdutoFormulari
         unidade: "UN",
         produto: "",
         cor: "",
-        categoriaId: 0,
-        preco: 0.0,
+        categoriaId: null,
+        preco: 0.01,
         sku: "",
         descricao: "",
     });

@@ -2,7 +2,8 @@
     <form @submit.prevent="handleSubmit" class="space-y-4">
         <div class="space-y-2">
             <Label for="produto">Produto</Label>
-            <Input id="produto" placeholder="Nome do produto" minlength="2" v-model="formularioStore.data.produto" required />
+            <Input id="produto" placeholder="Nome do produto" minlength="2" v-model="formularioStore.data.produto"
+                required />
         </div>
         <div class="grid md:grid-cols-2 gap-4">
             <div class="space-y-2">
@@ -28,6 +29,8 @@
                 <Label for="categoria">Categoria</Label>
                 <SelectSearchAjax id="categoria" labelSearch="Selecione uma categoria"
                     v-model="formularioStore.data.categoriaId" :ajax="fetchUsuarios" />
+                <span class="text-sm ml-2 text-red-500" v-if="errosProduto.categoriaId">{{ errosProduto.categoriaId
+                    }}</span>
             </div>
         </div>
         <div class="grid md:grid-cols-2 gap-4">
@@ -44,8 +47,8 @@
             <div class="space-y-2">
                 <Label for="codigoBarra">Código de barra (EAN-13)</Label>
                 <div class="flex w-full max-w-sm items-center">
-                    <Input class="rounded-none rounded-l-md" id="codigoBarra" type="number" minlength="12" maxlength="13" placeholder="Código de barra"
-                        v-model="formularioStore.data.codigoBarra" />
+                    <Input class="rounded-none rounded-l-md" id="codigoBarra" type="number" minlength="12"
+                        maxlength="13" placeholder="Código de barra" v-model="formularioStore.data.codigoBarra" />
                     <TooltipProvider>
                         <Tooltip :delayDuration="200">
                             <TooltipTrigger as-child>
@@ -152,13 +155,17 @@ import { useInfosProdutoStore } from "@/stores/patrimonio/produtos/infosProdutos
 import { gerarCodigoEAN13 } from "@/utils/geradorCodigoBarra";
 import { NumberField, NumberFieldContent, NumberFieldDecrement, NumberFieldIncrement, NumberFieldInput } from "@/components/ui/number-field";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { checkDataProduto, errors as errosProduto } from "@/schemas/patrimonio/produtosSchema";
 const formularioStore = useProdutoFormularioStore();
 const mainStore = useProdutoStore();
 const infosProdutos = useInfosProdutoStore();
 
 const handleSubmit = async (): Promise<void> => {
     let res = null;
-    if (formularioStore.refId == null) res = await ProdutoService.create(formularioStore.data);
+    if (formularioStore.refId == null) {
+        if (!checkDataProduto(formularioStore.data)) return
+        res = await ProdutoService.create(formularioStore.data);
+    }
     else res = await ProdutoService.update(formularioStore.refId, formularioStore.data);
     if (res) {
         formularioStore.isModalOpen = false;
