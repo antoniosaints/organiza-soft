@@ -1,47 +1,25 @@
-version: '3'
-
 services:
   api:
-    build:
+    build: 
       context: ./api
-      args:
-        DATABASE_URL: ${DATABASE_URL}
-        SECRET: ${SECRET}
-        BASE_URL_FRONT: ${BASE_URL_FRONT}
-        STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
-        STRIPE_PUBLIC_KEY: ${STRIPE_PUBLIC_KEY}
-        STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
-        PORT: ${PORT}
-        TZ: ${TZ}
-    container_name: api-container
     ports:
-      - "${PORT}:${PORT}"
-    environment:
-      DATABASE_URL: ${DATABASE_URL}
-      SECRET: ${SECRET}
-      BASE_URL_FRONT: ${BASE_URL_FRONT}
-      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
-      STRIPE_PUBLIC_KEY: ${STRIPE_PUBLIC_KEY}
-      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
-      PORT: ${PORT}
-      TZ: ${TZ}
+      - "5000:5000"
+    container_name: organizasoft-api-container
+    env_file:
+      - .env
     volumes:
-      - ./api:/app
+      - ./api:/api
+    command: sh -c "npm install && npm run migrate:deploy && npm run seed && npm run dev"
 
   vue:
     build:
       context: ./vue
-      args:
-        VITE_PORT: ${VITE_PORT}  # Passando a porta do Vite
-        VITE_BASE_URL_BACKEND: ${VITE_BASE_URL_BACKEND}  # URL do backend para o Vite
-        VITE_OPENAI_API_KEY: ${VITE_OPENAI_API_KEY}  # OpenAI API Key para o Vite
-    container_name: vue-container
+    container_name: organizasoft-front-container
+    volumes:
+      - ./vue:/vue
     ports:
-      - "${VITE_PORT}:80"  # Mapeia a porta Vite configurada no .env
-    environment:
-      VITE_PORT: ${VITE_PORT}  # Porta do Vite
-      VITE_BASE_URL_BACKEND: ${VITE_BASE_URL_BACKEND}
-      VITE_OPENAI_API_KEY: ${VITE_OPENAI_API_KEY}
-
-volumes:
-  db_data:
+      - "8989:80"
+    depends_on:
+      - api
+    env_file:
+      - .env
