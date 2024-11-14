@@ -10,6 +10,12 @@ COPY package*.json ./
 # Instalar dependências
 RUN npm install
 
+# Declaração de argumentos para receber as envs
+ARG VITE_BASE_URL_BACKEND
+
+# Passar as variáveis para o ambiente de build
+ENV VITE_BASE_URL_BACKEND=$VITE_BASE_URL_BACKEND
+
 # Copiar o restante dos arquivos da aplicação
 COPY . .
 
