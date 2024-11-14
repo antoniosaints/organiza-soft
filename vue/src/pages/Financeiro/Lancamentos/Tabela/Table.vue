@@ -27,9 +27,10 @@
             <div class="flex space-x-2 md:w-1/2 w-full">
                 <Input type="search" @input="(event: any) => { if (event.target.value == '') loadDataChange() }"
                     @keyup.enter="loadDataChange" id="rows-per-page" v-model="mainStore.search"
-                    placeholder="Pesquisar produto..." />
+                    placeholder="Buscar lancamentos..." />
                 <Button variant="default" class="w-max" @click="loadDataChange">
-                    <Search class="w-4 h-4 mr-2" />Buscar
+                    <Loader v-if="mainStore.isLoading" class="w-4 h-4 mr-2 animate-spin" />
+                    <Search v-else class="w-4 h-4 mr-2" />{{ mainStore.isLoading ? 'Buscando...' : 'Buscar' }}
                 </Button>
                 <DropdownMenu v-if="mainStore.selectedItens.length > 0">
                     <DropdownMenuTrigger asChild>
@@ -59,9 +60,9 @@
                         </Tooltip>
                     </TooltipProvider>
                 </div>
-                <VueDatePicker placeholder="Período de filtragem" format="dd/MM/yyyy" 
-                    select-text="Aplicar" cancel-text="Fechar" :preset-dates="presetsDatePickerVue" locale="pt" :dark="darkMode"
-                    utc v-model="dateFilter" range>
+                <VueDatePicker placeholder="Período de filtragem" format="dd/MM/yyyy" select-text="Aplicar"
+                    cancel-text="Fechar" :preset-dates="presetsDatePickerVue" locale="pt" :dark="darkMode" utc
+                    v-model="dateFilter" range>
                     <template #preset-date-range-button="{ label, value, presetDate }">
                         <span role="button" :tabindex="0" @click="presetDate(value)"
                             @keyup.enter.prevent="presetDate(value)" @keyup.space.prevent="presetDate(value)">
@@ -120,7 +121,7 @@
             </div>
         </div>
         <DetalhesProduto />
-        <div v-show="dataExists" class="flex flex-col md:flex-row justify-between items-center mt-4">
+        <div v-show="dataExists && !mainStore.isLoading" class="flex flex-col md:flex-row justify-between items-center mt-4">
             <Label class="text-foreground/80">Mostrando de {{ rangeStart }} até {{ rangeEnd }} de {{ mainStore.total
                 }}</Label>
             <div class="flex item-center flex-col md:flex-row space-x-4">
@@ -204,7 +205,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, CircleChevronDown, CircleFadingPlus, FilterX, Search, Trash2 } from "lucide-vue-next";
+import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, CircleChevronDown, CircleFadingPlus, FilterX, Loader, Search, Trash2 } from "lucide-vue-next";
 import { Label } from "@/components/ui/label";
 import { onMounted, watch, computed, ref } from "vue";
 import { Input } from "@/components/ui/input";

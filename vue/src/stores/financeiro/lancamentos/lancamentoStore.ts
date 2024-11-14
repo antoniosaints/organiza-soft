@@ -10,6 +10,7 @@ export const useLancamentosStore = defineStore(
   "LancamentosStore",
   (): ILancamentosStore => {
     const lancamentos = ref<ITransacao[]>([]);
+    const isLoading = ref(false);
     const limit = ref<string>("10");
     const page = ref<number>(1);
     const total = ref<number>(0);
@@ -19,6 +20,7 @@ export const useLancamentosStore = defineStore(
     const getLancamentos = async (dateFilter?: string[]): Promise<void> => {
       try {
         if (!Autorize.can("visualizar", "lancamentos")) return;
+        isLoading.value = true;
         const { data, total: totalClientes } =
           await LancamentosRepository.getAll(
             Number(limit.value),
@@ -26,12 +28,14 @@ export const useLancamentosStore = defineStore(
             search.value,
             dateFilter
           );
+        isLoading.value = false;
         lancamentos.value = data;
         total.value = totalClientes;
       } catch (error: any) {
         const errorMessage =
           error?.response?.data?.message || "Erro desconhecido.";
         ScToastUtil.error(errorMessage);
+        isLoading.value = false;
       }
     };
 
@@ -64,6 +68,7 @@ export const useLancamentosStore = defineStore(
 
     return {
       lancamentos,
+      isLoading,
       limit,
       page,
       total,
