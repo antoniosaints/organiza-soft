@@ -25,9 +25,16 @@
 - agora rode a api em desenvolvimento com `npm run dev` 
 - a api deve estar rodando na porta definida nas variáveis de ambiente `.env` da pasta `/api`
 
+
 ### Você ja deve conseguir acessar a aplicação em `http://localhost:(porta definida no .env da pasta vue)`
 
+### Docker
+- No diretório raiz, sete as variáveis de ambiente, clonando o arquivo `.env_example` e criando o `.env`
+- Depois, rode o comando `docker-compose up`
+- O Serviço ja deve rodar de acordo com as portas setadas no arquivo de variáveis
+
 ## Para hospedar o projeto, você deve realizar o build de ambas as partes do projeto e colocar em um servidor NGinx com NodeJS!
+## No caso do docker, hospede em algum serviço que dê suporte ao Docker e depois faça o mapeamento dos domínios de acordo com as portas setadas
 
 ![dash](https://github.com/user-attachments/assets/c4f66bc8-bf68-445f-b144-2631af12fa2a)
 ![ai](https://github.com/user-attachments/assets/9f0f563e-bbf3-4922-aa0a-305e7cb3d044)
