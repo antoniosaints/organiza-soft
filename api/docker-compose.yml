@@ -1,8 +1,11 @@
 services:
   app:
-    build: .
+    build: 
+      context: .
+      args:
+        PORT: ${PORT}
     ports:
-      - "3340:5000"
+      - "${PORT}:${PORT}"
     env_file:
       - .env_prod
     volumes:

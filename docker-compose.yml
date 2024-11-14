@@ -2,8 +2,10 @@ services:
   api:
     build: 
       context: ./api
+      args:
+        PORT: ${PORT}
     ports:
-      - "${API_PORT}:5000"
+      - "${PORT}:${PORT}"
     container_name: organizasoft-api-container
     env_file:
       - .env
