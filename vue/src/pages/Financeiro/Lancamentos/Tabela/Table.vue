@@ -8,6 +8,7 @@
             </div>
             <div class="flex space-x-2">
                 <DetalhesLancamento />
+                <EfetivarLancamento />
                 <TooltipProvider>
                     <Tooltip>
                         <TooltipTrigger>
@@ -220,6 +221,7 @@ import { useLancamentosFormularioStore } from "@/stores/financeiro/lancamentos/l
 import DetalhesLancamento from "../Modais/DetalhesLancamento.vue";
 import { presetsDatePickerVue } from "@/utils/datepickerUtil";
 import { useColorMode } from "@vueuse/core";
+import EfetivarLancamento from "../Modais/EfetivarLancamento.vue";
 const colormode = useColorMode();
 
 onMounted(() => {

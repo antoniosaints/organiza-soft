@@ -6,6 +6,8 @@ export type IAbility =
   | "deletar"
   | "detalhar"
   | "exportar"
+  | "efetivar"
+  | "estornar"
   | "importar"
   | "transferir"
   | "criar_pix"

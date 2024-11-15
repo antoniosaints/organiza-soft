@@ -1,9 +1,11 @@
 import { Router } from "express";
-import { cancelarParcela, createTransacao, deleteComprovante, deleteTransacao, efetivarParcela, efetivarTransacao, estornarParcela, getResumoLancamentos, getTransacao, getTransacoes, renameComprovante, updateTransacao, uploadComprovante } from "../../controllers/financeiro/transacao_controller";
+import { cancelarParcela, converterLancamento, createTransacao, deleteComprovante, deleteTransacao, efetivarParcela, efetivarTransacao, estornarLancamento, estornarParcela, getResumoLancamentos, getTransacao, getTransacoes, renameComprovante, updateTransacao, uploadComprovante } from "../../controllers/financeiro/transacao_controller";
 const transacaoRouter = Router();
 
 transacaoRouter.get("/:id", getTransacao);
-transacaoRouter.get("/efetivar/:id", efetivarTransacao);
+transacaoRouter.post("/efetivar/:id", efetivarTransacao);
+transacaoRouter.get("/estornarLancamento/:id", estornarLancamento);
+transacaoRouter.get("/converterLancamento/:id", converterLancamento);
 transacaoRouter.get("/efetivarParcela/:id", efetivarParcela);
 transacaoRouter.get("/estornarParcela/:id", estornarParcela);
 transacaoRouter.get("/cancelarParcela/:id", cancelarParcela);

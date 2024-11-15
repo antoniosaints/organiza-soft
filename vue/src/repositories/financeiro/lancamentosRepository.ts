@@ -1,4 +1,4 @@
-import ITransacao from "@/types/financeiro/ILancamentos";
+import ITransacao, { IFormaPagamento } from "@/types/financeiro/ILancamentos";
 import axiosService from "../../services/http/axiosService";
 import { ISchemaLancamento } from "@/stores/financeiro/lancamentos/lancamentoSchemaStore";
 import { IResumoFinanceiro } from "@/types/financeiro/IResumoFinanceiro";
@@ -8,9 +8,13 @@ export default class LancamentosRepository {
     const { data } = await axiosService.get(`financeiro/transacao/${id}`);
     return data.data;
   }
-  static async efetivar(id: number): Promise<ITransacao> {
-    const { data } = await axiosService.get(
-      `financeiro/transacao/efetivar/${id}`
+  static async efetivar(
+    id: number,
+    body: { date: string; formaPagamento: IFormaPagamento }
+  ): Promise<ITransacao> {
+    const { data } = await axiosService.post(
+      `financeiro/transacao/efetivar/${id}`,
+      body
     );
     return data;
   }
@@ -23,6 +27,18 @@ export default class LancamentosRepository {
   static async estornarParcela(id: number): Promise<ITransacao> {
     const { data } = await axiosService.get(
       `financeiro/transacao/estornarParcela/${id}`
+    );
+    return data;
+  }
+  static async estornarLancamento(id: number): Promise<ITransacao> {
+    const { data } = await axiosService.get(
+      `financeiro/transacao/estornarLancamento/${id}`
+    );
+    return data;
+  }
+  static async converterLancamento(id: number, natureza: "receita" | "despesa"): Promise<ITransacao> {
+    const { data } = await axiosService.get(
+      `financeiro/transacao/converterLancamento/${id}?natureza=${natureza}`
     );
     return data;
   }

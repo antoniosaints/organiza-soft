@@ -27,6 +27,7 @@ export const useLancamentosFormularioStore = defineStore(
     const data = ref<ITransacao>({ ...defaultData.value });
     const refId = ref<number | null>(null);
     const isModalOpen = ref(false);
+    const isModalEfetivarOpen = ref(false);
     const isModalDetalhesOpen = ref(false);
 
     const resetData = () => {
@@ -39,6 +40,7 @@ export const useLancamentosFormularioStore = defineStore(
       refId,
       isModalOpen,
       resetData,
+      isModalEfetivarOpen,
       isModalDetalhesOpen,
     };
   }

@@ -88,8 +88,9 @@ export const getResumoLancamentos = async (req: Request, res: Response) => {
 
 export const efetivarTransacao = async (req: Request, res: Response) => {
   try {
+    const { date, formaPagamento } = req.body;
     const transacao = await prismaService.financeiroTransacao.update({
-      data: { status: "recebido" },
+      data: { status: "recebido", dataEfetivado: new Date(date).toISOString(), metodoPagamento: formaPagamento },
       where: {
         id: Number(req.params.id),
         contaSistemaId: req.body.contaSistemaId,
@@ -153,6 +154,54 @@ export const estornarParcela = async (req: Request, res: Response) => {
         data: parcela,
       },
       "Parcela estornada com sucesso"
+    );
+  } catch (error: any) {
+    HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
+  }
+};
+export const estornarLancamento = async (req: Request, res: Response) => {
+  try {
+    const lancamento = await prismaService.financeiroTransacao.update({
+      data: { status: "pendente", metodoPagamento: null, dataEfetivado: null },
+      where: {
+        id: Number(req.params.id),
+        contaSistemaId: req.body.contaSistemaId,
+      },
+    });
+
+    ResponseService.created(
+      res,
+      {
+        message: "Lancamento estornado com sucesso",
+        data: lancamento,
+      },
+      "Lancamento estornado com sucesso"
+    );
+  } catch (error: any) {
+    HttpErrorService.hadle(error, res);
+  } finally {
+    await prismaService.$disconnect();
+  }
+};
+export const converterLancamento = async (req: Request, res: Response) => {
+  try {
+    const lancamento = await prismaService.financeiroTransacao.update({
+      data: { natureza: req.query.natureza == "receita" ? "despesa" : "receita" },
+      where: {
+        id: Number(req.params.id),
+        contaSistemaId: req.body.contaSistemaId,
+      },
+    });
+
+    ResponseService.created(
+      res,
+      {
+        message: "Lancamento convertido com sucesso",
+        data: lancamento,
+      },
+      "Lancamento convertido com sucesso"
     );
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
