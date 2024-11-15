@@ -22,8 +22,6 @@ export const createcategoria = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 
@@ -62,8 +60,6 @@ export const getcategorias = async (req: Request, res: Response) => {
     ResponseService.success(res, { data: items, total });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 
@@ -76,8 +72,6 @@ export const getcategoria = async (req: Request, res: Response) => {
     ResponseService.success(res, { data: categoria });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 
@@ -96,8 +90,6 @@ export const updatecategoria = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 
@@ -110,7 +102,5 @@ export const deletecategoria = async (req: Request, res: Response) => {
     ResponseService.success(res, { message: "Categoria excluida com sucesso" });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };

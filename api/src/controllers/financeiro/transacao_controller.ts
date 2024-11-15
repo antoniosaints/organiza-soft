@@ -107,8 +107,6 @@ export const efetivarTransacao = async (req: Request, res: Response) => {
     );
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 
@@ -132,8 +130,6 @@ export const efetivarParcela = async (req: Request, res: Response) => {
     );
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 
@@ -157,8 +153,6 @@ export const estornarParcela = async (req: Request, res: Response) => {
     );
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 export const estornarLancamento = async (req: Request, res: Response) => {
@@ -181,8 +175,6 @@ export const estornarLancamento = async (req: Request, res: Response) => {
     );
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 export const converterLancamento = async (req: Request, res: Response) => {
@@ -205,8 +197,6 @@ export const converterLancamento = async (req: Request, res: Response) => {
     );
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 export const cancelarParcela = async (req: Request, res: Response) => {
@@ -229,8 +219,6 @@ export const cancelarParcela = async (req: Request, res: Response) => {
     );
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 
@@ -298,8 +286,6 @@ export const getTransacoes = async (req: Request, res: Response) => {
     ResponseService.success(res, { data: items, total });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 
@@ -321,12 +307,9 @@ export const getTransacao = async (req: Request, res: Response) => {
     ResponseService.success(res, { data: transacao });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 
-// Atualizar transação
 export const updateTransacao = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -346,8 +329,6 @@ export const updateTransacao = async (req: Request, res: Response) => {
     );
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 
@@ -432,7 +413,5 @@ export const deleteTransacao = async (req: Request, res: Response) => {
     ResponseService.success(res, { message: "Transação excluída com sucesso" });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };

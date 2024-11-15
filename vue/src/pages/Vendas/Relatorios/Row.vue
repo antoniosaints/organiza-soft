@@ -25,8 +25,8 @@
             <VendasBadge :status="data.status" />
         </TableCell>
         <TableCell class="hidden md:table-cell"><span
-                class="px-2 py-1 rounded-md bg-card text-secondary-foreground flex items-center w-min">
-                <User class="w-3 h-3 mr-1" /> {{ formatJustFirstname(data.Cliente?.nome!) }}
+                class="px-2 py-1 rounded-md bg-card text-secondary-foreground flex items-center w-max">
+                <User class="w-3 h-3 mr-1" /> {{ formatName(data.Cliente?.nome!) }}
             </span>
         </TableCell>
         <TableCell class="hidden md:table-cell"><span
@@ -52,7 +52,7 @@ import { CreditCard, Tag, User } from "lucide-vue-next";
 import { IVenda } from "@/types/vendas/IVenda";
 import { useVendasRelatorioStore } from "@/stores/vendas/relatorios/vendasRelatorioStore";
 import { useVendasFormularioStore } from "@/stores/vendas/relatorios/vendasFormularioStore";
-import { formatDateToPtbr, formatFirstLetterUpper, formatJustFirstname, formatRealValue } from "@/utils/formatterUtil";
+import { formatDateToPtbr, formatFirstLetterUpper, formatName, formatRealValue } from "@/utils/formatterUtil";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 const mainStore = useVendasRelatorioStore();
 const formularioStore = useVendasFormularioStore();

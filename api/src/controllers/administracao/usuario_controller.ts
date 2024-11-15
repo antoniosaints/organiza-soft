@@ -23,8 +23,6 @@ export const createUsuario = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 
@@ -64,8 +62,6 @@ export const getUsuarios = async (req: Request, res: Response) => {
     ResponseService.success(res, { data: items, total });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 
@@ -78,8 +74,6 @@ export const getUsuario = async (req: Request, res: Response) => {
     ResponseService.success(res, { data: usuario });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 
@@ -106,8 +100,6 @@ export const updateUsuario = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 
@@ -131,7 +123,5 @@ export const deleteUsuario = async (req: Request, res: Response) => {
     ResponseService.success(res, { message: "Usuario excluido com sucesso" });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };

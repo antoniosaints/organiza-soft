@@ -20,6 +20,6 @@ export async function MPCreatePaymentLink(req: Request, res: Response) {
     });
   } catch (error) {
     console.error("Erro ao criar o pagamento:", error);
-    throw error;
+    return res.status(500).json({ message: `Erro ao criar o link de pagamento: ${error}` });
   }
 }

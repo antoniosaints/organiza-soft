@@ -71,8 +71,6 @@ export const getVendas = async (req: Request, res: Response) => {
     ResponseService.success(res, { data: items, total });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 export const getVenda = async (req: Request, res: Response) => {
@@ -87,8 +85,6 @@ export const getVenda = async (req: Request, res: Response) => {
     ResponseService.success(res, { data: produto });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 export const createVenda = async (req: Request, res: Response) => {
@@ -132,8 +128,6 @@ export const createVenda = async (req: Request, res: Response) => {
     ResponseService.created(res, { data }, "Venda criada com sucesso");
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 export const createCheckoutMercadopagoVenda = async (
@@ -196,8 +190,6 @@ export const createCheckoutMercadopagoVenda = async (
     );
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 export const createPixMercadopagoVenda = async (
@@ -256,8 +248,6 @@ export const createPixMercadopagoVenda = async (
     );
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 export const deleteVenda = async (req: Request, res: Response) => {
@@ -272,8 +262,6 @@ export const deleteVenda = async (req: Request, res: Response) => {
     ResponseService.success(res, { data: produtos });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 export const getResumoVendas = async (req: Request, res: Response) => {
@@ -286,7 +274,5 @@ export const getResumoVendas = async (req: Request, res: Response) => {
     ResponseService.success(res, { data: vendas });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 }

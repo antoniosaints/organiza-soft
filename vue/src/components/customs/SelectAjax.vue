@@ -8,7 +8,7 @@ import { X } from 'lucide-vue-next'
 import { ref, computed, watch, onMounted } from 'vue'
 
 // Props e emit
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue", "update:label"]);
 const props = defineProps({
     modelValue: Number,
     canCreate: Boolean,
@@ -68,6 +68,7 @@ function handleLoadOptions(q, id = null) {
 // Função para selecionar uma opção
 function handleUpdateModelValue(selected) {
     emit("update:modelValue", selected.value);
+    emit("update:label", selected.label);
     selectedOption.value = selected;
     query.value = "";
     if (props.createOption && selected?.missing) {
@@ -75,6 +76,7 @@ function handleUpdateModelValue(selected) {
         props.createOption(selected, (option) => {
             emit("update:modelValue", option.value);
             selectedOption.value = option;
+            emit("label", option.label);
             value.value = option.value;
             handleLoadOptions("")
             isLoading.value = false;
@@ -88,6 +90,7 @@ function clearSelection() {
     query.value = "";
     value.value = null;
     emit("update:modelValue", null);
+    emit("update:label", null);
 }
 </script>
 

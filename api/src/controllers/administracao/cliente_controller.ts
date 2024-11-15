@@ -21,8 +21,6 @@ export const createCliente = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 
@@ -57,8 +55,6 @@ export const getClientes = async (req: Request, res: Response) => {
     ResponseService.success(res, { data: items, total });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 
@@ -72,8 +68,6 @@ export const getCliente = async (req: Request, res: Response) => {
     ResponseService.success(res, { data: cliente });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 
@@ -92,8 +86,6 @@ export const updateCliente = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 
@@ -109,7 +101,5 @@ export const deleteCliente = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };

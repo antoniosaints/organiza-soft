@@ -22,8 +22,6 @@ export const createParcelamento = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 
@@ -35,8 +33,6 @@ export const getParcelamentos = async (req: Request, res: Response) => {
     ResponseService.success(res, { data: parcelamentos });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 
@@ -49,8 +45,6 @@ export const getParcelamento = async (req: Request, res: Response) => {
     ResponseService.success(res, { data: parcelamento });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 
@@ -69,8 +63,6 @@ export const updateParcelamento = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
 
@@ -85,7 +77,5 @@ export const deleteParcelamento = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
-  } finally {
-    await prismaService.$disconnect();
   }
 };
