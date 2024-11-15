@@ -20,6 +20,11 @@ const routes: RouteRecordRaw[] = [
         name: "pagamentos.status",
         component: () => import("@/views/Financeiro/Mercadopago/StatusPagamento.vue")
     },
+    {
+        path: "/recuperacao",
+        name: "recuperacao.senha",
+        component: () => import("@/views/PaginasAbertas/RecuperarSenha.vue")
+    },
 ];
 
 export const Router = createRouter({
