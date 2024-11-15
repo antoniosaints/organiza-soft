@@ -21,7 +21,7 @@
                         </ul>
                     </CardContent>
                     <CardFooter>
-                        <RouterLink class="w-full" to="/site/cadastro">
+                        <RouterLink class="w-full" to="/cadastro">
                             <Button class="w-full transition-transform duration-300 hover:scale-105">Escolher
                                 Plano</Button>
                         </RouterLink>
