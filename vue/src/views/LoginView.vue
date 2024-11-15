@@ -35,7 +35,11 @@
           </div>
         </div>
         <div class="flex items-center mb-3 justify-between">
-          <Button type="submit">Logar no sistema</Button>
+          <Button type="submit">
+            <LogIn v-if="!loadingStore.isLoading" class="w-4 h-4 mr-2" />
+            <LoadingIconFetch class="w-4 h-4 mr-2" />
+            Logar no sistema
+          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger as-child>
               <Button variant="outline" class="dark:bg-gray-700">
@@ -82,7 +86,10 @@ import Label from "@/components/ui/label/Label.vue";
 import Switch from "@/components/ui/switch/Switch.vue";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useColorMode } from "@vueuse/core";
-
+import LoadingIconFetch from "@/components/utils/LoadingIconFetch.vue";
+import { LogIn } from "lucide-vue-next";
+import { useLoadingStore } from "@/composables/useLoading";
+const loadingStore = useLoadingStore();
 const mode = useColorMode();
 
 const lembrarUsuario = ref<boolean>(
