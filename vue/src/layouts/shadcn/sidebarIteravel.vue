@@ -2,7 +2,7 @@
 import { Skeleton } from '@/components/ui/skeleton';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible"
 import { useMenuStore } from '@/stores/menuStore';
-import { BadgeCheck, BookOpenCheck, ChevronRight, ClipboardCheck, Computer, Contact, Cpu, FileBox, FileChartPie, FileCheck, FileDigit, FileText, Handshake, History, House, KeyRound, Landmark, Layers, List, LockKeyhole, MessageCircle, Package, PenTool, Settings2, Tags, Ticket, User, UserRoundCog, Wallet } from 'lucide-vue-next';
+import { BadgeCheck, BookOpenCheck, ChevronRight, ClipboardCheck, Computer, Contact, FileBox, FileChartPie, FileCheck, FileDigit, FileText, Handshake, History, House, KeyRound, Landmark, Layers, List, LockKeyhole, MessageCircle, Package, PenTool, Settings2, Sparkles, Tags, Ticket, User, UserRoundCog, Wallet } from 'lucide-vue-next';
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 const menuStore = useMenuStore()
@@ -69,7 +69,7 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
     },
     {
         title: t("sidebar.assistant"),
-        icon: Cpu,
+        icon: Sparkles,
         secondaryIcon: Skeleton,
         show: menuStore.permissions.assistente,
         items: [
