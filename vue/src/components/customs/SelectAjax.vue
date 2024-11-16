@@ -96,7 +96,7 @@ function clearSelection() {
 
 <template>
     <Popover v-model:open="open">
-        <div class="flex items-center">
+        <div class="flex items-center w-full">
             <PopoverTrigger as-child>
                 <Button variant="outline" role="combobox" :aria-expanded="open" class="w-full justify-between" :class="{ 'rounded-r-none': selectedOption && clearable }">
                     {{ selectedOption ? selectedOption.label : "Selecione um item..." }}

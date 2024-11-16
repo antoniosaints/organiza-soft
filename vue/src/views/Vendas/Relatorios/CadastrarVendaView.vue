@@ -7,7 +7,7 @@
                     Nova Venda
                 </Button>
             </SheetTrigger>
-            <SheetContent class="w-full sm:w-[calc(100vw-50%)] sm:max-w-[calc(100vw)]" side="right">
+            <SheetContent class="w-full sm:w-[calc(100vw-60%)] sm:max-w-[calc(100vw)]" side="right">
                 <SheetHeader>
                     <SheetTitle>Nova Venda</SheetTitle>
                 </SheetHeader>
@@ -56,7 +56,7 @@
                     <div class="space-y-2">
                         <Label>Adicionar Produtos</Label>
                         <div class="flex space-x-2">
-                            <SelectSearchAjax labelSearch="Selecione uma categoria" v-model="produtoSelecionado" :ajax="fetchUsuarios" />
+                            <SelectAjax :options="produtosFiltrados" v-model="produtoSelecionado" />
                             <NumberField id="age" :default-value="1" v-model.number="quantidade" :min="0">
                                 <NumberFieldContent>
                                 <NumberFieldDecrement />
@@ -72,7 +72,7 @@
                     </div>
 
                     <!-- Carrinho -->
-                    <div v-if="carrinho.length > 0" class="space-y-2">
+                    <div v-if="true" class="space-y-2">
                         <Label>Itens da venda</Label>
                         <ul class="space-y-2">
                             <li v-for="item in carrinho" :key="item.id"
@@ -117,12 +117,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { CalendarIcon, MinusCircle, PlusCircle, Tag, Trash2 } from 'lucide-vue-next';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectSearchAjax, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { Textarea } from '@/components/ui/textarea';
@@ -135,6 +135,15 @@ import {
 } from '@internationalized/date'
 import { NumberField, NumberFieldContent, NumberFieldDecrement, NumberFieldIncrement, NumberFieldInput } from '@/components/ui/number-field';
 import { ProdutosRepository } from '@/repositories/patrimonio/produtos/produtosRepository';
+import SelectAjax from '@/components/customs/SelectAjax.vue';
+import { IPatrimonioProduto } from '@/types/patrimonio/IPatrimonioProduto';
+
+const produtos = ref<IPatrimonioProduto[]>([])
+
+onMounted(async () => {
+    const data = await ProdutosRepository.getAll(100, 1, "")
+    produtos.value = data.data
+})
 
 const df = new DateFormatter('pt-BR', {
   dateStyle: 'long',
@@ -145,14 +154,13 @@ const clientes = [
     { id: '2', nome: 'Cliente B' },
     { id: '3', nome: 'Cliente C' }
 ]
-const produtos = [
-    { id: '1', nome: 'Produto 1', preco: 10 },
-    { id: '2', nome: 'Produto 2', preco: 20 },
-    { id: '3', nome: 'Produto 3', preco: 30 }
-]
+
+const produtosFiltrados = computed(() => {
+    return produtos.value.map(p => ({ value: p.id, label: p.produto }))
+})
 
 interface IItemCarrinho {
-    id: string
+    id: string | number
     nome: string
     preco: number
     quantidade: number
@@ -167,38 +175,27 @@ const carrinho = reactive<IItemCarrinho[]>([])
 const produtoSelecionado = ref()
 const quantidade = ref(1)
 
-const fetchUsuarios = async (query: string, id?: number) => {
-    if (id) {
-        return await ProdutosRepository.get(id).then(response => {
-            return [{ id: response.id as number, label: response.produto }]
-        })
-    }else {
-        return await ProdutosRepository.getAll(10, 1, query).then(response => {
-            return response.data.map(item => ({ id: item.id as number, label: item.produto }))
-        })
-    }
-}
 // Métodos
 const adicionarAoCarrinho = () => {
-    const produto = produtos.find(p => p.id === produtoSelecionado.value)
+    const produto = produtos.value.find(p => p.id === produtoSelecionado.value)
     if (produto) {
         const itemExistente = carrinho.find(item => item.id === produto.id)
         if (itemExistente) {
             itemExistente.quantidade += quantidade.value
         } else {
-            carrinho.push({ id: produto.id, nome: produto.nome, preco: produto.preco, quantidade: quantidade.value })
+            carrinho.push({ id: produto?.id!, nome: produto.produto, preco: produto.preco, quantidade: quantidade.value })
         }
         produtoSelecionado.value = 0
         quantidade.value = 1
     }
 }
 
-const removerDoCarrinho = (id: string) => {
+const removerDoCarrinho = (id: string | number) => {
     const index = carrinho.findIndex(item => item.id === id)
     if (index !== -1) carrinho.splice(index, 1)
 }
 
-const atualizarQuantidade = (id: string, novaQuantidade: number) => {
+const atualizarQuantidade = (id: string | number, novaQuantidade: number) => {
     const item = carrinho.find(item => item.id === id)
     if (item) item.quantidade = Math.max(1, novaQuantidade)
 }
