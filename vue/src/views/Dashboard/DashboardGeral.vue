@@ -29,14 +29,14 @@
                     <CardTitle class="text-sm font-medium">
                         Assinaturas
                     </CardTitle>
-                    <Users class="h-4 w-4" />
+                    <PenTool class="h-4 w-4" />
                 </CardHeader>
                 <CardContent>
                     <div class="text-2xl font-bold text-cyan-500">
-                        +2350
+                        <EyeOff class="inline-flex" />
                     </div>
                     <p class="text-xs text-muted-foreground">
-                        +180.1% desde o mês passado
+                        Sem novas assinaturas
                     </p>
                 </CardContent>
             </Card>
@@ -64,14 +64,14 @@
                     <CardTitle class="text-sm font-medium">
                         Clientes
                     </CardTitle>
-                    <Activity class="h-4 w-4" />
+                    <UsersRound class="h-4 w-4" />
                 </CardHeader>
                 <CardContent>
                     <div class="text-2xl font-bold text-blue-500">
-                        +573
+                        <EyeOff class="inline-flex" />
                     </div>
                     <p class="text-xs text-muted-foreground">
-                        +201 desde o mês passado
+                        Sem novos clientes
                     </p>
                 </CardContent>
             </Card>
@@ -82,11 +82,11 @@
                     <CardTitle>Resumo de vendas</CardTitle>
                     <CardDescription>Resumo de vendas por mês</CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent class="h-[calc(100%-6rem)]">
                     <BarChart v-if="vendas.length > 0" class="h-48 py-4" :rounded-corners="4"
                         :data="calcularTotalPorMes()" index="index" :categories="['total']"
                         :y-formatter="formateTicketValue" :custom-tooltip="CustomTooltipChart" />
-                    <div v-else class="flex flex-col items-center justify-center h-s w-full mt-8">
+                    <div v-else class="flex flex-col items-center justify-center h-full w-full">
                         <ChartColumnBig class="w-16 h-16 text-muted-foreground" />
                         <p class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
                     </div>
@@ -97,12 +97,12 @@
                     <CardTitle>Resumo de lançamentos</CardTitle>
                     <CardDescription>Resumo de lançamentos por mês</CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent class="h-[calc(100%-6rem)]">
                     <BarChart v-if="resumoFinanceiro.resumo.total > 0" class="h-48 py-4" :rounded-corners="4"
                         :data="resumoFinanceiro.graficos.resumoPorMes" index="name" :custom-tooltip="CustomTooltipChart"
                         :categories="['receita', 'despesa']" :colors="['#22c55e', '#ef4444']"
                         :y-formatter="formateTicketValue" />
-                    <div v-else class="flex flex-col items-center justify-center h-s w-full mt-8">
+                    <div v-else class="flex flex-col items-center justify-center h-full w-full">
                         <ChartColumnBig class="w-16 h-16 text-muted-foreground" />
                         <p class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
                     </div>
@@ -113,10 +113,10 @@
                     <CardTitle>Resumo de assinaturas</CardTitle>
                     <CardDescription>Resumo de assinaturas por mês</CardDescription>
                 </CardHeader>
-                <CardContent>
-                    <div class="flex flex-col items-center justify-center h-s w-full mt-8">
+                <CardContent class="h-[calc(100%-6rem)]">
+                    <div class="flex flex-col items-center justify-center h-full w-full">
                         <ChartColumnBig class="w-16 h-16 text-muted-foreground" />
-                        <p class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
+                        <p class="text-center text-sm text-muted-foreground">Nenhuma assinatura encontrada</p>
                     </div>
                 </CardContent>
             </Card>
@@ -128,15 +128,20 @@
                             Veja seus lançamentos recentes
                         </CardDescription>
                     </div>
-                    <Button as-child size="sm" class="ml-auto gap-1">
+                    <Button v-show="loginStore.dataUserInfosLogged?.financeiro" as-child size="sm" class="ml-auto gap-1">
                         <RouterLink to="/app/financeiro/lancamentos">
                             Ver tudo
                             <ArrowUpRight class="h-4 w-4" />
                         </RouterLink>
                     </Button>
                 </CardHeader>
-                <CardContent>
-                    <UltimosLancamentos :lancamentos="resumoFinanceiro.ultimoslancamentos" />
+                <CardContent class="h-[calc(100%-6rem)]">
+                    <UltimosLancamentos v-if="resumoFinanceiro.ultimoslancamentos.length"
+                        :lancamentos="resumoFinanceiro.ultimoslancamentos" />
+                    <div v-else class="flex flex-col items-center justify-center h-full w-full">
+                        <Table2 class="w-16 h-16 text-muted-foreground" />
+                        <p class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
+                    </div>
                 </CardContent>
             </Card>
             <Card>
@@ -147,15 +152,19 @@
                             Veja duas vendas recentes
                         </CardDescription>
                     </div>
-                    <Button as-child size="sm" class="ml-auto gap-1">
+                    <Button v-show="loginStore.dataUserInfosLogged?.vendas" as-child size="sm" class="ml-auto gap-1">
                         <RouterLink to="/app/vendas/relatorio">
                             Ver tudo
                             <ArrowUpRight class="h-4 w-4" />
                         </RouterLink>
                     </Button>
                 </CardHeader>
-                <CardContent class="grid gap-8">
-                    <UltimasVendas :vendas="vendasRecents" />
+                <CardContent class="h-[calc(100%-6rem)]">
+                    <UltimasVendas v-if="vendasRecents.length" :vendas="vendasRecents" />
+                    <div v-else class="flex flex-col items-center justify-center h-full w-full">
+                        <Table2 class="w-16 h-16 text-muted-foreground" />
+                        <p class="text-center text-sm text-muted-foreground">Nenhuma venda encontrada</p>
+                    </div>
                 </CardContent>
             </Card>
         </div>
@@ -163,7 +172,7 @@
 </template>
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { Activity, ArrowBigDown, ArrowBigUp, ArrowUpRight, ChartColumnBig, CreditCard, DollarSign, Users } from "lucide-vue-next"
+import { ArrowBigDown, ArrowBigUp, ArrowUpRight, ChartColumnBig, CreditCard, DollarSign, EyeOff, PenTool, Table2, UsersRound } from "lucide-vue-next"
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { BarChart } from '@/components/ui/chart-bar'
@@ -177,10 +186,12 @@ import { computed } from "vue";
 import { formatRealValue } from "@/utils/formatterUtil";
 import UltimosLancamentos from "@/pages/Financeiro/Lancamentos/Dashboard/UltimosLancamentos.vue";
 import UltimasVendas from "@/pages/Vendas/Dashboard/UltimasVendas.vue";
+import { useLoginStore } from "@/stores/login/loginStore";
+const loginStore = useLoginStore();
 
 const vendas = ref<IVenda[]>([])
 const vendasRecents = ref<IVenda[]>([])
-    const resumoFinanceiro = ref<IResumoFinanceiro>({
+const resumoFinanceiro = ref<IResumoFinanceiro>({
     resumo: {
         efetivadoDespesaAVista: 0,
         efetivadoReceitaAVista: 0,

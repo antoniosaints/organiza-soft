@@ -188,11 +188,15 @@
                     </CardTitle>
                     <CardDescription>Resumo mensal por forma de pagamento</CardDescription>
                 </CardHeader>
-                <CardContent>
-                    <BarChart class="h-48 py-4" :rounded-corners="4"
+                <CardContent class="h-[calc(100%-6rem)]">
+                    <BarChart v-if="resumoFinanceiro.resumo.total > 0" class="h-48 py-4" :rounded-corners="4"
                         :data="resumoFinanceiro.graficos.resumoPorFormaPagamento" :custom-tooltip="CustomTooltipChart"
                         index="name" :categories="['total', 'pendente', 'pago']"
                         :colors="['#3b82f6', '#ef4444', '#22c55e']" />
+                    <div v-else class="flex flex-col items-center justify-center h-full w-full">
+                        <ChartColumnIcon class="w-16 h-16 text-muted-foreground" />
+                        <p class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
+                    </div>
                 </CardContent>
             </Card>
             <Card class="col-span-1">
@@ -217,10 +221,14 @@
                     </CardTitle>
                     <CardDescription>Resumo mensal por categoria</CardDescription>
                 </CardHeader>
-                <CardContent>
-                    <BarChart class="h-48 py-4" :rounded-corners="4" :data="resumoFinanceiro.graficos.resumoPorCategoria"
+                <CardContent class="h-[calc(100%-6rem)]">
+                    <BarChart v-if="resumoFinanceiro.resumo.total > 0" class="h-48 py-4" :rounded-corners="4" :data="resumoFinanceiro.graficos.resumoPorCategoria"
                         :custom-tooltip="CustomTooltipChart" index="name" :categories="['total', 'pendente', 'pago']"
                         :colors="['#3b82f6', '#ef4444', '#22c55e']" />
+                    <div v-else class="flex flex-col items-center justify-center h-full w-full">
+                        <ChartColumnIcon class="w-16 h-16 text-muted-foreground" />
+                        <p class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
+                    </div>
                 </CardContent>
             </Card>
             <Card class="col-span-1">
@@ -243,10 +251,14 @@
                     </CardTitle>
                     <CardDescription>Resumo mensal por natureza</CardDescription>
                 </CardHeader>
-                <CardContent>
-                    <BarChart class="h-48 py-4" :rounded-corners="4" :data="resumoFinanceiro.graficos.resumoPorMes"
+                <CardContent class="h-[calc(100%-6rem)]">
+                    <BarChart v-if="resumoFinanceiro.resumo.total > 0" class="h-48 py-4" :rounded-corners="4" :data="resumoFinanceiro.graficos.resumoPorMes"
                         :custom-tooltip="CustomTooltipChart" index="name" :categories="['receita', 'despesa']"
                         :colors="['#22c55e', '#ef4444']" />
+                    <div v-else class="flex flex-col items-center justify-center h-full w-full">
+                        <ChartColumnIcon class="w-16 h-16 text-muted-foreground" />
+                        <p class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
+                    </div>
                 </CardContent>
             </Card>
             <Card class="xl:col-span-2">
@@ -257,15 +269,19 @@
                             Veja seus lançamentos recentes
                         </CardDescription>
                     </div>
-                    <Button as-child size="sm" class="ml-auto gap-1">
+                    <Button v-show="loginStore.dataUserInfosLogged?.financeiro" as-child size="sm" class="ml-auto gap-1">
                         <RouterLink to="/app/financeiro/lancamentos">
                             Ver tudo
                             <ArrowUpRight class="h-4 w-4" />
                         </RouterLink>
                     </Button>
                 </CardHeader>
-                <CardContent>
-                    <UltimosLancamentos :lancamentos="resumoFinanceiro.ultimoslancamentos" />
+                <CardContent class="h-[calc(100%-6rem)]">
+                    <UltimosLancamentos v-if="resumoFinanceiro.ultimoslancamentos.length" :lancamentos="resumoFinanceiro.ultimoslancamentos" />
+                    <div v-else class="flex flex-col items-center justify-center h-full w-full">
+                        <Table2 class="w-16 h-16 text-muted-foreground" />
+                        <p class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
+                    </div>
                 </CardContent>
             </Card>
             <Card>
@@ -286,8 +302,12 @@
                     </CardTitle>
                     <CardDescription>Lista das contas do sistema</CardDescription>
                 </CardHeader>
-                <CardContent class="grid gap-8">
-                    <ContasLancamentos :contas="resumoFinanceiro.resumoContas" />
+                <CardContent class="h-[calc(100%-6rem)]">
+                    <ContasLancamentos v-if="resumoFinanceiro.resumoContas.length" :contas="resumoFinanceiro.resumoContas" />
+                    <div v-else class="flex flex-col items-center justify-center h-full w-full">
+                        <CreditCard class="w-16 h-16 text-muted-foreground" />
+                        <p class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
+                    </div>
                 </CardContent>
             </Card>
         </div>
@@ -295,7 +315,7 @@
 </template>
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
-import { ArrowBigDown, ArrowBigUp, ArrowUpRight, ChartCandlestick, CircleArrowOutDownLeft, CircleArrowOutUpRight, CircleCheckBig, CircleHelp, ClockArrowDown, DollarSign } from "lucide-vue-next"
+import { ArrowBigDown, ArrowBigUp, ArrowUpRight, ChartCandlestick, ChartColumnIcon, CircleArrowOutDownLeft, CircleArrowOutUpRight, CircleCheckBig, CircleHelp, ClockArrowDown, CreditCard, DollarSign, Table2 } from "lucide-vue-next"
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { BarChart } from '@/components/ui/chart-bar'
@@ -309,6 +329,8 @@ import { useColorMode } from "@vueuse/core";
 import { presetsDatePickerVue } from "@/utils/datepickerUtil";
 import UltimosLancamentos from "./UltimosLancamentos.vue";
 import ContasLancamentos from "./ContasLancamentos.vue";
+import { useLoginStore } from "@/stores/login/loginStore";
+const loginStore = useLoginStore()
 const colormode = useColorMode()
 const dateFilter = ref<string[]>([])
 
