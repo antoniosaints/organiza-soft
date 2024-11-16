@@ -2,8 +2,9 @@ services:
   app:
     build: 
       context: .
+    container_name: organizasoft-api-container
     ports:
-      - "5000:5000"
+      - "3340:5000"
     env_file:
       - .env_prod
     volumes:
