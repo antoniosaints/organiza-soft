@@ -1,6 +1,6 @@
 <template>
     <Sheet v-model:open="formularioStore.isModalDetalhesOpen">
-        <SheetContent class="w-full sm:w-[calc(100vw-40%)] sm:max-w-[calc(100vw)]" side="right">
+        <SheetContent class="w-full sm:w-[calc(100vw-20%)] md:w-[calc(100vw-30%)] lg:w-[calc(100vw-50%)] sm:max-w-[calc(100vw)]" side="right">
             <SheetHeader>
                 <SheetTitle class="text-2xl font-bold">Novo lançamento </SheetTitle>
                 <SheetDescription>

@@ -8,7 +8,7 @@
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" class="w-auto">
-                <DropdownMenuItem @click="converterLancamento(data.id as number, data.natureza)" v-if="data.status === 'pendente'" class="cursor-pointer">
+                <DropdownMenuItem @click="converterLancamento(data.id as number, data.natureza)" class="cursor-pointer">
                     <Replace class="mr-2 h-3 w-3" />
                     Converter
                 </DropdownMenuItem>

@@ -1,20 +1,13 @@
 import ICliente from "../administracao/clientes/ICliente";
 import IUsuario from "../administracao/usuarios/IUsuario";
 import ICategoria from "./ICategoria";
+import IContaTransacao from "./IContaTransacao";
 import IParcelamento from "./IParcelamento";
 import { IStatusTransacao } from "./IStatusTransacao";
 
 export interface IFormaPagamento {
   forma: string;
   cor: string;
-}
-export interface IContasLancamentos {
-  conta: string;
-  saldo: number;
-  regra: "privada" | "publica";
-  userId: number;
-  cor?: string;
-  descricao: string;
 }
 export default interface ITransacao {
   id?: number;
@@ -47,7 +40,7 @@ export default interface ITransacao {
   valorFinal?: number;
   FinanceiroParcelamento?: IParcelamento[];
   Categoria?: ICategoria;
-  Conta?: IContasLancamentos;
+  Conta?: IContaTransacao;
   FormaPagamento?: IFormaPagamento;
   UsuarioLancamento?: IUsuario;
   ClienteOnLancamentos?: IRelationCliente[];

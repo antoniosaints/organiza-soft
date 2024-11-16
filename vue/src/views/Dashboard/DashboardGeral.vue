@@ -88,7 +88,7 @@
                         :y-formatter="formateTicketValue" :custom-tooltip="CustomTooltipChart" />
                     <div v-else class="flex flex-col items-center justify-center h-full w-full">
                         <ChartColumnBig class="w-16 h-16 text-muted-foreground" />
-                        <p class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
+                        <p class="text-center text-sm text-muted-foreground">Nenhuma venda encontrada</p>
                     </div>
                 </CardContent>
             </Card>

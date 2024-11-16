@@ -72,8 +72,8 @@ const formStore = useLancamentosFormularioStore()
 const lancamentoStore = useLancamentosStore()
 const loginStore = useLoginStore()
 
-const date = ref(null)
-const formaPagamento = ref("dinheiro")
+const date = ref(new Date())
+const formaPagamento = ref("pix")
 const isDark = computed(() => colorMode.value === 'dark');
 
 const canPagamentosRetroativos = computed(() => {
