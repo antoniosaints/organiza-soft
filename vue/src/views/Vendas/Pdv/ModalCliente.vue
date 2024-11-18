@@ -13,6 +13,7 @@ import { usePontoDeVendasStore } from '@/stores/vendas/pdv/pontoVendasStore';
 import SelectAjax from '@/components/customs/SelectAjax.vue';
 import { createClienteLancamento, getClientesLancamento } from '@/pages/Financeiro/Lancamentos/Cadastro/dataCliente';
 import { Autorize } from '@/autorization';
+import { UserRoundCheck } from 'lucide-vue-next';
 const storePDV = usePontoDeVendasStore();
 const canCreateClienteLancamento = Autorize.can("criar", "clientes")!
 </script>
@@ -33,8 +34,11 @@ const canCreateClienteLancamento = Autorize.can("criar", "clientes")!
             </div>
             <DialogFooter>
                 <DialogClose asChild>
-                    <Button type="submit">
-                        Confirmar cliente
+                    <Button size="sm" type="submit">
+                        <div class="flex items-center">
+                            <UserRoundCheck class="w-3 h-3 mr-2" />
+                            Confirmar cliente
+                        </div>
                     </Button>
                 </DialogClose>
             </DialogFooter>

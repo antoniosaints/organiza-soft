@@ -98,7 +98,7 @@ function clearSelection() {
     <Popover v-model:open="open">
         <div class="flex items-center w-full">
             <PopoverTrigger as-child>
-                <Button variant="outline" role="combobox" :aria-expanded="open" class="w-full justify-between" :class="{ 'rounded-r-none': selectedOption && clearable }">
+                <Button variant="outline" role="combobox" :aria-expanded="open" class="flex-1 truncate justify-between" :class="{ 'rounded-r-none': selectedOption && clearable }">
                     {{ selectedOption ? selectedOption.label : "Selecione um item..." }}
                     <CaretSortIcon class="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>

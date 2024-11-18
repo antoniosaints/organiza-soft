@@ -304,7 +304,7 @@ const submitLancamento = async () => {
 
                             <div class="space-y-2 p-2">
                                 <Label for="taxaJuros">Taxa de juros</Label>
-                                <NumberField id="taxaJuros" :format-options="{ style: 'percent' }" :step="0.01"
+                                <NumberField id="taxaJuros" :format-options="{ style: 'percent', minimumFractionDigits: 2 }" :step="0.0001"
                                     :default-value="0" v-model="schema.lancamento.taxaJuros" :min="0">
                                     <NumberFieldContent>
                                         <NumberFieldDecrement />
@@ -317,7 +317,7 @@ const submitLancamento = async () => {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                             <div class="space-y-2 p-2">
                                 <Label for="taxaCambio">Taxa de cambio</Label>
-                                <NumberField id="taxaCambio" :format-options="{ style: 'percent' }" :step="0.01"
+                                <NumberField id="taxaCambio" :format-options="{ style: 'percent', minimumFractionDigits: 2 }" :step="0.0001"
                                     :default-value="0" v-model="schema.lancamento.taxaCambio" :min="0">
                                     <NumberFieldContent>
                                         <NumberFieldDecrement />
@@ -329,7 +329,7 @@ const submitLancamento = async () => {
 
                             <div class="space-y-2 p-2">
                                 <Label for="taxaDesconto">Taxa de desconto</Label>
-                                <NumberField id="taxaDesconto" :format-options="{ style: 'percent' }" :step="0.01"
+                                <NumberField id="taxaDesconto" :format-options="{ style: 'percent', minimumFractionDigits: 2 }" :step="0.0001"
                                     :default-value="0" v-model="schema.lancamento.taxaDesconto" :min="0">
                                     <NumberFieldContent>
                                         <NumberFieldDecrement />
