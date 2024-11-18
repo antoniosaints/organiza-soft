@@ -18,6 +18,7 @@
                     </Tooltip>
                 </TooltipProvider>
                 <ProdutoModal />
+                <CadastroEstoque />
             </div>
         </div>
         <div class="flex space-x-1 w-full md:w-1/2 gap-4 mb-4">
@@ -181,6 +182,7 @@ import { useProdutoFormularioStore } from "@/stores/patrimonio/produtos/produtoF
 import { ProdutosRow } from ".";
 import ProdutoModal from "./Formulario/ProdutoModal.vue";
 import DetalhesProduto from "./Infos/DetalhesProduto.vue";
+import CadastroEstoque from "../Estoques/Modais/CadastroEstoque.vue";
 
 const mainStore = useProdutoStore();
 const formularioStore = useProdutoFormularioStore();
