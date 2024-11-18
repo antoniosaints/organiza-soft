@@ -212,16 +212,13 @@
                     </CardTitle>
                     <CardDescription>Resumo mensal por forma de pagamento</CardDescription>
                 </CardHeader>
-                <CardContent class="h-[calc(100%-6rem)]">
-                    <BarChart v-if="resumoFinanceiro.resumo.total > 0 && !isLoading" class="h-48 py-4" :rounded-corners="4"
-                        :data="resumoFinanceiro.graficos.resumoPorFormaPagamento" :custom-tooltip="CustomTooltipChart"
-                        index="name" :categories="['total', 'pendente', 'pago']"
-                        :colors="['#3b82f6', '#ef4444', '#22c55e']" />
-                    <div v-else class="flex flex-col items-center justify-center h-full w-full">
-                        <ChartColumnIcon v-if="!isLoading" class="w-16 h-16 text-muted-foreground" />
-                        <Loader v-else class="w-16 h-16 text-muted-foreground animate-spin" />
-                        <p v-if="!isLoading" class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
-                    </div>
+                <CardContent>
+                    <CardContentLoading :icon="ChartColumnIcon" :is-loading="isLoading" message="Nenhum lançamento encontrado" :show="resumoFinanceiro.resumo.total > 0">
+                        <BarChart class="h-48 py-4" :rounded-corners="4"
+                            :data="resumoFinanceiro.graficos.resumoPorFormaPagamento" :custom-tooltip="CustomTooltipChart"
+                            index="name" :categories="['total', 'pendente', 'pago']"
+                            :colors="['#3b82f6', '#ef4444', '#22c55e']" />
+                    </CardContentLoading>
                 </CardContent>
             </Card>
             <Card class="col-span-1">
@@ -246,15 +243,12 @@
                     </CardTitle>
                     <CardDescription>Resumo mensal por categoria</CardDescription>
                 </CardHeader>
-                <CardContent class="h-[calc(100%-6rem)]">
-                    <BarChart v-if="resumoFinanceiro.resumo.total > 0 && !isLoading" class="h-48 py-4" :rounded-corners="4" :data="resumoFinanceiro.graficos.resumoPorCategoria"
+                <CardContent>
+                    <CardContentLoading :icon="ChartColumnIcon" :is-loading="isLoading" message="Nenhum lançamento encontrado" :show="resumoFinanceiro.resumo.total > 0">
+                        <BarChart class="h-48 py-4" :rounded-corners="4" :data="resumoFinanceiro.graficos.resumoPorCategoria"
                         :custom-tooltip="CustomTooltipChart" index="name" :categories="['total', 'pendente', 'pago']"
                         :colors="['#3b82f6', '#ef4444', '#22c55e']" />
-                    <div v-else class="flex flex-col items-center justify-center h-full w-full">
-                        <ChartColumnIcon v-if="!isLoading" class="w-16 h-16 text-muted-foreground" />
-                        <Loader v-else class="w-16 h-16 text-muted-foreground animate-spin" />
-                        <p v-if="!isLoading" class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
-                    </div>
+                    </CardContentLoading>
                 </CardContent>
             </Card>
             <Card class="col-span-1">
@@ -277,15 +271,12 @@
                     </CardTitle>
                     <CardDescription>Resumo mensal por natureza</CardDescription>
                 </CardHeader>
-                <CardContent class="h-[calc(100%-6rem)]">
-                    <BarChart v-if="resumoFinanceiro.resumo.total > 0 && !isLoading" class="h-48 py-4" :rounded-corners="4" :data="resumoFinanceiro.graficos.resumoPorMes"
+                <CardContent>
+                    <CardContentLoading :icon="ChartColumnIcon" :is-loading="isLoading" message="Nenhum lançamento encontrado" :show="resumoFinanceiro.resumo.total > 0">
+                        <BarChart class="h-48 py-4" :rounded-corners="4" :data="resumoFinanceiro.graficos.resumoPorMes"
                         :custom-tooltip="CustomTooltipChart" index="name" :categories="['receita', 'despesa']"
                         :colors="['#22c55e', '#ef4444']" />
-                    <div v-else class="flex flex-col items-center justify-center h-full w-full">
-                        <ChartColumnIcon v-if="!isLoading" class="w-16 h-16 text-muted-foreground" />
-                        <Loader v-else class="w-16 h-16 text-muted-foreground animate-spin" />
-                        <p v-if="!isLoading" class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
-                    </div>
+                    </CardContentLoading>
                 </CardContent>
             </Card>
             <Card class="xl:col-span-2">
@@ -303,13 +294,10 @@
                         </RouterLink>
                     </Button>
                 </CardHeader>
-                <CardContent class="h-[calc(100%-6rem)]">
-                    <UltimosLancamentos v-if="resumoFinanceiro.ultimoslancamentos.length && !isLoading" :lancamentos="resumoFinanceiro.ultimoslancamentos" />
-                    <div v-else class="flex flex-col items-center justify-center h-full w-full">
-                        <Table2 v-if="!isLoading" class="w-16 h-16 text-muted-foreground" />
-                        <Loader v-else class="w-16 h-16 text-muted-foreground animate-spin" />
-                        <p v-if="!isLoading" class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
-                    </div>
+                <CardContent>
+                    <CardContentLoading :icon="Table2" :is-loading="isLoading" message="Nenhum lançamento encontrado" :show="resumoFinanceiro.ultimoslancamentos.length > 0">
+                        <UltimosLancamentos :lancamentos="resumoFinanceiro.ultimoslancamentos" />
+                    </CardContentLoading>
                 </CardContent>
             </Card>
             <Card>
@@ -330,13 +318,10 @@
                     </CardTitle>
                     <CardDescription>Lista das contas do sistema</CardDescription>
                 </CardHeader>
-                <CardContent class="h-[calc(100%-6rem)]">
-                    <ContasLancamentos v-if="resumoFinanceiro.resumoContas.length && !isLoading" :contas="resumoFinanceiro.resumoContas" />
-                    <div v-else class="flex flex-col items-center justify-center h-full w-full">
-                        <CreditCard v-if="!isLoading" class="w-16 h-16 text-muted-foreground" />
-                        <Loader v-else class="w-16 h-16 text-muted-foreground animate-spin" />
-                        <p v-if="!isLoading" class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
-                    </div>
+                <CardContent>
+                    <CardContentLoading :icon="CreditCard" :is-loading="isLoading" message="Nenhum lançamento encontrado" :show="resumoFinanceiro.resumoContas.length > 0">
+                        <ContasLancamentos :contas="resumoFinanceiro.resumoContas" />
+                    </CardContentLoading>
                 </CardContent>
             </Card>
         </div>
@@ -344,7 +329,7 @@
 </template>
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
-import { ArrowBigDown, ArrowBigUp, ArrowUpRight, ChartCandlestick, ChartColumnIcon, CircleArrowOutDownLeft, CircleArrowOutUpRight, CircleCheckBig, CircleHelp, ClockArrowDown, CreditCard, DollarSign, Loader, Table2 } from "lucide-vue-next"
+import { ArrowBigDown, ArrowBigUp, ArrowUpRight, ChartCandlestick, ChartColumnIcon, CircleArrowOutDownLeft, CircleArrowOutUpRight, CircleCheckBig, CircleHelp, ClockArrowDown, CreditCard, DollarSign, Table2 } from "lucide-vue-next"
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { BarChart } from '@/components/ui/chart-bar'
@@ -360,6 +345,7 @@ import UltimosLancamentos from "./UltimosLancamentos.vue";
 import ContasLancamentos from "./ContasLancamentos.vue";
 import { useLoginStore } from "@/stores/login/loginStore";
 import { Skeleton } from "@/components/ui/skeleton";
+import CardContentLoading from "@/components/customs/CardContentLoading.vue";
 const loginStore = useLoginStore()
 const colormode = useColorMode()
 const dateFilter = ref<string[]>([])
