@@ -40,14 +40,20 @@
                     <DollarSign class="h-4 w-4" />
                 </CardHeader>
                 <CardContent>
-                    <div class="text-2xl font-bold text-blue-500">
-                        {{ formatRealValue(totalReceita + totalDespesa) }}
+                    <div v-if="isLoading">
+                        <Skeleton class="h-6 w-32" />
+                        <Skeleton class="h-4 mt-2 w-38" />
                     </div>
-                    <div class="flex gap-1 text-xs items-center">
-                        <ArrowBigDown class="h-4 w-4 text-green-500" />
-                        {{ formatRealValue(totalReceita) }}
-                        <ArrowBigUp class="h-4 w-4 text-red-500" />
-                        {{ formatRealValue(totalDespesa) }}
+                    <div v-else>
+                        <div class="text-2xl font-bold text-blue-500">
+                            {{ formatRealValue(totalReceita + totalDespesa) }}
+                        </div>
+                        <div class="flex gap-1 text-xs items-center">
+                            <ArrowBigDown class="h-4 w-4 text-green-500" />
+                            {{ formatRealValue(totalReceita) }}
+                            <ArrowBigUp class="h-4 w-4 text-red-500" />
+                            {{ formatRealValue(totalDespesa) }}
+                        </div>
                     </div>
                 </CardContent>
             </Card>
@@ -76,24 +82,30 @@
                     <ChartCandlestick class="h-4 w-4" />
                 </CardHeader>
                 <CardContent>
-                    <div class="text-2xl font-bold"
-                        :class="totalEfetivoReceita - totalEfetivoDespesa > 0 ? 'text-green-500' : 'text-red-500'">
-                        {{ formatRealValue(totalEfetivoReceita - totalEfetivoDespesa) }}
+                    <div v-if="isLoading">
+                        <Skeleton class="h-6 w-32" />
+                        <Skeleton class="h-4 mt-2 w-38" />
                     </div>
-                    <p class="flex gap-1 text-xs items-center">
-                        <CircleArrowOutDownLeft class="h-3 w-3 text-green-500" />
-                        {{
-                            (totalEfetivoReceita + totalEfetivoDespesa) > 0
-                                ? ((totalEfetivoReceita / (totalEfetivoReceita + totalEfetivoDespesa)) * 100).toFixed(2)
-                                : 0
-                        }}% receita
-                        <CircleArrowOutUpRight class="h-3 w-3 text-red-500" />
-                        {{
-                            (totalEfetivoReceita + totalEfetivoDespesa) > 0
-                                ? ((totalEfetivoDespesa / (totalEfetivoReceita + totalEfetivoDespesa)) * 100).toFixed(2)
-                                : 0
-                        }}% despesa
-                    </p>
+                    <div v-else>
+                        <div class="text-2xl font-bold"
+                            :class="totalEfetivoReceita - totalEfetivoDespesa > 0 ? 'text-green-500' : 'text-red-500'">
+                            {{ formatRealValue(totalEfetivoReceita - totalEfetivoDespesa) }}
+                        </div>
+                        <p class="flex gap-1 text-xs items-center">
+                            <CircleArrowOutDownLeft class="h-3 w-3 text-green-500" />
+                            {{
+                                (totalEfetivoReceita + totalEfetivoDespesa) > 0
+                                    ? ((totalEfetivoReceita / (totalEfetivoReceita + totalEfetivoDespesa)) * 100).toFixed(2)
+                                    : 0
+                            }}% receita
+                            <CircleArrowOutUpRight class="h-3 w-3 text-red-500" />
+                            {{
+                                (totalEfetivoReceita + totalEfetivoDespesa) > 0
+                                    ? ((totalEfetivoDespesa / (totalEfetivoReceita + totalEfetivoDespesa)) * 100).toFixed(2)
+                                    : 0
+                            }}% despesa
+                        </p>
+                    </div>
                 </CardContent>
             </Card>
             <Card>
@@ -119,14 +131,20 @@
                     <ClockArrowDown class="h-4 w-4" />
                 </CardHeader>
                 <CardContent>
-                    <div class="text-2xl font-bold text-yellow-500">
-                        {{ formatRealValue(totalReceitaPendente + totalDespesaPendente) }}
+                    <div v-if="isLoading">
+                        <Skeleton class="h-6 w-32" />
+                        <Skeleton class="h-4 mt-2 w-38" />
                     </div>
-                    <div class="flex gap-1 text-xs items-center">
-                        <ClockArrowDown class="h-3 w-3 text-green-500" />
-                        {{ formatRealValue(totalReceitaPendente) }}
-                        <ClockArrowDown class="h-3 w-3 text-red-500" />
-                        {{ formatRealValue(totalDespesaPendente) }}
+                    <div v-else>
+                        <div class="text-2xl font-bold text-yellow-500">
+                            {{ formatRealValue(totalReceitaPendente + totalDespesaPendente) }}
+                        </div>
+                        <div class="flex gap-1 text-xs items-center">
+                            <ClockArrowDown class="h-3 w-3 text-green-500" />
+                            {{ formatRealValue(totalReceitaPendente) }}
+                            <ClockArrowDown class="h-3 w-3 text-red-500" />
+                            {{ formatRealValue(totalDespesaPendente) }}
+                        </div>
                     </div>
                 </CardContent>
             </Card>
@@ -153,14 +171,20 @@
                     <CircleCheckBig class="h-4 w-4" />
                 </CardHeader>
                 <CardContent>
-                    <div class="text-2xl font-bold text-blue-500">
-                        {{ formatRealValue(totalEfetivoDespesa + totalEfetivoReceita) }}
+                    <div v-if="isLoading">
+                        <Skeleton class="h-6 w-32" />
+                        <Skeleton class="h-4 mt-2 w-38" />
                     </div>
-                    <div class="flex gap-1 text-xs items-center">
-                        <CircleCheckBig class="h-3 w-3 text-green-500" />
-                        {{ formatRealValue(totalEfetivoReceita) }}
-                        <CircleCheckBig class="h-3 w-3 text-red-500" />
-                        {{ formatRealValue(totalEfetivoDespesa) }}
+                    <div v-else>
+                        <div class="text-2xl font-bold text-blue-500">
+                            {{ formatRealValue(totalEfetivoDespesa + totalEfetivoReceita) }}
+                        </div>
+                        <div class="flex gap-1 text-xs items-center">
+                            <CircleCheckBig class="h-3 w-3 text-green-500" />
+                            {{ formatRealValue(totalEfetivoReceita) }}
+                            <CircleCheckBig class="h-3 w-3 text-red-500" />
+                            {{ formatRealValue(totalEfetivoDespesa) }}
+                        </div>
                     </div>
                 </CardContent>
             </Card>
@@ -189,13 +213,14 @@
                     <CardDescription>Resumo mensal por forma de pagamento</CardDescription>
                 </CardHeader>
                 <CardContent class="h-[calc(100%-6rem)]">
-                    <BarChart v-if="resumoFinanceiro.resumo.total > 0" class="h-48 py-4" :rounded-corners="4"
+                    <BarChart v-if="resumoFinanceiro.resumo.total > 0 && !isLoading" class="h-48 py-4" :rounded-corners="4"
                         :data="resumoFinanceiro.graficos.resumoPorFormaPagamento" :custom-tooltip="CustomTooltipChart"
                         index="name" :categories="['total', 'pendente', 'pago']"
                         :colors="['#3b82f6', '#ef4444', '#22c55e']" />
                     <div v-else class="flex flex-col items-center justify-center h-full w-full">
-                        <ChartColumnIcon class="w-16 h-16 text-muted-foreground" />
-                        <p class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
+                        <ChartColumnIcon v-if="!isLoading" class="w-16 h-16 text-muted-foreground" />
+                        <Loader v-else class="w-16 h-16 text-muted-foreground animate-spin" />
+                        <p v-if="!isLoading" class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
                     </div>
                 </CardContent>
             </Card>
@@ -222,12 +247,13 @@
                     <CardDescription>Resumo mensal por categoria</CardDescription>
                 </CardHeader>
                 <CardContent class="h-[calc(100%-6rem)]">
-                    <BarChart v-if="resumoFinanceiro.resumo.total > 0" class="h-48 py-4" :rounded-corners="4" :data="resumoFinanceiro.graficos.resumoPorCategoria"
+                    <BarChart v-if="resumoFinanceiro.resumo.total > 0 && !isLoading" class="h-48 py-4" :rounded-corners="4" :data="resumoFinanceiro.graficos.resumoPorCategoria"
                         :custom-tooltip="CustomTooltipChart" index="name" :categories="['total', 'pendente', 'pago']"
                         :colors="['#3b82f6', '#ef4444', '#22c55e']" />
                     <div v-else class="flex flex-col items-center justify-center h-full w-full">
-                        <ChartColumnIcon class="w-16 h-16 text-muted-foreground" />
-                        <p class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
+                        <ChartColumnIcon v-if="!isLoading" class="w-16 h-16 text-muted-foreground" />
+                        <Loader v-else class="w-16 h-16 text-muted-foreground animate-spin" />
+                        <p v-if="!isLoading" class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
                     </div>
                 </CardContent>
             </Card>
@@ -252,12 +278,13 @@
                     <CardDescription>Resumo mensal por natureza</CardDescription>
                 </CardHeader>
                 <CardContent class="h-[calc(100%-6rem)]">
-                    <BarChart v-if="resumoFinanceiro.resumo.total > 0" class="h-48 py-4" :rounded-corners="4" :data="resumoFinanceiro.graficos.resumoPorMes"
+                    <BarChart v-if="resumoFinanceiro.resumo.total > 0 && !isLoading" class="h-48 py-4" :rounded-corners="4" :data="resumoFinanceiro.graficos.resumoPorMes"
                         :custom-tooltip="CustomTooltipChart" index="name" :categories="['receita', 'despesa']"
                         :colors="['#22c55e', '#ef4444']" />
                     <div v-else class="flex flex-col items-center justify-center h-full w-full">
-                        <ChartColumnIcon class="w-16 h-16 text-muted-foreground" />
-                        <p class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
+                        <ChartColumnIcon v-if="!isLoading" class="w-16 h-16 text-muted-foreground" />
+                        <Loader v-else class="w-16 h-16 text-muted-foreground animate-spin" />
+                        <p v-if="!isLoading" class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
                     </div>
                 </CardContent>
             </Card>
@@ -277,10 +304,11 @@
                     </Button>
                 </CardHeader>
                 <CardContent class="h-[calc(100%-6rem)]">
-                    <UltimosLancamentos v-if="resumoFinanceiro.ultimoslancamentos.length" :lancamentos="resumoFinanceiro.ultimoslancamentos" />
+                    <UltimosLancamentos v-if="resumoFinanceiro.ultimoslancamentos.length && !isLoading" :lancamentos="resumoFinanceiro.ultimoslancamentos" />
                     <div v-else class="flex flex-col items-center justify-center h-full w-full">
-                        <Table2 class="w-16 h-16 text-muted-foreground" />
-                        <p class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
+                        <Table2 v-if="!isLoading" class="w-16 h-16 text-muted-foreground" />
+                        <Loader v-else class="w-16 h-16 text-muted-foreground animate-spin" />
+                        <p v-if="!isLoading" class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
                     </div>
                 </CardContent>
             </Card>
@@ -303,10 +331,11 @@
                     <CardDescription>Lista das contas do sistema</CardDescription>
                 </CardHeader>
                 <CardContent class="h-[calc(100%-6rem)]">
-                    <ContasLancamentos v-if="resumoFinanceiro.resumoContas.length" :contas="resumoFinanceiro.resumoContas" />
+                    <ContasLancamentos v-if="resumoFinanceiro.resumoContas.length && !isLoading" :contas="resumoFinanceiro.resumoContas" />
                     <div v-else class="flex flex-col items-center justify-center h-full w-full">
-                        <CreditCard class="w-16 h-16 text-muted-foreground" />
-                        <p class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
+                        <CreditCard v-if="!isLoading" class="w-16 h-16 text-muted-foreground" />
+                        <Loader v-else class="w-16 h-16 text-muted-foreground animate-spin" />
+                        <p v-if="!isLoading" class="text-center text-sm text-muted-foreground">Nenhum lançamento encontrado</p>
                     </div>
                 </CardContent>
             </Card>
@@ -315,7 +344,7 @@
 </template>
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
-import { ArrowBigDown, ArrowBigUp, ArrowUpRight, ChartCandlestick, ChartColumnIcon, CircleArrowOutDownLeft, CircleArrowOutUpRight, CircleCheckBig, CircleHelp, ClockArrowDown, CreditCard, DollarSign, Table2 } from "lucide-vue-next"
+import { ArrowBigDown, ArrowBigUp, ArrowUpRight, ChartCandlestick, ChartColumnIcon, CircleArrowOutDownLeft, CircleArrowOutUpRight, CircleCheckBig, CircleHelp, ClockArrowDown, CreditCard, DollarSign, Loader, Table2 } from "lucide-vue-next"
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { BarChart } from '@/components/ui/chart-bar'
@@ -330,6 +359,7 @@ import { presetsDatePickerVue } from "@/utils/datepickerUtil";
 import UltimosLancamentos from "./UltimosLancamentos.vue";
 import ContasLancamentos from "./ContasLancamentos.vue";
 import { useLoginStore } from "@/stores/login/loginStore";
+import { Skeleton } from "@/components/ui/skeleton";
 const loginStore = useLoginStore()
 const colormode = useColorMode()
 const dateFilter = ref<string[]>([])
@@ -342,6 +372,7 @@ defineProps({
     }
 })
 
+const isLoading = ref(true)
 const darkMode = computed(() => colormode.value === "dark" ? true : false)
 const resumoFinanceiro = ref<IResumoFinanceiro>({
     resumo: {
@@ -389,8 +420,10 @@ const totalEfetivoDespesa = computed(() => {
 })
 
 const getResumoFinanceiro = async () => {
+    isLoading.value = true
     const resultado = await LancamentosRepository.getResume(dateFilter.value);
     resumoFinanceiro.value = resultado
+    isLoading.value = false
 }
 
 onMounted(async () => {
