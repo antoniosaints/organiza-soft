@@ -63,7 +63,7 @@ const getValorLancamento = (lancamento: ITransacao) => {
                         <BadgeNatureza :natureza="lancamento.natureza" />
                     </TableCell>
                     <TableCell class="hidden xl:table-cell">
-                        <LancamentosBadge :status="lancamento.status" />
+                        <LancamentosBadge :data="lancamento" />
                     </TableCell>
                     <TableCell class="hidden xl:table-cell">
                         <BadgeMetodo :data="lancamento" />

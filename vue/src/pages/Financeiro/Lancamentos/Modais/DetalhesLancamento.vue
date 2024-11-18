@@ -10,14 +10,20 @@ import ITransacao from '@/types/financeiro/ILancamentos'
 import IParcelamento from '@/types/financeiro/IParcelamento'
 import AcoesParcelamento from "./AcoesParcelamento.vue"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import BadgeStatus from "../Tabela/BadgeStatus.vue"
 const store = useLancamentosDetalhesStore()
 
 const getValorLancamento = (lancamento: ITransacao) => {
   let valorTotal = 0;
-  if (lancamento.parcelado == "sim") {
-    valorTotal = lancamento.FinanceiroParcelamento?.reduce((acc: number, item: IParcelamento) => acc + item.valor, 0) || 0;
+  if (lancamento.parcelado == "sim" && lancamento.FinanceiroParcelamento) {
+    const parcelas = lancamento.FinanceiroParcelamento?.filter((item) => (item.status != "cancelada"));
+    const totalParcelas = parcelas.length || 0;
+    const totalPagas = parcelas.filter((item) => (item.status === "recebido")).length || 0;
+    if (totalParcelas > 0 && totalPagas === totalParcelas) { lancamento.status = "recebido" } else { lancamento.status = "pendente" }
+    valorTotal = parcelas.reduce((acc: number, item: IParcelamento) => acc + item.valor, 0) || 0;
+  } else {
+    valorTotal = lancamento.valorFinal!
   }
-  valorTotal = lancamento.valorFinal!
   return formatRealValue(valorTotal);
 }
 
@@ -29,14 +35,14 @@ const getValorLancamento = (lancamento: ITransacao) => {
       <DialogHeader class="border-b pb-4">
         <div class="flex justify-between items-center">
           <div class="flex items-center space-x-4">
-            <Receipt class="w-10 h-10 text-primary"/>
+            <Receipt class="w-10 h-10 text-primary" />
             <div>
               <DialogTitle class="text-2xl font-bold">Lançamento #{{ store.lancamento?.id }}</DialogTitle>
               <p class="text-sm text-muted-foreground">{{ store.lancamento?.descricao }}</p>
             </div>
           </div>
           <div class="px-3 py-1 rounded-full text-sm font-semibold">
-            <LancamentosBadge :status="store.lancamento?.status" />
+            <LancamentosBadge :data="store.lancamento" />
           </div>
         </div>
       </DialogHeader>
@@ -54,7 +60,8 @@ const getValorLancamento = (lancamento: ITransacao) => {
             </div>
             <div>
               <h3 class="text-md font-semibold mb-1">Informações fiscais</h3>
-              <p class="text-sm text-muted-foreground">Código NFe: {{ store.lancamento?.codigoNfe || "Não informado" }}</p>
+              <p class="text-sm text-muted-foreground">Código NFe: {{ store.lancamento?.codigoNfe || "Não informado" }}
+              </p>
               <p class="text-sm text-muted-foreground">Código Serviço: {{ store.lancamento?.codigo_servico || "Não informado" }}</p>
               <p class="text-sm text-muted-foreground">Moeda: {{ store.lancamento?.moeda || "Não informado" }}</p>
             </div>
@@ -107,32 +114,33 @@ const getValorLancamento = (lancamento: ITransacao) => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                    <TableRow v-for="parcela in store.lancamento?.FinanceiroParcelamento" :key="parcela.id">
-                      <TableCell class="font-medium">{{ parcela.tipo.substring(0, 1).toUpperCase() + parcela.tipo.substring(1) }}</TableCell>
-                      <TableCell># {{ parcela.parcela }}</TableCell>
-                      <TableCell>
-                        <LancamentosBadge :status="parcela.status" />
-                      </TableCell>
-                      <TableCell>
-                        <div class="flex items-center">
-                          <CalendarCheck2 class="w-3 h-3 mr-1 text-green-500" />
-                          {{ formatDate(parcela.dataVencimento! as string) }}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <span class="font-bold">
-                          {{ formatRealValue(parcela.valor) }}
-                        </span>
-                      </TableCell>
-                      <TableCell class="font-bold">
-                        {{ formatRealValue(parcela.status === "pendente" ? 0 : parcela.valor) }}
-                      </TableCell>
-                      <TableCell class="text-right">
-                        <AcoesParcelamento :parcela="parcela" />
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
+                  <TableRow v-for="parcela in store.lancamento?.FinanceiroParcelamento" :key="parcela.id">
+                    <TableCell class="font-medium">{{ parcela.tipo.substring(0, 1).toUpperCase() +
+                      parcela.tipo.substring(1) }}</TableCell>
+                    <TableCell># {{ parcela.parcela }}</TableCell>
+                    <TableCell>
+                      <BadgeStatus :data="parcela" :natureza="store.lancamento!.natureza" />
+                    </TableCell>
+                    <TableCell>
+                      <div class="flex items-center">
+                        <CalendarCheck2 class="w-3 h-3 mr-1 text-green-500" />
+                        {{ formatDate(parcela.dataVencimento! as string) }}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <span class="font-bold">
+                        {{ formatRealValue(parcela.valor) }}
+                      </span>
+                    </TableCell>
+                    <TableCell class="font-bold">
+                      {{ formatRealValue(parcela.status === "pendente" ? 0 : parcela.valor) }}
+                    </TableCell>
+                    <TableCell class="text-right">
+                      <AcoesParcelamento :parcela="parcela" />
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
             </div>
           </ScrollArea>
         </div>

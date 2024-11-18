@@ -31,7 +31,7 @@
             </div>
         </TableCell>
         <TableCell class="hidden md:table-cell">
-            <LancamentosBadge :status="data.status" />
+            <LancamentosBadge :data="data" />
         </TableCell>
         <TableCell class="hidden md:table-cell">
             <BadgeMetodo :data="data" />

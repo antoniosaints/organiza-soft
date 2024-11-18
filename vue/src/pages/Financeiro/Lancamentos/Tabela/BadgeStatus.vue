@@ -7,16 +7,17 @@
 
 <script setup lang="ts">
 import { Badge } from "@/components/ui/badge";
-import ITransacao from "@/types/financeiro/ILancamentos";
+import IParcelamento from "@/types/financeiro/IParcelamento";
 import { CircleCheckBig } from "lucide-vue-next";
 import { computed } from "vue";
 
 const props = defineProps<{
-    data: ITransacao
+    data: IParcelamento,
+    natureza: "receita" | "despesa"
 }>();
 
 const labelStatus = computed(() => {
-    return (props.data.status === "recebido" && props.data.natureza === "despesa") ? "pago" : props.data.status;
+    return (props.data.status === "recebido" && props.natureza === "despesa") ? "pago" : props.data.status;
 })
 
 const statusClasses = computed(() => {
