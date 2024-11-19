@@ -353,6 +353,7 @@ model ContasSistema {
   Funcionarios                  RecursosHumanosFuncionarios[]
   UsuariosInFuncionarios        RecursosHumanosUsuariosInFuncionarios[]
   ClienteOnLancamentos          ClienteOnLancamentos[]
+  PatrimonioVariantesProduto    PatrimonioVariantesProduto[]
 }
 
 model PatrimonioProdutos {
@@ -382,8 +383,34 @@ model PatrimonioProdutos {
   PatrimonioProdutosMovimentos  PatrimonioProdutosMovimentos[]
   PatrimonioComprasFornecedores PatrimonioComprasFornecedores[]
   VendasRelatorios              VendasRelatorios[]
+  PatrimonioVariantesProduto    PatrimonioVariantesProduto[]
 
   @@index([categoriaId], map: "categoria_produto_key")
+}
+
+model PatrimonioVariantesProduto {
+  id                            Int                             @id @default(autoincrement())
+  produtoId                     Int
+  Produto                       PatrimonioProdutos              @relation(references: [id], fields: [produtoId], onDelete: Cascade)
+  contaSistemaId                Int
+  ContaSistema                  ContasSistema                   @relation(fields: [contaSistemaId], references: [id])
+  cor                           String?
+  modelo                        String?
+  material                      String?
+  peso                          Float?
+  fabricante                    String?
+  altura                        Float?
+  largura                       Float?
+  etiquetaENCE                  String?
+  alimentacao                   String?
+  pilhaOuBateria                Boolean                         @default(false)
+  codigoBarra                   String?
+  descricao                     String?
+  dataCriado                    DateTime                        @default(now())
+  datAtualizado                 DateTime                        @updatedAt
+  PatrimonioProdutosEstoques    PatrimonioProdutosEstoques[]
+  PatrimonioProdutosMovimentos  PatrimonioProdutosMovimentos[]
+  PatrimonioComprasFornecedores PatrimonioComprasFornecedores[]
 }
 
 model PatrimonioProdutoCategoria {
@@ -404,6 +431,7 @@ model PatrimonioArmazenamentos {
   local                        String?
   contaSistemaId               Int
   ContaSistema                 ContasSistema                  @relation(fields: [contaSistemaId], references: [id])
+  descricao                    String?
   dataCriado                   DateTime                       @default(now())
   dataAtualizado               DateTime                       @updatedAt
   PatrimonioProdutosEstoques   PatrimonioProdutosEstoques[]
@@ -411,39 +439,46 @@ model PatrimonioArmazenamentos {
 }
 
 model PatrimonioProdutosEstoques {
-  id             Int                      @id @default(autoincrement())
-  Produto        PatrimonioProdutos       @relation(fields: [produtoId], references: [id], onDelete: Restrict)
+  id             Int                        @id @default(autoincrement())
+  Produto        PatrimonioProdutos         @relation(fields: [produtoId], references: [id], onDelete: Restrict)
   produtoId      Int
-  Armazen        PatrimonioArmazenamentos @relation(fields: [armazenId], references: [id], onDelete: Restrict)
+  Variante       PatrimonioVariantesProduto @relation(fields: [varianteId], references: [id], onDelete: Restrict)
+  varianteId     Int
+  Armazen        PatrimonioArmazenamentos   @relation(fields: [armazenId], references: [id], onDelete: Restrict)
   armazenId      Int
   contaSistemaId Int
-  ContaSistema   ContasSistema            @relation(fields: [contaSistemaId], references: [id])
+  ContaSistema   ContasSistema              @relation(fields: [contaSistemaId], references: [id])
   estoqueMinimo  Int
-  quantidade     Int                      @default(0)
-  pdv            SimOuNao                 @default(nao)
-  dataCriado     DateTime                 @default(now())
-  dataAtualizado DateTime                 @updatedAt
+  quantidade     Int                        @default(0)
+  pdv            Boolean                    @default(false)
+  controle       Boolean                    @default(false)
+  descricao      String?
+  dataCriado     DateTime                   @default(now())
+  dataAtualizado DateTime                   @updatedAt
 
   @@unique([produtoId, armazenId], map: "produto_armazen_id")
 }
 
 model PatrimonioProdutosMovimentos {
-  id             Int                      @id @default(autoincrement())
-  Produto        PatrimonioProdutos       @relation(fields: [produtoId], references: [id], onDelete: Cascade)
+  id             Int                        @id @default(autoincrement())
+  Produto        PatrimonioProdutos         @relation(fields: [produtoId], references: [id], onDelete: Cascade)
   produtoId      Int
-  valorUnitario  Float                    @db.Double
+  Variante       PatrimonioVariantesProduto @relation(fields: [varianteId], references: [id], onDelete: Restrict)
+  varianteId     Int
+  valorUnitario  Float                      @db.Double
   notaFiscal     String?
-  Armazen        PatrimonioArmazenamentos @relation(fields: [armazenId], references: [id], onDelete: Restrict)
+  Armazen        PatrimonioArmazenamentos   @relation(fields: [armazenId], references: [id], onDelete: Restrict)
   armazenId      Int
   contaSistemaId Int
-  ContaSistema   ContasSistema            @relation(fields: [contaSistemaId], references: [id])
+  ContaSistema   ContasSistema              @relation(fields: [contaSistemaId], references: [id])
   tipo           PatrimonioTipoMovimento
   quantidade     Int
-  dataMovimento  DateTime                 @default(now())
+  dataMovimento  DateTime                   @default(now())
   motivoAjuste   String?
   descricao      String?
 
   @@index([produtoId])
+  @@index([varianteId])
   @@index([armazenId])
 }
 
@@ -464,14 +499,18 @@ model PatrimonioFornecedores {
 }
 
 model PatrimonioComprasFornecedores {
-  id             Int                    @id @default(autoincrement())
-  Produto        PatrimonioProdutos     @relation(fields: [produtoId], references: [id], onDelete: Cascade)
+  id             Int                        @id @default(autoincrement())
+  Produto        PatrimonioProdutos         @relation(fields: [produtoId], references: [id], onDelete: Cascade)
   produtoId      Int
-  Fornecedor     PatrimonioFornecedores @relation(fields: [fornecedorId], references: [id], onDelete: Restrict)
+  Variante       PatrimonioVariantesProduto @relation(fields: [varianteId], references: [id], onDelete: Restrict)
+  varianteId     Int
+  Fornecedor     PatrimonioFornecedores     @relation(fields: [fornecedorId], references: [id], onDelete: Restrict)
   fornecedorId   Int
   quantidade     Float
+  valor          Float                      @default(0) @db.Double
+  descricao      String?
   contaSistemaId Int
-  ContaSistema   ContasSistema          @relation(fields: [contaSistemaId], references: [id])
+  ContaSistema   ContasSistema              @relation(fields: [contaSistemaId], references: [id])
 
   @@index([produtoId, fornecedorId], map: "produto_fornecedor_id")
 }
