@@ -42,7 +42,7 @@ const getValorLancamento = (lancamento: ITransacao) => {
             </div>
           </div>
           <div class="px-3 py-1 rounded-full text-sm font-semibold">
-            <LancamentosBadge :data="store.lancamento" />
+            <LancamentosBadge :data="store.lancamento!" />
           </div>
         </div>
       </DialogHeader>
