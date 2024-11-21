@@ -3,7 +3,7 @@
     <TabsDashboardView>
       <template v-slot:title>
         <div class="text-left mb-2">
-          <h2 class="text-2xl font-semibold">{{ saudacaoDinamica() }}, {{ nome }} 🎯</h2>
+          <h2 class="text-2xl font-semibold">{{ saudacaoDinamica() }}, {{ nome }} 😉🎯</h2>
           <p class="text-sm text-muted-foreground">Acompanhe o desempenho da sua empresa aqui.</p>
         </div>
       </template>
