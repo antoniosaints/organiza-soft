@@ -5,7 +5,7 @@
       <img src="/logo-login.png" alt="logo" class="w-0 lg:w-[70%]" />
     </div>
     <div
-      class="w-full lg:w-[40%] flex flex-col h-screen md:h-auto md:max-w-md p-6 bg-white rounded-lg shadow dark:bg-gray-800">
+      class="w-full justify-center items-center lg:w-[40%] flex flex-col h-screen md:h-auto md:max-w-md p-6 bg-white rounded-lg shadow dark:bg-gray-800">
       <div class="max-w-lg text-center">
         <h1
           class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
