@@ -64,7 +64,7 @@
           </DropdownMenu>
         </div>
       </form>
-      <div class="text-center flex justify-between">
+      <div class="flex w-full max-w-lg justify-between">
         <p class="text-sm"><RouterLink to="/cadastro" class="text-blue-500 hover:underline">Criar nova conta</RouterLink>
         </p>
         <p class="text-sm"><RouterLink to="/recuperacao" class="text-blue-500 hover:underline">Esqueceu sua senha?</RouterLink>
