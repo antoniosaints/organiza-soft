@@ -1,7 +1,6 @@
 import './assets/index.css';
 import '@vuepic/vue-datepicker/dist/main.css'
 import App from './App.vue';
-import IconsUtil from './utils/iconsUtil';
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import { useMainStore } from './stores/mainStore';
@@ -21,7 +20,6 @@ app.use(VueQueryPlugin);
     await mainStore.init();
     app.use(i18n);
     app.use(Router);
-    app.component('IconFA', IconsUtil);
     app.component('VueDatePicker', VueDatePicker);
     app.mount('#app');
 })();

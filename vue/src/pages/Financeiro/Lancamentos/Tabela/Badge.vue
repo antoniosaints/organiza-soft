@@ -1,5 +1,5 @@
 <template>
-    <Badge :class="statusClasses">
+    <Badge class="px-2 py-1 rounded-md relative overflow-hidden" :class="statusClasses">
         <CircleCheckBig class="mr-2 h-3 w-3" />
         {{ labelStatus.charAt(0).toUpperCase() + labelStatus.slice(1) }}
     </Badge>
