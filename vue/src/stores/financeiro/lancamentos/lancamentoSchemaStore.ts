@@ -23,6 +23,9 @@ export const useLancamentoSchemaStore = defineStore(
       lancamento: {
         operacao: "entrada",
         status: "pendente",
+        taxaDesconto: 0,
+        taxaCambio: 0,
+        taxaJuros: 0,
         contaId: null,
         natureza: "receita",
         categoriaId: null,

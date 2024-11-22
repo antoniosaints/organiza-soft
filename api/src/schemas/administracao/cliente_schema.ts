@@ -17,13 +17,11 @@ const createCliente = zodUtil.object({
     .trim(),
   telefone: zodUtil
     .string({
-      required_error: "O telefone e obrigatorio",
       invalid_type_error: "O telefone deve ser uma string",
     })
     .optional(),
   endereco: zodUtil
     .string({
-      required_error: "O endereço e obrigatorio",
       invalid_type_error: "O endereço deve ser uma string",
     })
     .optional(),
