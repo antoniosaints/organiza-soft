@@ -12,16 +12,20 @@
         </TableCell>
         <TableCell class="font-bold">{{ formatRealValue(data.preco) }}</TableCell>
         <TableCell class="hidden md:table-cell">
-            <div class="px-2 py-1 bg-primary text-primary-foreground rounded-md flex items-center w-min">
+            <div class="px-2 py-1 bg-primary text-primary-foreground rounded-md flex items-center w-max">
                 <ScanBarcode class="w-3 h-3 mr-1" />
-                {{ data.sku }}
+                {{ data.sku || "Sem SKU" }}
             </div>
         </TableCell>
-        <TableCell class="hidden md:table-cell"><span class="px-2 py-1 rounded-md bg-card text-secondary-foreground flex items-center w-min"><Layers class="w-3 h-3 mr-1" /> {{ data?.Categoria?.categoria }}</span>
+        <TableCell class="hidden md:table-cell"><span
+                class="px-2 py-1 rounded-md bg-card text-secondary-foreground flex items-center w-max">
+                <Layers class="w-3 h-3 mr-1" /> {{ data?.Categoria?.categoria }}
+            </span>
         </TableCell>
-        <TableCell class="hidden md:table-cell"><span class="px-0 py-1 rounded-md">{{ data.cor }}</span>
+        <TableCell class="hidden md:table-cell"><span class="px-0 py-1 rounded-md">{{ data.cor || "Sem cor" }}</span>
         </TableCell>
-        <TableCell class="hidden md:table-cell"><span class="px-2 py-1 bg-secondary rounded-md">{{ formatDateToPtbr(data.dataCriado as string) }}</span></TableCell>
+        <TableCell class="hidden md:table-cell"><span class="px-2 py-1 bg-secondary rounded-md">{{
+            formatDateToPtbr(data.dataCriado as string) }}</span></TableCell>
         <TableCell class="text-right">
             <ProdutosAction :data="data" />
         </TableCell>

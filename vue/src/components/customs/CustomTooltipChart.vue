@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-
-defineProps<{
+interface IProps {
     title?: string
     data: {
         name: string
         color: string
         value: any
     }[]
-}>()
+}
+defineProps<IProps>()
 
 const formatValue = (value: any) => {
     if (typeof value === 'number') {
