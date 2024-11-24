@@ -42,7 +42,7 @@ const selectOrganization = (org: Organization) => {
                 </Avatar>
                 <div class="truncate flex flex-col items-start">
                     {{ loginStore.dataAccountLogged?.conta }}
-                    <span class="text-sm text-primary-foreground/50 flex-1 truncate">{{ loginStore.dataAccountLogged?.email }}</span>
+                    <span class="text-xs text-primary-foreground/50 flex-1 truncate">{{ loginStore.dataAccountLogged?.email }}</span>
                 </div>
                 <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
@@ -57,7 +57,7 @@ const selectOrganization = (org: Organization) => {
                         </Avatar>
                         <div class="flex flex-col">
                             <span>{{ org.name }}</span>
-                            <span class="text-sm text-muted-foreground">{{ org.email }}</span>
+                            <span class="text-xs text-muted-foreground">{{ org.email }}</span>
                         </div>
                         <Check class="ml-auto h-4 w-4"
                             :class="{ 'opacity-100': selectedOrg.id === org.id, 'opacity-0': selectedOrg.id !== org.id }" />
