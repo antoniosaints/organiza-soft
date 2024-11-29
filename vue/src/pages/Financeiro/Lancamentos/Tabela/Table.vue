@@ -12,6 +12,14 @@
                 <TooltipProvider>
                     <Tooltip>
                         <TooltipTrigger>
+                            <FiltrarRegistros />
+                        </TooltipTrigger>
+                        <TooltipContent>Filtrar registros</TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger>
                             <Button @click="formularioStore.isModalDetalhesOpen = true" size="sm" variant="default"
                                 class="flex gap-2">
                                 <CircleFadingPlus class="w-4 h-4" />
@@ -222,6 +230,7 @@ import DetalhesLancamento from "../Modais/DetalhesLancamento.vue";
 import { presetsDatePickerVue } from "@/utils/datepickerUtil";
 import { useColorMode } from "@vueuse/core";
 import EfetivarLancamento from "../Modais/EfetivarLancamento.vue";
+import FiltrarRegistros from "../Modais/FiltrarRegistros.vue";
 const colormode = useColorMode();
 
 onMounted(() => {

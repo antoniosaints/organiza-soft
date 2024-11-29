@@ -59,13 +59,15 @@ export default class LancamentosRepository {
   static async getAll(
     limit: number,
     page: number,
+    natureza: string,
+    status: string,
     search?: string | undefined,
-    dateFilter?: string[]
+    dateFilter?: string[],
   ): Promise<{ data: ITransacao[]; total: number }> {
     let filterDate = "";
     if (dateFilter) filterDate = dateFilter.join(",");
     const { data } = await axiosService.get(
-      `financeiro/transacao?limit=${limit}&page=${page}&search=${search}&dataFiltro=${filterDate}`
+      `financeiro/transacao?limit=${limit}&page=${page}&search=${search}&dataFiltro=${filterDate}&natureza=${natureza}&status=${status}`
     );
     return data;
   }

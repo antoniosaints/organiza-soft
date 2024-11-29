@@ -6,6 +6,8 @@ import { ScToastUtil } from "@/utils/scToastUtil";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
+type statusTransacao = "pendente" | "recebido" | "cancelada";
+type naturezaTransacao = "receita" | "despesa";
 export const useLancamentosStore = defineStore(
   "LancamentosStore",
   (): ILancamentosStore => {
@@ -13,9 +15,12 @@ export const useLancamentosStore = defineStore(
     const isLoading = ref(false);
     const limit = ref<string>("10");
     const page = ref<number>(1);
+    const natureza = ref<naturezaTransacao | "todos">("todos");
+    const status = ref<statusTransacao | "todos">("todos");
     const total = ref<number>(0);
     const search = ref<string>("");
     const selectedItens = ref<number[]>([]);
+    const isModalFilterOpen = ref<boolean>(false);
 
     const getLancamentos = async (dateFilter?: string[]): Promise<void> => {
       try {
@@ -25,8 +30,10 @@ export const useLancamentosStore = defineStore(
           await LancamentosRepository.getAll(
             Number(limit.value),
             page.value,
+            natureza.value,
+            status.value,
             search.value,
-            dateFilter
+            dateFilter,
           );
         isLoading.value = false;
         lancamentos.value = data;
@@ -71,12 +78,15 @@ export const useLancamentosStore = defineStore(
       isLoading,
       limit,
       page,
+      status,
+      natureza,
       total,
       search,
       selectedItens,
       handleSelectItens,
       deleteSelectedItens,
       getLancamentos,
+      isModalFilterOpen
     };
   }
 );

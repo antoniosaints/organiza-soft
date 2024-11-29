@@ -1,0 +1,108 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #014fa7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  background: white;
+  padding: 20px;
+  max-height: 100vh;
+  overflow: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 50%;
+}
+
+@media screen and (max-width: 760px) {
+  .container {
+    width: 100%;
+  }
+} 
+
+h1 {
+  color: #333;
+}
+.paragraph {
+  background: #fcfafa;
+  padding: 5px;
+  border-radius: 5px;
+  color: rgb(56, 56, 56);
+}
+
+.card_profile {
+  border-radius: 11px;
+  padding: 12px;
+  text-align: left;
+}
+
+.header_profile {
+  font-size: xx-large;
+  font-family: monospace;
+  margin: 0;
+  color: dodgerblue;
+}
+.header_profile_second {
+  font-size: xx-large;
+  font-family: monospace;
+  margin: 0;
+  color: dodgerblue;
+}
+
+button {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 20px;
+  font-size: 16px;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.quiz {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+#result {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+.question {
+  display: flex;
+  flex-direction: column;
+}
+.percents {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+
+.percents .percent {
+  padding: 5px;
+  border-radius: 5px;
+  display: flex;
+  color: #efefef;
+  width: 100%;
+  gap: 2px;
+  justify-content: center;
+  background-color: #007bff;
+}

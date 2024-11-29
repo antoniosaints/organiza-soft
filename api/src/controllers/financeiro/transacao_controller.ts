@@ -16,6 +16,7 @@ import {
   resumoByConta,
   resumoGraficos,
 } from "../../hooks/financeiro/get_resumo_graficos";
+import { NaturezaTransacao, StatusTransacao } from "@prisma/client";
 
 // Criação de transação
 export const createTransacao = async (req: Request, res: Response) => {
@@ -225,7 +226,7 @@ export const cancelarParcela = async (req: Request, res: Response) => {
 // Obter todas as transações
 export const getTransacoes = async (req: Request, res: Response) => {
   try {
-    const { limit, page, search, dataFiltro } = req.query;
+    const { limit, page, search, natureza, status, dataFiltro } = req.query;
     let startDate = null;
     let endDate = null;
     if (dataFiltro) {
@@ -233,9 +234,13 @@ export const getTransacoes = async (req: Request, res: Response) => {
     }
     const offset = (Number(page) - 1) * Number(limit);
     const busca = search as string;
-
+    const tipoConta = natureza?.toString() == "todos" ? null : natureza;
+    const statusConta = status?.toString() == "todos" ? null : status;
+    
     const whereFilter = {
       AND: [
+        tipoConta ? { natureza: tipoConta as NaturezaTransacao } : {},
+        statusConta ? { status: statusConta as StatusTransacao } : {},
         busca
           ? {
               OR: [
