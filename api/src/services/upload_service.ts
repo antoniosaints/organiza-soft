@@ -40,11 +40,7 @@ const uploadService = (
     },
   });
 
-  const fileFilter = (
-    req: Request,
-    file: Express.Multer.File,
-    cb: any
-  ) => {
+  const fileFilter = (req: Request, file: Express.Multer.File, cb: any) => {
     const allowTypes = [
       "image/jpeg",
       "image/jpg",
