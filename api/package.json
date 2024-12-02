@@ -1,14 +1,14 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "main": "app.ts",
+  "main": "main.ts",
   "author": "",
   "license": "ISC",
   "description": "",
   "scripts": {
-    "start": "node dist/app.js",
-    "dev": "tsx watch src/app.ts",
-    "build": "tsup src",
+    "start": "node dist/main.js",
+    "dev": "tsx watch app/main.ts",
+    "build": "tsup app",
     "database": "npx prisma studio",
     "seed": "npx prisma db seed",
     "migrate:dev": "npx prisma migrate dev",
