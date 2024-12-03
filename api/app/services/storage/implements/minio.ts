@@ -24,9 +24,9 @@ export class MinioStorageProvider implements IStorageProvider {
     dataStream.on("end", () => {
       console.log("Conteúdo do objeto:", data);
     });
-    
+
     dataStream.on("error", (err) => {
-        console.error("Erro ao ler o objeto:", err);
+      console.error("Erro ao ler o objeto:", err);
     });
     return data;
   }
@@ -43,7 +43,8 @@ export class MinioStorageProvider implements IStorageProvider {
       this.bucketName,
       fileName,
       file.buffer,
-      file.size
+      file.size,
+      { "Content-Type": file.mimetype }
     );
     console.log(`Arquivo ${fileName} enviado ao MinIO com sucesso.`);
 
