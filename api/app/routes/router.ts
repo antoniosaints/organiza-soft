@@ -13,6 +13,7 @@ import armazensRouter from "./patrimonio/armazens_router";
 import mercadopagoRouter from "./financeiro/mercadopago/mercadopago_router";
 import vendasRouter from "./vendas/vendas_router";
 import codigoBarraRouter from "./patrimonio/codigo_barra_router";
+import uploadRouter from "./uploads/uploadRouter";
 
 const router = Router();
 // Rotas de assinatura
@@ -42,5 +43,7 @@ router.use("/patrimonio/armazen", auth_middleware, accountMiddleware, armazensRo
 router.use("/patrimonio/gerarCodigoBarra", auth_middleware, accountMiddleware, codigoBarraRouter);
 // Rotas de vendas
 router.use("/vendas", auth_middleware, accountMiddleware, vendasRouter);
+// Rotas de uploads
+router.use("/uploads", uploadRouter);
 
 export default router;

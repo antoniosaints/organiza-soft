@@ -7,8 +7,8 @@ import {
 } from "../../services";
 import { VendaBodySchema } from "../../schemas/vendas/vendas_body_schema";
 import { generateUniqueIdWithPrefix } from "../../utils/tools/UniqueId";
-import { MercadoPagoGateway } from "../../gateways/mercadopago/mercado_pago";
 import "dotenv/config";
+import { MercadoPagoGateway } from "../../domain/gateways/mercadopago/mercado_pago";
 export const getVendas = async (req: Request, res: Response) => {
   try {
     const { limit, page, search, dataFiltro } = req.query;

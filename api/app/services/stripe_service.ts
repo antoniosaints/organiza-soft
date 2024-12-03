@@ -1,44 +1,36 @@
 import Stripe from "stripe";
 import { stripe } from "../libs/stripe";
 import prismaService from "./prisma_service";
+import { PlanosSistema, Status } from "@prisma/client";
 
 export class StripeService {
   constructor(readonly subscription: Stripe.Subscription) {}
-
+  async updateContaSistema(contaId: number, plano: PlanosSistema, status: Status, stripeSubscriptionId: string | null) {
+    await prismaService.contasSistema.update({
+      where: { id: contaId },
+      data: {
+        plano,
+        status,
+        stripeSubscriptionId
+      },
+    });
+  }
   async managerSubscription(customerId: string): Promise<void> {
     try {
-      const conta = await prismaService.contasSistema.findFirst({ where:{stripeCustomerId: customerId}})
+      const conta = await prismaService.contasSistema.findFirst({
+        where: { stripeCustomerId: customerId },
+      });
       if (conta) {
         if (this.isActive() || this.isTrial()) {
-          await prismaService.contasSistema.update({ where:{id: conta.id}, 
-            data:{
-              plano: "pro",
-              status: "ativa",
-              stripeSubscriptionId: this.subscription.id
-            }
-          })
-        }
-        else if (this.isPastDue()){
-          await prismaService.contasSistema.update({ where:{id: conta.id}, 
-            data:{
-              plano: "free",
-              status: "vencida",
-              stripeSubscriptionId: this.subscription.id
-            }
-          })
-        }
-        else if (this.isCanceled()){
-          await prismaService.contasSistema.update({ where:{id: conta.id}, 
-            data:{
-              plano: "free",
-              status: "cancelada",
-              stripeSubscriptionId: null
-            }
-          })
+          await this.updateContaSistema(conta.id, "pro", "ativa", this.subscription.id);
+        } else if (this.isPastDue()) {
+          await this.updateContaSistema(conta.id, "free", "vencida", this.subscription.id);
+        } else if (this.isCanceled()) {
+          await this.updateContaSistema(conta.id, "free", "cancelada", null);
         }
       }
-    }catch (error) {
-      console.log(error)
+    } catch (error) {
+      console.log(error);
     }
   }
   isTrial(): boolean {
@@ -65,33 +57,52 @@ export class StripeService {
     if (!this.subscription.trial_end || !this.subscription.trial_start) {
       return null;
     }
-    const trialStart = new Date(this.subscription.trial_start * 1000).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
-    const trialEnd = new Date(this.subscription.trial_end * 1000).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
+    const trialStart = new Date(
+      this.subscription.trial_start * 1000
+    ).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
+    const trialEnd = new Date(
+      this.subscription.trial_end * 1000
+    ).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
     return {
       trialStart,
       trialEnd,
     };
   }
   getPaymentPeriod() {
-    const periodStart = new Date(this.subscription.current_period_start * 1000).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
-    const periodEnd = new Date(this.subscription.current_period_end * 1000).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
+    const periodStart = new Date(
+      this.subscription.current_period_start * 1000
+    ).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
+    const periodEnd = new Date(
+      this.subscription.current_period_end * 1000
+    ).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
     return {
       periodStart,
-      periodEnd
+      periodEnd,
     };
   }
   static async cancelAccountByWebhook(customerId: string): Promise<any> {
-    const conta = await prismaService.contasSistema.findFirst({ where:{stripeCustomerId: customerId}})
+    const conta = await prismaService.contasSistema.findFirst({
+      where: { stripeCustomerId: customerId },
+    });
     if (conta) {
-      await prismaService.contasSistema.update({ where:{id: conta.id}, data: {
-        status: "inativa",
-        stripeCustomerId: "",
-        plano: "free",
-        stripeSubscriptionId: null
-      }})
+      await prismaService.contasSistema.update({
+        where: { id: conta.id },
+        data: {
+          status: "inativa",
+          stripeCustomerId: "",
+          plano: "free",
+          stripeSubscriptionId: null,
+        },
+      });
     }
   }
-  static async createCustomer(email: string, name: string, description: string = "", phone: string = "", address: any = {}): Promise<any> {
+  static async createCustomer(
+    email: string,
+    name: string,
+    description: string = "",
+    phone: string = "",
+    address: any = {}
+  ): Promise<any> {
     const customer = await stripe.customers.create({
       email,
       name,
@@ -104,11 +115,14 @@ export class StripeService {
         line2: address?.line2 || "",
         postal_code: address?.postal_code || "",
         state: address?.state || "",
-      }
+      },
     });
     return customer;
   }
-  static async createCustomerPortal(customerId: string, urlRedirect: string): Promise<any> {
+  static async createCustomerPortal(
+    customerId: string,
+    urlRedirect: string
+  ): Promise<any> {
     const session = await stripe.billingPortal.sessions.create({
       customer: customerId,
       return_url: urlRedirect,
@@ -132,9 +146,8 @@ export class StripeService {
     return subscription;
   }
   static async cancelSubscription(subscriptionId: string): Promise<any> {
-    const canceledSubscription = await stripe.subscriptions.cancel(
-      subscriptionId
-    );
+    const canceledSubscription =
+      await stripe.subscriptions.cancel(subscriptionId);
     return canceledSubscription;
   }
 }

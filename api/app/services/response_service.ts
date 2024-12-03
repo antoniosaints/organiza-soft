@@ -1,7 +1,7 @@
 import { Response } from "express";
 
 class ResponseService {
-  static success(res: Response, data: any, message = "success") {
+  static success(res: Response, data: any, message: string = "success") {
     return res.status(200).json({
       status: "success",
       message,
@@ -9,7 +9,11 @@ class ResponseService {
     });
   }
 
-  static created(res: Response, data: any, message = "Registro criado com sucesso") {
+  static created(
+    res: Response,
+    data: any,
+    message: string = "Registro criado com sucesso"
+  ) {
     return res.status(201).json({
       status: "success",
       message,
@@ -17,7 +21,11 @@ class ResponseService {
     });
   }
 
-  static badRequest(res: Response, message = "Bad request", error: number = 400) {
+  static badRequest(
+    res: Response,
+    message: string = "Bad request",
+    error: number = 400
+  ) {
     return res.status(error).json({
       status: "error",
       message,
@@ -25,7 +33,11 @@ class ResponseService {
     });
   }
 
-  static unauthorized(res: Response, message = "Unauthorized", error: number = 401) {
+  static unauthorized(
+    res: Response,
+    message: string = "Unauthorized",
+    error: number = 401
+  ) {
     return res.status(error).json({
       status: "error",
       message,
@@ -33,7 +45,11 @@ class ResponseService {
     });
   }
 
-  static forbidden(res: Response, message = "Forbidden", error: number = 403) {
+  static forbidden(
+    res: Response,
+    message: string = "Forbidden",
+    error: number = 403
+  ) {
     return res.status(error).json({
       status: "error",
       message,
@@ -41,7 +57,11 @@ class ResponseService {
     });
   }
 
-  static notFound(res: Response, message = "Not found", error: number = 404,) {
+  static notFound(
+    res: Response,
+    message: string = "Not found",
+    error: number = 404
+  ) {
     return res.status(error).json({
       status: "error",
       message,
@@ -52,7 +72,7 @@ class ResponseService {
   static internalError(
     res: Response,
     error: any,
-    message = "Internal server error"
+    message: string = "Internal server error"
   ) {
     return res.status(500).json({
       status: "error",

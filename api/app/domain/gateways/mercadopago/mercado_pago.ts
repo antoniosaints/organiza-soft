@@ -1,8 +1,4 @@
 import { PaymentResponse } from "mercadopago/dist/clients/payment/commonTypes";
-import {
-  mercadoPagoPayment,
-  mercadoPagoPreference,
-} from "../../services/mercado_pago_service";
 import { PreferenceResponse } from "mercadopago/dist/clients/preference/commonTypes";
 import {
   IGatewayPayment,
@@ -10,6 +6,7 @@ import {
   IOrderPreference,
 } from "../gateway_interface";
 import "dotenv/config";
+import { mercadoPagoPayment, mercadoPagoPreference } from "../../../services/mercado_pago_service";
 
 export class MercadoPagoGateway implements IGatewayPayment {
   async createPayment(order: IOrderPayment): Promise<PaymentResponse> {

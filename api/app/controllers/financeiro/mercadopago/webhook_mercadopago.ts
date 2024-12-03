@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 import { HttpErrorService, prismaService } from "../../../services";
-import { MercadoPagoGateway } from "../../../gateways/mercadopago/mercado_pago";
-import { padronizarStatusGateway } from "../../../gateways/status_mapper";
-import { stat } from "fs";
+import { MercadoPagoGateway } from "../../../domain/gateways/mercadopago/mercado_pago";
+import { padronizarStatusGateway } from "../../../domain/gateways/status_mapper";
 
 interface IMercadoPagoBody {
   action: string;

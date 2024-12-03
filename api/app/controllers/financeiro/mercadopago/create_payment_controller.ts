@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { MercadoPagoGateway } from "../../../gateways/mercadopago/mercado_pago";
-import { IOrderPayment } from "../../../gateways/gateway_interface";
+import { IOrderPayment } from "../../../domain/gateways/gateway_interface";
+import { MercadoPagoGateway } from "../../../domain/gateways/mercadopago/mercado_pago";
 
 const getRandomString = (): string => {
   return (
