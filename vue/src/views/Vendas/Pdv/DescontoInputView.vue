@@ -12,9 +12,10 @@ const store = usePontoDeVendasStore();
 </script>
 
 <template>
-    <NumberField class="bg-background w-full" id="percent" v-model="store.porcentagemDesconto" :min="0" :max="1" :default-value="0.00"
-        :step="0.01" :format-options="{
+    <NumberField class="bg-background w-full" id="percent" v-model="store.porcentagemDesconto" :min="0" :max="1" :default-value="0"
+        :step="0.0001" :format-options="{
             style: 'percent',
+            maximumFractionDigits: 2
         }">
         <NumberFieldContent>
             <NumberFieldDecrement />

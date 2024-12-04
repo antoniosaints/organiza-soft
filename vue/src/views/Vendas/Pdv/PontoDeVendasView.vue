@@ -8,8 +8,9 @@ import ModalDescontoView from "./ModalDescontoView.vue"
 import { usePontoDeVendasStore } from "@/stores/vendas/pdv/pontoVendasStore"
 import ComprovanteView from "./ComprovanteView.vue"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { formatRealValue } from "@/utils/formatterUtil"
+import { formatName, formatRealValue } from "@/utils/formatterUtil"
 import { onMounted } from "vue"
+import ModalCliente from "./ModalCliente.vue"
 
 const storePDV = usePontoDeVendasStore();
 onMounted(() => storePDV.getProdutos())
@@ -121,6 +122,7 @@ onMounted(() => storePDV.getProdutos())
                     </div>
                     <div class="flex items-center gap-2">
                         <ModalDescontoView />
+                        <ModalCliente />
                         <Select v-model="storePDV.formaPagamento">
                             <SelectTrigger class="bg-background h-8 text-xs">
                                 <CreditCard class="w-3 h-3 mr-1" />
@@ -147,9 +149,9 @@ onMounted(() => storePDV.getProdutos())
                                 </SelectItem>
                             </SelectContent>
                         </Select>
-                        <Button variant="outline" class="w-min flex-1" size="sm">
+                        <Button @click="storePDV.isOpenClienteModal = true" variant="outline" class="w-min flex-1" size="sm">
                             <User class="w-3 h-3 mr-2" />
-                            Cliente
+                            {{ storePDV.nomeCliente ? formatName(storePDV.nomeCliente) : "Cliente" }}
                         </Button>
                     </div>
                     <Button variant="default" size="lg" @click="storePDV.finalizarVenda">

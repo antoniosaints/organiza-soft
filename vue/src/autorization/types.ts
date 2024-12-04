@@ -6,6 +6,8 @@ export type IAbility =
   | "deletar"
   | "detalhar"
   | "exportar"
+  | "efetivar"
+  | "estornar"
   | "importar"
   | "transferir"
   | "criar_pix"
@@ -16,4 +18,7 @@ export type IEntity =
   | "clientes"
   | "produtos"
   | "vendas"
-  | "lancamentos";
+  | "lancamentos"
+  | "categorias_lancamentos"
+  | "categorias_produtos"
+  | "contas_lancamentos"

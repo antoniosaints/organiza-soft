@@ -5,7 +5,7 @@
       <img src="/logo-login.png" alt="logo" class="w-0 lg:w-[70%]" />
     </div>
     <div
-      class="w-full lg:w-[40%] justify-center items-center flex flex-col h-screen md:h-auto md:max-w-md p-6 bg-white rounded-lg shadow dark:bg-gray-800">
+      class="w-full justify-center items-center lg:w-[40%] flex flex-col h-screen md:h-auto md:max-w-md p-6 bg-white rounded-lg shadow dark:bg-gray-800">
       <div class="max-w-lg text-center">
         <h1
           class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
@@ -19,13 +19,13 @@
       <form class="w-full max-w-lg" @submit.prevent="loginUsuario">
         <div class="mb-5">
           <Label for="email" class="text-md">E-mail</Label>
-          <Input class="border h-12 text-md rounded-xl border-gray-600" v-model="usuario.email" required type="email" label="E-mail"
-            placeholder="Seu e-mail" />
+          <Input class="border h-12 text-md rounded-xl border-gray-600" v-model="usuario.email" required type="email"
+            label="E-mail" placeholder="Seu e-mail" />
         </div>
         <div class="mb-5">
           <Label for="password" class="text-md">Senha</Label>
-          <Input class="border h-12 text-md rounded-xl border-gray-600" v-model="usuario.senha" required type="password" label="Senha"
-            placeholder="•••••••••" />
+          <Input class="border h-12 text-md rounded-xl border-gray-600" v-model="usuario.senha" required type="password"
+            label="Senha" placeholder="•••••••••" />
         </div>
         <div class="flex items-start mb-5">
           <div class="flex items-center h-5 space-x-2">
@@ -34,31 +34,41 @@
             <Label for="airplane-mode">Lembrar de mim</Label>
           </div>
         </div>
-        <Button type="submit">Logar no sistema</Button>
+        <div class="flex items-center mb-3 justify-between">
+          <Button type="submit">
+            <LogIn v-if="!loadingStore.isLoading" class="w-4 h-4 mr-2" />
+            <LoadingIconFetch class="w-4 h-4 mr-2" />
+            Logar no sistema
+          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger as-child>
+              <Button variant="outline" class="dark:bg-gray-700">
+                <Icon icon="radix-icons:moon"
+                  class="h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:-rotate-0 dark:scale-100" />
+                <Icon icon="radix-icons:sun"
+                  class="absolute h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:rotate-90 dark:scale-0" />
+                <span class="sr-only">Toggle theme</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem @click="mode = 'light'">
+                Claro
+              </DropdownMenuItem>
+              <DropdownMenuItem @click="mode = 'dark'">
+                Escuro
+              </DropdownMenuItem>
+              <DropdownMenuItem @click="mode = 'auto'">
+                Automático
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </form>
-      <div class="flex justify-end w-full">
-        <DropdownMenu>
-          <DropdownMenuTrigger as-child>
-            <Button variant="outline" class="dark:bg-gray-700">
-              <Icon icon="radix-icons:moon"
-                class="h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:-rotate-0 dark:scale-100" />
-              <Icon icon="radix-icons:sun"
-                class="absolute h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:rotate-90 dark:scale-0" />
-              <span class="sr-only">Toggle theme</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem @click="mode = 'light'">
-              Claro
-            </DropdownMenuItem>
-            <DropdownMenuItem @click="mode = 'dark'">
-              Escuro
-            </DropdownMenuItem>
-            <DropdownMenuItem @click="mode = 'auto'">
-              Automático
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+      <div class="flex w-full max-w-lg justify-between">
+        <p class="text-sm"><RouterLink to="/cadastro" class="text-blue-500 hover:underline">Criar nova conta</RouterLink>
+        </p>
+        <p class="text-sm"><RouterLink to="/recuperacao" class="text-blue-500 hover:underline">Esqueceu sua senha?</RouterLink>
+        </p>
       </div>
     </div>
   </div>
@@ -71,12 +81,15 @@ import { LoginService } from "@/services/login/loginService";
 import StorageUtil from "@/utils/storageUtil";
 import Button from "@/components/ui/button/Button.vue";
 import Input from "@/components/ui/input/Input.vue";
-import {Icon} from "@iconify/vue";
+import { Icon } from "@iconify/vue";
 import Label from "@/components/ui/label/Label.vue";
 import Switch from "@/components/ui/switch/Switch.vue";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useColorMode } from "@vueuse/core";
-
+import LoadingIconFetch from "@/components/utils/LoadingIconFetch.vue";
+import { LogIn } from "lucide-vue-next";
+import { useLoadingStore } from "@/composables/useLoading";
+const loadingStore = useLoadingStore();
 const mode = useColorMode();
 
 const lembrarUsuario = ref<boolean>(

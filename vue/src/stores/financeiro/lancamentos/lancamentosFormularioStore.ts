@@ -9,17 +9,25 @@ export const useLancamentosFormularioStore = defineStore(
     const defaultData = ref<ITransacao>({
       status: "pendente",
       valor: 0,
-      categoriasId: 0,
-      contaId: 0,
-      dataVencimento: new Date(),
+      categoriaId: null,
+      contaId: null,
+      dataVencimento: new Date().toUTCString(),
       metodoPagamento: "dinheiro",
       natureza: "receita",
-      operacao: "entrada"
+      operacao: "entrada",
+      taxaCambio: 0,
+      parcelado: "nao",
+      codigoNfe: "",
+      fornecedorId: 0,
+      taxaDesconto: 0,
+      taxaJuros: 0,
+      referenciaExterna: "",
     });
 
     const data = ref<ITransacao>({ ...defaultData.value });
     const refId = ref<number | null>(null);
     const isModalOpen = ref(false);
+    const isModalEfetivarOpen = ref(false);
     const isModalDetalhesOpen = ref(false);
 
     const resetData = () => {
@@ -32,6 +40,7 @@ export const useLancamentosFormularioStore = defineStore(
       refId,
       isModalOpen,
       resetData,
+      isModalEfetivarOpen,
       isModalDetalhesOpen,
     };
   }

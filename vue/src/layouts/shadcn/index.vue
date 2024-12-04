@@ -1,10 +1,11 @@
 <template>
     <div class="flex min-h-screen w-full bg-background text-foreground">
         <aside :class="sidebarClasses">
-            <div class="flex h-16 border-white/30 border-b-2 items-center bg-sidebar justify-between text-white px-4">
-                <div to="/app" class="flex items-center gap-2 font-bold">
-                    <img src="/OS.png" alt="logo" class="h-8 w-8 rounded-full">
-                    <span class="text-xl">Organiza Soft</span>
+            <div class="flex border-white/10 border-b items-center bg-sidebar justify-between text-white p-2">
+                <div class="flex w-full items-center">
+                    <!-- <img src="/OS.png" alt="logo" class="h-8 w-8 rounded-full">
+                    <span class="text-xl">Organiza Soft</span> -->
+                    <SelectConta />
                 </div>
                 <button type="button" class="lg:hidden" @click="toggleSidebar">
                     <PanelLeftClose />
@@ -47,11 +48,12 @@
                     <BreadCrumb />
                 </div>
                 <div class="flex items-center gap-4">
+                    <ComandoBusca />
                     <ToogleMode />
                     <ProfileHome />
                 </div>
             </header>
-            <main class="p-4 lg:p-6">
+            <main class="p-4 lg:p-6 max-w-7xl mx-auto">
                 <GlobalAlert class="mb-2" />
                 <router-view v-if="showComponent" v-slot="{ Component }">
                     <transition name="fade" @before-enter="beforeEnter" @after-leave="afterLeave">
@@ -75,6 +77,9 @@ import { onUnmounted } from 'vue';
 import { useLoginStore } from '@/stores/login/loginStore';
 import GlobalAlert from './globalAlert.vue';
 import SidebarIteravel from './sidebarIteravel.vue';
+import ComandoBusca from '@/pages/ComandoBusca/ComandoBusca.vue';
+import SelectConta from './selectConta.vue';
+import { Router } from '@/routes/Router';
 
 const widthWindow = ref(window.innerWidth);
 const loginStore = useLoginStore();
@@ -109,10 +114,13 @@ const mainContentClass = computed(() => {
     return `${isSidebarOpen.value ? 'lg:pl-64' : 'lg:pl-0'}`
 })
 const sidebarClasses = computed(() => {
-    return `fixed inset-y-0 left-0 z-20 flex w-64 flex-col border-r border-border bg-background
+    return `fixed inset-y-0 left-0 z-20 flex w-full sm:w-64 flex-col border-r border-border bg-background
       transition-all duration-300 ${isSidebarOpen.value ? 'translate-x-0' : '-translate-x-full'}`;
 });
 
+Router.beforeEach(() => {
+    isSidebarOpen.value = window.innerWidth <= 768 ? false : true;
+})
 </script>
 
 <style scoped>

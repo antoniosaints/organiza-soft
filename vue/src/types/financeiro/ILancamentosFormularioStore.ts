@@ -7,5 +7,6 @@ export interface ILancamentosFormularioStore {
     refId: Ref<number|null>
     isModalOpen: Ref<boolean>,
     isModalDetalhesOpen: Ref<boolean>,
+    isModalEfetivarOpen: Ref<boolean>,
     resetData: () => void
 }

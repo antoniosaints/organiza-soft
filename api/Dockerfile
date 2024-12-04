@@ -1,50 +1,23 @@
-# Estágio 1: Compilação da aplicação
-FROM node:18 AS builder
+# Usa a imagem Node.js 18
+FROM node:18
+
+# Define o diretório de trabalho no container
 WORKDIR /app
 
-# Definir ARGs para o build (passados via docker-compose.yml)
-ARG DATABASE_URL
-ARG SECRET
-ARG BASE_URL_FRONT
-ARG STRIPE_SECRET_KEY
-ARG STRIPE_PUBLIC_KEY
-ARG STRIPE_WEBHOOK_SECRET
-ARG PORT
-ARG TZ
-
-# Instalar as dependências do projeto
+# Copia o arquivo package.json e package-lock.json para o container
 COPY package*.json ./
+
+# Instala as dependências
 RUN npm install
 
-# Copiar o restante dos arquivos e compilar o TypeScript
+# Declaração de argumentos para receber as envs
+ARG PORT=5000
+
+# Copia o restante dos arquivos para o container
 COPY . .
-RUN npx prisma generate
-RUN npm run migrate:deploy
-RUN npm run seed
-RUN npm run build
 
-# Estágio 2: Rodar a aplicação em produção
-FROM node:18
-WORKDIR /app
-
-# Copiar apenas os arquivos necessários para rodar a aplicação
-COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/prisma ./prisma 
-
-# Definir variáveis de ambiente no contêiner
-ENV DATABASE_URL=$DATABASE_URL
-ENV SECRET=$SECRET
-ENV BASE_URL_FRONT=$BASE_URL_FRONT
-ENV STRIPE_SECRET_KEY=$STRIPE_SECRET_KEY
-ENV STRIPE_PUBLIC_KEY=$STRIPE_PUBLIC_KEY
-ENV STRIPE_WEBHOOK_SECRET=$STRIPE_WEBHOOK_SECRET
-ENV PORT=$PORT
-ENV TZ=$TZ
-
-# Expõe a porta definida
+# Expo
 EXPOSE $PORT
 
-# Rodar a aplicação
-CMD ["node", "dist/app.js"]
+# Define o comando para rodar as migrações, seeds e iniciar a aplicação
+CMD npm run migrate:deploy && npm run seed && npm run dev

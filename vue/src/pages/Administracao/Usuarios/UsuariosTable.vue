@@ -29,12 +29,13 @@
             </Button>
         </div>
         <div class="rounded-lg border shadow-sm overflow-auto">
-            <Table v-if="UsuariosExists">
+            <Table v-show="UsuariosExists">
                 <TableHeader>
                     <TableRow class="bg-secondary">
                         <TableHead>Nome</TableHead>
                         <TableHead class="hidden sm:table-cell">Permissão</TableHead>
                         <TableHead class="hidden md:table-cell">Email</TableHead>
+                        <TableHead class="hidden md:table-cell">Contato</TableHead>
                         <TableHead class="hidden md:table-cell">Status</TableHead>
                         <TableHead class="text-right">Ações</TableHead>
                     </TableRow>
@@ -44,13 +45,13 @@
                 </TableBody>
             </Table>
 
-            <div v-else class="w-full text-blue-100 flex flex-col justify-center items-center">
+            <div v-show="!UsuariosExists" class="w-full text-blue-100 flex flex-col justify-center items-center">
                 <img class="w-64" src="/not_found.svg" />
                 <p class="mb-6 font-sans text-xl text-black dark:text-white flex items-center">Nenhum registro encontrado {{ usuarioStore.search == '' ? '' : ' com: ' + usuarioStore.search }}</p>
                 <Button @click="openModalNewUser" class="bg-primary mb-6 hover:bg-primary/90"><UserPlus2 class="mr-1 h-4 w-4" />  Novo usuário</Button>
             </div>
         </div>
-        <div v-if="UsuariosExists" class="flex flex-col md:flex-row justify-between items-center mt-4">
+        <div v-show="UsuariosExists" class="flex flex-col md:flex-row justify-between items-center mt-4">
             <Label class="text-foreground/80">Mostrando de {{ rangeStart }} até {{ rangeEnd }} de {{ usuarioStore.total
                 }}</Label>
             <div class="flex item-center flex-col md:flex-row space-x-4">
@@ -80,26 +81,26 @@
                     </Select>
                 </div>
                 <Pagination :total="usuarioStore.total" :items-per-page="Number(usuarioStore.limit)" :sibling-count="1"
-                    show-edges :default-page="usuarioStore.page">
+                    show-edges :default-page="currentPage">
                     <PaginationList v-slot="{ items }" class="flex items-center gap-1">
                         <PaginationFirst as-child @click="loadUsers(1)">
                             <ChevronFirst :size="14" />
                         </PaginationFirst>
-                        <PaginationPrev as-child @click="loadUsers(usuarioStore.page - 1)">
+                        <PaginationPrev as-child @click="loadUsers(currentPage - 1)">
                             <ChevronLeft :size="14" />
                         </PaginationPrev>
 
                         <template v-for="(item, index) in items">
                             <PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
                                 <Button @click="loadUsers(item.value)" class="w-10 h-10 p-0"
-                                    :variant="item.value === usuarioStore.page ? 'default' : 'secondary'">
+                                    :variant="item.value === currentPage ? 'default' : 'secondary'">
                                     {{ item.value }}
                                 </Button>
                             </PaginationListItem>
                             <PaginationEllipsis v-else :key="item.type" :index="index" />
                         </template>
 
-                        <PaginationNext as-child @click="loadUsers(usuarioStore.page + 1)">
+                        <PaginationNext as-child @click="loadUsers(currentPage + 1)">
                             <ChevronRight :size="14" />
                         </PaginationNext>
                         <PaginationLast as-child
@@ -146,6 +147,7 @@ import { useUsuarioFormularioStore } from "@/stores/administracao/usuarios/usuar
 
 const usuarioStore = useUsuarioStore();
 const UsuarioFormularioState = useUsuarioFormularioStore();
+const currentPage = computed(() => Number(usuarioStore.page) || 1);
 const perPage = computed(() => usuarioStore.limit);
 const rangeStart = computed(() => (usuarioStore.page - 1) * Number(usuarioStore.limit) + 1);
 const rangeEnd = computed(() => (usuarioStore.page - 1) * Number(usuarioStore.limit) + usuarioStore.usuarios.length);

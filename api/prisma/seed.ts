@@ -24,17 +24,6 @@ async function main() {
       anotacoes: "admin"
     },
   }); 
-  await prisma.financeiroParcelas.upsert({
-    where: { id: 1 },
-    update: {},
-    create: {
-      contaSistemaId: 1,
-      periodo: "mensal",
-      nome: "1 vez",
-      quantidade: 1,
-    },
-  });
-
 }
 
 main()

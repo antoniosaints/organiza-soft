@@ -28,7 +28,7 @@ const managerStatusAndValue = () => {
         const totalPagas = parcelas.filter((item) => (item.status === "recebido")).length || 0;
         if (totalParcelas > 0 && totalPagas === totalParcelas) {props.data.status = "recebido"} else {props.data.status = "pendente"}
         props.data.valor = parcelas.reduce((acc, parcela) => acc + parcela.valor, 0) || 0;
-        percent.value = Math.round(totalPagas / totalParcelas * 100);
+        percent.value = Math.round(totalPagas / totalParcelas * 100) || 0;
         legend.value = `${totalPagas}/${totalParcelas} - ${percent.value}%`;
     }
 }

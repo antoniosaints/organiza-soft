@@ -50,7 +50,6 @@ export const createUsuarioAI = async (
       );
       const res = await UsuariosRepository.create({
         email: function_arguments.email,
-        grupoId: 1,
         nome: function_arguments.nome,
         senha: function_arguments.senha,
         regra: "visualizador",

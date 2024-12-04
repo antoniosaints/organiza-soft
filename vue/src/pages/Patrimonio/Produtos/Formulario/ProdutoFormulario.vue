@@ -2,7 +2,8 @@
     <form @submit.prevent="handleSubmit" class="space-y-4">
         <div class="space-y-2">
             <Label for="produto">Produto</Label>
-            <Input id="produto" placeholder="Nome do produto" minlength="2" v-model="formularioStore.data.produto" required />
+            <Input id="produto" placeholder="Nome do produto" minlength="2" v-model="formularioStore.data.produto"
+                required />
         </div>
         <div class="grid md:grid-cols-2 gap-4">
             <div class="space-y-2">
@@ -19,15 +20,17 @@
                     }">
                     <NumberFieldContent>
                         <NumberFieldDecrement />
-                        <NumberFieldInput class="bg-secondary" />
+                        <NumberFieldInput />
                         <NumberFieldIncrement />
                     </NumberFieldContent>
                 </NumberField>
             </div>
             <div class="space-y-2">
                 <Label for="categoria">Categoria</Label>
-                <SelectSearchAjax id="categoria" labelSearch="Selecione uma categoria"
-                    v-model="formularioStore.data.categoriaId" :ajax="fetchUsuarios" />
+                <SelectAjax :can-create="canCreate" v-model="formularioStore.data.categoriaId" :create-option="createCategoria"
+                    :load-options="getCategorias" />
+                <span class="text-sm ml-2 text-red-500" v-if="errosProduto.categoriaId">{{ errosProduto.categoriaId
+                    }}</span>
             </div>
         </div>
         <div class="grid md:grid-cols-2 gap-4">
@@ -44,8 +47,8 @@
             <div class="space-y-2">
                 <Label for="codigoBarra">Código de barra (EAN-13)</Label>
                 <div class="flex w-full max-w-sm items-center">
-                    <Input class="rounded-none rounded-l-md" id="codigoBarra" type="number" minlength="12" maxlength="13" placeholder="Código de barra"
-                        v-model="formularioStore.data.codigoBarra" />
+                    <Input class="rounded-none rounded-l-md" id="codigoBarra" type="number" minlength="12"
+                        maxlength="13" placeholder="Código de barra" v-model="formularioStore.data.codigoBarra" />
                     <TooltipProvider>
                         <Tooltip :delayDuration="200">
                             <TooltipTrigger as-child>
@@ -146,19 +149,28 @@ import { useProdutoFormularioStore } from "@/stores/patrimonio/produtos/produtoF
 import { useProdutoStore } from "@/stores/patrimonio/produtos/produtoStore";
 import { ProdutoService } from "@/services/patrimonio/produtoService";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectSearchAjax, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CategoriasRepository } from "@/repositories/patrimonio/produtos/categoriasRepository";
 import { useInfosProdutoStore } from "@/stores/patrimonio/produtos/infosProdutosStore";
 import { gerarCodigoEAN13 } from "@/utils/geradorCodigoBarra";
 import { NumberField, NumberFieldContent, NumberFieldDecrement, NumberFieldIncrement, NumberFieldInput } from "@/components/ui/number-field";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { checkDataProduto, errors as errosProduto } from "@/schemas/patrimonio/produtosSchema";
+import SelectAjax from "@/components/customs/SelectAjax.vue";
+import { IOptionAjax, SetOptions, SetSelected } from "@/components/customs/selectAjaxUtils";
+import { IPatrimonioCategoria } from "@/types/patrimonio/IPatrimonioCategoria";
+import { Autorize } from "@/autorization";
 const formularioStore = useProdutoFormularioStore();
 const mainStore = useProdutoStore();
 const infosProdutos = useInfosProdutoStore();
+const canCreate = Autorize.can("criar", "categorias_produtos")!;
 
 const handleSubmit = async (): Promise<void> => {
     let res = null;
-    if (formularioStore.refId == null) res = await ProdutoService.create(formularioStore.data);
+    if (formularioStore.refId == null) {
+        if (!checkDataProduto(formularioStore.data)) return
+        res = await ProdutoService.create(formularioStore.data);
+    }
     else res = await ProdutoService.update(formularioStore.refId, formularioStore.data);
     if (res) {
         formularioStore.isModalOpen = false;
@@ -170,16 +182,28 @@ const generateCodigoBarra = async () => {
     let res = gerarCodigoEAN13();
     formularioStore.data.codigoBarra = res as string;
 }
-
-const fetchUsuarios = async (query: string, id?: number) => {
-    if (id) {
-        return await CategoriasRepository.get(id).then(response => {
-            return [{ id: response.id as number, label: response.categoria }]
-        })
+async function getCategorias(
+    query: string,
+    getOption: number | null = null,
+    setOptions: SetOptions,
+): Promise<void> {
+    if (getOption) {
+        const response = await CategoriasRepository.get(getOption);
+        setOptions([{ value: response.id as number, label: response.categoria }]);
     } else {
-        return await CategoriasRepository.getAll(10, 1, query).then(response => {
-            return response.data.map(item => ({ id: item.id as number, label: item.categoria }))
-        })
+        const response = await CategoriasRepository.getAll(10, 1, query);
+        setOptions(response.data.map((item: IPatrimonioCategoria) => ({ value: item.id as number, label: item.categoria })));
     }
+}
+
+async function createCategoria(
+    option: IOptionAjax,
+    setSelected: SetSelected
+): Promise<void> {
+    const response = await CategoriasRepository.create({ categoria: option.label, cor: '' });
+    setSelected({
+        value: response.id as number,
+        label: response.categoria,
+    });
 }
 </script>

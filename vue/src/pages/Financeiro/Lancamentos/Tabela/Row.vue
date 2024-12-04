@@ -3,19 +3,14 @@
         <TableCell>
             <Checkbox :checked="hasSelected" @click="mainStore.handleSelectItens(data.id as number)" />
         </TableCell>
-        <TableCell><span
-                class="px-2 py-1 rounded-md text-secondary-foreground flex items-center w-min bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 hover:bg-green-300 dark:hover:bg-green-700"
-                :class="{ 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200 hover:bg-red-300 dark:hover:bg-red-700': data.natureza === 'despesa' }">
-                <CircleArrowOutDownLeft v-if="data.natureza === 'receita'" class="w-3 h-3 mr-1" />
-                <CircleArrowOutUpRight v-else class="w-3 h-3 mr-1" /> 
-                {{ data.natureza.charAt(0).toUpperCase() + data.natureza.slice(1) }}
-            </span>
+        <TableCell>
+            <BadgeNatureza :natureza="data.natureza" />
         </TableCell>
         <TableCell>
             <TooltipProvider>
-                <Tooltip :delay-duration="200">
+                <Tooltip :delay-duration="800">
                     <TooltipTrigger as-child>
-                        <Button @click="openDetailsProduct(data.id as number)" variant="outline"
+                        <Button @click="storeDetalhes.openModalLancamento(data.id as number)" variant="outline"
                             class="h-auto px-2 py-1 hover:bg-transparent hover:text-primary/60 dark:hover:text-primary-foreground/50">
                             <Receipt class="w-3 h-3 mr-1" />
                             {{ data.descricao ? truncateText(data.descricao) : 'Sem descricão' }}
@@ -27,20 +22,23 @@
                 </Tooltip>
             </TooltipProvider>
         </TableCell>
-        <TableCell class="font-bold">{{ formatRealValue(data.valor - data.desconto!) }}</TableCell>
+        <TableCell class="font-bold">
+            <CellValor :data="data" />
+        </TableCell>
         <TableCell class="font-bold hidden md:table-cell">
-            <div class="flex items-center bg-secondary px-2 py-1 text-secondary-foreground rounded-md w-min">
+            <div class="flex items-center bg-secondary px-2 py-1 text-secondary-foreground rounded-md w-max">
                 <ChartPie class="w-3 h-3 mr-1" /> {{ data.Categoria?.categoria }}
             </div>
         </TableCell>
         <TableCell class="hidden md:table-cell">
-            <LancamentosBadge :status="data.status" />
+            <LancamentosBadge :data="data" />
         </TableCell>
         <TableCell class="hidden md:table-cell">
             <BadgeMetodo :data="data" />
         </TableCell>
-        <TableCell class="hidden md:table-cell"><span class="px-2 py-1 bg-secondary rounded-md">{{
-            formatDateToPtbr(data.dataLancamento as string) }}</span></TableCell>
+        <TableCell class="hidden md:table-cell">
+            <CellVencimentos :data="data" />
+        </TableCell>
         <TableCell class="text-right">
             <LancamentosAction :data="data" />
         </TableCell>
@@ -53,23 +51,21 @@ import { Button } from "@/components/ui/button";
 import { computed } from "vue";
 import { Checkbox } from "@/components/ui/checkbox";
 import { LancamentosAction, LancamentosBadge } from ".";
-import { ChartPie, CircleArrowOutDownLeft, CircleArrowOutUpRight, Receipt } from "lucide-vue-next";
-import { formatDateToPtbr, formatRealValue } from "@/utils/formatterUtil";
+import { ChartPie, Receipt } from "lucide-vue-next";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import ITransacao from "@/types/financeiro/ILancamentos";
 import { useLancamentosStore } from "@/stores/financeiro/lancamentos/lancamentoStore";
 import BadgeMetodo from "./BadgeMetodo.vue";
-import { useLancamentosFormularioStore } from "@/stores/financeiro/lancamentos/lancamentosFormularioStore";
+import CellVencimentos from "./CellVencimentos.vue";
+import CellValor from "./CellValor.vue";
+import { useLancamentosDetalhesStore } from "@/stores/financeiro/lancamentos/lancamentosDetalhesStore";
+import BadgeNatureza from "./BadgeNatureza.vue";
 const mainStore = useLancamentosStore();
-const formularioStore = useLancamentosFormularioStore();
+const storeDetalhes = useLancamentosDetalhesStore();
 
 const hasSelected = computed(() => {
     return mainStore.selectedItens.includes(props.data.id as number);
 });
-const openDetailsProduct = (id: number) => {
-    formularioStore.refId = id
-    formularioStore.isModalDetalhesOpen = true
-};
 
 const truncateText = (text: string) => {
     const maxLength = 20

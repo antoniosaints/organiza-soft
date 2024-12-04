@@ -1,17 +1,14 @@
-version: '3.8'
-
 services:
-  mysql:
-    image: mysql:latest
-    container_name: mysql_container
-    environment:
-      MYSQL_ROOT_PASSWORD: cas20182018
-      MYSQL_DATABASE: api
-      TZ: 'America/Sao_Paulo'
+  app:
+    build: 
+      context: .
+    container_name: organizasoft-api-container
     ports:
-      - "3306:3306"
+      - "3340:5000"
+    env_file:
+      - .env_prod
     volumes:
-      - mysql_data:/var/lib/mysql
-
-volumes:
-  mysql_data:
+      - .:/app
+    command: sh -c "npm install && npm run migrate:deploy && npm run seed && npm run build && npm start"
+    stdin_open: true 
+    tty: true 

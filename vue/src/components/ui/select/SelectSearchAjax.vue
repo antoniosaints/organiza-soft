@@ -1,7 +1,7 @@
 <template>
     <Popover v-model:open="open">
         <PopoverTrigger as-child>
-            <Button variant="secondary" @click="fetchResults('')" role="combobox" :aria-expanded="open"
+            <Button variant="outline" @click="fetchResults('')" role="combobox" :aria-expanded="open"
                 class="w-full justify-between">
                 {{ selectedValue ? selectedValue.label : labelSearch || 'Selecione...' }}
                 <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />

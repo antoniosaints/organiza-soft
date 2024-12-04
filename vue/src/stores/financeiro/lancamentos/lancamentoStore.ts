@@ -6,33 +6,43 @@ import { ScToastUtil } from "@/utils/scToastUtil";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
+type statusTransacao = "pendente" | "recebido" | "cancelada";
+type naturezaTransacao = "receita" | "despesa";
 export const useLancamentosStore = defineStore(
   "LancamentosStore",
   (): ILancamentosStore => {
     const lancamentos = ref<ITransacao[]>([]);
+    const isLoading = ref(false);
     const limit = ref<string>("10");
     const page = ref<number>(1);
+    const natureza = ref<naturezaTransacao | "todos">("todos");
+    const status = ref<statusTransacao | "todos">("todos");
     const total = ref<number>(0);
     const search = ref<string>("");
     const selectedItens = ref<number[]>([]);
-    const startDate = ref<string>("");
-    const endDate = ref<string>("");
+    const isModalFilterOpen = ref<boolean>(false);
 
-    const getLancamentos = async (): Promise<void> => {
+    const getLancamentos = async (dateFilter?: string[]): Promise<void> => {
       try {
         if (!Autorize.can("visualizar", "lancamentos")) return;
+        isLoading.value = true;
         const { data, total: totalClientes } =
           await LancamentosRepository.getAll(
             Number(limit.value),
             page.value,
-            search.value
+            natureza.value,
+            status.value,
+            search.value,
+            dateFilter,
           );
+        isLoading.value = false;
         lancamentos.value = data;
         total.value = totalClientes;
       } catch (error: any) {
         const errorMessage =
           error?.response?.data?.message || "Erro desconhecido.";
         ScToastUtil.error(errorMessage);
+        isLoading.value = false;
       }
     };
 
@@ -64,17 +74,19 @@ export const useLancamentosStore = defineStore(
     };
 
     return {
-      startDate,
-      endDate,
       lancamentos,
+      isLoading,
       limit,
       page,
+      status,
+      natureza,
       total,
       search,
       selectedItens,
       handleSelectItens,
       deleteSelectedItens,
       getLancamentos,
+      isModalFilterOpen
     };
   }
 );

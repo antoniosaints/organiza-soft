@@ -9,6 +9,8 @@ import StorageUtil from "@/utils/storageUtil";
 import { defineStore } from "pinia";
 import { computed, ref, watch } from "vue";
 import { useVendasRelatorioStore } from "../relatorios/vendasRelatorioStore";
+import { useLoginStore } from "@/stores/login/loginStore";
+const loginStore = useLoginStore();
 
 export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
   const carrinho = ref<ICarrinhoItem[]>(
@@ -21,8 +23,11 @@ export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
   const buscarItem = ref<string>("");
   const totalItens = ref<number>(0);
   const valorTotal = ref<number>(0);
+  const isOpenClienteModal = ref<boolean>(false);
   const formaPagamento = ref<IMetodoPagamento>('pix');
   const valorComDesconto = ref<number>(0);
+  const clienteVenda = ref<number | null>(null);
+  const nomeCliente = ref<string | null>(null);
   const porcentagemDesconto = ref<number>(0);
   const openComprovante = ref<boolean>(false);
   const openCompartilharLink = ref<boolean>(false);
@@ -115,12 +120,17 @@ export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
     if (!carrinho.value.length) {
       return ScToastUtil.warning("Carrinho vazio!");
     }
+
+    if (!clienteVenda.value) {
+      return ScToastUtil.warning("Selecione um cliente!");
+    }
+
     const venda: ICreateVenda = {
       itens: carrinho.value,
-      cliente: 1,
+      cliente: clienteVenda.value,
       descricao: "Venda - PDV",
       formaPagamento: formaPagamento.value,
-      vendedor: 1,
+      vendedor: loginStore.dataUserInfosLogged?.id!,
       desconto: porcentagemDesconto.value
     }
 
@@ -148,7 +158,10 @@ export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
     gerarCkheckoutPagamentoPìx,
     getProdutos,
     carrinho,
+    clienteVenda,
+    nomeCliente,
     carrinhoComprovante,
+    isOpenClienteModal,
     produtos,
     buscarItem,
     totalItens,

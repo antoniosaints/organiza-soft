@@ -8,15 +8,17 @@
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" class="w-auto">
-                <DropdownMenuItem class="cursor-pointer">
-                    <Link class="mr-2 h-3 w-3" />
-                    Link de Pagamento
-                </DropdownMenuItem>
-                <DropdownMenuItem class="cursor-pointer">
-                    <RefreshCw class="mr-2 h-3 w-3" />
+                <DropdownMenuItem @click="converterLancamento(data.id as number, data.natureza)" class="cursor-pointer">
+                    <Replace class="mr-2 h-3 w-3" />
                     Converter
                 </DropdownMenuItem>
-                <DropdownMenuItem @click="efetivarLancamento(data.id as number)" v-if="data.status === 'pendente'" class="cursor-pointer">
+                <DropdownMenuItem @click="estornarPagamento(data.id as number)" v-if="(canEstornarLancamento)"
+                    class="cursor-pointer">
+                    <Undo2 class="mr-2 h-3 w-3" />
+                    Estornar
+                </DropdownMenuItem>
+                <DropdownMenuItem @click="openModalEfetivar(data.id as number)"
+                    v-if="(canEfetivarLancamento)" class="cursor-pointer">
                     <FileCheck class="mr-2 h-3 w-3" />
                     Efetivar
                 </DropdownMenuItem>
@@ -59,18 +61,27 @@ import {
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import LancamentosRepository from '@/repositories/financeiro/lancamentosRepository';
+import { useLancamentosFormularioStore } from '@/stores/financeiro/lancamentos/lancamentosFormularioStore';
 import { useLancamentosStore } from '@/stores/financeiro/lancamentos/lancamentoStore';
 import ITransacao from '@/types/financeiro/ILancamentos';
 import { ScToastUtil } from '@/utils/scToastUtil';
-import { Ellipsis, FileCheck, Link, RefreshCw, Trash2 } from "lucide-vue-next";
-import { ref } from "vue";
+import { Ellipsis, FileCheck, Replace, Trash2, Undo2 } from "lucide-vue-next";
+import { computed, ref } from "vue";
 const MainState = useLancamentosStore();
+const FormularioStore = useLancamentosFormularioStore();
 
 const openDialogDelete = ref(false);
 
-defineProps<{
+const props = defineProps<{
     data: ITransacao
 }>()
+
+const canEstornarLancamento = computed(() => {
+    return (props.data.status === 'recebido' && !props.data.FinanceiroParcelamento?.length && Autorize.can("estornar", "lancamentos"));
+})
+const canEfetivarLancamento = computed(() => {
+    return (props.data.status === 'pendente' && !props.data.FinanceiroParcelamento?.length && Autorize.can("efetivar", "lancamentos"));
+})
 
 const onDeletar = async (lancamento: ITransacao) => {
     if (!Autorize.can("deletar", "lancamentos")) return;
@@ -86,13 +97,30 @@ const onDeletar = async (lancamento: ITransacao) => {
     }
 }
 
-const efetivarLancamento = async (id: number) => {
+const estornarPagamento = async (id: number) => {
+    if (!Autorize.can("estornar", "lancamentos")) return;
     try {
-        await LancamentosRepository.efetivar(id);
+        await LancamentosRepository.estornarLancamento(id);
         MainState.getLancamentos();
-        ScToastUtil.success("Lançamento efetivado com sucesso!");
+        ScToastUtil.success("Lançamento estornado com sucesso!");
     } catch (e: any) {
         ScToastUtil.warning(e.response.data.message);
     }
+}
+const converterLancamento = async (id: number, natureza: "receita" | "despesa") => {
+    if (!Autorize.can("atualizar", "lancamentos")) return;
+    try {
+        await LancamentosRepository.converterLancamento(id, natureza);
+        MainState.getLancamentos();
+        ScToastUtil.success("Lançamento convertido com sucesso!");
+    } catch (e: any) {
+        ScToastUtil.warning(e.response.data.message);
+    }
+}
+
+const openModalEfetivar = (id: number) => {
+    if (!Autorize.can("efetivar", "lancamentos")) return;
+    FormularioStore.refId = id
+    FormularioStore.isModalEfetivarOpen = true
 }
 </script>

@@ -2,7 +2,7 @@
 import { Skeleton } from '@/components/ui/skeleton';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible"
 import { useMenuStore } from '@/stores/menuStore';
-import { ChevronRight, ClipboardCheck, Computer, Contact, Cpu, FileBox, FileChartPie, FileText, Handshake, History, House, KeyRound, Landmark, Layers, List, LockKeyhole, MessageCircle, Package, Settings2, Tags, User, UserRoundCog, Wallet } from 'lucide-vue-next';
+import { BadgeCheck, BookOpenCheck, ChevronRight, ClipboardCheck, Computer, Contact, FileBox, FileChartPie, FileCheck, FileDigit, FileText, Handshake, History, House, KeyRound, Landmark, Layers, List, LockKeyhole, MessageCircle, Package, PenTool, Settings2, Sparkles, Tags, Ticket, User, UserRoundCog, Wallet } from 'lucide-vue-next';
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 const menuStore = useMenuStore()
@@ -51,7 +51,7 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
     {
         icon: Handshake,
         title: "RH",
-        show: menuStore.permissions.admin,
+        show: menuStore.permissions.rh,
         items: [
             {
                 icon: UserRoundCog,
@@ -69,7 +69,7 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
     },
     {
         title: t("sidebar.assistant"),
-        icon: Cpu,
+        icon: Sparkles,
         secondaryIcon: Skeleton,
         show: menuStore.permissions.assistente,
         items: [
@@ -90,7 +90,7 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
                 icon: FileChartPie,
                 title: t("sidebar.resumecrm"),
                 url: "/app/crm/clientes",
-                show: menuStore.permissions.crm
+                show: menuStore.permissions.crm && menuStore.permissions.dashboardCrm
             },
             {
                 icon: User,
@@ -121,7 +121,7 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
             {
                 title: "Resumo",
                 icon: FileChartPie,
-                show: menuStore.permissions.vendas,
+                show: menuStore.permissions.vendas && menuStore.permissions.dashboardVendas,
                 url: "/app/patrimonio/categorias"
             },
             {
@@ -144,6 +144,12 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
         show: menuStore.permissions.financeiro,
         items: [
             {
+                title: "Resumo",
+                icon: FileChartPie,
+                show: menuStore.permissions.financeiro && menuStore.permissions.dashboardFinanceiro,
+                url: "/app/financeiro/dashboard"
+            },
+            {
                 icon: Wallet,
                 title: 'Lançamentos',
                 show: menuStore.permissions.financeiro,
@@ -152,19 +158,19 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
             {
                 icon: FileText,
                 title: 'DRE',
-                show: menuStore.permissions.financeiro,
+                show: menuStore.permissions.financeiro && false,
                 url: "/app/financeiro/dre"
             },
             {
                 icon: Settings2,
                 title: t("sidebar.others"),
-                show: menuStore.permissions.financeiro,
+                show: menuStore.permissions.financeiro && false,
                 items: [
                     {
                         title: 'Categorias',
                         icon: Contact,
                         url: "/app/financeiro/categorias",
-                        show: menuStore.permissions.crm
+                        show: menuStore.permissions.financeiro
                     }
                 ]
             }
@@ -177,11 +183,55 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
         show: menuStore.permissions.patrimonio,
         items: [
             {
+                title: "Resumo",
+                icon: FileChartPie,
+                show: menuStore.permissions.patrimonio && menuStore.permissions.dashboardPatrimonio,
+                url: "/app/patrimonio/dashboard"
+            },
+            {
                 icon: FileBox,
                 title: 'Produtos',
                 show: menuStore.permissions.patrimonio,
                 url: "/app/patrimonio/produtos"
             }
+        ]
+    },
+    {
+        title: "Serviços",
+        icon: FileDigit,
+        show: menuStore.permissions.servicos,
+        items: [
+            {
+                icon: BookOpenCheck,
+                title: 'Ordens de Serviço',
+                show: menuStore.permissions.servicos,
+                url: "/app/servicos/os"
+            },
+            {
+                icon: FileCheck,
+                title: 'Serviços',
+                show: menuStore.permissions.servicos,
+                url: "/app/servicos/servicos"
+            },
+        ]
+    },
+    {
+        title: "Assinantes",
+        icon: PenTool,
+        show: menuStore.permissions.assinantes,
+        items: [
+            {
+                icon: Ticket,
+                title: 'Assinaturas',
+                show: menuStore.permissions.assinantes,
+                url: "/app/assinantes/assinaturas"
+            },
+            {
+                icon: BadgeCheck,
+                title: 'Planos',
+                show: menuStore.permissions.assinantes,
+                url: "/app/assinantes/planos"
+            },
         ]
     }
 ]
@@ -191,8 +241,8 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
 <template>
     <div class="flex-1 overflow-y-auto bg-sidebar text-white px-2 py-4">
         <nav class="grid gap-2">
-            <collapsible v-for="(item, index) in MenuOptionsSidebar" :key="index" v-show="item.show"
-                :title="item.title" v-slot="{ open }" class="grid gap-2">
+            <collapsible v-for="(item, index) in MenuOptionsSidebar" :key="index" v-show="item.show" :title="item.title"
+                v-slot="{ open }" class="grid gap-2">
                 <router-link v-if="!item?.items?.length" :to="item.url!"
                     class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                     <component :is="item.icon" />
@@ -210,7 +260,7 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
                 </collapsible-trigger>
                 <collapsible-content>
                     <div class="grid gap-2 pl-6">
-                        <div v-for="(subItem, index) in item.items" :key="index">
+                        <div v-for="(subItem, index) in item.items" :key="index" v-show="subItem.show">
                             <router-link v-if="!subItem?.items?.length" :to="subItem.url!"
                                 class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                                 <component :is="subItem.icon" />
@@ -226,7 +276,7 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
                                 </collapsible-trigger>
                                 <collapsible-content>
                                     <div class="grid gap-2 pl-6">
-                                        <div v-for="(terceiro, index) in subItem.items" :key="index">
+                                        <div v-for="(terceiro, index) in subItem.items" :key="index" v-show="terceiro.show">
                                             <router-link :to="terceiro.url!"
                                                 class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-hover">
                                                 <component :is="terceiro.icon" />
