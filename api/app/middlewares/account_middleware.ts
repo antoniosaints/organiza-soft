@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import ResponseService from "../services/response_service";
-import prismaService from "../services/prisma_service";
+import ResponseService from "../services/http/response_service";
+import prismaService from "../services/database/prisma_service";
 
 // Middleware para validação de accountId, se existir, adiciona ao body do request
 const accountMiddleware = async (req: Request, res: Response, next: any) => {

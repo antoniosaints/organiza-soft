@@ -1,5 +1,5 @@
 import { ZodSchema, infer as Infer } from "zod";
-import { ValidationError } from "../utils/http/lancar_erro";
+import { ValidationError } from "../../utils/http/lancar_erro";
 
 const validateSchema = <T extends ZodSchema>(schema: T, data: unknown): Infer<T> => {
     const validated = schema.safeParse(data);

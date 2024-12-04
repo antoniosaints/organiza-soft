@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import HttpErrorService from "../../services/http_error_service";
-import prismaService from "../../services/prisma_service";
-import ResponseService from "../../services/response_service";
+import HttpErrorService from "../../services/http/http_error_service";
+import prismaService from "../../services/database/prisma_service";
+import ResponseService from "../../services/http/response_service";
 import {
   createAssinatura as createAssinaturaSchema,
   updateAssinatura as updateAssinaturaSchema,
 } from "../../schemas/assinaturas/assinatura_schema";
-import validateSchema from "../../services/validade_schema";
+import { validateSchema } from "../../services";
 
 export const createAssinatura = async (req: Request, res: Response) => {
   try {

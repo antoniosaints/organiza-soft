@@ -26,15 +26,4 @@ export class UploadController {
             res.status(500).json({ message: 'Erro ao gerar presigned URL.', error });
         }
     }
-
-    static async downloadFile(req: Request, res: Response) {
-        try {
-            const minio = new MinioStorageProvider("organizasoft");
-            const files = await minio.download("1733259979751-139772666 (1).jpeg");
-            res.status(200).json({ message: 'Objetos recuperados.', objects: files });
-        } catch (error) {
-            console.error('Erro ao buscar os objetos:', error);
-            res.status(500).json({ message: 'Erro ao buscar os objetos.', error });
-        }
-    }
 }

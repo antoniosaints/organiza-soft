@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { LancamentoBodySchema } from "../schemas/financeiro/lancamento_body_schema";
-import prismaService from "./prisma_service";
-import { createParcelamento } from "../schemas/financeiro/parcelamento_schema";
+import { LancamentoBodySchema } from "../../schemas/financeiro/lancamento_body_schema";
+import prismaService from "../database/prisma_service";
+import { createParcelamento } from "../../schemas/financeiro/parcelamento_schema";
 import { Response } from "express";
-import ResponseService from "./response_service";
+import ResponseService from "../http/response_service";
 export class LancamentoService {
   private parcelas: z.infer<typeof createParcelamento>[] = [];
   constructor(

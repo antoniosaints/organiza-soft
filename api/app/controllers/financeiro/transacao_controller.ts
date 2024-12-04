@@ -10,7 +10,7 @@ import {
   validateSchema,
 } from "../../services";
 import { LancamentoBodySchema } from "../../schemas/financeiro/lancamento_body_schema";
-import { LancamentoService } from "../../services/lancamentos_service";
+import { LancamentoService } from "../../services/financeiro/lancamentos_service";
 import { getResumoTransacoes } from "../../hooks/financeiro/get_resumo";
 import {
   resumoByConta,

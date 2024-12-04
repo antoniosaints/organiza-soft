@@ -1,5 +1,5 @@
 import { PrismaClientKnownRequestError, PrismaClientValidationError } from "@prisma/client/runtime/library";
-import { NotFoundError, ValidationError } from "../utils/http/lancar_erro";
+import { NotFoundError, ValidationError } from "../../utils/http/lancar_erro";
 import { Response } from "express";
 
 const errosPrisma: Record<string, string> = {

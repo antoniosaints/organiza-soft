@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import JwtService from "../services/jwt_service";
-import ResponseService from "../services/response_service";
+import JwtService from "../services/auth/jwt_service";
+import ResponseService from "../services/http/response_service";
 
 const AUTH_ERRORS = {
   MISSING_TOKEN: "Token não informado",

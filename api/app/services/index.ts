@@ -1,11 +1,11 @@
-import { deleteFileService, renameFileService } from "./file_service";
-import HttpErrorService from "./http_error_service";
-import JwtService from "./jwt_service";
-import prismaService from "./prisma_service";
-import ResponseService from "./response_service";
-import { StripeService } from "./stripe_service";
-import uploadService from "./upload_service";
-import validateSchema from "./validade_schema";
+import { deleteFileService, renameFileService } from "./storage/file_service";
+import HttpErrorService from "./http/http_error_service";
+import JwtService from "./auth/jwt_service";
+import prismaService from "./database/prisma_service";
+import ResponseService from "./http/response_service";
+import { StripeService } from "./financeiro/stripe_service";
+import uploadService from "./storage/upload_service";
+import validateSchema from "./validation/validade_schema";
 
 export {
     renameFileService,

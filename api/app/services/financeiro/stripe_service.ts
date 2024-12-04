@@ -1,6 +1,6 @@
 import Stripe from "stripe";
-import { stripe } from "../libs/stripe";
-import prismaService from "./prisma_service";
+import { stripe } from "../../libs/stripe";
+import prismaService from "../database/prisma_service";
 import { PlanosSistema, Status } from "@prisma/client";
 
 export class StripeService {
