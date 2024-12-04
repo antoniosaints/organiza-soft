@@ -16,10 +16,21 @@ export class UploadController {
         }
     }
 
-    static async getFiles(req: Request, res: Response) {
+    static async presignUrl(req: Request, res: Response) {
         try {
             const minio = new MinioStorageProvider("organizasoft");
-            const files = await minio.getAll();
+            const presignedUrl = await minio.presignUrl(req.params.objectName);
+            res.status(200).json({ message: 'Presigned URL gerada com sucesso.', presignedUrl });
+        } catch (error) {
+            console.error('Erro ao gerar presigned URL:', error);
+            res.status(500).json({ message: 'Erro ao gerar presigned URL.', error });
+        }
+    }
+
+    static async downloadFile(req: Request, res: Response) {
+        try {
+            const minio = new MinioStorageProvider("organizasoft");
+            const files = await minio.download("1733259979751-139772666 (1).jpeg");
             res.status(200).json({ message: 'Objetos recuperados.', objects: files });
         } catch (error) {
             console.error('Erro ao buscar os objetos:', error);

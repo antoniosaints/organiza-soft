@@ -9,26 +9,22 @@ export class MinioStorageProvider implements IStorageProvider {
     this.bucketName = bucketName;
   }
 
-  async getAll(): Promise<any> {
-    const dataStream = await MinioService.getObject(
+  async download(objectName: string): Promise<any> {
+    const data = MinioService.fGetObject(
       this.bucketName,
-      "1733256950286-3716548.xlsx"
+      objectName,
+      `.\\uploads\\${objectName}`
     );
 
-    // Para ler o conteúdo do stream
-    let data = "";
-    dataStream.on("data", (chunk) => {
-      data += chunk.toString();
-    });
-
-    dataStream.on("end", () => {
-      console.log("Conteúdo do objeto:", data);
-    });
-
-    dataStream.on("error", (err) => {
-      console.error("Erro ao ler o objeto:", err);
-    });
     return data;
+  }
+  async presignUrl(objectName: string): Promise<string> {
+    const presignedUrl = await MinioService.presignedGetObject(
+      this.bucketName,
+      objectName,
+      24 * 60 * 60
+    );
+    return presignedUrl;
   }
   async upload(
     file: Express.Multer.File,
