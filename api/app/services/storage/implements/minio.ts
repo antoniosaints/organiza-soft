@@ -8,21 +8,23 @@ import { MinioService } from "../cloud/minio_service";
 
 export class MinioStorageProvider implements IStorageProvider {
   bucketName: string = "";
-  constructor(bucketName: string) {
+  pathName: string = "";
+  constructor(bucketName: string, pathName: string) {
     this.bucketName = bucketName;
+    this.pathName = pathName;
   }
-  async presignUrl(objectName: string): Promise<string> {
+  async presignUrl(objectName: string, expiresIn: number = 86400): Promise<string> {
     const presignedUrl = await MinioService.presignedGetObject(
       this.bucketName,
-      objectName,
-      24 * 60 * 60
+      `${this.pathName}/${objectName}`,
+      expiresIn
     );
     return presignedUrl;
   }
-  async upload(file: Express.Multer.File, folder: string): Promise<any> {
+  async upload(file: Express.Multer.File): Promise<any> {
     const generateRandomId = () => Math.floor(Math.random() * 1000000000);
     const fileName = `${Date.now()}-${generateRandomId()}${path.extname(file.originalname)}`;
-    const filePath = `${folder}/${fileName}`; // Adiciona a "pasta" da conta
+    const filePath = `${this.pathName}/${fileName}`; // Adiciona a "pasta" da conta
 
     await this.createBucketIfNotExists();
 
@@ -41,7 +43,7 @@ export class MinioStorageProvider implements IStorageProvider {
     return {
       etag: result.etag,
       filename: fileName,
-      path: folder,
+      path: this.pathName,
       version: result.versionId,
     };
   }

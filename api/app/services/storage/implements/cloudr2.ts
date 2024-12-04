@@ -2,7 +2,7 @@ import { IStorageProvider } from "../dtos/IStorageProvider";
 import { R2Service } from "../cloud/r2_service";
 import path from "path";
 import {
-    DeleteObjectCommand,
+  DeleteObjectCommand,
   DeleteObjectCommandInput,
   DeleteObjectRequest,
   GetObjectAclCommandInput,
@@ -15,8 +15,10 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 export class R2StorageProvider implements IStorageProvider {
   bucketName: string = "";
-  constructor(bucketName: string) {
+  pathName: string = "";
+  constructor(bucketName: string, pathName: string) {
     this.bucketName = bucketName;
+    this.pathName = pathName;
   }
   async upload(file: Express.Multer.File, folder: string): Promise<any> {
     const generateRandomId = () => Math.floor(Math.random() * 1000000000);
@@ -31,9 +33,7 @@ export class R2StorageProvider implements IStorageProvider {
       ContentType: file.mimetype,
     };
 
-    const result = await R2Service.send(
-        new PutObjectCommand(params)
-    );
+    const result = await R2Service.send(new PutObjectCommand(params));
     return {
       etag: result.ETag,
       filename: fileName,
@@ -47,19 +47,20 @@ export class R2StorageProvider implements IStorageProvider {
       Key: path,
     };
 
-    const result = await R2Service.send(
-        new DeleteObjectCommand(params)
-    );
+    const result = await R2Service.send(new DeleteObjectCommand(params));
     return result;
   }
 
-  async presignUrl(objectName: string): Promise<string> {
+  async presignUrl(
+    objectName: string,
+    expiresIn: number = 86400
+  ): Promise<string> {
     const params: GetObjectAclCommandInput = {
-      Bucket: this.bucketName,
-      Key: objectName
+      Bucket: `${this.pathName}/${objectName}`,
+      Key: objectName,
     };
-    const command = new GetObjectCommand(params)
-    const url = await getSignedUrl(R2Service, command, {expiresIn: 24 * 60 * 60});
+    const command = new GetObjectCommand(params);
+    const url = await getSignedUrl(R2Service, command, { expiresIn });
     return url;
   }
 }
