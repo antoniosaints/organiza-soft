@@ -4,7 +4,7 @@ import { UploadController } from "../../controllers/uploads/upload_controller";
 const uploadRouter = Router();
 const upload = multer();
 
-uploadRouter.post("/", upload.single("file"), UploadController.uploadFile);
+uploadRouter.post("/", upload.array("file"), UploadController.uploadFile);
 uploadRouter.get("/:objectName", UploadController.presignUrl);
 
 export default uploadRouter;

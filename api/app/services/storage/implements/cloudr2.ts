@@ -4,12 +4,10 @@ import path from "path";
 import {
   DeleteObjectCommand,
   DeleteObjectCommandInput,
-  DeleteObjectRequest,
   GetObjectAclCommandInput,
   GetObjectCommand,
   PutObjectCommand,
   PutObjectCommandInput,
-  PutObjectRequest,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
