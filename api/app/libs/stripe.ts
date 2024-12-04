@@ -1,12 +1,6 @@
-import "dotenv/config";
 import Stripe from "stripe";
+import env from "../configs/env";
 
-const secretKey = process.env.STRIPE_SECRET_KEY;
-
-if (!secretKey) {
-    throw new Error("Stripe secret key not found");
-}
-
-export const stripe = new Stripe(secretKey, {
+export const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
     apiVersion: "2024-06-20"
 });

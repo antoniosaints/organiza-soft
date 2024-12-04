@@ -1,12 +1,12 @@
 import * as Minio from "minio";
-import "dotenv/config";
+import env from "../../../configs/env";
 
 const MinioService = new Minio.Client({
-  endPoint: process.env.MINIO_ENDPOINT!,
+  endPoint: env.MINIO_ENDPOINT,
   port: 443,
   useSSL: true,
-  accessKey: process.env.S3_ACCESSKEY!,
-  secretKey: process.env.S3_SECRETKEY!,
+  accessKey: env.MINIO_ACCESSKEY,
+  secretKey: env.MINIO_SECRETKEY,
 });
 
 export { MinioService };
