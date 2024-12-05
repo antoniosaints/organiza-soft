@@ -6,5 +6,6 @@ const upload = multer();
 
 uploadRouter.post("/", upload.array("file"), UploadController.uploadFile);
 uploadRouter.get("/:objectName", UploadController.presignUrl);
+uploadRouter.delete("/:objectName", UploadController.deleteFile);
 
 export default uploadRouter;

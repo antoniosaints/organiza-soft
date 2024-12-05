@@ -16,6 +16,17 @@ export class UploadController {
         }
     }
 
+    static async deleteFile(req: Request, res: Response) {
+        try {
+            const minio = new MinioStorageProvider("organizasoft", "conta01");
+            const forceDelete = req.query.forceDelete === 'true';
+            await minio.delete(req.params.objectName, forceDelete);
+            res.status(200).json({ message: 'Arquivo excluído com sucesso.' });
+        } catch (error) {
+            res.status(500).json({ message: 'Erro ao excluir arquivo.', error });
+        }
+    }
+
     static async presignUrl(req: Request, res: Response) {
         try {
             const minio = new MinioStorageProvider("organizasoft", "conta01");

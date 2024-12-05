@@ -13,7 +13,10 @@ export class MinioStorageProvider implements IStorageProvider {
     this.bucketName = bucketName;
     this.pathName = pathName;
   }
-  async presignUrl(objectName: string, expiresIn: number = 86400): Promise<string> {
+  async presignUrl(
+    objectName: string,
+    expiresIn: number = 86400
+  ): Promise<string> {
     const presignedUrl = await MinioService.presignedGetObject(
       this.bucketName,
       `${this.pathName}/${objectName}`,
@@ -30,7 +33,6 @@ export class MinioStorageProvider implements IStorageProvider {
 
     const metadata: ItemBucketMetadata = {
       "Content-Type": file.mimetype,
-      "x-amz-acl": "public-read",
     };
 
     const result = await MinioService.putObject(
@@ -47,8 +49,11 @@ export class MinioStorageProvider implements IStorageProvider {
       version: result.versionId,
     };
   }
-  async delete(objectName: string): Promise<void> {
-    await MinioService.removeObject(this.bucketName, objectName);
+  async delete(objectName: string, forceDelete: boolean = true): Promise<void> {
+    const filePath = `${this.pathName}/${objectName}`;
+    await MinioService.removeObject(this.bucketName, filePath, {
+      forceDelete,
+    });
     console.log(`Arquivo ${objectName} excluído com sucesso.`);
   }
   async createBucketIfNotExists(): Promise<void> {
