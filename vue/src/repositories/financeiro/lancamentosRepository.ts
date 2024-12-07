@@ -59,8 +59,8 @@ export default class LancamentosRepository {
   static async getAll(
     limit: number,
     page: number,
-    natureza: string,
-    status: string,
+    natureza?: string,
+    status?: string,
     search?: string | undefined,
     dateFilter?: string[],
   ): Promise<{ data: ITransacao[]; total: number }> {

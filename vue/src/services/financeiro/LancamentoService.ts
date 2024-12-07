@@ -30,6 +30,8 @@ export class LancamentoService {
   static async getAll(
     limit: string,
     page: number,
+    natureza?: string,
+    status?: string,
     search?: string,
     dateFilter?: string[]
   ): Promise<{ data: ITransacao[]; total: number }> {
@@ -38,6 +40,8 @@ export class LancamentoService {
       const { data, total } = await LancamentosRepository.getAll(
         Number(limit),
         page,
+        natureza,
+        status,
         search,
         dateFilter
       );
