@@ -6,9 +6,19 @@ export const DefRelatorioGeralFinanceiro: TDocumentDefinitions = {
   language: "pt-br",
   pageSize: "A4",
   pageOrientation: "portrait",
-  watermark: {
-    text: "CAS Telecomunicações Eireli",
-    opacity: 0.1,
+//   watermark: {
+//     text: "CAS Telecomunicações Eireli",
+//     opacity: 0.1,
+//   },
+  ownerPassword: "123",
+  permissions: {
+        annotating: true,
+        contentAccessibility: true,
+        copying: false,
+        modifying: false,
+        fillingForms: false,
+        printing: "highResolution",
+        documentAssembly: false,
   },
   info: {
       author: "CAS Telecomunicações Eireli",
