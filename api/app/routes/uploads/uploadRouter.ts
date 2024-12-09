@@ -1,11 +1,11 @@
 import { Router } from "express";
 import multer from "multer";
-import { UploadController } from "../../controllers/uploads/upload_controller";
+import { deleteFile, presignUrl, uploadFile } from "../../controllers/uploads/upload_controller";
 const uploadRouter = Router();
 const upload = multer();
 
-uploadRouter.post("/", upload.array("file"), UploadController.uploadFile);
-uploadRouter.get("/:objectName", UploadController.presignUrl);
-uploadRouter.delete("/:objectName", UploadController.deleteFile);
+uploadRouter.post("/", upload.array("file"), uploadFile);
+uploadRouter.get("/:objectName", presignUrl);
+uploadRouter.delete("/:objectName", deleteFile);
 
 export default uploadRouter;
