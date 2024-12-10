@@ -37,8 +37,8 @@ router.use("/patrimonio", auth_middleware, accountMiddleware, patrimonioRouter);
 // Rotas de vendas
 router.use("/vendas", auth_middleware, accountMiddleware, vendasRouter);
 // Rotas de uploads
-router.use("/uploads", uploadRouter);
+router.use("/uploads", auth_middleware, accountMiddleware, uploadRouter);
 // Rotas de relatorios
-router.use("/relatorios", relatoriosRouter);
+router.use("/relatorios", auth_middleware, accountMiddleware, relatoriosRouter);
 
 export default router;
