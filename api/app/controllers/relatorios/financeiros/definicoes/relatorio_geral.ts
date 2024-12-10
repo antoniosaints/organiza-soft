@@ -11,19 +11,19 @@ export const DefRelatorioGeralFinanceiro = async (query: IQueryParams, request: 
     language: "pt-br",
     version: "1.3",
     pageSize: "A4",
-    watermark: query.marca === "sim" ? { text: "CAS Telecomunicações Eireli", color: "blue", opacity: 0.1, bold: true } : undefined,
+    watermark: query.marca === "sim" ? { text: "Organiza Soft", color: "blue", opacity: 0.1, bold: true } : undefined,
     pageOrientation: "portrait",
     ownerPassword: "123",
     permissions: defaultPermissions(query),
     info: {
-      author: "CAS Telecomunicações Eireli",
+      author: "Organiza Soft",
       creator: "Antonio Costa dos Santos",
       title: "Relatório Financeiro",
       subject: "Relatório Financeiro",
       creationDate: new Date(),
       keywords: "Relatório Financeiro",
       modDate: new Date(),
-      producer: "CAS Telecomunicações Eireli",
+      producer: "Organiza Soft",
     },
     content: [
       {
@@ -36,7 +36,7 @@ export const DefRelatorioGeralFinanceiro = async (query: IQueryParams, request: 
           },
           {
             text: [
-              { text: "CAS Telecomunicações Eireli\n", style: "header" },
+              { text: "Organiza Soft\n", style: "header" },
               { text: "Contato: 9998414-0666\n", style: "subheader" },
               { text: "E-mail: costaantonio883@gmail.com\n", style: "subheader" },
               {
@@ -49,7 +49,7 @@ export const DefRelatorioGeralFinanceiro = async (query: IQueryParams, request: 
           },
         ],
       },
-      {text: "DRE - CAS Telecomunicações Eireli", style: "largeheader"},
+      {text: "DRE - Organiza Soft", style: "largeheader"},
       {
         table: {
           body: [

@@ -69,6 +69,7 @@
                         </Tooltip>
                     </TooltipProvider>
                 </div>
+                <Button class="w-min px-2 mr-2" @click="exportarPdf" variant="outline"><FileDown class="w-4 h-4" /></Button>
                 <VueDatePicker placeholder="Período de filtragem" format="dd/MM/yyyy" select-text="Aplicar"
                     cancel-text="Fechar" :preset-dates="presetsDatePickerVue" locale="pt" :dark="darkMode" utc
                     v-model="dateFilter" range>
@@ -214,7 +215,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, CircleChevronDown, CircleFadingPlus, FilterX, Loader, Search, Trash2 } from "lucide-vue-next";
+import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, CircleChevronDown, CircleFadingPlus, FileDown, FilterX, Loader, Search, Trash2 } from "lucide-vue-next";
 import { Label } from "@/components/ui/label";
 import { onMounted, watch, computed, ref } from "vue";
 import { Input } from "@/components/ui/input";
@@ -231,6 +232,7 @@ import { presetsDatePickerVue } from "@/utils/datepickerUtil";
 import { useColorMode } from "@vueuse/core";
 import EfetivarLancamento from "../Modais/EfetivarLancamento.vue";
 import FiltrarRegistros from "../Modais/FiltrarRegistros.vue";
+import FinanceiroRelatorioRepository from "@/repositories/relatorios/financeiroRelatorioRepository";
 const colormode = useColorMode();
 
 onMounted(() => {
@@ -273,4 +275,8 @@ const loadDataChange = async (paginate?: number) => {
     mainStore.page = paginate || 1;
     await mainStore.getLancamentos(dateFilter.value);
 };
+
+async function exportarPdf() {
+    await FinanceiroRelatorioRepository.gerarRelatorioDre();
+}
 </script>
