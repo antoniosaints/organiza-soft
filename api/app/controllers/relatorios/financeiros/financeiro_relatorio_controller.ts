@@ -12,7 +12,7 @@ export const createRelatorioFinanceiro = async (req: Request, res: Response) => 
     document.on('end', () => {
         const result = Buffer.concat(chunks);
         res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', 'inline; filename=relatorio.pdf');
+        res.setHeader('Content-Disposition', `${(req.query.download && req.query.download === "sim") ? 'attachment' : 'inline'}; filename=relatorio.pdf`);
         res.end(result);
     });
     document.end();
