@@ -11,6 +11,7 @@ import vendasRouter from "./vendas/vendas_router";
 import uploadRouter from "./uploads/uploadRouter";
 import relatoriosRouter from "./relatorios/relatorios_router";
 import patrimonioRouter from "./patrimonio/patrimonio_router";
+import { enviarEmail } from "../controllers/email/email_controller";
 
 const router = Router();
 // Rotas de assinatura
@@ -40,5 +41,7 @@ router.use("/vendas", auth_middleware, accountMiddleware, vendasRouter);
 router.use("/uploads", auth_middleware, accountMiddleware, uploadRouter);
 // Rotas de relatorios
 router.use("/relatorios", auth_middleware, accountMiddleware, relatoriosRouter);
+// Rotas de email
+router.use("/email/enviar", enviarEmail);
 
 export default router;
