@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
 import env from '../../configs/env';
+import SMTPTransport from 'nodemailer/lib/smtp-transport';
 
 // Configuração do transporte
 const transporter = nodemailer.createTransport({
@@ -13,7 +14,7 @@ const transporter = nodemailer.createTransport({
 });
 
 // Função para enviar email
-export const sendEmail = async (to: string, subject: string, text: string, html?: string) => {
+export const sendEmail = async (to: string, subject: string, text: string, html?: string): Promise<SMTPTransport.SentMessageInfo> => {
     const mailOptions = {
         from: env.EMAIL_USER, // Seu email
         to,
@@ -21,5 +22,5 @@ export const sendEmail = async (to: string, subject: string, text: string, html?
         text,
         html
     };
-    await transporter.sendMail(mailOptions);
+    return await transporter.sendMail(mailOptions);
 };
