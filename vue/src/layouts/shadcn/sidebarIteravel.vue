@@ -2,7 +2,7 @@
 import { Skeleton } from '@/components/ui/skeleton';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible"
 import { useMenuStore } from '@/stores/menuStore';
-import { BadgeCheck, BookOpenCheck, ChevronRight, ClipboardCheck, Computer, Contact, FileBox, FileChartPie, FileCheck, FileDigit, FileText, Handshake, History, House, KeyRound, Landmark, Layers, List, LockKeyhole, MessageCircle, Package, PenTool, Settings2, Sparkles, Tags, Ticket, User, UserRoundCog, Wallet } from 'lucide-vue-next';
+import { BadgeCheck, BookOpenCheck, ChevronRight, ClipboardCheck, Computer, Contact, FileBox, ChartArea, FileCheck, FileDigit, FileText, Handshake, History, House, KeyRound, Landmark, Layers, List, LockKeyhole, MessageCircle, Package, PenTool, Settings2, Sparkles, Tags, User, UserRoundCog, Wallet, FileBadge } from 'lucide-vue-next';
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 const menuStore = useMenuStore()
@@ -37,7 +37,7 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
             {
                 icon: KeyRound,
                 title: t("sidebar.subscription"),
-                url: "/app/assinatura",
+                url: "/app/licenca",
                 show: menuStore.permissions.admin
             },
             {
@@ -87,7 +87,7 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
         icon: Layers,
         items: [
             {
-                icon: FileChartPie,
+                icon: ChartArea,
                 title: t("sidebar.resumecrm"),
                 url: "/app/crm/clientes",
                 show: menuStore.permissions.crm && menuStore.permissions.dashboardCrm
@@ -120,7 +120,7 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
         items: [
             {
                 title: "Resumo",
-                icon: FileChartPie,
+                icon: ChartArea,
                 show: menuStore.permissions.vendas && menuStore.permissions.dashboardVendas,
                 url: "/app/patrimonio/categorias"
             },
@@ -145,7 +145,7 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
         items: [
             {
                 title: "Resumo",
-                icon: FileChartPie,
+                icon: ChartArea,
                 show: menuStore.permissions.financeiro && menuStore.permissions.dashboardFinanceiro,
                 url: "/app/financeiro/dashboard"
             },
@@ -184,7 +184,7 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
         items: [
             {
                 title: "Resumo",
-                icon: FileChartPie,
+                icon: ChartArea,
                 show: menuStore.permissions.patrimonio && menuStore.permissions.dashboardPatrimonio,
                 url: "/app/patrimonio/dashboard"
             },
@@ -216,21 +216,33 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
         ]
     },
     {
-        title: "Assinantes",
+        title: "Assinaturas",
         icon: PenTool,
         show: menuStore.permissions.assinantes,
         items: [
             {
-                icon: Ticket,
-                title: 'Assinaturas',
+                icon: ChartArea,
+                title: 'Resumo',
                 show: menuStore.permissions.assinantes,
-                url: "/app/assinantes/assinaturas"
+                url: "/app/assinantes/painel"
+            },
+            {
+                icon: FileBadge,
+                title: 'Contratos',
+                show: menuStore.permissions.assinantes,
+                url: "/app/assinantes/contratos"
             },
             {
                 icon: BadgeCheck,
                 title: 'Planos',
                 show: menuStore.permissions.assinantes,
                 url: "/app/assinantes/planos"
+            },
+            {
+                icon: FileBox,
+                title: 'Produtos/Serviços',
+                show: menuStore.permissions.assinantes,
+                url: "/app/assinantes/produtos"
             },
         ]
     }

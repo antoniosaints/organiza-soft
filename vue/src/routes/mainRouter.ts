@@ -8,6 +8,7 @@ import { financeiroRouter } from "./rotas/financeiroRouter";
 import { patrimonioRouter } from "./rotas/patrimonioRouter";
 import { perfilRouter } from "./rotas/perfilRouter";
 import { vendasRouter } from "./rotas/vendasRouter";
+import { assinantesRouter } from "./rotas/assinantesRouter";
 
 export const mainRouter: RouteRecordRaw = {
   path: "/app",
@@ -25,5 +26,6 @@ export const mainRouter: RouteRecordRaw = {
     financeiroRouter,
     patrimonioRouter,
     perfilRouter,
+    assinantesRouter
   ],
 };

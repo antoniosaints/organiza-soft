@@ -5,7 +5,7 @@ const pt: ITranslation = {
     home: "Dashboard",
     admin: "Administração",
     users: "Usuários",
-    subscription: "Assinatura",
+    subscription: "Licença",
     logs: "Logs",
     assistant: "Assistente IA",
     playground: "Chat IA",

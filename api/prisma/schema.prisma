@@ -153,16 +153,56 @@ model Assinatura {
 }
 
 model AssinaturaPlano {
-  id              Int           @id @default(autoincrement())
-  contaSistemaId  Int
-  ContaSistema    ContasSistema @relation(fields: [contaSistemaId], references: [id])
-  nome            String        @db.VarChar(100)
-  descricao       String?       @db.Text
-  preco           Float
-  cor             String
-  dataCriacao     DateTime      @default(now())
-  dataAtualizacao DateTime?
-  Assinatura      Assinatura[]
+  id                    Int                     @id @default(autoincrement())
+  contaSistemaId        Int
+  ContaSistema          ContasSistema           @relation(fields: [contaSistemaId], references: [id])
+  nome                  String                  @db.VarChar(100)
+  descricao             String?                 @db.Text
+  periodoCobranca       PeriodoAssinantesPlanos @default(mensal)
+  preco                 Float
+  cor                   String
+  dataCriacao           DateTime                @default(now())
+  dataAtualizacao       DateTime?
+  Assinatura            Assinatura[]
+  AssinaturaItemOnPLano AssinaturaItemOnPlano[]
+}
+
+model AssinaturaItem {
+  id                    Int                     @id @default(autoincrement())
+  contaSistemaId        Int
+  ContaSistema          ContasSistema           @relation(fields: [contaSistemaId], references: [id])
+  nome                  String                  @db.VarChar(100)
+  valor                 Float                   @db.Double
+  tipo                  TipoItemAssinatura
+  descricao             String?                 @db.Text
+  dataCriacao           DateTime                @default(now())
+  dataAtualizado        DateTime                @updatedAt
+  AssinaturaItemOnPLano AssinaturaItemOnPlano[]
+}
+
+enum PeriodoAssinantesPlanos {
+  mensal
+  diario
+  anual
+  semestral
+  semanal
+  quinzenal
+}
+
+model AssinaturaItemOnPlano {
+  id       Int             @id @default(autoincrement())
+  item     Int
+  qtdItens Float           @db.Double
+  plano    Int
+  Plano    AssinaturaPlano @relation(fields: [plano], references: [id])
+  Item     AssinaturaItem  @relation(fields: [item], references: [id])
+
+  @@unique([item, plano])
+}
+
+enum TipoItemAssinatura {
+  servico
+  produto
 }
 
 model AssinaturaBloqueio {
@@ -354,6 +394,7 @@ model ContasSistema {
   UsuariosInFuncionarios        RecursosHumanosUsuariosInFuncionarios[]
   ClienteOnLancamentos          ClienteOnLancamentos[]
   PatrimonioVariantesProduto    PatrimonioVariantesProduto[]
+  AssinaturaItem                AssinaturaItem[]
 }
 
 model PatrimonioProdutos {

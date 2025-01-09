@@ -26,6 +26,20 @@ type ResumoTransacoes = FinanceiroTransacao & {
   Categoria?: FinanceiroCategorias;
   Conta?: FinanceiroContas;
 };
+
+// const calcularValorTotal = (item: ResumoTransacoes, status: "pendente" | "recebido") => {
+//   if (item.parcelado === "nao" && item.status === status && !item.FinanceiroParcelamento?.length) {
+//     return item.valorFinal;
+//   } else {
+//     return (
+//       item.FinanceiroParcelamento?.reduce(
+//         (subAcc: number, val: { status?: string; valor?: number }) =>
+//           subAcc + (val.status === status ? val.valor || 0 : 0),
+//         0
+//       ) || 0
+//     );
+//   }
+// }
 export const resumoByCategoria = (data: ResumoTransacoes[]): IGrafico[] => {
   const totalPorCategoria = data.reduce<IGrafico[]>((acc, item) => {
     const categoria = item.Categoria;
