@@ -12,7 +12,7 @@ export default interface IPlano {
   dataCriacao?: string;
   dataAtualizacao?: string;
   Assinatura?: IAssinaturaContrato[];
-  AssinaturaItemOnPlano?: IAssinaturaItemOnPlano[];
+  AssinaturaItemOnPLano?: IAssinaturaItemOnPlano[];
 }
 
 type PeriodoAssinantesPlanos = "mensal" | "trimestral" | "semestral" | "anual" | "quinzenal";

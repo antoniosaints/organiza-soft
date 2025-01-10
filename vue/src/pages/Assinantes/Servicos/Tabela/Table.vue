@@ -2,8 +2,8 @@
     <div class="mx-auto max-w-7xl">
         <div class="flex justify-between items-center mb-4">
             <div>
-                <h2 class="text-2xl font-bold text-foreground">Contratos</h2>
-                <p class="text-sm font-normal text-foreground hidden md:flex">Listagem de todos os contratos
+                <h2 class="text-2xl font-bold text-foreground">Produtos e Serviços</h2>
+                <p class="text-sm font-normal text-foreground hidden md:flex">Listagem de todos os produtos e serviços
                 </p>
             </div>
             <div class="flex space-x-2">
@@ -13,7 +13,7 @@
             <div class="flex space-x-2 md:w-1/2 w-full">
                 <Input type="search" @input="(event: any) => { if (event.target.value == '') loadDataChange() }"
                     @keyup.enter="loadDataChange" id="rows-per-page" v-model="mainStore.search"
-                    placeholder="Buscar contratos..." />
+                    placeholder="Buscar produtos e serviços..." />
                 <Button variant="default" class="w-max" @click="loadDataChange">
                     <Loader v-if="mainStore.isLoading" class="w-4 h-4 mr-2 animate-spin" />
                     <Search v-else class="w-4 h-4 mr-2" />{{ mainStore.isLoading ? 'Buscando...' : 'Buscar' }}
@@ -82,8 +82,8 @@
                         <TableHead></TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead>Plano</TableHead>
-                        <TableHead>Contrato</TableHead>
-                        <TableHead class="hidden md:table-cell">Categoria</TableHead>
+                        <TableHead>Cobrança</TableHead>
+                        <TableHead class="hidden md:table-cell">Valor</TableHead>
                         <TableHead class="hidden md:table-cell">Status</TableHead>
                         <TableHead class="hidden md:table-cell">Pagamento</TableHead>
                         <TableHead class="hidden md:table-cell">Vencimento</TableHead>
@@ -91,7 +91,7 @@
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    <ContratosRow v-for="data in mainStore.lancamentos" :key="data.id" :data="data" />
+                    <ServicosRow v-for="data in mainStore.lancamentos" :key="data.id" :data="data" />
                 </TableBody>
             </Table>
             <div v-show="!dataExists" class="w-full text-blue-100 flex flex-col justify-center items-center">
@@ -198,7 +198,7 @@ import { onMounted, watch, computed, ref } from "vue";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { ContratosRow } from ".";
+import { ServicosRow } from ".";
 import DetalhesProduto from "./Infos/DetalhesProduto.vue";
 import CompartilharLink from "@/views/Vendas/Pdv/CompartilharLink.vue";
 import { useLancamentosStore } from "@/stores/financeiro/lancamentos/lancamentoStore";

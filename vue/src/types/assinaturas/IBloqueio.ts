@@ -7,5 +7,5 @@ export interface IAssinaturaBloqueio {
   dataBloqueio?: string;
   dataDesbloqueio?: string;
   assinaturaId: number;
-  Assinatura: IAssinaturaContrato;
+  Assinatura?: IAssinaturaContrato;
 }

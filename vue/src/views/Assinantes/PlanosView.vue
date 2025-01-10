@@ -1,3 +1,10 @@
+<script setup lang="ts">
+import { PlanosTable } from '@/pages/Assinantes/Planos/Tabela';
+
+</script>
+
 <template>
-    Planos de assinatura
+    <div>
+        <PlanosTable />
+    </div>
 </template>

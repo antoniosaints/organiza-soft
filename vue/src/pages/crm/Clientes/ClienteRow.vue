@@ -3,6 +3,9 @@
         <TableCell>
             <Checkbox :checked="hasSelected" @click="clienteStore.handleSelectItens(cliente.id as number)" />
         </TableCell>
+        <TableCell class="hidden md:table-cell">
+            <ClienteBadge :status="cliente.status" />
+        </TableCell>
         <TableCell>
             <HoverCard>
                 <HoverCardTrigger asChild>
@@ -23,9 +26,10 @@
                 {{ cliente.email }}
             </div>
         </TableCell>
-        <TableCell class="hidden md:table-cell">{{ cliente.telefone }}</TableCell>
+        <TableCell class="hidden md:table-cell">{{ cliente.cpfCnpj || "Sem CPF/CNPJ" }}</TableCell>
+        <TableCell class="hidden md:table-cell">{{ cliente.telefone || "Sem contato" }}</TableCell>
         <TableCell class="hidden md:table-cell">
-            <ClienteBadge :status="cliente.status" />
+            <ClienteCidade :cidade="cliente.cidade" />
         </TableCell>
         <TableCell class="text-right">
             <ClienteAction :cliente="cliente" />
@@ -43,6 +47,7 @@ import { useClienteStore } from "@/stores/crm/clientes/clienteStore";
 import { computed } from "vue";
 import { Checkbox } from "@/components/ui/checkbox";
 import { AtSign, User } from "lucide-vue-next";
+import ClienteCidade from "./ClienteCidade.vue";
 const clienteStore = useClienteStore();
 
 const hasSelected = computed(() => {

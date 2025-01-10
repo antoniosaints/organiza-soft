@@ -1,3 +1,10 @@
+<script setup lang="ts">
+import { ServicosTable } from '@/pages/Assinantes/Servicos/Tabela';
+
+</script>
+
 <template>
-    Produtos e serviços de planos
+    <div>
+        <ServicosTable />
+    </div>
 </template>

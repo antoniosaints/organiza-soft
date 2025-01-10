@@ -139,7 +139,7 @@ model Assinatura {
   clienteId       Int
   planoId         Int
   dataInicio      DateTime
-  dataFim         DateTime
+  dataFim         DateTime?
   status          Status               @default(ativa)
   dataBloqueio    DateTime?
   dataCriacao     DateTime             @default(now())
@@ -203,6 +203,7 @@ model AssinaturaItemOnPlano {
 enum TipoItemAssinatura {
   servico
   produto
+  outro
 }
 
 model AssinaturaBloqueio {
@@ -210,7 +211,7 @@ model AssinaturaBloqueio {
   contaSistemaId  Int
   ContaSistema    ContasSistema @relation(fields: [contaSistemaId], references: [id])
   motivo          String        @db.Text
-  dataBloqueio    DateTime?
+  dataBloqueio    DateTime      @default(now())
   dataDesbloqueio DateTime?
   assinaturaId    Int
   Assinatura      Assinatura    @relation(fields: [assinaturaId], references: [id], onDelete: Cascade)

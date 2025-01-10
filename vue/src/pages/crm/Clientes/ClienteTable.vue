@@ -62,10 +62,12 @@
                 <TableHeader>
                     <TableRow class="bg-secondary">
                         <TableHead></TableHead>
+                        <TableHead class="hidden md:table-cell">Status</TableHead>
                         <TableHead>Nome</TableHead>
                         <TableHead class="hidden sm:table-cell">E-mail</TableHead>
+                        <TableHead class="hidden md:table-cell">CPF/CNPJ</TableHead>
                         <TableHead class="hidden md:table-cell">Telefone</TableHead>
-                        <TableHead class="hidden md:table-cell">Status</TableHead>
+                        <TableHead class="hidden md:table-cell">Cidade</TableHead>
                         <TableHead class="text-right">Ações</TableHead>
                     </TableRow>
                 </TableHeader>
