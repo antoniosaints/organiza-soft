@@ -63,7 +63,7 @@
                         </div>
                         <div class="space-y-2">
                             <Label for="canal_preferido">Canal Preferido</Label>
-                            <Select v-model="clienteFormularioStore.data.canalPreferido">
+                            <Select v-model="clienteFormularioStore.data.canalPreferidoContato">
                                 <SelectTrigger class="w-full">
                                     <SelectValue placeholder="Selecione um canal" />
                                 </SelectTrigger>
@@ -136,8 +136,8 @@
                                 v-model="clienteFormularioStore.data.cidade" />
                         </div>
                         <div class="space-y-2">
-                            <Label for="phone">Endereço</Label>
-                            <Input id="phone" placeholder="Endereço" type="text"
+                            <Label for="address">Endereço</Label>
+                            <Input id="address" placeholder="Endereço" type="text"
                                 v-model="clienteFormularioStore.data.endereco" />
                         </div>
                     </div>

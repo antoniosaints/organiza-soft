@@ -53,14 +53,14 @@ const createCliente = zodUtil.object({
   }).nullable().optional(),
   tipoCliente: zodUtil.enum(["fisica", "juridica"], {
     invalid_type_error: "O tipo de cliente deve ser 'fisica' ou 'juridica'",
-  }).nullable().optional(),
+  }).optional(),
   instagram: zodUtil.string({
     invalid_type_error: "O Instagram deve ser uma string",
   }).nullable().optional(),
   site: zodUtil.string({
     invalid_type_error: "O site deve ser uma string",
   }).nullable().optional(),
-  canalPreferido: ICanaisVenda.nullable().optional(),
+  canalPreferidoContato: ICanaisVenda.optional(),
   cep: zodUtil.string({
     invalid_type_error: "O CEP deve ser uma string",
   }).nullable().optional(),
@@ -84,7 +84,6 @@ const createCliente = zodUtil.object({
   }).nullable().optional(),
   dataBloqueio: dateTransformer,
   dataUltimaCompra: dateTransformer,
-  dataCriacao: dateTransformer,
   contaSistemaId: zodUtil.number({
     required_error: "O contaSistemaId é obrigatório",
     invalid_type_error: "O contaSistemaId deve ser um número",
@@ -92,18 +91,15 @@ const createCliente = zodUtil.object({
 });
 
 const updateCliente = zodUtil.object({
-  id: zodUtil.number({
-    invalid_type_error: "O ID deve ser um número",
-  }).nullable().optional(),
   nome: zodUtil.string({
     invalid_type_error: "O nome deve ser uma string",
-  }).nullable().optional(),
+  }).optional(),
   email: zodUtil.string({
     invalid_type_error: "O email deve ser uma string",
-  }).nullable().optional(),
+  }).optional(),
   status: zodUtil.enum(["ativo", "inativo"], {
     invalid_type_error: "O status deve ser 'ativo' ou 'inativo'",
-  }).nullable().optional(),
+  }).optional(),
   telefone: zodUtil.string({
     invalid_type_error: "O telefone deve ser uma string",
   }).nullable().optional(),
@@ -118,14 +114,14 @@ const updateCliente = zodUtil.object({
   }).nullable().optional(),
   tipoCliente: zodUtil.enum(["fisica", "juridica"], {
     invalid_type_error: "O tipo de cliente deve ser 'fisica' ou 'juridica'",
-  }).nullable().optional(),
+  }).optional(),
   instagram: zodUtil.string({
     invalid_type_error: "O Instagram deve ser uma string",
   }).nullable().optional(),
   site: zodUtil.string({
     invalid_type_error: "O site deve ser uma string",
   }).nullable().optional(),
-  canalPreferido: ICanaisVenda.nullable().optional(),
+  canalPreferidoContato: ICanaisVenda.optional(),
   cep: zodUtil.string({
     invalid_type_error: "O CEP deve ser uma string",
   }).nullable().optional(),
@@ -148,8 +144,7 @@ const updateCliente = zodUtil.object({
     invalid_type_error: "O score financeiro deve ser um número",
   }).nullable().optional(),
   dataBloqueio: dateTransformer,
-  dataUltimaCompra: dateTransformer,
-  dataCriacao: dateTransformer,
+  dataUltimaCompra: dateTransformer
 });
 
 export { createCliente, updateCliente };

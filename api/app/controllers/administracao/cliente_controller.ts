@@ -41,6 +41,9 @@ export const getClientes = async (req: Request, res: Response) => {
                   OR: [
                     { nome: { contains: busca } },
                     { email: { contains: busca } },
+                    { cpfCnpj: { contains: busca } },
+                    { telefone: { contains: busca } },
+                    { cidade: { contains: busca } },
                   ],
                 }
               : {},
