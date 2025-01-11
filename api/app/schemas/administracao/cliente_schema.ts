@@ -64,6 +64,12 @@ const createCliente = zodUtil.object({
   cep: zodUtil.string({
     invalid_type_error: "O CEP deve ser uma string",
   }).nullable().optional(),
+  estado: zodUtil.string({
+    invalid_type_error: "O Estado deve ser uma string",
+  }).nullable().optional(),
+  latitudeLongitude: zodUtil.string({
+    invalid_type_error: "A latitudeLongitude deve ser uma string separada por virgula",
+  }).nullable().optional(),
   cidade: zodUtil.string({
     invalid_type_error: "A cidade deve ser uma string",
   }).nullable().optional(),
@@ -124,6 +130,12 @@ const updateCliente = zodUtil.object({
   canalPreferidoContato: ICanaisVenda.optional(),
   cep: zodUtil.string({
     invalid_type_error: "O CEP deve ser uma string",
+  }).nullable().optional(),
+  estado: zodUtil.string({
+    invalid_type_error: "O Estado deve ser uma string",
+  }).nullable().optional(),
+  latitudeLongitude: zodUtil.string({
+    invalid_type_error: "A latitudeLongitude deve ser uma string separada por virgula",
   }).nullable().optional(),
   cidade: zodUtil.string({
     invalid_type_error: "A cidade deve ser uma string",

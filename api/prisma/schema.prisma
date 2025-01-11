@@ -95,6 +95,7 @@ model Cliente {
   canalPreferidoContato CanalPreferidoContato  @default(telefone)
   cep                   String?
   estado                String?                @db.Char(2)
+  latitudeLongitude     String?                @db.VarChar(40)
   cidade                String?                @db.VarChar(100)
   pais                  String?                @db.VarChar(40)
   saldoDevedor          Float?                 @default(0)

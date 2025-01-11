@@ -131,9 +131,20 @@
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="space-y-2">
+                            <Label for="estado">Estado</Label>
+                            <Input id="estado" maxlength="2" placeholder="Estado" type="text" v-model="clienteFormularioStore.data.estado" />
+                        </div>
+                        <div class="space-y-2">
                             <Label for="cidade">Cidade</Label>
                             <Input id="cidade" placeholder="Cidade" type="text"
-                                v-model="clienteFormularioStore.data.cidade" />
+                            v-model="clienteFormularioStore.data.cidade" />
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <Label for="latitudeLongitude">Latitude/Longitude</Label>
+                            <Input id="latitudeLongitude" placeholder="Latitude / Longitude" type="text"
+                                v-model="clienteFormularioStore.data.latitudeLongitude" />
                         </div>
                         <div class="space-y-2">
                             <Label for="address">Endereço</Label>
@@ -167,8 +178,7 @@
         </Tabs>
         <div class="flex justify-end space-x-2">
             <Button type="submit">
-                <CircleCheck class="w-4 h-4 mr-2" /> {{ clienteFormularioStore.refId == null ? 'Salvar' : 'Atualizar'
-                }}
+                <CircleCheck class="w-4 h-4 mr-2" /> {{ buttonName }}
             </Button>
         </div>
     </form>
@@ -184,9 +194,13 @@ import { useClienteStore } from "@/stores/crm/clientes/clienteStore";
 import { ClienteService } from "@/services/crm/clienteService";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { computed } from "vue";
 const clienteFormularioStore = useClienteFormularioStore();
 const clienteStore = useClienteStore();
 
+const buttonName = computed(() => {
+    return clienteFormularioStore.refId == null ? 'Salvar' : 'Atualizar';
+})
 const handleSubmit = async (): Promise<void> => {
     let res = null;
     if (clienteFormularioStore.refId == null) res = await ClienteService.create(clienteFormularioStore.data);

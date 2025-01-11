@@ -26,6 +26,8 @@ export default interface ICliente {
   site?: string;
   canalPreferidoContato?: ICanaisVenda;
   cep?: string;
+  estado?: string;
+  latitudeLongitude?: string;
   cidade?: string;
   pais?: string;
   saldoDevedor?: number;
