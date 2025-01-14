@@ -21,7 +21,7 @@
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <RouterLink to="/app/assinatura">
+                        <RouterLink to="/app/licenca">
                             <Button size="sm" class="w-full">
                                 Assinar PRO 🎯
                             </Button>

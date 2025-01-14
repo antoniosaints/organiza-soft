@@ -1,72 +1,69 @@
 import { FinanceiroParcelamento, FinanceiroTransacao } from "@prisma/client";
+
 type ResumoTransacoes = FinanceiroTransacao & {
-  FinanceiroParcelamento?: FinanceiroParcelamento[]
-}
+  FinanceiroParcelamento?: FinanceiroParcelamento[];
+};
+
 export const getResumoTransacoes = (data: ResumoTransacoes[]) => {
-    const total = data.reduce((acc, item) => acc + item.valorFinal!, 0);
+  const total = data.reduce((acc, { valorFinal }) => acc + (valorFinal ?? 0), 0);
 
-    const pendenteReceitaAVista = data.reduce((acc, item) => {
-      return acc + ((item.status == "pendente" && item.parcelado == "nao" && item.natureza == "receita") ? item.valorFinal! : 0);
-    }, 0);
-    const efetivadoReceitaAVista = data.reduce((acc, item) => {
-      return acc + ((item.status == "recebido" && item.parcelado == "nao" && item.natureza == "receita") ? item.valorFinal! : 0);
-    }, 0);
-    const pendenteDespesaAVista = data.reduce((acc, item) => {
-      return acc + ((item.status == "pendente" && item.parcelado == "nao" && item.natureza == "despesa") ? item.valorFinal! : 0);
-    }, 0);
-    const efetivadoDespesaAVista = data.reduce((acc, item) => {
-      return acc + ((item.status == "recebido" && item.parcelado == "nao" && item.natureza == "despesa") ? item.valorFinal! : 0);
-    }, 0);
+  const calculateSum = (condition: (item: ResumoTransacoes) => boolean) =>
+    data.reduce((acc, item) => acc + (condition(item) ? item.valorFinal ?? 0 : 0), 0);
 
-    const receitasParceladas = data.filter((item) => item.parcelado == "sim" && item.natureza == "receita");
-    const despesasParceladas = data.filter((item) => item.parcelado == "sim" && item.natureza == "despesa");
+  const pendenteReceitaAVista = calculateSum(
+    ({ status, parcelado, natureza }) =>
+      status === "pendente" && parcelado === "nao" && natureza === "receita"
+  );
 
-    const pendentesReceitasAPrazo = receitasParceladas.reduce(
-      (acc, item) =>
+  const efetivadoReceitaAVista = calculateSum(
+    ({ status, parcelado, natureza }) =>
+      status === "recebido" && parcelado === "nao" && natureza === "receita"
+  );
+
+  const pendenteDespesaAVista = calculateSum(
+    ({ status, parcelado, natureza }) =>
+      status === "pendente" && parcelado === "nao" && natureza === "despesa"
+  );
+
+  const efetivadoDespesaAVista = calculateSum(
+    ({ status, parcelado, natureza }) =>
+      status === "recebido" && parcelado === "nao" && natureza === "despesa"
+  );
+
+  const filterByNatureza = (natureza: string) =>
+    data.filter(({ parcelado, natureza: itemNatureza }) => parcelado === "sim" && itemNatureza === natureza);
+
+  const sumParcelamentos = (
+    items: ResumoTransacoes[],
+    statusCondition: string
+  ) =>
+    items.reduce(
+      (acc, { FinanceiroParcelamento }) =>
         acc +
-        item.FinanceiroParcelamento!.reduce(
-          (acc: number, val: any) => acc + (val?.status == "pendente" ? val?.valor : 0),
+        (FinanceiroParcelamento?.reduce(
+          (sum, { status, valor }) => sum + (status === statusCondition ? valor ?? 0 : 0),
           0
-        ),
-      0
-    );
-    const efetivadoReceitasAPrazo = receitasParceladas.reduce(
-      (acc, item) =>
-        acc +
-        item.FinanceiroParcelamento!.reduce(
-          (acc: number, val: any) => acc + (val?.status == "recebido" ? val?.valor : 0),
-          0
-        ),
-      0
-    );
-    const pendentesDespesasAPrazo = despesasParceladas.reduce(
-      (acc, item) =>
-        acc +
-        item.FinanceiroParcelamento!.reduce(
-          (acc: number, val: any) => acc + (val?.status == "pendente" ? val?.valor : 0),
-          0
-        ),
-      0
-    );
-    const efetivadoDespesasAPrazo = despesasParceladas.reduce(
-      (acc, item) =>
-        acc +
-        item.FinanceiroParcelamento!.reduce(
-          (acc: number, val: any) => acc + (val?.status == "recebido" ? val?.valor : 0),
-          0
-        ),
+        ) ?? 0),
       0
     );
 
-    return {
-      total,
-      pendenteReceitaAVista,
-      efetivadoReceitaAVista,
-      pendenteDespesaAVista,
-      efetivadoDespesaAVista,
-      pendentesReceitasAPrazo,
-      pendentesDespesasAPrazo,
-      efetivadoReceitasAPrazo,
-      efetivadoDespesasAPrazo
-    };
+  const receitasParceladas = filterByNatureza("receita");
+  const despesasParceladas = filterByNatureza("despesa");
+
+  const pendentesReceitasAPrazo = sumParcelamentos(receitasParceladas, "pendente");
+  const efetivadoReceitasAPrazo = sumParcelamentos(receitasParceladas, "recebido");
+  const pendentesDespesasAPrazo = sumParcelamentos(despesasParceladas, "pendente");
+  const efetivadoDespesasAPrazo = sumParcelamentos(despesasParceladas, "recebido");
+
+  return {
+    total,
+    pendenteReceitaAVista,
+    efetivadoReceitaAVista,
+    pendenteDespesaAVista,
+    efetivadoDespesaAVista,
+    pendentesReceitasAPrazo,
+    pendentesDespesasAPrazo,
+    efetivadoReceitasAPrazo,
+    efetivadoDespesasAPrazo,
+  };
 };
