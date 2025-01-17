@@ -4,7 +4,7 @@ import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { ArrowDownCircle, ArrowUpCircle, CheckCheck, PiggyBank } from 'lucide-vue-next'
+import { ArrowDownCircle, ArrowUpCircle, CheckCheck, Landmark, PiggyBank, Wallet } from 'lucide-vue-next'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Textarea } from '@/components/ui/textarea'
@@ -62,10 +62,16 @@ const submitLancamento = async () => {
         <Tabs default-value="dados_principais" class="w-full">
             <TabsList class="grid w-max grid-cols-2">
                 <TabsTrigger value="dados_principais">
-                    Dados principais
+                    <div class="flex items-center">
+                        <Landmark class="mr-2 w-4 h-4" />
+                        Dados principais
+                    </div>
                 </TabsTrigger>
                 <TabsTrigger value="password">
-                    Outras informações
+                    <div class="flex items-center">
+                        <Wallet class="mr-2 w-4 h-4" />
+                        Outras informações
+                    </div>
                 </TabsTrigger>
             </TabsList>
             <form class="space-y-2" @submit.prevent="submitLancamento">
@@ -75,6 +81,7 @@ const submitLancamento = async () => {
                             <div class="space-y-2 p-2">
                                 <Label for="tipo_lancamento">Tipo de lançamento</Label>
                                 <RadioGroup
+                                    :disabled="true"
                                     @update:modelValue="schema.lancamento.natureza = $event as 'despesa' | 'receita'"
                                     class="grid grid-cols-2 gap-4">
                                     <div>

@@ -18,7 +18,7 @@ const tabsConfigurationsStatus = {
     <div class="mx-auto max-w-7xl">
         <h1 class="text-3xl font-bold mb-6">Configurações do sistema</h1>
         <Tabs :default-value="activeTab" class="">
-            <TabsList class="grid grid-cols-3 w-full md:w-[400px]">
+            <TabsList class="grid grid-cols-3 w-max md:w-[400px]">
                 <TabsTrigger :disabled="!tabsConfigurationsStatus.general" value="general">
                     <div class="flex items-center">
                         <Cog class="mr-1 w-4 h-4" />

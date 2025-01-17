@@ -20,10 +20,20 @@
                 <TooltipProvider>
                     <Tooltip>
                         <TooltipTrigger>
-                            <Button @click="formularioStore.isModalDetalhesOpen = true" size="sm" variant="default"
-                                class="flex gap-2">
-                                <CircleFadingPlus class="w-4 h-4" />
-                                Novo lançamento
+                            <Button @click="NovoLancamento('receita')" size="sm" variant="default"
+                                class="flex gap-2 bg-success hover:bg-success/80">
+                                <CircleArrowOutDownLeft class="w-4 h-4" />
+                                Nova receita
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Cadastrar novo lançamento</TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                        <TooltipTrigger>
+                            <Button @click="NovoLancamento('despesa')" size="sm" variant="default"
+                                class="flex gap-2 bg-error hover:bg-error/80">
+                                <CircleArrowOutUpRight class="w-4 h-4" />
+                                Nova despesa
                             </Button>
                         </TooltipTrigger>
                         <TooltipContent>Cadastrar novo lançamento</TooltipContent>
@@ -215,7 +225,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, CircleChevronDown, CircleFadingPlus, FileDown, FilterX, Loader, Search, Trash2 } from "lucide-vue-next";
+import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, CircleArrowOutDownLeft, CircleArrowOutUpRight, CircleChevronDown, CircleFadingPlus, FileDown, FilterX, Loader, Search, Trash2 } from "lucide-vue-next";
 import { Label } from "@/components/ui/label";
 import { onMounted, watch, computed, ref } from "vue";
 import { Input } from "@/components/ui/input";
@@ -233,6 +243,8 @@ import { useColorMode } from "@vueuse/core";
 import EfetivarLancamento from "../Modais/EfetivarLancamento.vue";
 import FiltrarRegistros from "../Modais/FiltrarRegistros.vue";
 import FinanceiroRelatorioRepository from "@/repositories/relatorios/financeiroRelatorioRepository";
+import { useLancamentoSchemaStore } from "@/stores/financeiro/lancamentos/lancamentoSchemaStore";
+const { schema } = useLancamentoSchemaStore()
 const colormode = useColorMode();
 
 onMounted(() => {
@@ -274,6 +286,11 @@ const deleteMultilineSelects = async () => {
 const loadDataChange = async (paginate?: number) => {
     mainStore.page = paginate || 1;
     await mainStore.getLancamentos(dateFilter.value);
+};
+
+const NovoLancamento = (tipo: "receita" | "despesa") => {
+    schema.lancamento.natureza = tipo
+    formularioStore.isModalDetalhesOpen = true
 };
 
 async function exportarPdf() {
