@@ -54,7 +54,7 @@ import { RouterLink } from 'vue-router';
         </ul>
 
         <h2>7. Privacidade e Dados do Usuário</h2>
-        <p>Nossa <RouterLink class="text-blue-600" to="/site/politica">política de privacidade</RouterLink> governa o tratamento de suas informações pessoais. Ao usar o Serviço, você
+        <p>Nossa <RouterLink class="text-blue-600" to="/politica">política de privacidade</RouterLink> governa o tratamento de suas informações pessoais. Ao usar o Serviço, você
             consente com a coleta e uso de suas informações conforme descrito nessa política.</p>
 
         <h2>8. Propriedade Intelectual</h2>

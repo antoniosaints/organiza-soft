@@ -159,9 +159,9 @@ const navigate = (path: string) => {
                             <div class="grid gap-1.5 leading-none">
                                 <label for="terms1"
                                     class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                                    Li e aceito os <a href="#" @click.prevent="navigate('/site/termos')"
+                                    Li e aceito os <a href="#" @click.prevent="navigate('/termos')"
                                         class="underline">Termos de serviço</a> e a <a href="#"
-                                        @click.prevent="navigate('/site/politica')" class="underline">Politica de
+                                        @click.prevent="navigate('/politica')" class="underline">Politica de
                                         Privacidade</a>
                                 </label>
                                 <p class="text-sm text-muted-foreground">
