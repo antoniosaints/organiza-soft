@@ -81,7 +81,6 @@ const submitLancamento = async () => {
                             <div class="space-y-2 p-2">
                                 <Label for="tipo_lancamento">Tipo de lançamento</Label>
                                 <RadioGroup
-                                    :disabled="true"
                                     @update:modelValue="schema.lancamento.natureza = $event as 'despesa' | 'receita'"
                                     class="grid grid-cols-2 gap-4">
                                     <div>

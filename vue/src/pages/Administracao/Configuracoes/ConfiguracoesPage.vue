@@ -10,7 +10,7 @@ const activeTab = ref('general');
 const tabsConfigurationsStatus = {
     general: true,
     integrations: true,
-    emails: false
+    emails: true
 }
 </script>
 

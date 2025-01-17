@@ -12,13 +12,16 @@
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuItem @click="toggleMode('light')">
+                    <Sun class="mr-2 h-4 w-4" />
                     Claro
                 </DropdownMenuItem>
                 <DropdownMenuItem @click="toggleMode('dark')">
+                    <Moon class="mr-2 h-4 w-4" />
                     Escuro
                 </DropdownMenuItem>
                 <DropdownMenuItem @click="toggleMode('auto')">
-                    Automático
+                    <MonitorCog class="mr-2 h-4 w-4" />
+                    Sistema
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
@@ -29,7 +32,7 @@
 import { ITheme } from '@/types/interface/ITheme';
 import { useColorMode } from '@vueuse/core';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
-import { Moon, Sun } from 'lucide-vue-next';
+import { Moon, Sun, MonitorCog } from 'lucide-vue-next';
 
 const mode = useColorMode();
 const toggleMode = (theme: ITheme) => mode.value = theme;
