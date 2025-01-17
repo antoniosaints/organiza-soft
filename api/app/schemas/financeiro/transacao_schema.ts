@@ -23,9 +23,10 @@ const createTransacao = zodUtil.object({
     invalid_type_error: "s categoriaId deve ser um number",
   }),
   fornecedorId: zodUtil
-    .any({
+    .number({
       invalid_type_error: "O fornecedorId deve ser um number",
     })
+    .nullable()
     .optional(),
   contaId: zodUtil.number({
     required_error: "O contaId é obrigatório",
