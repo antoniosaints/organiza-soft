@@ -8,11 +8,26 @@
                 </SheetDescription>
             </SheetHeader>
             <div class="mt-6">
-                <Tabs v-model="activeTab" defaultValue="detalhes" class="w-full">
-                    <TabsList class="w-auto grid grid-cols-3">
-                        <TabsTrigger value="detalhes">Detalhes</TabsTrigger>
-                        <TabsTrigger value="pricing">Preços</TabsTrigger>
-                        <TabsTrigger value="inventory">Inventário</TabsTrigger>
+                <Tabs v-model="activeTab" defaultValue="detalhes">
+                    <TabsList class="grid grid-cols-3 w-max">
+                        <TabsTrigger value="detalhes">
+                            <div class="flex items-center">
+                                <BadgeInfo class="mr-2 w-4 h-4" />
+                                Detalhes
+                            </div>
+                        </TabsTrigger>
+                        <TabsTrigger value="pricing">
+                            <div class="flex items-center">
+                                <BadgeDollarSign class="mr-2 w-4 h-4" />
+                                Preços
+                            </div>
+                        </TabsTrigger>
+                        <TabsTrigger value="inventory">
+                            <div class="flex items-center">
+                                <Boxes class="mr-2 w-4 h-4" />
+                                Inventário
+                            </div>
+                        </TabsTrigger>
                     </TabsList>
                     <TabsContent value="detalhes">
                         <div class="space-y-4">
@@ -107,6 +122,7 @@ import { useProdutoFormularioStore } from "@/stores/patrimonio/produtos/produtoF
 import { ProdutosRepository } from '@/repositories/patrimonio/produtos/produtosRepository'
 import InformacoesProduto from './InformacoesProduto.vue'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { BadgeDollarSign, BadgeInfo, Boxes } from 'lucide-vue-next'
 const formularioStore = useProdutoFormularioStore()
 
 const activeTab = ref('detalhes')

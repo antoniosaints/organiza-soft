@@ -1,15 +1,24 @@
 <template>
     <form @submit.prevent="handleSubmit" class="space-y-4">
-        <Tabs default-value="infos" class="w-full min-h-auto">
+        <Tabs default-value="infos" class="min-h-auto">
             <TabsList class="grid w-full grid-cols-3">
                 <TabsTrigger value="infos">
-                    Informações
+                    <div class="flex items-center">
+                        <BadgeInfo class="mr-2 w-4 h-4" />
+                        Informações
+                    </div>
                 </TabsTrigger>
                 <TabsTrigger value="address">
-                    Endereço
+                    <div class="flex items-center">
+                        <MapPinHouse class="mr-2 w-4 h-4" />
+                        Endereço
+                    </div>
                 </TabsTrigger>
                 <TabsTrigger value="financial">
-                    Financeiro
+                    <div class="flex items-center">
+                        <CircleDollarSign class="mr-2 w-4 h-4" />
+                        Financeiro
+                    </div>
                 </TabsTrigger>
             </TabsList>
             <TabsContent value="infos">
@@ -132,12 +141,13 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="space-y-2">
                             <Label for="estado">Estado</Label>
-                            <Input id="estado" maxlength="2" placeholder="Estado" type="text" v-model="clienteFormularioStore.data.estado" />
+                            <Input id="estado" maxlength="2" placeholder="Estado" type="text"
+                                v-model="clienteFormularioStore.data.estado" />
                         </div>
                         <div class="space-y-2">
                             <Label for="cidade">Cidade</Label>
                             <Input id="cidade" placeholder="Cidade" type="text"
-                            v-model="clienteFormularioStore.data.cidade" />
+                                v-model="clienteFormularioStore.data.cidade" />
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -188,7 +198,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CircleCheck } from "lucide-vue-next";
+import { BadgeInfo, CircleCheck, CircleDollarSign, MapPinHouse } from "lucide-vue-next";
 import { useClienteFormularioStore } from "@/stores/crm/clientes/clienteFormularioStore";
 import { useClienteStore } from "@/stores/crm/clientes/clienteStore";
 import { ClienteService } from "@/services/crm/clienteService";

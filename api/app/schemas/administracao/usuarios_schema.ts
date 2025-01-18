@@ -1,10 +1,17 @@
 import zodUtil from "../../utils/validations/zod_util";
 
 const createUser = zodUtil.object({
-  nome: zodUtil.string({
-    required_error: "O nome é obrigatório",
-    invalid_type_error: "O nome deve ser uma string",
-  }),
+  nome: zodUtil
+    .string({
+      required_error: "O nome é obrigatório",
+      invalid_type_error: "O nome deve ser uma string",
+    })
+    .min(2, {
+      message: "O nome deve ter pelo menos 2 caracteres",
+    })
+    .refine((value) => value.trim() !== "", {
+      message: "O nome não pode ser vazio ou apenas espaços",
+    }),
   email: zodUtil
     .string({
       required_error: "O email é obrigatório",
