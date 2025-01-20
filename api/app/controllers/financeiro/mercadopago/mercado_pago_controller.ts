@@ -50,6 +50,9 @@ export async function MPGetCredentials(req: Request, res: Response) {
         gatewayName: "mercadopago",
       },
     });
+    if (!gateway) {
+      return res.status(404).send("Credenciais não encontradas");
+    }
     res.json(gateway);
   } catch (error: any) {
     res.status(500).send(error.message);

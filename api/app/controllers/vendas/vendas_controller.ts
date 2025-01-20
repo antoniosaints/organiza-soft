@@ -169,7 +169,7 @@ export const createCheckoutMercadopagoVenda = async (
         idempotencyKey: generateUniqueIdWithPrefix("key"),
         maxInstallments: 6,
         product: `Venda PDV cliente: ${cliente?.nome}`,
-        webhookUrl: `${env.BASE_URL}/mercadopago/webhook`,
+        webhookUrl: `${env.BASE_URL}/mercadopago/webhook?contaSistemaId=${req.body.contaSistemaId}`,
         id: venda?.uniqueId!,
         itens: [
           {
@@ -234,7 +234,7 @@ export const createPixMercadopagoVenda = async (
         description: venda?.descricao!,
         idempotencyKey: generateUniqueIdWithPrefix("key"),
         product: "Venda de produtos - Organizasoft",
-        webhookUrl: `${env.BASE_URL}/mercadopago/webhook`,
+        webhookUrl: `${env.BASE_URL}/mercadopago/webhook?contaSistemaId=${req.body.contaSistemaId}`,
         id: venda?.uniqueId!,
         amount: Number(valorTotal.toFixed(2)),
       });

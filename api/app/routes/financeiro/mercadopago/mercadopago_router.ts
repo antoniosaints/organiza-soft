@@ -10,7 +10,7 @@ const mercadopagoRouter = Router();
 mercadopagoRouter.post("/criar-preference", auth_middleware, accountMiddleware, MPCreatePreferenceLink);
 mercadopagoRouter.post("/criar-payment", auth_middleware, accountMiddleware, MPCreatePaymentLink);
 mercadopagoRouter.post("/webhook", MPWebhookPagamentos);
-mercadopagoRouter.post("/gerenciar-credenciais", MPSaveCredentials);
-mercadopagoRouter.get("/get-credenciais", MPGetCredentials);
+mercadopagoRouter.post("/gerenciar-credenciais", auth_middleware, accountMiddleware, MPSaveCredentials);
+mercadopagoRouter.get("/get-credenciais", auth_middleware, accountMiddleware, MPGetCredentials);
 
 export default mercadopagoRouter;

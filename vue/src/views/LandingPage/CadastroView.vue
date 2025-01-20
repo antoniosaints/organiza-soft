@@ -138,7 +138,7 @@ const navigate = (path: string) => {
                     <template v-if="step === 2">
                         <div>
                             <label>Seu nome completo</label>
-                            <Input v-model="formValues.step2.nomeCompleto" placeholder="Digite seu nome" />
+                            <Input v-model="formValues.step2.nomeCompleto" type="text" placeholder="Digite seu nome" />
                             <p class="text-red-500 text-sm" v-if="errors.step2?.nomeCompleto">{{
                                 errors.step2.nomeCompleto[0] }}</p>
                         </div>
