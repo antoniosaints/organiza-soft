@@ -1,5 +1,5 @@
 import axiosService from "@/services/http/axiosService";
-import { ref } from "vue";
+import { Ref, ref } from "vue";
 type IMethods = "get" | "post" | "put" | "delete" | "patch";
 export function useFetch(
   url: string,
@@ -7,7 +7,7 @@ export function useFetch(
   body: any = null
 ) {
   const data = ref(null);
-  const loading = ref(false);
+  const loading: Ref<boolean> = ref(false);
   const error = ref(null);
 
   const fetchData = async () => {

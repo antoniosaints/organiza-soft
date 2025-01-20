@@ -3,6 +3,9 @@ const createPlano = zodUtil.object({
   nome: zodUtil.string({
     required_error: "O nome é obrigatório",
     invalid_type_error: "O nome deve ser uma string",
+  })
+  .min(2, {
+    message: "O nome deve ter pelo menos 2 caracteres",
   }),
   descricao: zodUtil
     .string({
@@ -28,6 +31,7 @@ const updatePlano = zodUtil.object({
     .string({
       invalid_type_error: "O nome deve ser uma string",
     })
+    .min(2, { message: "O nome deve ter pelo menos 2 caracteres" })
     .optional(),
   descricao: zodUtil
     .string({

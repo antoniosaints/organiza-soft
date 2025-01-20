@@ -16,7 +16,7 @@ export default interface ICliente {
   id?: number;
   nome: string;
   email: string;
-  status: "ativo" | "inativo";
+  status?: "ativo" | "inativo";
   telefone?: string;
   telefoneAlternativo?: string;
   cpfCnpj?: string;

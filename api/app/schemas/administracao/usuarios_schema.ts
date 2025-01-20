@@ -8,9 +8,6 @@ const createUser = zodUtil.object({
     })
     .min(2, {
       message: "O nome deve ter pelo menos 2 caracteres",
-    })
-    .refine((value) => value.trim() !== "", {
-      message: "O nome não pode ser vazio ou apenas espaços",
     }),
   email: zodUtil
     .string({
@@ -48,22 +45,22 @@ const createUser = zodUtil.object({
       invalid_type_error: "O telefone deve ser uma string",
     })
     .optional(),
-  resetarSenha: zodUtil.boolean().optional(),
-  lancamentosRetroativos: zodUtil.boolean().optional(),
-  recebimentosRetroativos: zodUtil.boolean().optional(),
-  pagamentosRetroativos: zodUtil.boolean().optional(),
-  rh: zodUtil.boolean().optional(),
-  assistenteIa: zodUtil.boolean().optional(),
-  crm: zodUtil.boolean().optional(),
-  vendas: zodUtil.boolean().optional(),
-  financeiro: zodUtil.boolean().optional(),
-  patrimonio: zodUtil.boolean().optional(),
-  servicos: zodUtil.boolean().optional(),
-  assinantes: zodUtil.boolean().optional(),
-  dashboardFinanceiro: zodUtil.boolean().optional(),
-  dashboardVendas: zodUtil.boolean().optional(),
-  dashboardPatrimonio: zodUtil.boolean().optional(),
-  dashboardCrm: zodUtil.boolean().optional(),
+  resetarSenha: zodUtil.boolean().default(false).optional(),
+  lancamentosRetroativos: zodUtil.boolean().default(false).optional(),
+  recebimentosRetroativos: zodUtil.boolean().default(false).optional(),
+  pagamentosRetroativos: zodUtil.boolean().default(false).optional(),
+  rh: zodUtil.boolean().default(false).optional(),
+  assistenteIa: zodUtil.boolean().default(false).optional(),
+  crm: zodUtil.boolean().default(false).optional(),
+  vendas: zodUtil.boolean().default(false).optional(),
+  financeiro: zodUtil.boolean().default(false).optional(),
+  patrimonio: zodUtil.boolean().default(false).optional(),
+  servicos: zodUtil.boolean().default(false).optional(),
+  assinantes: zodUtil.boolean().default(false).optional(),
+  dashboardFinanceiro: zodUtil.boolean().default(false).optional(),
+  dashboardVendas: zodUtil.boolean().default(false).optional(),
+  dashboardPatrimonio: zodUtil.boolean().default(false).optional(),
+  dashboardCrm: zodUtil.boolean().default(false).optional(),
   regra: zodUtil.enum(
     [
       "proprietario",
@@ -91,6 +88,9 @@ const updateUser = zodUtil.object({
   nome: zodUtil
     .string({
       invalid_type_error: "O nome deve ser uma string",
+    })
+    .min(2, {
+      message: "O nome deve ter pelo menos 2 caracteres",
     })
     .optional(),
   email: zodUtil

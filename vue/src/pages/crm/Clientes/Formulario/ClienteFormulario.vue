@@ -130,7 +130,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="space-y-2">
                             <Label for="cep">CEP</Label>
-                            <Input id="cep" placeholder="CEP" type="text" v-model="clienteFormularioStore.data.cep" />
+                            <Input id="cep" placeholder="CEP" type="text" max="8" v-model="clienteFormularioStore.data.cep" />
                         </div>
                         <div class="space-y-2">
                             <Label for="pais">País</Label>
@@ -204,7 +204,9 @@ import { useClienteStore } from "@/stores/crm/clientes/clienteStore";
 import { ClienteService } from "@/services/crm/clienteService";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { computed } from "vue";
+import { computed, watch } from "vue";
+import { ScToastUtil } from "@/utils/scToastUtil";
+import { useCEP } from "@/composables/useCep";
 const clienteFormularioStore = useClienteFormularioStore();
 const clienteStore = useClienteStore();
 
@@ -220,4 +222,25 @@ const handleSubmit = async (): Promise<void> => {
         await clienteStore.getClientes();
     }
 };
+
+watch(
+    () => clienteFormularioStore.data.cep,
+    async (cep) => {
+        if (cep && cep.length === 8) {
+            try {
+                const res = await useCEP(cep);
+                const data = res;
+                clienteFormularioStore.data.endereco = data.value?.logradouro || "";
+                clienteFormularioStore.data.cidade = data.value?.localidade || "";
+                clienteFormularioStore.data.pais = "Brasil";
+                clienteFormularioStore.data.estado = data.value?.uf || "";
+                ScToastUtil.success("Informações de CEP carregadas com sucesso");
+            } catch (error) {
+                console.error(error);
+                ScToastUtil.info("CEP inválido");
+            }
+        }
+    },
+    { immediate: false }
+);
 </script>

@@ -7,17 +7,14 @@ export const useClienteFormularioStore = defineStore("usuarioFormularioStore", (
     const defaultData = ref<ICliente>({
         nome: "",
         email: "",
-        telefone: "",
-        endereco: "",
-        status: "ativo"
     });
 
-    const data = ref<ICliente>({ ...defaultData.value });
+    const data = ref<ICliente>(defaultData.value);
     const refId = ref<number | null>(null);
     const isModalOpen = ref(false);
 
     const resetData = () => {
-        data.value = { ...defaultData.value };
+        data.value = defaultData.value;
     };
 
     return {
