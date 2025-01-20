@@ -9,7 +9,7 @@ export async function MPCreatePreferenceLink(req: Request, res: Response) {
   try {
     const order: IOrderPreference = req.body;
     order.idempotencyKey = getRandomString();
-    const Gateway = new MercadoPagoGateway();
+    const Gateway = new MercadoPagoGateway(req.body.contaSistemaId);
     const payment = await Gateway.createPreference(order);
     return res.json({
       link: payment.init_point

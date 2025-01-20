@@ -7,8 +7,8 @@ import {
 } from "../../services";
 import { VendaBodySchema } from "../../schemas/vendas/vendas_body_schema";
 import { generateUniqueIdWithPrefix } from "../../utils/tools/UniqueId";
-import "dotenv/config";
 import { MercadoPagoGateway } from "../../domain/gateways/mercadopago/mercado_pago";
+import env from "../../configs/env";
 export const getVendas = async (req: Request, res: Response) => {
   try {
     const { limit, page, search, dataFiltro } = req.query;
@@ -136,7 +136,7 @@ export const createCheckoutMercadopagoVenda = async (
 ) => {
   try {
     const { id } = req.params;
-    const MercadoPago = new MercadoPagoGateway();
+    const MercadoPago = new MercadoPagoGateway(req.body.contaSistemaId);
     const checkout = await prismaService.$transaction(async (prisma) => {
       await prisma.vendas.update({
         where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
@@ -169,7 +169,7 @@ export const createCheckoutMercadopagoVenda = async (
         idempotencyKey: generateUniqueIdWithPrefix("key"),
         maxInstallments: 6,
         product: `Venda PDV cliente: ${cliente?.nome}`,
-        webhookUrl: `${process.env.BASE_URL}/mercadopago/webhook`,
+        webhookUrl: `${env.BASE_URL}/mercadopago/webhook`,
         id: venda?.uniqueId!,
         itens: [
           {
@@ -198,7 +198,7 @@ export const createPixMercadopagoVenda = async (
 ) => {
   try {
     const { id } = req.params;
-    const MercadoPago = new MercadoPagoGateway();
+    const MercadoPago = new MercadoPagoGateway(req.body.contaSistemaId);
     const checkout = await prismaService.$transaction(async (prisma) => {
       await prisma.vendas.update({
         where: { id: Number(id), contaSistemaId: req.body.contaSistemaId },
@@ -234,7 +234,7 @@ export const createPixMercadopagoVenda = async (
         description: venda?.descricao!,
         idempotencyKey: generateUniqueIdWithPrefix("key"),
         product: "Venda de produtos - Organizasoft",
-        webhookUrl: `${process.env.BASE_URL}/mercadopago/webhook`,
+        webhookUrl: `${env.BASE_URL}/mercadopago/webhook`,
         id: venda?.uniqueId!,
         amount: Number(valorTotal.toFixed(2)),
       });

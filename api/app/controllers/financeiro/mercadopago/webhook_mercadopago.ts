@@ -13,7 +13,7 @@ interface IMercadoPagoBody {
 export const MPWebhookPagamentos = async (req: Request, res: Response) => {
   try {
     const { type, action, data }: IMercadoPagoBody = req.body;
-    const Gateway = new MercadoPagoGateway();
+    const Gateway = new MercadoPagoGateway(req.body.contaSistemaId);
     if (type === "payment" && action === "payment.updated" && data.id) {
       const { external_reference, status, payment_method_id } =
         await Gateway.getPayment(data.id);

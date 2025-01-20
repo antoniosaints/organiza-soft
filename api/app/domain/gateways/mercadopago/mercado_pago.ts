@@ -6,11 +6,13 @@ import {
   IOrderPreference,
 } from "../gateway_interface";
 import "dotenv/config";
-import { mercadoPagoPayment, mercadoPagoPreference } from "../../../services/financeiro/mercado_pago_service";
+import { MercadoPagoPayment, MercadoPagoPreference } from "../../../services/financeiro/mercado_pago_service";
 
 export class MercadoPagoGateway implements IGatewayPayment {
+  constructor (readonly accountId: number) {}
   async createPayment(order: IOrderPayment): Promise<PaymentResponse> {
-    const payment = await mercadoPagoPayment.create({
+    const MPPayment = await MercadoPagoPayment(this.accountId);
+    const payment = await MPPayment.create({
       body: {
         transaction_amount: order.amount,
         description: order.description,
@@ -30,13 +32,15 @@ export class MercadoPagoGateway implements IGatewayPayment {
   }
 
   async getPayment(id: string): Promise<PaymentResponse> {
-    const payment = await mercadoPagoPayment.get({ id });
+    const MPPayment = await MercadoPagoPayment(this.accountId);
+    const payment = await MPPayment.get({ id });
     return payment;
   }
 
   async createPreference(order: IOrderPreference): Promise<PreferenceResponse> {
     const baseUrlFront = process.env.BASE_URL_FRONT || "";
-    const payment = await mercadoPagoPreference.create({
+    const MPPreference = await MercadoPagoPreference(this.accountId);
+    const payment = await MPPreference.create({
       body: {
         items: order.itens,
         additional_info: order.description,

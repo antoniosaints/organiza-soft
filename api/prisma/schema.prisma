@@ -229,6 +229,19 @@ model Configuracoes {
   dataCriacao    DateTime      @default(now())
 }
 
+model IntegracoesGateways {
+  id              Int           @id @default(autoincrement())
+  contaSistemaId  Int 
+  ContaSistema    ContasSistema @relation(fields: [contaSistemaId], references: [id])
+  gatewayName     String        @db.VarChar(100)
+  descricao       String?       @db.Text
+  apiKey          String        @db.VarChar(250)
+  apiSecret       String?       @db.VarChar(250)
+  webhook         String?       @db.VarChar(255)
+  dataCriacao     DateTime      @default(now())
+  dataAtualizacao DateTime      @updatedAt
+}
+
 model ClienteOnLancamentos {
   id             Int                 @id @default(autoincrement())
   clienteId      Int
@@ -397,6 +410,7 @@ model ContasSistema {
   ClienteOnLancamentos          ClienteOnLancamentos[]
   PatrimonioVariantesProduto    PatrimonioVariantesProduto[]
   AssinaturaItem                AssinaturaItem[]
+  IntegracoesGateways           IntegracoesGateways[]
 }
 
 model PatrimonioProdutos {

@@ -3,7 +3,18 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useMercadoPagoStore } from "@/stores/gateways/mercadopagoStore";
 import { BadgeCheck, Blocks } from "lucide-vue-next";
+import { onMounted } from "vue";
+
+const mercadoPago = useMercadoPagoStore();
+
+onMounted(async () => {
+    await mercadoPago.getDataCredentials();
+})
+const saveCredentials = async () => {
+    await mercadoPago.saveCredentials(mercadoPago.credentials);
+}
 </script>
 <template>
     <div>
@@ -18,11 +29,11 @@ import { BadgeCheck, Blocks } from "lucide-vue-next";
                 <CardContent class="space-y-4">
                     <div class="grid w-full items-center gap-1.5">
                         <Label for="chave_publica">Chave pública (Public Key)</Label>
-                        <Input id="chave_publica" type="text" placeholder="Chave pública" />
+                        <Input id="chave_publica" v-model="mercadoPago.credentials.apiKey" type="text" placeholder="Chave pública" />
                     </div>
                     <div class="grid w-full items-center gap-1.5">
                         <Label for="chave_secreta">Token de acesso (Access Token)</Label>
-                        <Input id="chave_secreta" type="text" placeholder="Token de acesso" />
+                        <Input id="chave_secreta" v-model="mercadoPago.credentials.apiSecret" type="text" placeholder="Token de acesso" />
                     </div>
                 </CardContent>
             </Card>
@@ -46,7 +57,7 @@ import { BadgeCheck, Blocks } from "lucide-vue-next";
             </Card>
         </div>
         <div class="text-right">
-            <Button>
+            <Button @click="saveCredentials">
                 <BadgeCheck class="w-4 h-4 mr-2" />
                 Salvar Configurações
             </Button>

@@ -13,7 +13,7 @@ export async function MPCreatePaymentLink(req: Request, res: Response) {
   try {
     const order: IOrderPayment = req.body;
     order.idempotencyKey = getRandomString();
-    const Gateway = new MercadoPagoGateway();
+    const Gateway = new MercadoPagoGateway(req.body.contaSistemaId);
     const { point_of_interaction } = await Gateway.createPayment(order);
     return res.json({
       link: point_of_interaction?.transaction_data?.ticket_url,
