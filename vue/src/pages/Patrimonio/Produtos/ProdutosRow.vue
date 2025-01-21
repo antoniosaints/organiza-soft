@@ -10,6 +10,12 @@
                 {{ data.produto }}
             </Button>
         </TableCell>
+        <TableCell class="font-bold hidden md:table-cell">
+            <span class="px-2 py-1 rounded-md bg-card font-bold text-secondary-foreground flex items-center w-max">
+                <Archive class="w-3 h-3 mr-1" />
+                0
+            </span>
+        </TableCell>
         <TableCell class="font-bold">{{ formatRealValue(data.preco) }}</TableCell>
         <TableCell class="hidden md:table-cell">
             <div class="px-2 py-1 bg-primary text-primary-foreground rounded-md flex items-center w-max">
@@ -41,7 +47,7 @@ import { useProdutoStore } from "@/stores/patrimonio/produtos/produtoStore";
 import { IPatrimonioProduto } from "@/types/patrimonio/IPatrimonioProduto";
 import { useProdutoFormularioStore } from "@/stores/patrimonio/produtos/produtoFormularioStore";
 import { ProdutosAction } from ".";
-import { Layers, ScanBarcode, Tag } from "lucide-vue-next";
+import { Archive, Layers, ScanBarcode, Tag } from "lucide-vue-next";
 import { formatDateToPtbr, formatRealValue } from "@/utils/formatterUtil";
 const mainStore = useProdutoStore();
 const formularioStore = useProdutoFormularioStore();

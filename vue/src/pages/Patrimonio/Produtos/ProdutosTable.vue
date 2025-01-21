@@ -64,6 +64,21 @@
                     <TableRow class="bg-secondary">
                         <TableHead></TableHead>
                         <TableHead>Produto</TableHead>
+                        <TableHead class="hidden md:table-cell">
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <div class="flex items-center">
+                                            <Archive class="w-4 h-4 mr-1" />
+                                            Est.
+                                        </div>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        Contagem de estoques relacionados <br> a este produto!
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                        </TableHead>
                         <TableHead>Preço</TableHead>
                         <TableHead class="hidden md:table-cell">SKU</TableHead>
                         <TableHead class="hidden md:table-cell">Categoria</TableHead>
@@ -171,7 +186,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, CircleChevronDown, Filter, Package, Search, Trash2 } from "lucide-vue-next";
+import { Archive, ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, CircleChevronDown, Filter, Package, Search, Trash2 } from "lucide-vue-next";
 import { Label } from "@/components/ui/label";
 import { onMounted, watch, computed, ref } from "vue";
 import { Input } from "@/components/ui/input";
