@@ -8,7 +8,7 @@
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" class="w-28">
-                <DropdownMenuItem @click="onEditar(data.id as number)">
+                <DropdownMenuItem @click="onEditar(data.id!)">
                     <Pencil class="mr-2 h-3 w-3" />
                     Editar
                 </DropdownMenuItem>

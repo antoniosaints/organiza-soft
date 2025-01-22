@@ -1,6 +1,6 @@
 <template>
     <Badge :class="statusClasses">
-        {{ status.substring(0, 1).toUpperCase() + status.substring(1) }}
+        {{ formatFirstLetter(status) }}
     </Badge>
 </template>
 
@@ -11,6 +11,10 @@ import { computed } from "vue";
 const props = defineProps({
     status: String
 });
+
+const formatFirstLetter = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
 const statusClasses = computed(() => {
     const colors = {

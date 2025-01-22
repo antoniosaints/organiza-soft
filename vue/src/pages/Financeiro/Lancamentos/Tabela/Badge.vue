@@ -1,12 +1,11 @@
 <template>
-    <Badge class="px-2 py-1 rounded-md relative overflow-hidden" :class="statusClasses">
+    <span class="px-2 py-1 rounded-md text-secondary-foreground flex items-center w-min overflow-hidden" :class="statusClasses">
         <CircleCheckBig class="mr-2 h-3 w-3" />
         {{ labelStatus.charAt(0).toUpperCase() + labelStatus.slice(1) }}
-    </Badge>
+    </span>
 </template>
 
 <script setup lang="ts">
-import { Badge } from "@/components/ui/badge";
 import ITransacao from "@/types/financeiro/ILancamentos";
 import { CircleCheckBig } from "lucide-vue-next";
 import { computed } from "vue";

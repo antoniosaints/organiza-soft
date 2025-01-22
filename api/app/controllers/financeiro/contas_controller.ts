@@ -26,8 +26,27 @@ export const createConta = async (req: Request, res: Response) => {
 
 export const getContas = async (req: Request, res: Response) => {
   try {
+    const { search, limit, page } = req.query;
+    const busca = search as string;
+    const offset = (Number(page) - 1) * Number(limit);
     const contas = await prismaService.financeiroContas.findMany({
-      where: { contaSistemaId: req.body.contaSistemaId },
+      skip: offset || 0,
+      take: Number(limit) || 10,
+      where: {
+        AND: [
+          busca
+            ? {
+                OR: [
+                  { descricao: { contains: busca } },
+                  { conta: { contains: busca } },
+                ],
+              }
+            : {},
+          {
+            contaSistemaId: req.body.contaSistemaId,
+          },
+        ],
+      },
     });
     ResponseService.success(res, { data: contas });
   } catch (error: any) {

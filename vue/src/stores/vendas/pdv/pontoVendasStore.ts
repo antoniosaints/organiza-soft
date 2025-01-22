@@ -24,34 +24,34 @@ export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
   const totalItens = ref<number>(0);
   const valorTotal = ref<number>(0);
   const isOpenClienteModal = ref<boolean>(false);
-  const formaPagamento = ref<IMetodoPagamento>('pix');
+  const formaPagamento = ref<IMetodoPagamento>("pix");
   const valorComDesconto = ref<number>(0);
   const clienteVenda = ref<number | null>(null);
   const nomeCliente = ref<string | null>(null);
   const porcentagemDesconto = ref<number>(0);
   const openComprovante = ref<boolean>(false);
   const openCompartilharLink = ref<boolean>(false);
-  const linkPagamento = ref<string>('');
+  const linkPagamento = ref<string>("");
 
   const getProdutos = async () => {
     const prod = await ProdutosRepository.getAll(10, 1, "");
-    produtos.value = prod.data.map((produto) => ({ 
+    produtos.value = prod.data.map((produto) => ({
       id: produto.id!,
       produto: produto.produto,
       preco: produto.preco,
       categoria: produto.Categoria?.categoria!,
     }));
-  }
+  };
 
   watch(buscarItem, async () => {
     const prod = await ProdutosRepository.getAll(10, 1, buscarItem.value);
-    produtos.value = prod.data.map((produto) => ({ 
+    produtos.value = prod.data.map((produto) => ({
       id: produto.id!,
       produto: produto.produto,
       preco: produto.preco,
       categoria: produto.Categoria?.categoria!,
     }));
-  })
+  });
 
   const adicionarAoCarrinho = (produto: IProdutoPDV) => {
     const existingItem = carrinho.value.find((item) => item.id === produto.id);
@@ -73,7 +73,7 @@ export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
     linkPagamento.value = pix;
     openCompartilharLink.value = true;
     vendasRelatorioStore.getVendas();
-  }
+  };
 
   const gerarCkheckoutPagamentoPìx = async (id: number) => {
     const vendasRelatorioStore = useVendasRelatorioStore();
@@ -82,7 +82,7 @@ export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
     linkPagamento.value = checkout;
     openCompartilharLink.value = true;
     vendasRelatorioStore.getVendas();
-  }
+  };
   const removerDoCarrinho = (produtoId: number) => {
     carrinho.value = carrinho.value.reduce((acc, item) => {
       if (item.id === produtoId) {
@@ -131,10 +131,11 @@ export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
       descricao: "Venda - PDV",
       formaPagamento: formaPagamento.value,
       vendedor: loginStore.dataUserInfosLogged?.id!,
-      desconto: porcentagemDesconto.value
-    }
+      desconto: porcentagemDesconto.value,
+    };
 
     const data = await VendasService.create(venda);
+
     if (data) {
       carrinhoComprovante.value = carrinho.value;
       carrinho.value = [];
@@ -177,6 +178,6 @@ export const usePontoDeVendasStore = defineStore("pontoDeVendas", () => {
     openComprovante,
     finalizarVenda,
     openCompartilharLink,
-    linkPagamento
+    linkPagamento,
   };
 });

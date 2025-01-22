@@ -24,7 +24,7 @@ export const useCategoriasLancamentoStore = defineStore(
             page.value,
             search.value
           );
-          categorias.value = data;
+        categorias.value = data;
         total.value = totalClientes;
       } catch (error: any) {
         const errorMessage =

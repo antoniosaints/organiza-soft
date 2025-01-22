@@ -24,7 +24,7 @@ export const useContasLancamentoStore = defineStore(
             page.value,
             search.value
           );
-          contas.value = data;
+        contas.value = data;
         total.value = totalClientes;
       } catch (error: any) {
         const errorMessage =

@@ -27,7 +27,7 @@
                 </router-link>
             </dropdown-menu-item>
             <dropdown-menu-separator />
-            <dropdown-menu-item>
+            <dropdown-menu-item @click="logOut">
                 <LogOut class="h-4 mr-1" /> Sair
             </dropdown-menu-item>
         </dropdown-menu-content>
@@ -41,8 +41,12 @@ import { LogOut, Settings, User } from "lucide-vue-next";
 import { useLoginStore } from "@/stores/login/loginStore";
 import { useLayoutStore } from "./stateLayout";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { LoginService } from "@/services/login/loginService";
 
 const loginStore = useLoginStore();
+const logOut = async () => {
+    await LoginService.logout();
+}
 const layoutStore = useLayoutStore();
 const infos = loginStore.dataUserInfosLogged;
 </script>

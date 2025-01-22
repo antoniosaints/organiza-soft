@@ -40,3 +40,9 @@ export function formatName(fullName: string): string {
 
   return `${firstName} ${lastNameInitial}`;
 }
+
+export const formatTruncateText = (text: string) => {
+  const maxLength = 20
+  if (text.length <= maxLength) return text
+  return text.slice(0, maxLength) + '...'
+}

@@ -1,10 +1,10 @@
 <template>
     <TableRow :class="{ 'bg-primary/40 hover:bg-primary/30': hasSelected }" class="transition-colors">
         <TableCell>
-            <Checkbox :checked="hasSelected" @click="mainStore.handleSelectItens(data.id as number)" />
+            <Checkbox :checked="hasSelected" @click="mainStore.handleSelectItens(data.id!)" />
         </TableCell>
         <TableCell>
-            <Button @click="openDetailsProduct(data.id as number)" variant="outline"
+            <Button @click="openDetailsProduct(data.id!)" variant="outline"
                 class="h-auto px-2 py-1 hover:bg-transparent hover:text-primary/60 dark:hover:text-primary-foreground/50">
                 <Tag class="w-3 h-3 mr-1" />
                 {{ data.produto }}
@@ -25,13 +25,13 @@
         </TableCell>
         <TableCell class="hidden md:table-cell"><span
                 class="px-2 py-1 rounded-md bg-card text-secondary-foreground flex items-center w-max">
-                <Layers class="w-3 h-3 mr-1" /> {{ data?.Categoria?.categoria }}
+                <Layers class="w-3 h-3 mr-1" /> {{ data?.Categoria?.categoria || "Sem categoria" }}
             </span>
         </TableCell>
         <TableCell class="hidden md:table-cell"><span class="px-0 py-1 rounded-md">{{ data.cor || "Sem cor" }}</span>
         </TableCell>
         <TableCell class="hidden md:table-cell"><span class="px-2 py-1 bg-secondary rounded-md">{{
-            formatDateToPtbr(data.dataCriado as string) }}</span></TableCell>
+            formatDateToPtbr(data.dataCriado!) }}</span></TableCell>
         <TableCell class="text-right">
             <ProdutosAction :data="data" />
         </TableCell>

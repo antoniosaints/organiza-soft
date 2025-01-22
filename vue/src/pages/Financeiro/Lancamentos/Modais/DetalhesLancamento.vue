@@ -11,6 +11,7 @@ import IParcelamento from '@/types/financeiro/IParcelamento'
 import AcoesParcelamento from "./AcoesParcelamento.vue"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import BadgeStatus from "../Tabela/BadgeStatus.vue"
+import BadgeNatureza from "../Tabela/BadgeNatureza.vue"
 const store = useLancamentosDetalhesStore()
 
 const getValorLancamento = (lancamento: ITransacao) => {
@@ -38,10 +39,11 @@ const getValorLancamento = (lancamento: ITransacao) => {
             <Receipt class="w-10 h-10 text-primary" />
             <div>
               <DialogTitle class="text-2xl font-bold">Lançamento #{{ store.lancamento?.id }}</DialogTitle>
-              <p class="text-sm text-muted-foreground">{{ store.lancamento?.descricao }}</p>
+              <p class="text-sm text-muted-foreground flex items-center">{{ store.lancamento?.descricao }}</p>
             </div>
           </div>
-          <div class="px-3 py-1 rounded-full text-sm font-semibold">
+          <div class="px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-2">
+            <BadgeNatureza :natureza="store.lancamento?.natureza!" />
             <LancamentosBadge :data="store.lancamento!" />
           </div>
         </div>

@@ -18,25 +18,27 @@ export const useAssinaturaContratoStore = defineStore(
       try {
         if (!Autorize.can("visualizar", "clientes")) return;
 
-        data.value = [{
-          id: 1,
-          clienteId: 1,
-          dataFim: new Date(),
-          dataInicio: new Date(),
-          planoId: 1,
-          status: "ativa",
-          Plano: {
-            nome: "Plano 1",
-            cor: "#f00",
-            periodoCobranca: "mensal",
-            preco: 100
+        data.value = [
+          {
+            id: 1,
+            clienteId: 1,
+            dataFim: new Date(),
+            dataInicio: new Date(),
+            planoId: 1,
+            status: "ativa",
+            Plano: {
+              nome: "Plano 1",
+              cor: "#f00",
+              periodoCobranca: "mensal",
+              preco: 100,
+            },
+            Cliente: {
+              email: "a@b.com",
+              nome: "Cliente 1",
+              status: "ativo",
+            },
           },
-          Cliente: {
-            email: "a@b.com",
-            nome: "Cliente 1",
-            status: "ativo"
-          }
-        }];
+        ];
         total.value = 0;
       } catch (error: any) {
         const errorMessage =

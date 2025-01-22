@@ -70,7 +70,7 @@ export const useVendasRelatorioStore = defineStore(
       selectedItens,
       handleSelectItens,
       deleteSelectedItens,
-      getVendas
+      getVendas,
     };
   }
 );
