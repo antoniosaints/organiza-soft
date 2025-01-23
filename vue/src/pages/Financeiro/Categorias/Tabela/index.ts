@@ -1,0 +1,1 @@
+export { default as DataTableCategoriasFinanceiro } from './DataTable.vue'

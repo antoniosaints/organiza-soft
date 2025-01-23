@@ -21,7 +21,7 @@ const store = useCategoriaFormularioStore()
           Cadastro de categorias
         </DialogDescription>
       </DialogHeader>
-      <div class="grid gap-4 py-4">
+      <div class="grid gap-2">
         <Formulario /> 
       </div>
     </DialogContent>

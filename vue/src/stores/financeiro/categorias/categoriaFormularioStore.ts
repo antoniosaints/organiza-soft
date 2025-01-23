@@ -12,6 +12,7 @@ export const useCategoriaFormularioStore = defineStore(
 
     const data = ref<ICategoria>({ ...defaultData.value });
     const refId = ref<number | null>(null);
+    const deleteId = ref<number | null>(null);
     const isModalOpen = ref(false);
     const isModalDetalhesOpen = ref(false);
 
@@ -23,6 +24,7 @@ export const useCategoriaFormularioStore = defineStore(
       data,
       defaultData,
       refId,
+      deleteId,
       isModalOpen,
       resetData,
       isModalDetalhesOpen,

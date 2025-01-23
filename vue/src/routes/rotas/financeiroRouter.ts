@@ -24,5 +24,11 @@ export const financeiroRouter: RouteRecordRaw = {
       meta: { breadcrumb: "Contas financeiras" },
       component: () => import("@/views/Financeiro/Contas/ContasTableView.vue"),
     },
+    {
+      path: "/app/financeiro/categorias",
+      name: "Categorias",
+      meta: { breadcrumb: "Categorias financeiras" },
+      component: () => import("@/views/Financeiro/Categorias/CategoriasTableView.vue"),
+    },
   ],
 };

@@ -11,6 +11,7 @@ export const useCategoriasLancamentoStore = defineStore(
     const categorias = ref<ICategoria[]>([]);
     const limit = ref<string>("10");
     const page = ref<number>(1);
+    const pages = ref<number>(1);
     const total = ref<number>(0);
     const search = ref<string>("");
     const selectedItens = ref<number[]>([]);
@@ -18,14 +19,15 @@ export const useCategoriasLancamentoStore = defineStore(
     const getCategorias = async (): Promise<void> => {
       try {
         if (!Autorize.can("visualizar", "categorias_lancamentos")) return;
-        const { data, total: totalClientes } =
+        const { data, total: totalCategorias, pages: QtdPages } =
           await CategoriasLancamentosRepository.getAll(
             Number(limit.value),
             page.value,
             search.value
           );
         categorias.value = data;
-        total.value = totalClientes;
+        total.value = totalCategorias;
+        pages.value = QtdPages;
       } catch (error: any) {
         const errorMessage =
           error?.response?.data?.message || "Erro desconhecido.";
@@ -64,6 +66,7 @@ export const useCategoriasLancamentoStore = defineStore(
       categorias,
       limit,
       page,
+      pages,
       total,
       search,
       selectedItens,

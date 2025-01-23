@@ -106,7 +106,7 @@ const table = useVueTable({
 <template>
     <div>
         <div class="flex items-center py-4">
-            <Input type="search" class="max-w-sm" placeholder="Filtrar contas..." @input="onSearch($event.target.value)" />
+            <Input type="search" class="max-w-sm" placeholder="Filtrar categorias..." @input="onSearch($event.target.value)" />
         </div>
         <div class="border rounded-md">
             <Table>
@@ -141,7 +141,7 @@ const table = useVueTable({
                                     <div class="flex items-center justify-center space-x-2 text-foreground/80 mb-6">
                                         <Button size="sm" variant="default">
                                             <CircleFadingPlus class="mr-1 h-4 w-4" />
-                                            Nova conta
+                                            Nova categoria
                                         </Button>
                                     </div>
                                 </div>

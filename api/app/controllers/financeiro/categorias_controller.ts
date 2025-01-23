@@ -28,7 +28,9 @@ export const createcategoria = async (req: Request, res: Response) => {
 export const getcategorias = async (req: Request, res: Response) => {
   try {
     const { limit, page, search } = req.query;
-    const offset = (Number(page) - 1) * Number(limit);
+    const pageNumber = page || 1;
+    const limitNumber = limit || 10;
+    const offset = (Number(pageNumber) - 1) * Number(limitNumber);
     const busca = search as string;
 
     const whereFilter = {
@@ -37,7 +39,7 @@ export const getcategorias = async (req: Request, res: Response) => {
           ? {
               OR: [
                 { categoria: { contains: busca } },
-                { cor: { contains: busca } }
+                { cor: { contains: busca } },
               ],
             }
           : {},
@@ -50,14 +52,25 @@ export const getcategorias = async (req: Request, res: Response) => {
     const [items, total] = await Promise.all([
       prismaService.financeiroCategorias.findMany({
         skip: offset || 0,
-        take: Number(limit) || 10,
+        take: Number(limitNumber) || 10,
         where: whereFilter,
+        include: {
+          _count: {
+            select: {
+              FinanceiroTransacao: true,
+            }
+          }
+        }
       }),
       prismaService.financeiroCategorias.count({
         where: whereFilter,
       }),
     ]);
-    ResponseService.success(res, { data: items, total });
+    ResponseService.success(res, {
+      data: items,
+      total,
+      pages: Math.ceil(total / Number(limitNumber)),
+    });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
   }

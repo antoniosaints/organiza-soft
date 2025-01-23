@@ -2,7 +2,7 @@
 import { Skeleton } from '@/components/ui/skeleton';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible"
 import { useMenuStore } from '@/stores/menuStore';
-import { BadgeCheck, BookOpenCheck, ChevronRight, ClipboardCheck, Computer, Contact, FileBox, ChartArea, FileCheck, FileDigit, FileText, Handshake, History, House, KeyRound, Landmark, Layers, List, LockKeyhole, MessageCircle, Package, PenTool, Settings2, Sparkles, Tags, User, UserRoundCog, Wallet, FileBadge } from 'lucide-vue-next';
+import { BadgeCheck, BookOpenCheck, ChevronRight, ClipboardCheck, Computer, Contact, FileBox, ChartArea, FileCheck, FileDigit, FileText, Handshake, History, House, KeyRound, Landmark, Layers, List, LockKeyhole, MessageCircle, Package, PenTool, Settings2, Sparkles, Tags, User, UserRoundCog, Wallet, FileBadge, DollarSign } from 'lucide-vue-next';
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 const menuStore = useMenuStore()
@@ -170,6 +170,12 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
                         title: 'Contas',
                         icon: Landmark,
                         url: "/app/financeiro/contas",
+                        show: menuStore.permissions.financeiro
+                    },
+                    {
+                        title: 'Categorias',
+                        icon: DollarSign,
+                        url: "/app/financeiro/categorias",
                         show: menuStore.permissions.financeiro
                     }
                 ]
