@@ -27,11 +27,13 @@ export const createConta = async (req: Request, res: Response) => {
 export const getContas = async (req: Request, res: Response) => {
   try {
     const { search, limit, page } = req.query;
+    const pageNumber = page || 1;
+    const limitNumber = limit || 10;
     const busca = search as string;
-    const offset = (Number(page) - 1) * Number(limit);
+    const offset = (Number(pageNumber) - 1) * Number(limitNumber);
     const contas = await prismaService.financeiroContas.findMany({
       skip: offset || 0,
-      take: Number(limit) || 10,
+      take: Number(limitNumber),
       where: {
         AND: [
           busca

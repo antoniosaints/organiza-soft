@@ -64,7 +64,7 @@ watch(
 )
 watch(
     () => table.getState().pagination.pageIndex,
-    onUpdateValue
+    onUpdateValue,
 )
 
 </script>

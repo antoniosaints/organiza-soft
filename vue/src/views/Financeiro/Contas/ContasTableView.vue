@@ -4,8 +4,11 @@ import { columnsContasFinanceiro } from '@/pages/Financeiro/Contas/Tabela/column
 import { DataTableContasFinanceiro } from '@/pages/Financeiro/Contas/Tabela'
 import { useContasLancamentoStore } from '@/stores/financeiro/contas/contasLancamentoStore'
 import { Loader } from 'lucide-vue-next'
+import IContaTransacao from '@/types/financeiro/IContaTransacao'
+import ContasLancamentosRepository from '@/repositories/financeiro/contasLancamentosRepository'
 
 const store = useContasLancamentoStore()
+const data = ref<IContaTransacao[]>([])
 const isLoading = ref(false)
 interface IDatatableValue {
     search: string
@@ -13,13 +16,13 @@ interface IDatatableValue {
     page: number
 }
 
-const buscarContas = async (data: IDatatableValue) => {
+const buscarContas = async (table: IDatatableValue) => {
     isLoading.value = true
-    store.search = data.search
-    store.limit = data.perpage
-    store.page = data.page
-    await store.getContas()
+    const response = await ContasLancamentosRepository.getAll(Number(table.perpage), table.page, table.search)
+    data.value = response.data
     isLoading.value = false
+    console.log(store.contas)
+    console.log(table)
 }
 
 onMounted(async () => {
@@ -34,6 +37,6 @@ onMounted(async () => {
             <p class="text-sm font-normal text-foreground hidden md:flex">Listagem de todas as contas financeiras
             </p>
         </div>
-        <DataTableContasFinanceiro @dataTableValue="buscarContas" :columns="columnsContasFinanceiro" :data="store.contas" />
+        <DataTableContasFinanceiro @dataTableValue="buscarContas" :columns="columnsContasFinanceiro" :data="data" />
     </div>
 </template>
