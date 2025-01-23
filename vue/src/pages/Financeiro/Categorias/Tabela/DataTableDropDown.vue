@@ -33,8 +33,8 @@ const onExcluirCategoria = async (id: number) => {
   try {
     await CategoriasLancamentosRepository.delete(id);
     storeCategorias.getCategorias();
-  } catch (error: any) {
-    ScToastUtil.error(error.message);
+  } catch (e: any) {
+    ScToastUtil.warning(e.response.data.message);
   }
 }
 </script>
