@@ -15,7 +15,7 @@ import {
     getFilteredRowModel,
     useVueTable,
 } from '@tanstack/vue-table'
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import { valueUpdater } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -101,11 +101,6 @@ const table = useVueTable({
         onUpdateValue()
     },
 })
-
-watch(
-    () => table.getState().pagination.pageIndex,
-    onUpdateValue
-)
 </script>
 
 <template>

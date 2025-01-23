@@ -2,10 +2,10 @@ import IContaTransacao from "@/types/financeiro/IContaTransacao";
 import { ColumnDef } from "@tanstack/vue-table";
 import { h } from "vue";
 import DataTableDropDown from "./DataTableDropDown.vue";
-import { formatRealValue } from "@/utils/formatterUtil";
 import ButtonConta from "./ButtonConta.vue";
 import { Checkbox } from "@/components/ui/checkbox";
 import BadgeRegra from "./BadgeRegra.vue";
+import BadgeContagem from "./BadgeContagem.vue";
 
 export const columnsContasFinanceiro: ColumnDef<IContaTransacao>[] = [
   {
@@ -38,14 +38,14 @@ export const columnsContasFinanceiro: ColumnDef<IContaTransacao>[] = [
     },
   },
   {
-    accessorKey: "saldo",
-    header: () => h("div", { class: "text-left" }, "Saldo"),
+    accessorKey: "_count",
+    header: () => h("div", { class: "text-left" }, "Lançamentos"),
     cell: ({ row }) => {
-      const saldo = Number.parseFloat(row.getValue("saldo"));
+      const contagem = row.original._count;
       return h(
         "div",
         { class: "text-left font-medium" },
-        formatRealValue(saldo)
+        h(BadgeContagem, {contagem: contagem?.FinanceiroTransacao!})
       );
     },
   },

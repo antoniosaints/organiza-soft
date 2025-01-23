@@ -8,5 +8,8 @@ export default interface IContaTransacao {
     userId: number
     cor: string
     descricao?: string
+    _count?: {
+        FinanceiroTransacao?: number
+    }
     Transacao?: ITransacao[]
 }

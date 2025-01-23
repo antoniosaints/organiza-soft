@@ -6,8 +6,11 @@ import { useContasLancamentoStore } from '@/stores/financeiro/contas/contasLanca
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Button } from '@/components/ui/button'
 import { Landmark } from 'lucide-vue-next'
+import ContasModal from '@/pages/Financeiro/Contas/Modais/ContasModal.vue'
+import { useContaLancamentoFormularioStore } from '@/stores/financeiro/contas/contasLancamentoFormularioStore'
 
-const store = useContasLancamentoStore()
+const store = useContasLancamentoStore();
+const mainStore = useContaLancamentoFormularioStore();
 const isLoading = ref(false)
 interface IDatatableValue {
     search: string
@@ -23,6 +26,7 @@ const buscarContas = async (table: IDatatableValue) => {
     store.search = table.search
     await store.getContas()
     isLoading.value = false
+    console.log(store.contas)
 }
 
 onMounted(async () => {
@@ -42,7 +46,7 @@ onMounted(async () => {
                 <TooltipProvider>
                     <Tooltip>
                         <TooltipTrigger>
-                            <Button size="sm" variant="default" >
+                            <Button size="sm" variant="default" @click="mainStore.isModalOpen = true">
                                 <Landmark class="w-4 h-4 mr-2" />
                                 Nova conta
                             </Button>
@@ -55,5 +59,6 @@ onMounted(async () => {
         <DataTableContasFinanceiro @dataTableValue="buscarContas"
             :pager="{ rowCount: store.total, pageCount: store.pages }" :columns="columnsContasFinanceiro"
             :data="store.contas" />
+        <ContasModal />
     </div>
 </template>

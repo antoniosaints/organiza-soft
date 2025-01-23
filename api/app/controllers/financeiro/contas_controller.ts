@@ -52,6 +52,13 @@ export const getContas = async (req: Request, res: Response) => {
         skip: offset || 0,
         take: Number(limitNumber),
         where: whereFilter,
+        include: {
+          _count: {
+            select: {
+              FinanceiroTransacao: true,
+            }
+          }
+        }
       }),
       prismaService.financeiroContas.count({
         where: whereFilter,
