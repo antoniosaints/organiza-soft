@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import IContaTransacao from '@/types/financeiro/IContaTransacao';
 import { ScToastUtil } from '@/utils/scToastUtil';
-import { Copy, MoreHorizontal } from 'lucide-vue-next'
+import { Copy, Ellipsis, Pencil, Trash2 } from 'lucide-vue-next'
 
 defineProps<{
   conta: IContaTransacao
@@ -18,19 +18,25 @@ function copy(id: number) {
 <template>
   <DropdownMenu>
     <DropdownMenuTrigger as-child>
-      <Button variant="ghost" class="w-8 h-8 p-0">
+      <Button variant="outline" size="sm" class="h-7 w-9 p-0">
         <span class="sr-only">Abrir menu</span>
-        <MoreHorizontal class="w-4 h-4" />
+        <Ellipsis class="h-6 w-6" />
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end">
-      <DropdownMenuItem @click="copy(conta.id!)">
-        <Copy class="mr-2 h-4 w-4" />
-        Copiar ID
+      <DropdownMenuItem>
+        <Pencil class="mr-2 h-3 w-3" />
+        Editar
       </DropdownMenuItem>
       <DropdownMenuSeparator />
-      <DropdownMenuItem>View customer</DropdownMenuItem>
-      <DropdownMenuItem>View payment details</DropdownMenuItem>
+      <DropdownMenuItem @click="copy(conta.id!)">
+        <Copy class="mr-2 h-3 w-3" />
+        Copiar ID
+      </DropdownMenuItem>
+      <DropdownMenuItem class="text-red-600 cursor-pointer">
+        <Trash2 class="mr-2 h-3 w-3" />
+        Excluir
+      </DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
 </template>

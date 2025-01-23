@@ -164,12 +164,12 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
             {
                 icon: Settings2,
                 title: t("sidebar.others"),
-                show: menuStore.permissions.financeiro && false,
+                show: menuStore.permissions.financeiro,
                 items: [
                     {
-                        title: 'Categorias',
-                        icon: Contact,
-                        url: "/app/financeiro/categorias",
+                        title: 'Contas',
+                        icon: Landmark,
+                        url: "/app/financeiro/contas",
                         show: menuStore.permissions.financeiro
                     }
                 ]

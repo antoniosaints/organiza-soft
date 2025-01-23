@@ -3,26 +3,26 @@ import { onMounted, ref } from 'vue'
 import { columnsContasFinanceiro } from '@/pages/Financeiro/Contas/Tabela/columns'
 import { DataTableContasFinanceiro } from '@/pages/Financeiro/Contas/Tabela'
 import { useContasLancamentoStore } from '@/stores/financeiro/contas/contasLancamentoStore'
-import { Loader } from 'lucide-vue-next'
-import IContaTransacao from '@/types/financeiro/IContaTransacao'
-import ContasLancamentosRepository from '@/repositories/financeiro/contasLancamentosRepository'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { Button } from '@/components/ui/button'
+import { Landmark } from 'lucide-vue-next'
 
 const store = useContasLancamentoStore()
-const data = ref<IContaTransacao[]>([])
 const isLoading = ref(false)
 interface IDatatableValue {
     search: string
     perpage: string,
-    page: number
+    page: number,
+    rowSelection: {}
 }
 
 const buscarContas = async (table: IDatatableValue) => {
     isLoading.value = true
-    const response = await ContasLancamentosRepository.getAll(Number(table.perpage), table.page, table.search)
-    data.value = response.data
+    store.page = table.page
+    store.limit = table.perpage
+    store.search = table.search
+    await store.getContas()
     isLoading.value = false
-    console.log(store.contas)
-    console.log(table)
 }
 
 onMounted(async () => {
@@ -32,11 +32,28 @@ onMounted(async () => {
 
 <template>
     <div class="flex flex-col mx-auto">
-        <div>
-            <h2 class="text-2xl font-bold flex items-center text-foreground">Contas Financeiras <Loader class="animate-spin" v-if="isLoading" /></h2>
-            <p class="text-sm font-normal text-foreground hidden md:flex">Listagem de todas as contas financeiras
-            </p>
+        <div class="flex justify-between items-center">
+            <div>
+                <h2 class="text-2xl font-bold flex items-center text-foreground">Contas </h2>
+                <p class="text-sm font-normal text-foreground hidden md:flex">Listagem de todas as contas financeiras
+                </p>
+            </div>
+            <div class="flex space-x-2">
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger>
+                            <Button size="sm" variant="default" >
+                                <Landmark class="w-4 h-4 mr-2" />
+                                Nova conta
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Cadastrar nova conta financeira</TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
+            </div>
         </div>
-        <DataTableContasFinanceiro @dataTableValue="buscarContas" :columns="columnsContasFinanceiro" :data="data" />
+        <DataTableContasFinanceiro @dataTableValue="buscarContas"
+            :pager="{ rowCount: store.total, pageCount: store.pages }" :columns="columnsContasFinanceiro"
+            :data="store.contas" />
     </div>
 </template>

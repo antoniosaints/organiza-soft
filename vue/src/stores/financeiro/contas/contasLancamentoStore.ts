@@ -10,6 +10,7 @@ export const useContasLancamentoStore = defineStore(
   () => {
     const contas = ref<IContaTransacao[]>([]);
     const limit = ref<string>("10");
+    const pages = ref<number>(1);
     const page = ref<number>(1);
     const total = ref<number>(0);
     const search = ref<string>("");
@@ -18,14 +19,15 @@ export const useContasLancamentoStore = defineStore(
     const getContas = async (): Promise<void> => {
       try {
         if (!Autorize.can("visualizar", "contas_lancamentos")) return;
-        const { data, total: totalClientes } =
+        const { data, total: totalContas, pages: QtdPages } =
           await ContasLancamentosRepository.getAll(
             Number(limit.value),
             page.value,
             search.value
           );
         contas.value = data;
-        total.value = totalClientes;
+        total.value = totalContas;
+        pages.value = QtdPages;
       } catch (error: any) {
         const errorMessage =
           error?.response?.data?.message || "Erro desconhecido.";
@@ -64,6 +66,7 @@ export const useContasLancamentoStore = defineStore(
       contas,
       limit,
       page,
+      pages,
       total,
       search,
       selectedItens,

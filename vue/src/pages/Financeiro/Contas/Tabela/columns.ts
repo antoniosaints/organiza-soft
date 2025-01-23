@@ -2,9 +2,10 @@ import IContaTransacao from "@/types/financeiro/IContaTransacao";
 import { ColumnDef } from "@tanstack/vue-table";
 import { h } from "vue";
 import DataTableDropDown from "./DataTableDropDown.vue";
-import { formatFirstLetterUpper, formatRealValue } from "@/utils/formatterUtil";
+import { formatRealValue } from "@/utils/formatterUtil";
 import ButtonConta from "./ButtonConta.vue";
 import { Checkbox } from "@/components/ui/checkbox";
+import BadgeRegra from "./BadgeRegra.vue";
 
 export const columnsContasFinanceiro: ColumnDef<IContaTransacao>[] = [
   {
@@ -38,24 +39,35 @@ export const columnsContasFinanceiro: ColumnDef<IContaTransacao>[] = [
   },
   {
     accessorKey: "saldo",
-    header: () => h("div", { class: "text-right" }, "Saldo"),
+    header: () => h("div", { class: "text-left" }, "Saldo"),
     cell: ({ row }) => {
       const saldo = Number.parseFloat(row.getValue("saldo"));
       return h(
         "div",
-        { class: "text-right font-medium" },
+        { class: "text-left font-medium" },
         formatRealValue(saldo)
       );
     },
   },
   {
+    accessorKey: "cor",
+    header: () => h("div", { class: "text-left" }, "Cor"),
+    cell: ({ row }) => {
+      return h(
+        "div",
+        { class: "text-left font-medium" },
+        row.getValue("cor") || "Sem cor"
+      );
+    },
+  },
+  {
     accessorKey: "regra",
-    header: () => h("div", { class: "text-right" }, "Regra"),
+    header: () => h("div", { class: "text-left" }, "Regra"),
     cell: ({ row }) => {
       return h(
         "div",
         { class: "text-right font-medium" },
-        formatFirstLetterUpper(row.getValue("regra") as string)
+        h(BadgeRegra, { regra: row.getValue("regra") as "privada" | "publica" })
       );
     },
   },

@@ -31,26 +31,37 @@ export const getContas = async (req: Request, res: Response) => {
     const limitNumber = limit || 10;
     const busca = search as string;
     const offset = (Number(pageNumber) - 1) * Number(limitNumber);
-    const contas = await prismaService.financeiroContas.findMany({
-      skip: offset || 0,
-      take: Number(limitNumber),
-      where: {
-        AND: [
-          busca
-            ? {
-                OR: [
-                  { descricao: { contains: busca } },
-                  { conta: { contains: busca } },
-                ],
-              }
-            : {},
-          {
-            contaSistemaId: req.body.contaSistemaId,
-          },
-        ],
-      },
+
+    const whereFilter = {
+      AND: [
+        busca
+          ? {
+              OR: [
+                { descricao: { contains: busca } },
+                { conta: { contains: busca } },
+              ],
+            }
+          : {},
+        {
+          contaSistemaId: req.body.contaSistemaId,
+        },
+      ],
+    };
+    const [items, total] = await Promise.all([
+      prismaService.financeiroContas.findMany({
+        skip: offset || 0,
+        take: Number(limitNumber),
+        where: whereFilter,
+      }),
+      prismaService.financeiroContas.count({
+        where: whereFilter,
+      }),
+    ]);
+    ResponseService.success(res, {
+      data: items,
+      total: total,
+      pages: Math.ceil(total / Number(limitNumber)),
     });
-    ResponseService.success(res, { data: contas });
   } catch (error: any) {
     HttpErrorService.hadle(error, res);
   }
