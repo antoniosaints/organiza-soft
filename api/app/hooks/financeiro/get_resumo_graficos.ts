@@ -17,6 +17,7 @@ interface IReceitaDespesa {
 }
 interface IBalanco {
   name: string;
+  cor: string;
   saldo: number;
   receita: number;
   despesa: number;
@@ -163,6 +164,7 @@ export const resumoByConta = (data: ResumoTransacoes[]): IBalanco[] => {
     } else {
       acc.push({
         name: conta?.conta || "Indefinido",
+        cor: conta?.cor || "#000000",
         saldo:
           item.parcelado === "sim" && item.FinanceiroParcelamento?.length
             ? item.FinanceiroParcelamento.reduce(

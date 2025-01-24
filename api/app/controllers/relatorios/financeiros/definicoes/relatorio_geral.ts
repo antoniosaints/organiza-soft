@@ -8,7 +8,9 @@ import { getdataConta } from "./relatorio_geral_data";
 import { informacoesPdf } from "../configs/infos";
 import { marcaDaguaPdf } from "../configs/marcadagua";
 
-export const DefRelatorioGeralFinanceiro = async (request: Request): Promise<TDocumentDefinitions> => {
+export const DefRelatorioGeralFinanceiro = async (
+  request: Request
+): Promise<TDocumentDefinitions> => {
   const query: IQueryParams = request.query;
   const data = await relatorioVendasMensal(request);
   const dataConta = await getdataConta(request);
@@ -60,12 +62,26 @@ export const DefRelatorioGeralFinanceiro = async (request: Request): Promise<TDo
         style: "largeheader",
       },
       {
+        layout: {
+          hLineWidth: function (i, node) {
+            return i === 0 ? 0 : 1; // Aplica borda horizontal apenas nas linhas inferiores
+          },
+          vLineWidth: function () {
+            return 0; // Remove bordas verticais
+          },
+          hLineColor: function () {
+            return "#000000"; // Cor da borda inferior
+          },
+          vLineColor: function () {
+            return null; // Sem borda vertical
+          },
+        },
         table: {
           body: [
             [
               { text: "Categoria", style: "tableHeader" },
-              { text: "Receitas", style: "tableHeader" },
-              { text: "Despesas", style: "tableHeader" },
+              { text: "(+)Receitas", style: "tableHeader" },
+              { text: "(-)Despesas", style: "tableHeader" },
               { text: "%", style: "tableHeader" },
             ],
             ...data,

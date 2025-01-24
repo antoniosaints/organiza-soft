@@ -45,10 +45,10 @@ export const relatorioVendasMensal = async (
     const porcentagemDespesa = (despesa / totalGeral) * 100;
     const porcentagem = Math.min(porcentagemReceita + porcentagemDespesa, 100);
     return [
-      categoria,
-      `R$ ${receita.toFixed(2)}`,
-      `R$ ${despesa.toFixed(2)}`,
-      `${porcentagem.toFixed(2)}%`,
-    ];
+      { text: `# ${categoria}`, style: { fontSize: 11 } },
+      { text: (receita ? `R$ ${receita.toFixed(2)}` : "-"), style: { color: "green", fontSize: 11 } },
+      { text: (despesa ? `R$ ${despesa.toFixed(2)}` : "-"), style: { color: "red", fontSize: 11 } },
+      { text: `${porcentagem.toFixed(2)}%`, bold: true, style: { fontSize: 11 } },
+    ] as TableCell[];
   });
 };

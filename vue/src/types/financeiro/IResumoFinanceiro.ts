@@ -14,6 +14,7 @@ interface IReceitaDespesa {
 export interface IBalanco {
     name: string;
     saldo: number;
+    cor: string;
     receita: number;
     despesa: number;
   }

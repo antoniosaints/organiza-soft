@@ -16,10 +16,10 @@ defineProps<{
         <div class="flex flex-col gap-2">
             <Card class="bg-background" v-for="item in contas" :key="item.name">
                 <CardContent class="py-2 relative flex justify-between items-center">
-                    <div class="absolute left-0 top-0 p-2 bg-purple-500 h-full rounded-l-md">
+                    <div class="absolute left-0 top-0 p-2 h-full rounded-l-md" :class="item.cor">
                     </div>
                     <div>
-                        <div class="flex items-center gap-2 transition hover:text-purple-500">
+                        <div class="flex items-center gap-2 transition">
                             <WalletMinimal class="w-5 h-5 hover:animate-pulse" />
                             <h3 class="font-semibold">{{ item.name }}</h3>
                         </div>

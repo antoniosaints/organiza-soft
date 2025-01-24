@@ -65,17 +65,24 @@ const onFormularioSubmit = async () => {
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="privada">
-                                    Privada
+                                    <div class="flex items-center gap-2">
+                                        <div class="h-4 w-4 rounded bg-red-500" />
+                                        Privada
+                                    </div>
                                 </SelectItem>
                                 <SelectItem value="publica">
-                                    Pública
+                                    <div class="flex items-center gap-2">
+                                        <div class="h-4 w-4 rounded bg-green-500" />
+                                        Pública
+                                    </div>
                                 </SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
                     <div class="grid w-full gap-1.5 col-span-2">
                         <Label for="observacao">Descrição</Label>
-                        <Textarea id="observacao" v-model="mainStore.data.descricao" required placeholder="Descrição." />
+                        <Textarea id="observacao" v-model="mainStore.data.descricao" required
+                            placeholder="Descrição." />
                     </div>
                 </div>
                 <DialogFooter>

@@ -32,6 +32,7 @@ const openModal = () => {
 }
 
 onMounted(async () => {
+    store.page = 1
     await store.getCategorias()
 })
 </script>

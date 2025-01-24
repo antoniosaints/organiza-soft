@@ -19,7 +19,7 @@ interface IDatatableValue {
     rowSelection: {}
 }
 
-const buscarContas = async (table: IDatatableValue) => {
+const onFetch = async (table: IDatatableValue) => {
     isLoading.value = true
     store.page = table.page
     store.limit = table.perpage
@@ -35,6 +35,7 @@ const onSave = () => {
 }
 
 onMounted(async () => {
+    store.page = 1
     await store.getContas()
 })
 </script>
@@ -61,7 +62,7 @@ onMounted(async () => {
                 </TooltipProvider>
             </div>
         </div>
-        <DataTableContasFinanceiro @dataTableValue="buscarContas"
+        <DataTableContasFinanceiro @dataTableValue="onFetch"
             :pager="{ rowCount: store.total, pageCount: store.pages }" :columns="columnsContasFinanceiro"
             :data="store.contas" />
         <ContasModal />
