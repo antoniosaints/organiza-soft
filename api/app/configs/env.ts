@@ -4,6 +4,8 @@ dotenv.config();
 
 const envSchema = z.object({
     DATABASE_URL: z.string({required_error: "DATABASE_URL nao foi informado nas variaveis de ambiente"}),
+    LIFETIMETOKEN: z.string({required_error: "LIFETIMETOKEN nao foi informado nas variaveis de ambiente"}),
+    LIFETIMEREFRESHTOKEN: z.string({required_error: "LIFETIMEREFRESHTOKEN nao foi informado nas variaveis de ambiente"}),
     BASE_URL_FRONT: z.string({required_error: "BASE_URL_FRONT nao foi informado nas variaveis de ambiente"}),
     BASE_URL: z.string({required_error: "BASE_URL nao foi informado nas variaveis de ambiente"}),
     MINIO_SECRETKEY: z.string({required_error: "MINIO_SECRETKEY nao foi informado nas variaveis de ambiente"}),

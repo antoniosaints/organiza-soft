@@ -152,7 +152,7 @@ const table = useVueTable({
             </Table>
         </div>
         <div class="flex items-center justify-end py-4 space-x-2">
-            <DataTablePagination v-if="data.length" :table="table" />
+            <DataTablePagination :table="table" />
         </div>
     </div>
 </template>

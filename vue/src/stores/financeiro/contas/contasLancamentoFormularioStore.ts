@@ -9,7 +9,10 @@ export const useContaLancamentoFormularioStore = defineStore(
   () => {
     const defaultData = ref<IContaTransacao>({
       conta: "",
+      saldo: 0,
       cor: "",
+      descricao: "",
+      regra: "privada",
       userId: loginStore.dataUserInfosLogged?.id!,
     });
 

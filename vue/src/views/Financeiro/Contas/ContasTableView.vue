@@ -26,7 +26,12 @@ const buscarContas = async (table: IDatatableValue) => {
     store.search = table.search
     await store.getContas()
     isLoading.value = false
-    console.log(store.contas)
+}
+
+const onSave = () => {
+    mainStore.refId = null
+    mainStore.resetData()
+    mainStore.isModalOpen = true
 }
 
 onMounted(async () => {
@@ -46,7 +51,7 @@ onMounted(async () => {
                 <TooltipProvider>
                     <Tooltip>
                         <TooltipTrigger>
-                            <Button size="sm" variant="default" @click="mainStore.isModalOpen = true">
+                            <Button size="sm" variant="default" @click="onSave">
                                 <Landmark class="w-4 h-4 mr-2" />
                                 Nova conta
                             </Button>

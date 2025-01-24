@@ -27,6 +27,7 @@ const buscarContas = async (table: IDatatableValue) => {
 
 const openModal = () => {
     storeForm.refId = null
+    storeForm.resetData()
     storeForm.isModalOpen = true
 }
 

@@ -2,7 +2,6 @@ import axios from "axios";
 import StorageUtil from "@/utils/storageUtil";
 import { ScToastUtil } from "@/utils/scToastUtil";
 import { useLoadingStore } from "@/composables/useLoading";
-import { handleTokenRefresh } from "./handleRefreshToken";
 
 const BASEURL = import.meta.env.VITE_BASE_URL_BACKEND;
 
@@ -19,12 +18,19 @@ const axiosService = axios.create({
   },
 });
 
+function getAuthTokens() {
+  return {
+    token: StorageUtil.get("@gestao_inteligente:token"),
+    refreshToken: StorageUtil.get("@gestao_inteligente:refreshtoken"),
+    contaId: StorageUtil.get("@gestao_inteligente:contaId"),
+  };
+}
+
 axiosService.interceptors.request.use((config) => {
-  const token = StorageUtil.get("@gestao_inteligente:token");
-  const contaId = StorageUtil.get("@gestao_inteligente:contaId");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-    config.headers.AccountId = contaId;
+  const tokens = getAuthTokens();
+  if (tokens.token) {
+    config.headers.Authorization = `Bearer ${tokens.token}`;
+    config.headers.AccountId = tokens.contaId;
   }
   const loadingStore = useLoadingStore();
   loadingStore.startLoading();
@@ -32,7 +38,7 @@ axiosService.interceptors.request.use((config) => {
 });
 
 axiosService.interceptors.response.use(
-  response => {
+  (response) => {
     const loadingStore = useLoadingStore();
     loadingStore.stopLoading();
     return response;
@@ -40,14 +46,27 @@ axiosService.interceptors.response.use(
   async (error) => {
     const loadingStore = useLoadingStore();
     loadingStore.stopLoading();
+    const originalRequest = error.config;
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
 
-    const responseData = error.response?.data;
-    const tokenExpired = error.response?.status === 401 && responseData?.message === "Token invalido";
+      try {
+        const tokens = getAuthTokens();
+        const refreshResponse = await axiosService.post(`/auth/refresh`, {
+          refreshToken: tokens.refreshToken,
+        });
 
-    if (tokenExpired) {
-      return handleTokenRefresh(error.config);
+        const { token } = refreshResponse.data;
+        StorageUtil.set("@gestao_inteligente:token", token);
+        console.log("Novo token:", token);
+        originalRequest.headers.Authorization = `Bearer ${token}`;
+        return axiosService(originalRequest);
+      } catch (refreshError) {
+        console.error("Erro ao renovar token:", refreshError);
+        window.location.href = "/login";
+        return Promise.reject(refreshError);
+      }
     }
-
     return Promise.reject(error);
   }
 );

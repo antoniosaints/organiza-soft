@@ -7,6 +7,7 @@ import {
   ResponseService,
   validateSchema,
 } from "../../services";
+import { tokenGenerator, tokenRefresh } from "../../services/auth/token_manager";
 
 class AuthController {
   static async login(req: Request, res: Response) {
@@ -20,20 +21,9 @@ class AuthController {
       if (!user)
         return ResponseService.notFound(res, "Usuário não encontrado!");
 
-      const payload = {
-        userId: user.id,
-        name: user.nome,
-        contaId: user.contaSistemaId,
-      };
+      const data = tokenGenerator(user);
 
-      const refreshToken = JwtService.encode(payload, "7d");
-      const token = JwtService.encode({ refreshToken }, "8h");
-
-      return ResponseService.success(
-        res,
-        { token, refreshToken, contaId: user.contaSistemaId },
-        "Login realizado com sucesso"
-      );
+      return ResponseService.success(res, data, "Login realizado com sucesso");
     } catch (error) {
       HttpErrorService.hadle(error, res);
     }
@@ -42,11 +32,8 @@ class AuthController {
   static async verify(req: Request, res: Response) {
     try {
       const token = req.headers.authorization?.split(" ")[1];
-
-      if (!token) {
+      if (!token)
         return ResponseService.unauthorized(res, "Token não informado");
-      }
-
       JwtService.verify(token);
 
       return ResponseService.success(
@@ -86,17 +73,13 @@ class AuthController {
   static async refreshToken(req: Request, res: Response) {
     try {
       const { refreshToken } = req.body;
-
       if (!refreshToken) {
         return ResponseService.unauthorized(res, "Token não informado");
       }
-
-      JwtService.verify(refreshToken);
-
-      const token = JwtService.encode({ refreshToken }, "8h");
+      const data = tokenRefresh(refreshToken);
       return ResponseService.success(
         res,
-        { token },
+        data,
         "Token atualizado com sucesso"
       );
     } catch (error) {

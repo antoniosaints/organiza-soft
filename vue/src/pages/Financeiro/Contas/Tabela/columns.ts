@@ -6,6 +6,7 @@ import ButtonConta from "./ButtonConta.vue";
 import { Checkbox } from "@/components/ui/checkbox";
 import BadgeRegra from "./BadgeRegra.vue";
 import BadgeContagem from "./BadgeContagem.vue";
+import BadgeCor from "./BadgeCor.vue";
 
 export const columnsContasFinanceiro: ColumnDef<IContaTransacao>[] = [
   {
@@ -56,7 +57,7 @@ export const columnsContasFinanceiro: ColumnDef<IContaTransacao>[] = [
       return h(
         "div",
         { class: "text-left font-medium" },
-        row.getValue("cor") || "Sem cor"
+        h(BadgeCor, { cor: row.original.cor || "bg-gray-500" })
       );
     },
   },
