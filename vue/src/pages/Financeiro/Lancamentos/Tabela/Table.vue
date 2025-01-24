@@ -23,7 +23,7 @@
                             <Button @click="NovoLancamento('receita')" size="sm" variant="default"
                                 class="flex gap-2 bg-success hover:bg-success/80">
                                 <CircleArrowOutDownLeft class="w-4 h-4" />
-                                Nova receita
+                                {{ getWindowSize().width > 700 ? 'Nova receita' : ''}}
                             </Button>
                         </TooltipTrigger>
                         <TooltipContent>Cadastrar novo lançamento</TooltipContent>
@@ -33,7 +33,7 @@
                             <Button @click="NovoLancamento('despesa')" size="sm" variant="default"
                                 class="flex gap-2 bg-error hover:bg-error/80">
                                 <CircleArrowOutUpRight class="w-4 h-4" />
-                                Nova despesa
+                                {{ getWindowSize().width > 700 ? 'Nova despesa' : ''}}
                             </Button>
                         </TooltipTrigger>
                         <TooltipContent>Cadastrar novo lançamento</TooltipContent>
@@ -244,6 +244,7 @@ import EfetivarLancamento from "../Modais/EfetivarLancamento.vue";
 import FiltrarRegistros from "../Modais/FiltrarRegistros.vue";
 import FinanceiroRelatorioRepository from "@/repositories/relatorios/financeiroRelatorioRepository";
 import { useLancamentoSchemaStore } from "@/stores/financeiro/lancamentos/lancamentoSchemaStore";
+import { getWindowSize } from "@/utils/generalUtil";
 const { schema } = useLancamentoSchemaStore()
 const colormode = useColorMode();
 
