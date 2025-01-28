@@ -3,6 +3,7 @@ import {
   FinanceiroContas,
   FinanceiroParcelamento,
   FinanceiroTransacao,
+  StatusTransacao,
 } from "@prisma/client";
 interface IGrafico {
   name: string;
@@ -22,94 +23,57 @@ interface IBalanco {
   receita: number;
   despesa: number;
 }
-type ResumoTransacoes = FinanceiroTransacao & {
+export type ResumoTransacoes = FinanceiroTransacao & {
   FinanceiroParcelamento?: FinanceiroParcelamento[];
   Categoria?: FinanceiroCategorias;
   Conta?: FinanceiroContas;
 };
 
-// const calcularValorTotal = (item: ResumoTransacoes, status: "pendente" | "recebido") => {
-//   if (item.parcelado === "nao" && item.status === status && !item.FinanceiroParcelamento?.length) {
-//     return item.valorFinal;
-//   } else {
-//     return (
-//       item.FinanceiroParcelamento?.reduce(
-//         (subAcc: number, val: { status?: string; valor?: number }) =>
-//           subAcc + (val.status === status ? val.valor || 0 : 0),
-//         0
-//       ) || 0
-//     );
-//   }
-// }
+const calcularValorTotalWithStatus = (
+  item: ResumoTransacoes,
+  status: "pendente" | "recebido"
+) => {
+  if (
+    item.parcelado === "nao" &&
+    item.status === status &&
+    !item.FinanceiroParcelamento?.length
+  ) {
+    return item.valorFinal;
+  } else {
+    return (
+      item.FinanceiroParcelamento?.reduce(
+        (subAcc: number, val: { status?: string; valor?: number }): number =>
+          subAcc + (val.status === status ? val.valor || 0 : 0),
+        0
+      ) || 0
+    );
+  }
+};
+
+function calculateTotalWithoutStatus(item: ResumoTransacoes): number {
+  if (item.parcelado === "sim" && Array.isArray(item.FinanceiroParcelamento)) {
+    return item.FinanceiroParcelamento.reduce(
+      (subAcc: number, val: { valor?: number }) => subAcc + (val.valor || 0),
+      0
+    );
+  }
+  return item.valorFinal || 0;
+}
 export const resumoByCategoria = (data: ResumoTransacoes[]): IGrafico[] => {
   const totalPorCategoria = data.reduce<IGrafico[]>((acc, item) => {
     const categoria = item.Categoria;
     const index = acc.findIndex((entry) => entry.name === categoria?.categoria);
 
     if (index !== -1) {
-      if (
-        item.parcelado === "nao" &&
-        item.status === "pendente" &&
-        !item.FinanceiroParcelamento?.length
-      ) {
-        acc[index].pendente += item.valorFinal;
-      } else {
-        acc[index].pendente +=
-          item.FinanceiroParcelamento?.reduce(
-            (subAcc: number, val: { status?: string; valor?: number }) =>
-              subAcc + (val.status === "pendente" ? val.valor || 0 : 0),
-            0
-          ) || 0;
-      }
-
-      if (
-        item.parcelado === "nao" &&
-        item.status === "recebido" &&
-        !item.FinanceiroParcelamento?.length
-      ) {
-        acc[index].pago += item.valorFinal;
-      } else {
-        acc[index].pago +=
-          item.FinanceiroParcelamento?.reduce(
-            (subAcc: number, val: { status?: string; valor?: number }) =>
-              subAcc + (val.status === "recebido" ? val.valor || 0 : 0),
-            0
-          ) || 0;
-      }
-
-      // Atualização do valor total
+      acc[index].pendente += calcularValorTotalWithStatus(item, "pendente");
+      acc[index].pago += calcularValorTotalWithStatus(item, "recebido");
       acc[index].total = acc[index].pendente + acc[index].pago;
     } else {
       acc.push({
         name: categoria?.categoria || "Indefinido",
-        total:
-          item.parcelado === "sim" && item.FinanceiroParcelamento?.length
-            ? item.FinanceiroParcelamento.reduce(
-                (subAcc: number, val: { valor?: number }) =>
-                  subAcc + (val.valor || 0),
-                0
-              )
-            : item.valorFinal,
-        pendente:
-          item.parcelado === "sim" && item.FinanceiroParcelamento?.length
-            ? item.FinanceiroParcelamento.reduce(
-                (subAcc: number, val: { status?: string; valor?: number }) =>
-                  subAcc + (val.status === "pendente" ? val.valor || 0 : 0),
-                0
-              )
-            : item.status === "pendente"
-            ? item.valorFinal
-            : 0,
-        pago:
-          item.parcelado === "sim" && item.FinanceiroParcelamento?.length
-            ? item.FinanceiroParcelamento.reduce(
-                (subAcc: number, val: { status?: string; valor?: number }) =>
-                  subAcc + (val.status === "recebido" ? val.valor || 0 : 0),
-                0
-              )
-            : item.status === "recebido"
-            ? item.valorFinal
-            : 0,
+        total: calculateTotalWithoutStatus(item),
+        pendente: calcularValorTotalWithStatus(item, "pendente"),
+        pago: calcularValorTotalWithStatus(item, "recebido"),
       });
     }
 
@@ -184,8 +148,8 @@ export const resumoByConta = (data: ResumoTransacoes[]): IBalanco[] => {
                 0
               )
             : item.status === "recebido" && item.natureza === "receita"
-            ? item.valorFinal
-            : 0,
+              ? item.valorFinal
+              : 0,
         despesa:
           item.parcelado === "sim" && item.FinanceiroParcelamento?.length
             ? item.FinanceiroParcelamento.reduce(
@@ -197,8 +161,8 @@ export const resumoByConta = (data: ResumoTransacoes[]): IBalanco[] => {
                 0
               )
             : item.status === "recebido" && item.natureza === "despesa"
-            ? item.valorFinal
-            : 0,
+              ? item.valorFinal
+              : 0,
       });
     }
 
@@ -216,68 +180,15 @@ export const resumoByFormaPagamento = (
     const index = acc.findIndex((entry) => entry.name === formaPagamento);
 
     if (index !== -1) {
-      if (
-        item.parcelado === "nao" &&
-        item.status === "pendente" &&
-        !item.FinanceiroParcelamento?.length
-      ) {
-        acc[index].pendente += item.valorFinal;
-      } else {
-        acc[index].pendente +=
-          item.FinanceiroParcelamento?.reduce(
-            (subAcc: number, val: { status?: string; valor?: number }) =>
-              subAcc + (val.status === "pendente" ? val.valor || 0 : 0),
-            0
-          ) || 0;
-      }
-
-      if (
-        item.parcelado === "nao" &&
-        item.status === "recebido" &&
-        !item.FinanceiroParcelamento?.length
-      ) {
-        acc[index].pago += item.valorFinal;
-      } else {
-        acc[index].pago +=
-          item.FinanceiroParcelamento?.reduce(
-            (subAcc: number, val: { status?: string; valor?: number }) =>
-              subAcc + (val.status === "recebido" ? val.valor || 0 : 0),
-            0
-          ) || 0;
-      }
-
+      acc[index].pendente += calcularValorTotalWithStatus(item, "pendente");
+      acc[index].pago += calcularValorTotalWithStatus(item, "recebido");
       acc[index].total = acc[index].pendente + acc[index].pago;
     } else {
       acc.push({
         name: formaPagamento,
-        total:
-          item.parcelado === "sim" && item.FinanceiroParcelamento?.length
-            ? item.FinanceiroParcelamento.reduce(
-                (subAcc: number, val: { valor?: number }) =>
-                  subAcc + (val.valor || 0),
-                0
-              )
-            : item.valorFinal,
-        pendente:
-          item.parcelado === "sim" && item.FinanceiroParcelamento?.length
-            ? item.FinanceiroParcelamento.reduce(
-                (subAcc: number, val: { status?: string; valor?: number }) =>
-                  subAcc + (val.status === "pendente" ? val.valor || 0 : 0),
-                0
-              )
-            : item.status === "pendente"
-            ? item.valorFinal
-            : 0,
-        pago:
-          item.parcelado === "sim" && item.FinanceiroParcelamento?.length
-            ? item.FinanceiroParcelamento.reduce(
-                (subAcc: number, val: { status?: string; valor?: number }) =>
-                  subAcc + (val.status === "recebido" ? val.valor || 0 : 0),
-                0
-              )
-            : item.status === "recebido"
-            ? item.valorFinal
-            : 0,
+        total: calculateTotalWithoutStatus(item),
+        pendente: calcularValorTotalWithStatus(item, "pendente"),
+        pago: calcularValorTotalWithStatus(item, "recebido"),
       });
     }
 
