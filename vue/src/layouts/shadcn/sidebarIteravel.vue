@@ -122,7 +122,7 @@ const MenuOptionsSidebar: IMenuOptionsSidebar[] = [
                 title: "Resumo",
                 icon: ChartArea,
                 show: menuStore.permissions.vendas && menuStore.permissions.dashboardVendas,
-                url: "/app/patrimonio/categorias"
+                url: "/app/vendas/dashboard"
             },
             {
                 title: "PDV",

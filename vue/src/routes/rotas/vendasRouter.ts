@@ -19,5 +19,12 @@ export const vendasRouter: RouteRecordRaw = {
       component: () =>
         import("@/views/Vendas/Relatorios/VendasRelatoriosView.vue"),
     },
+    {
+      path: "/app/vendas/dashboard",
+      name: "DashboardVendas",
+      meta: { breadcrumb: "Dashboard de vendas" },
+      component: () =>
+        import("@/views/Vendas/Dashboard/ResumoView.vue"),
+    },
   ],
 };
